@@ -1,0 +1,17 @@
+.DS_Store
+
+# Local source capture and PDF extraction evidence.
+captures/
+tmp/
+
+# Prototype runtime output.
+krdv-guidelines-prototype/node_modules/
+krdv-guidelines-prototype/dist/
+krdv-guidelines-prototype/qa/
+krdv-guidelines-prototype/tmp/
+krdv-guidelines-prototype/output/
+krdv-guidelines-prototype/.playwright-cli/
+
+# Logs.
+*.log
+npm-debug.log*
