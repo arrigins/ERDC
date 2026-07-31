@@ -47,6 +47,7 @@
 - Mobile route check: `scrollWidth=390`, `clientWidth=390`.
 - Burger-open state: `aria-expanded=true`, sidebar has `is-open`, body has `drawer-locked`.
 - Browser console: 0 errors, 0 warnings during route sweep.
+- Public GitHub Pages route sweep passed after deployment. Targeted public SVG decode passed for `typography-system.svg`, `text-rules-a.svg`, and `text-rules-b.svg`.
 
 **Build And Test**
 - `GITHUB_PAGES=true npm run build` passes.
