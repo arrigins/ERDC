@@ -1,53 +1,83 @@
 **Findings**
-- No P0/P1/P2 findings remain.
+- No P0/P1/P2 findings remain after the focused local QA pass.
 
 **Source Visual Truth**
-- Brand source: `/Users/erdc/Downloads/Руководство по использованию фирменного стиля АО КРДВ февраль 2025 (1).pdf`.
-- Source layout reference: `https://devrev.standard-projects.com/photography`.
-- User-directed responsive change: source mobile behavior was intentionally replaced with a normal burger drawer.
-- User-directed content change: the PDF is used as a source of brand rules and assets, not as visible pagination or full-sheet previews.
+- Brand source: KRDV corporate style guide content previously extracted under `tmp/brandbook/brandbook.txt` and visual fragments under `tmp/brandbook`.
+- New structural reference: `https://brand.dropbox.com/`.
+- User-directed change: Dropbox-like structure, intro/preloader, separate section routes, living web content, no visible PDF pagination.
+- User-directed asset rule: vector assets are used as SVG, raster-only examples are WebP, text is rendered as live HTML.
 
-**Implementation Evidence**
-- Desktop cover: `/Users/erdc/Documents/ERDC BB/krdv-guidelines-prototype/output/playwright/cover-desktop.png`.
-- Desktop core elements: `/Users/erdc/Documents/ERDC BB/krdv-guidelines-prototype/output/playwright/elements-desktop.png`.
-- Desktop corporate materials: `/Users/erdc/Documents/ERDC BB/krdv-guidelines-prototype/output/playwright/corporate-desktop-clean.png`.
-- Desktop advertising materials: `/Users/erdc/Documents/ERDC BB/krdv-guidelines-prototype/output/playwright/advertising-desktop-clean.png`.
-- Desktop merch: `/Users/erdc/Documents/ERDC BB/krdv-guidelines-prototype/output/playwright/merch-desktop-ready.png`.
-- Desktop photo style: `/Users/erdc/Documents/ERDC BB/krdv-guidelines-prototype/output/playwright/photostyle-desktop-ready.png`.
-- Desktop appendix: `/Users/erdc/Documents/ERDC BB/krdv-guidelines-prototype/output/playwright/appendix-desktop-ready.png`.
-- Mobile elements: `/Users/erdc/Documents/ERDC BB/krdv-guidelines-prototype/output/playwright/elements-mobile.png`.
-- Mobile burger-open state: `/Users/erdc/Documents/ERDC BB/krdv-guidelines-prototype/output/playwright/mobile-burger-open.png`.
+**Implemented Structure**
+- Home catalog: `/#/`.
+- Section routes: `/#/platform`, `/#/logo`, `/#/architecture`, `/#/regimes`, `/#/color`, `/#/typography`, `/#/editorial`, `/#/graphics`, `/#/corporate`, `/#/advertising`, `/#/merch`, `/#/made`, `/#/photostyle`, `/#/social`.
+- Navigation: fixed top header, accessible burger button, full drawer, body scroll lock.
+- Interaction layer: preloader, section cards, logo lab, palette copy buttons, type lab, typograf demo, live business-card mockups, application cards, merch cards, photo tabs.
 
 **Content Coverage**
-- Positioning: brand promise, supporting themes, corporate mission, and four operating principles.
-- Core elements: logo meaning, logo versions, allowed backgrounds, clearspace, misuse examples, subsidiary logos, preference signs, primary and secondary palettes, typography, and text rules.
-- Base graphics: color coding for preference regimes and card assembly logic.
-- Corporate materials: business cards, QR business cards, subsidiary cards, and letterheads.
-- Advertising materials: leaflets, presswall, rollup, office navigation, schedule sign, and award documents.
-- Merch: notebooks, stationery, package, t-shirt, shopper, and "Made in TOR SPV" mark with product examples.
-- Photo style: principles, infrastructure, events, nature, people, and interactive gallery sections.
-- Appendix: social media guide fragment and corporate contacts.
+- Positioning: brand promise, mission and four operating principles.
+- Logo: logo meaning, versions, clearspace, contrast, misuse rules.
+- Subsidiaries: Russian and English architecture, horizontal and vertical variants.
+- Preference regimes: labels, names, colors and SVG sign set.
+- Color: primary and additional palette with HEX, RGB, CMYK and Pantone where available.
+- Typography: TT Norms Pro, TT Tsars, weight guidance and live specimen.
+- Text rules: quotes, dashes, currencies, phones, abbreviations and geography.
+- Base graphics: preference regime color coding.
+- Corporate materials: business cards, QR business cards, subsidiary cards, signs and specs.
+- Advertising materials: leaflets, presswall, rollup, navigation signs, schedule signs and award documents.
+- Merch: notebooks, stationery, package, t-shirt, shopper and product-mark scenarios.
+- Photo style: infrastructure, events, nature and people galleries.
+- Appendix: social media guide and corporate contacts.
 
 **Asset Coverage**
-- Vector fragments extracted from the brandbook and converted to SVG under `public/assets/brandbook/svg`.
-- Mixed photo/mockup fragments exported as optimized WebP under `public/assets/brandbook/webp`.
-- Full-sheet previews are not used as interface content.
-- The extracted brandbook asset folder is about 4.7 MB.
-- Existing photo-style imagery remains optimized as local WebP in `public/assets/photos`.
+- Clean SVG layer: `public/assets/brandbook/vector`, 20 SVG files, checked for no `<image>` or `data:image` references.
+- Raster examples: `public/assets/brandbook/raster`, 14 WebP files, about 816 KB.
+- Photo style: `public/assets/photos`, WebP images, about 1.1 MB.
+- Цельные растровые развороты PDF не используются как разделы интерфейса: векторные фрагменты вынесены в SVG, текст набран живым HTML.
+- Text-heavy rules are rebuilt in React/CSS instead of being placed as images.
 
-**Required Fidelity Surfaces**
-- Fonts and typography: supplied TT Norms Pro and TT Tsars files are connected. The shared typograf helper applies nonbreaking spaces after short Russian prepositions, conjunctions, abbreviations, numbers, and units across rendered content.
-- Layout: desktop keeps the fixed 250px sidebar, large dark chapter covers, horizontal section tabs, thin dividers, editorial spacing, and asset-led blocks.
-- Mobile: fixed top header, accessible burger button, scrim, drawer, locked body, and one-column content without horizontal overflow.
-- Colors: KRDV palette is applied from the brandbook, including `#0056a2`, `#001d37`, `#22a8e0`, `#d4e6fa`, `#de2327`, `#003b39`, and `#308d86`.
+**Typography**
+- Supplied TT Norms Pro and TT Tsars files are connected through `@font-face`.
+- The shared `typograf()` helper applies nonbreaking spaces for short Russian prepositions, conjunctions, abbreviations, numbers and units.
+- The typograf demo renders processed text live in the interface.
 
-**Interactions Tested**
-- All hash routes load: cover, positioning, elements, graphics, corporate, advertising, merch, photostyle, appendix.
-- Desktop route check: `scrollWidth=1440`, `clientWidth=1440`, no missing images.
-- Mobile route check: `scrollWidth=390`, `clientWidth=390`.
-- Burger-open state: `aria-expanded=true`, sidebar has `is-open`, body has `drawer-locked`.
-- Browser console: 0 errors, 0 warnings during route sweep.
-- Public GitHub Pages route sweep passed after deployment. Targeted public SVG decode passed for `typography-system.svg`, `text-rules-a.svg`, and `text-rules-b.svg`.
+**Visual QA Evidence**
+- Dropbox reference captures: `output/dropbox-reference/`.
+- Focused local QA report: `output/qa/focused-qa-report.json`.
+- Final local QA report: `output/qa/final/final-qa-report.json`.
+- Settled screenshots:
+  - `output/qa/desktop-home-settled.png`
+  - `output/qa/desktop-logo-settled.png`
+  - `output/qa/desktop-color-palette.png`
+  - `output/qa/desktop-photo-gallery.png`
+  - `output/qa/mobile-home-settled.png`
+  - `output/qa/mobile-corporate-settled.png`
+  - `output/qa/mobile-menu-open-settled.png`
+- Final screenshots:
+  - `output/qa/final/desktop-home.png`
+  - `output/qa/final/desktop-logo.png`
+  - `output/qa/final/desktop-color.png`
+  - `output/qa/final/desktop-typography.png`
+  - `output/qa/final/desktop-corporate.png`
+  - `output/qa/final/desktop-photostyle.png`
+  - `output/qa/final/desktop-social.png`
+  - `output/qa/final/mobile-home.png`
+  - `output/qa/final/mobile-logo.png`
+  - `output/qa/final/mobile-color.png`
+  - `output/qa/final/mobile-typography.png`
+  - `output/qa/final/mobile-corporate.png`
+  - `output/qa/final/mobile-photostyle.png`
+  - `output/qa/final/mobile-social.png`
+  - `output/qa/final/mobile-burger-open.png`
+
+**Checks Passed**
+- Desktop focused routes: home, logo, color, corporate and photostyle at 1440×1000.
+- Mobile focused routes: home, logo, color, corporate and photostyle at 390×844.
+- Final desktop routes: home, logo, color, typography, corporate, photostyle and social at 1440×950.
+- Final mobile routes: home, logo, color, typography, corporate, photostyle and social at 390×844.
+- No horizontal overflow in focused checks.
+- No broken images in focused checks.
+- Preloader reaches hidden state.
+- Mobile drawer opens, exposes 15 navigation controls and keeps document width equal to viewport width.
 
 **Build And Test**
 - `GITHUB_PAGES=true npm run build` passes.
@@ -55,6 +85,6 @@
 - GitHub Pages workflow remains configured for `main`.
 
 **Open Questions**
-- Public GitHub Pages deployment exposes supplied brand fonts, logo, and imagery. This should match the organization's web distribution permissions.
+- The original PDF file path supplied earlier is not currently present in `/Users/erdc/Downloads`; this pass used the already extracted local brandbook text and vector PDF fragments in `tmp/brandbook`.
 
-final result: passed
+final result: passed locally; public Pages verification is performed after push.
