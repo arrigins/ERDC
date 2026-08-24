@@ -1312,7 +1312,7 @@ function App() {
     setActivePageId(pageId);
     setOpenGroup(pageId);
     setMenuOpen(false);
-    document.getElementById("page")?.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    document.getElementById("page")?.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }
 
   function jumpTo(sectionId) {
@@ -1358,14 +1358,17 @@ function Sidebar({ activePageId, openGroup, setOpenGroup, navigate, jumpTo, prel
           const isActive = activePageId === group.id;
 
           return (
-            <motion.div className={`nav-group ${isActive ? "is-active" : ""}`} key={group.id} layout>
+            <div className={`nav-group ${isActive ? "is-active" : ""} ${isOpen ? "is-open" : ""}`} key={group.id}>
               <button
                 className="nav-parent"
                 type="button"
                 aria-expanded={isOpen}
                 aria-current={isActive ? "page" : undefined}
                 onClick={() => {
-                  setOpenGroup(isOpen ? "" : group.id);
+                  if (isActive) {
+                    setOpenGroup(isOpen ? "" : group.id);
+                    return;
+                  }
                   navigate(group.id);
                 }}
               >
@@ -1373,30 +1376,60 @@ function Sidebar({ activePageId, openGroup, setOpenGroup, navigate, jumpTo, prel
                 <strong>{t(group.navTitle || group.title)}</strong>
                 <UiIcon icon={isOpen ? ICONS.chevronUp : ICONS.chevronDown} className="nav-chevron" />
               </button>
-              <AnimatePresence initial={false}>
-                {isOpen ? (
-                  <motion.div
-                    className="nav-children"
-                    key={`${group.id}-children`}
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    {group.sections.map((section) => (
-                      <button key={section.id} type="button" onClick={() => (activePageId === group.id ? jumpTo(section.id) : navigate(group.id))}>
-                        {t(section.navTitle || section.title)}
-                      </button>
-                    ))}
-                  </motion.div>
-                ) : null}
-              </AnimatePresence>
-            </motion.div>
+              <NavChildren group={group} isOpen={isOpen} activePageId={activePageId} navigate={navigate} jumpTo={jumpTo} />
+            </div>
           );
         })}
       </nav>
 
     </aside>
+  );
+}
+
+function NavChildren({ group, isOpen, activePageId, navigate, jumpTo }) {
+  const innerRef = useRef(null);
+  const [height, setHeight] = useState(0);
+
+  useEffect(() => {
+    const element = innerRef.current;
+    if (!element) return undefined;
+
+    const shell = element.parentElement;
+    let firstFrame = 0;
+    let secondFrame = 0;
+
+    if (isOpen) {
+      setHeight(0);
+      firstFrame = window.requestAnimationFrame(() => {
+        secondFrame = window.requestAnimationFrame(() => {
+          setHeight(element.scrollHeight);
+        });
+      });
+    } else {
+      setHeight(shell?.getBoundingClientRect().height || element.scrollHeight);
+      firstFrame = window.requestAnimationFrame(() => {
+        secondFrame = window.requestAnimationFrame(() => {
+          setHeight(0);
+        });
+      });
+    }
+
+    return () => {
+      window.cancelAnimationFrame(firstFrame);
+      window.cancelAnimationFrame(secondFrame);
+    };
+  }, [group.sections, isOpen]);
+
+  return (
+    <div className="nav-children-shell" aria-hidden={!isOpen} style={{ height }}>
+      <div className="nav-children" ref={innerRef}>
+        {group.sections.map((section) => (
+          <button key={section.id} type="button" tabIndex={isOpen ? 0 : -1} onClick={() => (activePageId === group.id ? jumpTo(section.id) : navigate(group.id))}>
+            {t(section.navTitle || section.title)}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -1447,15 +1480,6 @@ function BrandPreloader() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.42, delay: 0.62, ease: [0.16, 1, 0.3, 1] }}
         />
-        <motion.div
-          className="preloader-arrow"
-          aria-hidden="true"
-          initial={{ opacity: 0, y: -6 }}
-          animate={{ opacity: [0, 1, 1], y: [-6, 0, 8] }}
-          transition={{ duration: 1.1, delay: 0.76, repeat: Infinity, repeatDelay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <UiIcon icon={ICONS.chevronDown} size={42} />
-        </motion.div>
       </motion.div>
     </motion.div>
   );

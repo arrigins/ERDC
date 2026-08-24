@@ -335,7 +335,7 @@ img {
 
 .preloader-logo {
   align-self: end;
-  width: clamp(74px, 7vw, 116px);
+  width: clamp(112px, 9vw, 164px);
   height: auto;
   object-fit: contain;
   margin-bottom: clamp(10px, 2.2vh, 22px);
@@ -350,18 +350,6 @@ img {
   line-height: 0.98;
   font-weight: 700;
   letter-spacing: 0;
-}
-
-.preloader-arrow {
-  position: absolute;
-  right: clamp(24px, 4vw, 52px);
-  bottom: clamp(28px, 4.6vw, 58px);
-  color: #4d9cff;
-}
-
-.preloader-arrow .ui-icon {
-  width: 42px;
-  height: 42px;
 }
 
 .mobile-menu-button,
@@ -515,14 +503,43 @@ img {
   transform: scaleY(1);
 }
 
-.nav-children {
+.nav-children-shell {
+  height: 0;
   box-sizing: border-box;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    height 420ms var(--ease),
+    opacity 180ms var(--ease-standard);
+  will-change: height, opacity;
+}
+
+.nav-group.is-open .nav-children-shell {
+  opacity: 1;
+  pointer-events: auto;
+  transition:
+    height 420ms var(--ease),
+    opacity 220ms var(--ease) 70ms;
+}
+
+.nav-children {
   display: grid;
   gap: 2px;
   padding: 8px 0 12px;
-  overflow: hidden;
-  transform-origin: top;
-  will-change: height, opacity;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity 180ms var(--ease-standard),
+    transform 320ms var(--ease);
+}
+
+.nav-group.is-open .nav-children {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 220ms var(--ease) 90ms,
+    transform 360ms var(--ease) 40ms;
 }
 
 .nav-children button {
@@ -3299,16 +3316,11 @@ img {
   }
 
   .preloader-logo {
-    width: 82px;
+    width: 112px;
   }
 
   .preloader-statement {
     font-size: 30px;
-  }
-
-  .preloader-arrow {
-    right: 22px;
-    bottom: 24px;
   }
 
   .hero-number,
