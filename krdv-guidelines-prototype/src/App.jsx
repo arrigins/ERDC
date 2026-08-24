@@ -1401,7 +1401,8 @@ function Sidebar({ activePageId, openGroup, setOpenGroup, navigate, jumpTo, prel
 }
 
 function BrandPreloader() {
-  const cellOrder = [0, 1, 5, 6, 2, 10, 7, 11, 3, 15, 8, 12, 4, 16, 9, 13, 17, 14, 18, 19];
+  const columns = Array.from({ length: 6 });
+  const rows = Array.from({ length: 5 });
 
   return (
     <motion.div
@@ -1411,16 +1412,50 @@ function BrandPreloader() {
       initial={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.08 } }}
     >
-      <div className="preloader-grid" aria-hidden="true">
-        {cellOrder.map((orderIndex, index) => (
-          <i key={index} style={{ "--cell-index": orderIndex }} />
+      <div className="preloader-blueprint" aria-hidden="true">
+        {columns.map((_, index) => (
+          <motion.i
+            className="preloader-v-line"
+            key={`v-${index}`}
+            style={{ left: `${(index / (columns.length - 1)) * 100}%` }}
+            initial={{ scaleY: 0, opacity: 0 }}
+            animate={{ scaleY: 1, opacity: 1 }}
+            transition={{ duration: 0.7, delay: index * 0.045, ease: [0.16, 1, 0.3, 1] }}
+          />
+        ))}
+        {rows.map((_, index) => (
+          <motion.i
+            className="preloader-h-line"
+            key={`h-${index}`}
+            style={{ top: `${(index / (rows.length - 1)) * 100}%` }}
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            transition={{ duration: 0.7, delay: 0.12 + index * 0.055, ease: [0.16, 1, 0.3, 1] }}
+          />
         ))}
       </div>
-      <motion.div className="preloader-content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.36, delay: 0.36, ease: [0.16, 1, 0.3, 1] }}>
-        <motion.img layoutId="krdv-menu-logo" className="preloader-logo" src={logoAsset("krdv-logo-ru-square.svg")} alt="" />
-        <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.42, delay: 0.54, ease: [0.16, 1, 0.3, 1] }}>
+      <motion.div className="preloader-frame" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.28, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}>
+        <motion.p className="preloader-statement" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}>
           {t("Руководство по использованию фирменного стиля АО «КРДВ»")}
         </motion.p>
+        <motion.img
+          layoutId="krdv-menu-logo"
+          className="preloader-logo"
+          src={logoAsset("krdv-logo-ru-square.svg")}
+          alt=""
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.42, delay: 0.62, ease: [0.16, 1, 0.3, 1] }}
+        />
+        <motion.div
+          className="preloader-arrow"
+          aria-hidden="true"
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: [0, 1, 1], y: [-6, 0, 8] }}
+          transition={{ duration: 1.1, delay: 0.76, repeat: Infinity, repeatDelay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <UiIcon icon={ICONS.chevronDown} size={42} />
+        </motion.div>
       </motion.div>
     </motion.div>
   );
