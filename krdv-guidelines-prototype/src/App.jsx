@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, LayoutGroup, MotionConfig, motion } from "motion/react";
 import { MorphIcon } from "morphicons/react";
+import { ColorPanels } from "@paper-design/shaders-react";
 
 const assetPath = (pathname) => `${import.meta.env.BASE_URL}${pathname.replace(/^\/+/, "")}`;
 const heroAsset = (filename) => assetPath(`/assets/hero/${filename}`);
@@ -607,6 +608,7 @@ const pagesData = [
     id: "overview",
     number: "00",
     title: "Обзор",
+    heroLibrary: "overview-panels",
     intro: "Руководство определяет визуальную систему АО «КРДВ»: от позиционирования и логотипа до цветов, шрифтов, носителей, фотостиля и материалов для скачивания.",
     sections: [
       {
@@ -1611,17 +1613,53 @@ function SubsidiaryHeroAnimation() {
   );
 }
 
+function LibraryMiniPreview({ variant }) {
+  return (
+    <div className={`library-hero-bg is-miniature is-${variant}`} aria-hidden="true">
+      <span />
+      <span />
+      <span />
+    </div>
+  );
+}
+
+function LibraryHeroBackground({ variant, miniature = false }) {
+  if (!variant) return null;
+  if (miniature) return <LibraryMiniPreview variant={variant} />;
+
+  const shaderProps = {
+    className: "library-shader",
+    fit: "cover",
+    maxPixelCount: 2400000,
+    minPixelRatio: 1,
+    style: { width: "100%", height: "100%" },
+  };
+
+  switch (variant) {
+    case "overview-panels":
+      return (
+        <div className="library-hero-bg is-overview-panels" aria-hidden="true">
+          <ColorPanels {...shaderProps} colors={["#0056a2", "#22a8e0", "#9ec6eb", "#de2327"]} colorBack="#001d37" density={1.18} length={1.7} angle1={0.34} angle2={-0.18} blur={0.06} edges speed={0.16} gradient={0.18} />
+        </div>
+      );
+    default:
+      return null;
+  }
+}
+
 function GuidelinePage({ page, activePageId, navigate }) {
   const hasMediaHero = Boolean(page.heroVideo);
   const hasAnimatedHero = Boolean(page.heroAnimation);
   const hasSubsidiaryHero = page.heroAnimation === "subsidiaryRegions";
+  const hasLibraryHero = Boolean(page.heroLibrary);
 
   return (
     <article className="guideline-page">
-      <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""}`} aria-label={t(page.title)}>
+      <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""} ${hasLibraryHero ? "is-library" : ""}`} aria-label={t(page.title)}>
         {page.heroVideo ? <video className="hero-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : null}
         {page.heroAnimation === "colorTiles" ? <ColorHeroAnimation /> : null}
         {hasSubsidiaryHero ? <SubsidiaryHeroAnimation /> : null}
+        {page.heroLibrary ? <LibraryHeroBackground variant={page.heroLibrary} /> : null}
         {page.heroLogo ? <HeroLogoLockup source={page.heroLogo} /> : null}
         <span className="hero-number">{page.number}</span>
         <h1 className="hero-title">{t(page.title)}</h1>
@@ -1771,6 +1809,7 @@ function SectionDirectory({ navigate, activePageId }) {
           const isCurrent = activePageId === page.id;
           const hasCover = Boolean(page.heroVideo);
           const hasMotionCover = page.heroAnimation === "colorTiles";
+          const hasLibraryCover = Boolean(page.heroLibrary);
 
           return (
             <motion.button
@@ -1785,10 +1824,11 @@ function SectionDirectory({ navigate, activePageId }) {
               aria-current={isCurrent ? "page" : undefined}
               aria-label={t(`Открыть раздел ${page.title}`)}
             >
-              <div className={`directory-visual ${hasCover || hasMotionCover ? "has-cover" : ""} ${hasMotionCover ? "has-motion-cover" : ""}`} aria-hidden="true">
+              <div className={`directory-visual ${hasCover || hasMotionCover || hasLibraryCover ? "has-cover" : ""} ${hasMotionCover ? "has-motion-cover" : ""} ${hasLibraryCover ? "has-library-cover" : ""}`} aria-hidden="true">
                 {page.heroVideo ? <video className="directory-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" /> : null}
                 {hasMotionCover ? <ColorHeroAnimation /> : null}
-                {hasCover || hasMotionCover ? null : <div className="directory-fallback" />}
+                {hasLibraryCover ? <LibraryHeroBackground variant={page.heroLibrary} miniature /> : null}
+                {hasCover || hasMotionCover || hasLibraryCover ? null : <div className="directory-fallback" />}
               </div>
               <div className="directory-copy">
                 <h3>{t(page.title)}</h3>

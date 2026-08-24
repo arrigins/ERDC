@@ -11,6 +11,7 @@
     "test:sites": "node --test tests/sites-worker.test.mjs"
   },
   "dependencies": {
+    "@paper-design/shaders-react": "^0.0.80",
     "@vitejs/plugin-react": "5.0.4",
     "gsap": "^3.15.0",
     "morphicons": "^1.7.0",
