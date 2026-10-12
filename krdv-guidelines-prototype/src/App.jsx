@@ -618,6 +618,7 @@ const pagesData = [
   },
   {
     id: "positioning",
+    heroVideo: "cover-positioning.mp4",
     number: "01",
     title: "Позиционирование",
     intro: "Дальний Восток и Арктика в коммуникации КРДВ показываются как территории будущего, успеха, мечты, знаний, инфраструктуры, карьеры, льгот, масштаба и ипотеки 2%.",
@@ -757,6 +758,7 @@ const pagesData = [
   },
   {
     id: "regimes",
+    heroVideo: "cover-regimes.mp4",
     number: "04",
     title: "Преференциальные режимы",
     navTitle: "Режимы",
@@ -813,6 +815,7 @@ const pagesData = [
   },
   {
     id: "typography",
+    heroVideo: "cover-typography.mp4",
     number: "06",
     title: "Типографика",
     intro: "Раздел задает шрифтовую иерархию: рабочий гротеск, акцидентную пару и отдельную гарнитуру для торжественных документов.",
@@ -839,6 +842,7 @@ const pagesData = [
   },
   {
     id: "text",
+    heroVideo: "cover-text.mp4",
     number: "07",
     title: "Оформление текста",
     intro: "При работе с текстом рекомендуется придерживаться базовых правил оформления русскоязычных текстов. Такое внимание к деталям помогает всем носителям АО «КРДВ» выглядеть профессионально и аккуратно.",
@@ -889,6 +893,7 @@ const pagesData = [
   },
   {
     id: "corporate",
+    heroVideo: "cover-corporate.mp4",
     number: "08",
     title: "Корпоративные материалы",
     navTitle: "Корп. материалы",
@@ -951,6 +956,7 @@ const pagesData = [
   },
   {
     id: "advertising",
+    heroVideo: "cover-advertising.mp4",
     number: "09",
     title: "Рекламные материалы",
     navTitle: "Рекламные",
@@ -1010,6 +1016,7 @@ const pagesData = [
   },
   {
     id: "merch",
+    heroVideo: "cover-merch.mp4",
     number: "10",
     title: "Мерч",
     intro: "Раздел описывает прикладные носители бренда: канцелярские материалы, упаковку и текстиль.",
@@ -1050,6 +1057,7 @@ const pagesData = [
   },
   {
     id: "made",
+    heroVideo: "cover-made.mp4",
     number: "11",
     title: "Товарный знак",
     intro: "Самостоятельный раздел для товарного знака, который поддерживает продукцию резидентов и помогает маркировать происхождение товаров.",
@@ -1145,6 +1153,7 @@ const pagesData = [
   },
   {
     id: "social",
+    heroVideo: "cover-social.mp4",
     number: "13",
     title: "Дизайн соцсетей",
     intro: "Гайд по оформлению публикаций в соцсетях",
@@ -1161,6 +1170,7 @@ const pagesData = [
   },
   {
     id: "contacts",
+    heroVideo: "cover-contacts.mp4",
     number: "14",
     title: "Контакты",
     intro: "Реквизиты компании и обратная связь по руководству.",

@@ -1815,7 +1815,7 @@ img {
   gap: 18px;
   border: 1px solid var(--line-active);
   padding: 20px;
-  background: var(--blue);
+  background: #1c4286;
   color: #ffffff;
   text-decoration: none;
   transition:
@@ -1826,8 +1826,8 @@ img {
 
 .resource-links a:hover,
 .resource-links a:focus-visible {
-  border-color: rgba(0, 86, 162, 0.58);
-  background: #0056a2;
+  border-color: rgba(28, 66, 134, 0.58);
+  background: #153468;
   color: #ffffff;
 }
 
@@ -2803,14 +2803,14 @@ img {
   margin: 0;
   border: 1px solid var(--line);
   padding: 24px;
-  background: #0056a2;
+  background: #1c4286;
   color: #ffffff;
   font-style: normal;
   transition: transform var(--motion-standard) var(--ease), background var(--motion-standard) var(--ease);
 }
 
 .contact-block:hover {
-  background: #004a8b;
+  background: #153468;
   transform: translateY(-2px);
 }
 
