@@ -1,7 +1,9 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-const base = process.env.GITHUB_PAGES === "true" ? "/ERDCBB/" : "/";
+// На GitHub Pages сайт живёт по адресу /<имя-репозитория>/, поэтому берём имя из GITHUB_REPOSITORY.
+const repoName = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "ERDCBB";
+const base = process.env.GITHUB_PAGES === "true" ? `/${repoName}/` : "/";
 
 export default defineConfig({
   base,
