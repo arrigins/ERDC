@@ -1163,10 +1163,6 @@ img {
     #f7f9fb;
 }
 
-.directory-visual.has-cover + .directory-copy p {
-  -webkit-line-clamp: 2;
-}
-
 .directory-copy {
   display: grid;
   grid-template-columns: 1fr;
@@ -1199,13 +1195,9 @@ img {
 }
 
 .directory-copy p {
-  display: -webkit-box;
-  overflow: hidden;
   color: var(--muted);
   font-size: 15px;
   line-height: 1.32;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
 }
 
 .directory-copy small {
@@ -1241,7 +1233,7 @@ img {
 }
 
 .positioning-promise {
-  min-height: 320px;
+  min-height: 0;
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.92fr);
   align-content: space-between;
@@ -1267,7 +1259,7 @@ img {
 .positioning-promise strong {
   width: min(100%, 980px);
   display: block;
-  margin-top: 28px;
+  margin-top: 0;
   color: #0056a2;
   font-size: clamp(38px, 4.6vw, 68px);
   line-height: 0.98;
@@ -1748,7 +1740,7 @@ img {
 }
 
 .made-sign-card[data-tone="black"] .made-sign-preview {
-  background: #101010;
+  background: #3a3e45;
 }
 
 .made-sign-card[data-tone="white"] .made-sign-preview {
@@ -2790,6 +2782,18 @@ img {
   font-size: 22px;
   line-height: 1.25;
   letter-spacing: 0;
+}
+
+.section-footnote {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  margin: 0;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
 }
 
 .contact-block {

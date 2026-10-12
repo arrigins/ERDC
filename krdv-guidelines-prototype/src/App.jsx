@@ -207,13 +207,6 @@ const regimeColorCoding = ["Гектар", "СПВ", "КОРФ", "ТОР", "СА
   .map((short) => regimes.find((item) => item.short === short))
   .filter(Boolean);
 
-const positioningPrinciples = [
-  { title: "Качественно", text: "Экспертиза, точность и профессиональный опыт в каждом контакте с аудиторией." },
-  { title: "Просто", text: "Понятный путь к мерам поддержки, цифровым сервисам и практическим решениям." },
-  { title: "Выгодно", text: "Льготы, инфраструктура и условия, которые усиливают экономику проектов." },
-  { title: "Надежно", text: "Ответственная поддержка граждан и бизнеса в долгих сценариях развития." },
-];
-
 const textRecommendationImages = [
   { title: "Кавычки", caption: "Контроль русских кавычек «елочки» и вложенных „лапок“.", file: "text-recommendation-1.png" },
   { title: "Тире", caption: "Разделение длинного тире в предложении и среднего тире в числовых интервалах.", file: "text-recommendation-2.png" },
@@ -372,7 +365,7 @@ const fontArchive = {
 const logoVariants = {
   "ru-horizontal": {
     title: "Русская горизонтальная версия",
-    role: "Основная версия",
+    role: "Дополнительная версия",
     description: "Используется в русскоязычных материалах, когда есть достаточно горизонтального пространства и логотип должен читаться как главный идентификатор.",
     preview: "krdv-logo-ru-horizontal.svg",
     kind: "horizontal",
@@ -386,7 +379,7 @@ const logoVariants = {
   },
   "ru-square": {
     title: "Русская вертикальная версия",
-    role: "Дополнительная версия",
+    role: "Основная версия",
     description: "Подходит для компактных зон, вертикальных композиций, карточек и носителей, где горизонтальная версия теряет масштаб.",
     preview: "krdv-logo-ru-square.svg",
     kind: "square",
@@ -400,7 +393,7 @@ const logoVariants = {
   },
   "en-horizontal": {
     title: "Английская горизонтальная версия",
-    role: "Основная международная версия",
+    role: "Дополнительная международная версия",
     description: "Используется для англоязычных ресурсов, международных мероприятий и материалов для зарубежной аудитории.",
     preview: "krdv-logo-en-horizontal.svg",
     kind: "horizontal",
@@ -414,7 +407,7 @@ const logoVariants = {
   },
   "en-square": {
     title: "Английская вертикальная версия",
-    role: "Дополнительная международная версия",
+    role: "Основная международная версия",
     description: "Используется в международных коммуникациях, когда нужен компактный вертикальный знак с англоязычным написанием.",
     preview: "krdv-logo-en-square.svg",
     kind: "square",
@@ -568,7 +561,6 @@ const photostyleImages = {
   events: [
     { title: "Деловой стенд", caption: "Коммуникационный кадр с выставки или форума.", file: "photostyle-composition-6.webp" },
     { title: "Вовлеченная аудитория", caption: "Событие с участниками, которые включены в процесс.", file: "photostyle-composition-7.webp" },
-    { title: "Выступление", caption: "Кадр выступления с живой аудиторией и понятным контекстом.", file: "photostyle-composition-8.webp" },
   ],
   nature: [
     { title: "Полярное сияние", caption: "Захватывающий природный кадр Арктики.", file: "photostyle-composition-10.webp" },
@@ -584,7 +576,6 @@ const photostyleImages = {
 };
 
 const appendixSocialImages = [
-  { title: "Публикация", caption: "Композиция для основного поста с фирменной графикой и текстовым блоком.", file: "appendix-social-1.webp", wide: true },
   { title: "Карточка с персоной", caption: "Формат для спикера, эксперта или героя материала.", file: "appendix-social-2.webp", contained: true },
 ];
 
@@ -609,19 +600,12 @@ const pagesData = [
     number: "00",
     title: "Обзор",
     heroLibrary: "overview-panels",
-    intro: "Руководство определяет визуальную систему АО «КРДВ»: от позиционирования и логотипа до цветов, шрифтов, носителей, фотостиля и материалов для скачивания.",
+    intro: "Руководство по визуальной системе АО «КРДВ»: логотип, цвета, типографика, фотостиль, носители и материалы для скачивания.",
     sections: [
-      {
-        id: "guide",
-        title: "Руководство",
-        lead: "Руководство по использованию фирменного стиля АО «КРДВ».",
-        paragraphs: ["Единые правила помогают сохранять узнаваемость корпорации во внутренних и внешних коммуникациях, печатных материалах, презентациях, рекламных носителях и цифровой среде."],
-        keywords: ["АО «КРДВ»", "Дальний Восток", "Арктика", "фирменный стиль", "визуальные коммуникации"],
-      },
       {
         id: "contents",
         title: "Содержание",
-        lead: "Навигационная карта ведет в каждый раздел и показывает, сколько смысловых блоков внутри.",
+        lead: "Руководство по использованию фирменного стиля АО «КРДВ»",
         directory: true,
       },
       {
@@ -666,7 +650,7 @@ const pagesData = [
     title: "Логотип",
     heroVideo: "logo-cover.mp4",
     heroLogo: "krdv-logo-ru-horizontal.svg",
-    intro: "Раздел показывает состав логотипа, доступные версии, правила размещения, охранное поле, работу с фоном и ограничения по использованию.",
+    intro: "Правила работы с логотипом: версии, размещение, охранное поле, работа с фоном и ограничения по использованию.",
     sections: [
       {
         id: "full",
@@ -677,7 +661,7 @@ const pagesData = [
           "Рост лотоса символизирует прогресс и развитие, способность противостоять любым трудностям на благо социально-экономического развития территорий Дальнего Востока и Арктики.",
           "Любая версия с измененной подписью или самостоятельным знаком допустима только по письменному решению Департамента визуальных коммуникаций АО «КРДВ».",
         ],
-        logos: ["ru-horizontal", "ru-square", "mark"],
+        logos: ["ru-horizontal", "ru-square"],
       },
       {
         id: "versions",
@@ -774,7 +758,8 @@ const pagesData = [
   {
     id: "regimes",
     number: "04",
-    title: "Режимы",
+    title: "Преференциальные режимы",
+    navTitle: "Режимы",
     intro: "Для преференциальных режимов используется единая система сокращений, знаков и названий. Она помогает быстро различать программы поддержки в коммуникационных материалах.",
     sections: [
       {
@@ -849,12 +834,6 @@ const pagesData = [
           { label: "Наградные документы", text: "TT Tsars применяется в благодарностях, благодарственных письмах и почетных грамотах." },
           { label: "Исключения", text: "Другие шрифты допускаются только для проектов и мероприятий с собственным фирменным стилем. В офисных документах допустимы Arial и Times New Roman." },
         ],
-      },
-      {
-        id: "font-files",
-        title: "Файлы",
-        paragraphs: ["Доступные начертания можно скачать отдельно или одним архивом для передачи в работу дизайнеру, подрядчику или внутренней команде."],
-        fontDownloads: true,
       },
     ],
   },
@@ -975,7 +954,7 @@ const pagesData = [
     number: "09",
     title: "Рекламные материалы",
     navTitle: "Рекламные",
-    intro: "Рекламно-информационные материалы включают лифлеты, прессволл, роллап, навигацию кабинетов, режимник и наградные документы.",
+    intro: "Рекламно-информационные материалы включают лифлеты, роллап, навигацию кабинетов, режимник и наградные документы.",
     sections: [
       {
         id: "leaflets",
@@ -987,13 +966,6 @@ const pagesData = [
           { title: "Лифлеты: общий вид", caption: "Набор обложек показывает цветовую навигацию по режимам.", file: "leaflets-layout-1.webp" },
           { title: "Лифлеты: развороты", caption: "Внутренние блоки продолжают палитру выбранного направления.", file: "leaflets-layout-2.webp" },
         ],
-      },
-      {
-        id: "presswall",
-        title: "Прессволл",
-        paragraphs: ["Крупный фон для фотозон, выставочных стендов и имиджевых мероприятий. Размер конструкции: 2000×3000 мм."],
-        rules: [{ label: "Перед печатью", text: "Новый дизайн прессволла проверяется в Департаменте визуальных коммуникаций КРДВ." }],
-        assetImages: [{ title: "Прессволл", caption: "Баннерная плоскость с повторяющимся фирменным знаком.", file: "presswall-layout.webp", wide: true }],
       },
       {
         id: "rollup",
@@ -1079,7 +1051,7 @@ const pagesData = [
   {
     id: "made",
     number: "11",
-    title: "Сделано в ТОР СПВ",
+    title: "Товарный знак",
     intro: "Самостоятельный раздел для товарного знака, который поддерживает продукцию резидентов и помогает маркировать происхождение товаров.",
     sections: [
       {
@@ -1144,8 +1116,7 @@ const pagesData = [
           "Неподходящий кадр: участники не вовлечены, людей много и лица не в фокусе, композиция неудачная, на переднем плане затылки или обилие текстур мешает считыванию.",
         ],
         assetImages: photostyleImages.events,
-        cardsPlacement: "afterAssets",
-        cards: [{ title: "Максим Блинов / РИА Новости", text: "Источник для событийных кадров с участием людей и деловой среды." }],
+        footnote: ["Автор фото: Максим Блинов.", "Источник: Фотохост-агентство РИА Новости"],
       },
       {
         id: "nature",
@@ -1173,28 +1144,34 @@ const pagesData = [
     ],
   },
   {
-    id: "appendix",
+    id: "social",
     number: "13",
-    title: "Приложение",
-    intro: "Приложение собирает дополнительные материалы для оформления социальных сетей и обратной связи по руководству.",
+    title: "Дизайн соцсетей",
+    intro: "Гайд по оформлению публикаций в соцсетях",
     sections: [
       {
-        id: "social",
+        id: "social-guide",
         title: "Социальные сети",
-        paragraphs: ["Гайд помогает сохранять узнаваемый визуальный язык в постах, карточках, обложках и регулярных публикациях КРДВ. Макеты ниже показывают базовую композицию и работу с персонами."],
+        paragraphs: ["Гайд помогает сохранять узнаваемый визуальный язык в постах, карточках, обложках и регулярных публикациях КРДВ."],
         assetImageMode: "stack",
         assetImages: appendixSocialImages,
         resourceLinks: ["socialGuide"],
       },
+    ],
+  },
+  {
+    id: "contacts",
+    number: "14",
+    title: "Контакты",
+    intro: "Реквизиты компании и обратная связь по руководству.",
+    sections: [
       {
-        id: "contacts",
+        id: "contacts-info",
         title: "Контакты",
         contacts: [
           "Акционерное общество «Корпорация развития Дальнего Востока и Арктики»",
-          "8 (800) 707-55-58",
           "erdc.ru",
-          "12/2025",
-          "© Все права защищены.",
+          "Дата последнего обновления руководства: 01.11.2026",
         ],
         contactCta: {
           title: "Нашли ошибку?",
@@ -1218,7 +1195,8 @@ const routeAliases = {
   illustration: "regimes",
   iconography: "regimes",
   language: "text",
-  resources: "appendix",
+  resources: "social",
+  appendix: "social",
   photo: "photostyle",
 };
 
@@ -1705,12 +1683,18 @@ function ContentSection({ section, navigate, activePageId }) {
         {section.palette ? <PaletteGrid colors={section.palette} /> : null}
         {section.typeSamples ? <TypeSpecimens items={section.typeSamples} /> : null}
         {section.fontWorkbench ? <FontWorkbench /> : null}
-        {section.fontDownloads ? <FontDownloadLibrary /> : null}
         {section.regimePalette ? <RegimePalette items={section.regimePalette} /> : null}
         {section.regimeSigns ? <RegimeSignLibrary /> : null}
         {section.madeSigns ? <MadeSignLibrary /> : null}
         {section.assetImages ? <AssetImageGrid items={section.assetImages} mode={section.assetImageMode} /> : null}
         {cardsAfterAssets ? <CardGrid items={section.cards} /> : null}
+        {section.footnote ? (
+          <p className="section-footnote">
+            {section.footnote.map((line) => (
+              <span key={line}>{t(line)}</span>
+            ))}
+          </p>
+        ) : null}
         {section.visuals ? <PlaceholderGrid items={section.visuals} /> : null}
         {section.resourceLinks ? <ResourceLinks keys={section.resourceLinks} /> : null}
         {section.typografDemo ? <TypografDemo /> : null}
@@ -1778,7 +1762,6 @@ function PositioningShowcase() {
     <div className="positioning-showcase">
       <div className="positioning-promise">
         <div>
-          <span>{t("Бренд-обещание")}</span>
           <strong>{t("Дальний Восток и Арктика — ближе к будущему")}</strong>
         </div>
         <div className="positioning-tag-cloud" aria-label={t("Смысловые направления")}>
@@ -1786,16 +1769,6 @@ function PositioningShowcase() {
             <em key={tag}>{t(tag)}</em>
           ))}
         </div>
-        <p>{t("Смысловые пары помогают говорить о территориях через конкретное движение: проекты, людей, инфраструктуру, карьеру и понятную пользу для резидентов.")}</p>
-      </div>
-      <div className="positioning-principles">
-        {positioningPrinciples.map((item, index) => (
-          <motion.article key={item.title} whileHover={{ y: -2 }} style={{ "--principle-index": index }}>
-            <span>{`0${index + 1}`}</span>
-            <h3>{t(item.title)}</h3>
-            <p>{t(item.text)}</p>
-          </motion.article>
-        ))}
       </div>
     </div>
   );
@@ -2213,7 +2186,6 @@ function FontWorkbench() {
   const [previewSize, setPreviewSize] = useState(64);
   const [sample, setSample] = useState(selectedFamily.sample);
   const selectedStyle = selectedFamily.files[styleIndex] || selectedFamily.files[0];
-  const canDownloadSelected = selectedStyle && isDesktopFontFile(selectedStyle);
   const fallback = selectedFamily.id === "tsars" || selectedFamily.id === "serif" ? "Georgia, serif" : "Arial, sans-serif";
   const preferredStyles = ["Regular", "Medium", "DemiBold", "Bold", "Black"];
   const styleOptions = selectedFamily.files.filter((file) => preferredStyles.includes(file.label) || file.file === selectedStyle?.file);
@@ -2308,12 +2280,6 @@ function FontWorkbench() {
           />
         </label>
 
-        {canDownloadSelected ? (
-          <div className="font-current-file">
-            <span>{t("Скачать выбранное начертание")}</span>
-            <FontFileLink file={selectedStyle} familyTitle={selectedFamily.title} compact />
-          </div>
-        ) : null}
       </div>
     </div>
   );
