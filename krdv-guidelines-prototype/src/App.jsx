@@ -1975,7 +1975,7 @@ function RegimeSignLibrary() {
             onMouseEnter={item.iconVideo ? playCardVideo : undefined}
             onMouseLeave={item.iconVideo ? resetCardVideo : undefined}
           >
-            <div className={`regime-sign-preview ${item.hasIcon ? "is-icon" : ""}`}>
+            <div className={`regime-sign-preview ${item.hasIcon ? "is-icon" : ""} ${item.iconVideo ? "" : "is-cover"}`}>
               <img src={regimeSignAsset(item.preview)} alt={t(item.short)} loading="lazy" />
               {item.iconVideo ? <video src={regimeSignAsset(item.iconVideo)} muted loop playsInline preload="auto" aria-hidden="true" /> : null}
             </div>
@@ -1984,7 +1984,6 @@ function RegimeSignLibrary() {
               <h3>{t(item.title)}</h3>
               <p>{t(item.description)}</p>
               <div className="logo-downloads" aria-label={t(`Скачать знак ${item.short}`)}>
-                <strong>{t("Скачать")}</strong>
                 <div>
                   {regimeSignFormats.map((format) => (
                     <LogoDownloadLink key={format} file={item.files[format]} format={format} title={item.title} asset={regimeSignAsset} />
