@@ -504,7 +504,7 @@ const subsidiaryLogoSets = subsidiaryLogos.reduce((sets, item) => {
 }, {});
 
 const regimeSignIcons = new Set(["tor", "intc", "sar", "korf", "azrf", "spv"]);
-const regimeSignVideoIcons = new Set(["tor", "azrf"]);
+const regimeSignVideoIcons = new Set(["tor", "azrf", "intc"]);
 
 const regimeSignLogos = [
   { slug: "tor", short: "ТОР", title: "Территории опережающего развития" },
