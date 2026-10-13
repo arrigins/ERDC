@@ -518,7 +518,7 @@ const regimeSignLogos = [
   color: regimes.find((regime) => regime.short === item.short)?.color || "#050505",
   description: regimeNotes[item.short],
   // Объёмные иконки для превью; файлы для скачивания — исходные векторные знаки.
-  preview: regimeSignIcons.has(item.slug) ? `regime-${item.slug}-icon.webp` : `regime-${item.slug}.svg`,
+  preview: regimeSignVideoIcons.has(item.slug) ? `regime-${item.slug}-icon.webp` : regimeSignIcons.has(item.slug) ? `regime-${item.slug}-wide.webp` : `regime-${item.slug}.svg`,
   hasIcon: regimeSignIcons.has(item.slug),
   iconVideo: regimeSignVideoIcons.has(item.slug) ? `regime-${item.slug}-icon.mp4` : "",
   files: {
