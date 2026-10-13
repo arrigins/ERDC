@@ -2493,11 +2493,7 @@ function SiteFooter() {
         </div>
       </div>
       <div className="site-footer-bottom">
-        <svg className="site-footer-mark" viewBox="0 0 125.09 68.99" role="img" aria-label={t("Знак КРДВ")} focusable="false">
-          {LOTUS_MARK_PATHS.map((path) => (
-            <path key={path} d={path} />
-          ))}
-        </svg>
+        <img className="site-footer-logo" src={logoAsset("krdv-logo-ru-horizontal-white.svg")} alt={t("Корпорация развития Дальнего Востока и Арктики")} />
         <p>{t(`© ${new Date().getFullYear()} АО «КРДВ»`)}</p>
         <button type="button" onClick={() => document.getElementById("page")?.scrollTo({ top: 0, behavior: "smooth" })}>
           {t("Наверх")}
