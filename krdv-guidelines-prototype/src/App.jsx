@@ -1216,7 +1216,33 @@ function App() {
   const [openGroup, setOpenGroup] = useState(getInitialPage);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showPreloader, setShowPreloader] = useState(true);
+  const [activeSectionId, setActiveSectionId] = useState("");
   const activePage = pagesById[activePageId] || pagesById.overview;
+
+  // Текущий подраздел — последний, чей заголовок уже прокручен до верхней трети экрана.
+  useEffect(() => {
+    const scroller = document.getElementById("page");
+    if (!scroller) return undefined;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const limit = scroller.getBoundingClientRect().top + scroller.clientHeight * 0.33;
+      let current = "";
+      scroller.querySelectorAll(".content-section").forEach((section) => {
+        if (section.getBoundingClientRect().top <= limit) current = section.id;
+      });
+      setActiveSectionId(current);
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    update();
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      scroller.removeEventListener("scroll", onScroll);
+      window.cancelAnimationFrame(frame);
+    };
+  }, [activePageId]);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1314,7 +1340,7 @@ function App() {
             <span>{t(menuOpen ? "Закрыть" : "Меню")}</span>
             <UiIcon icon={menuOpen ? ICONS.close : ICONS.menu} className="menu-icon" />
           </button>
-          <Sidebar activePageId={activePageId} openGroup={openGroup} setOpenGroup={setOpenGroup} navigate={navigate} jumpTo={jumpTo} preloading={showPreloader} />
+          <Sidebar activePageId={activePageId} activeSectionId={activeSectionId} openGroup={openGroup} setOpenGroup={setOpenGroup} navigate={navigate} jumpTo={jumpTo} preloading={showPreloader} />
           <button className="nav-backdrop" type="button" aria-label={t("Закрыть меню")} onClick={() => setMenuOpen(false)} />
           <motion.main id="page" className="page-scroll" layoutScroll>
             <GuidelinePage key={activePageId} page={activePage} activePageId={activePageId} navigate={navigate} />
@@ -1325,7 +1351,7 @@ function App() {
   );
 }
 
-function Sidebar({ activePageId, openGroup, setOpenGroup, navigate, jumpTo, preloading }) {
+function Sidebar({ activePageId, activeSectionId, openGroup, setOpenGroup, navigate, jumpTo, preloading }) {
   return (
     <aside className="sidebar" aria-label={t("Навигация брендбука")}>
       <button className="brand-lockup" type="button" onClick={() => navigate("overview")} aria-label={t("Открыть обзор")}>
@@ -1360,7 +1386,7 @@ function Sidebar({ activePageId, openGroup, setOpenGroup, navigate, jumpTo, prel
                 <strong>{t(group.navTitle || group.title)}</strong>
                 <UiIcon icon={isOpen ? ICONS.chevronUp : ICONS.chevronDown} className="nav-chevron" />
               </button>
-              <NavChildren group={group} isOpen={isOpen} activePageId={activePageId} navigate={navigate} jumpTo={jumpTo} />
+              <NavChildren group={group} isOpen={isOpen} activePageId={activePageId} activeSectionId={isActive ? activeSectionId : ""} navigate={navigate} jumpTo={jumpTo} />
             </div>
           );
         })}
@@ -1370,7 +1396,7 @@ function Sidebar({ activePageId, openGroup, setOpenGroup, navigate, jumpTo, prel
   );
 }
 
-function NavChildren({ group, isOpen, activePageId, navigate, jumpTo }) {
+function NavChildren({ group, isOpen, activePageId, activeSectionId, navigate, jumpTo }) {
   const innerRef = useRef(null);
   const [height, setHeight] = useState(0);
 
@@ -1408,7 +1434,7 @@ function NavChildren({ group, isOpen, activePageId, navigate, jumpTo }) {
     <div className="nav-children-shell" aria-hidden={!isOpen} style={{ height }}>
       <div className="nav-children" ref={innerRef}>
         {group.sections.map((section) => (
-          <button key={section.id} type="button" tabIndex={isOpen ? 0 : -1} onClick={() => (activePageId === group.id ? jumpTo(section.id) : navigate(group.id))}>
+          <button key={section.id} type="button" tabIndex={isOpen ? 0 : -1} aria-current={section.id === activeSectionId ? "location" : undefined} onClick={() => (activePageId === group.id ? jumpTo(section.id) : navigate(group.id))}>
             {t(section.navTitle || section.title)}
           </button>
         ))}

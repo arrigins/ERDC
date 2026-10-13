@@ -557,36 +557,23 @@ img {
   color: var(--muted);
   font-size: 15px;
   line-height: 1.22;
-  transition: color var(--motion-fast) var(--ease-standard), transform var(--motion-fast) var(--ease-standard);
+  transition: color var(--motion-fast) var(--ease-standard), background var(--motion-fast) var(--ease-standard);
 }
 
-.nav-children button::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 34px;
-  width: 6px;
-  height: 1px;
-  background: currentColor;
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity var(--motion-fast) var(--ease-standard), transform var(--motion-fast) var(--ease-standard);
-}
-
-.nav-parent:hover,
-.nav-children button:hover {
+.nav-parent:hover {
   color: #050505;
 }
 
+/* Подпункт при наведении и текущий подпункт подсвечиваются серой плашкой на всю ширину меню. */
 .nav-children button:hover,
-.nav-children button:focus-visible {
-  transform: translateX(3px);
+.nav-children button:focus-visible,
+.nav-children button[aria-current="location"] {
+  background: #f2f2f2;
+  color: #050505;
 }
 
-.nav-children button:hover::before,
-.nav-children button:focus-visible::before {
-  opacity: 1;
-  transform: translateX(0);
+.nav-children button:focus-visible {
+  outline-offset: -2px;
 }
 
 .page-scroll {
