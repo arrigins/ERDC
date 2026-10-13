@@ -503,7 +503,8 @@ const subsidiaryLogoSets = subsidiaryLogos.reduce((sets, item) => {
   return sets;
 }, {});
 
-const regimeSignIcons = new Set(["intc", "sar", "korf", "azrf", "spv"]);
+const regimeSignIcons = new Set(["tor", "intc", "sar", "korf", "azrf", "spv"]);
+const regimeSignVideoIcons = new Set(["tor"]);
 
 const regimeSignLogos = [
   { slug: "tor", short: "ТОР", title: "Территории опережающего развития" },
@@ -519,6 +520,7 @@ const regimeSignLogos = [
   // Объёмные иконки для превью; файлы для скачивания — исходные векторные знаки.
   preview: regimeSignIcons.has(item.slug) ? `regime-${item.slug}-icon.webp` : `regime-${item.slug}.svg`,
   hasIcon: regimeSignIcons.has(item.slug),
+  iconVideo: regimeSignVideoIcons.has(item.slug) ? `regime-${item.slug}-icon.mp4` : "",
   files: {
     svg: `regime-${item.slug}.svg`,
     png: `regime-${item.slug}.png`,
@@ -1951,7 +1953,11 @@ function RegimeSignLibrary() {
         {regimeSignLogos.map((item) => (
           <motion.article className="regime-sign-card" key={item.slug} style={{ "--sign-color": item.color }} layout whileHover={{ y: -2 }}>
             <div className={`regime-sign-preview ${item.hasIcon ? "is-icon" : ""}`}>
-              <img src={regimeSignAsset(item.preview)} alt={t(item.short)} loading="lazy" />
+              {item.iconVideo ? (
+                <video src={regimeSignAsset(item.iconVideo)} poster={regimeSignAsset(item.preview)} autoPlay muted loop playsInline preload="metadata" aria-label={t(item.short)} />
+              ) : (
+                <img src={regimeSignAsset(item.preview)} alt={t(item.short)} loading="lazy" />
+              )}
             </div>
             <div className="regime-sign-copy">
               <span>{t(item.short)}</span>

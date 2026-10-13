@@ -1732,9 +1732,12 @@ img {
   padding: 12px;
 }
 
-.regime-sign-preview.is-icon img {
+.regime-sign-preview.is-icon img,
+.regime-sign-preview.is-icon video {
+  width: 100%;
   max-width: 156px;
   max-height: 156px;
+  object-fit: contain;
 }
 
 .made-sign-preview {
@@ -3379,7 +3382,8 @@ img {
     grid-template-rows: 156px 1fr;
   }
 
-  .regime-sign-preview.is-icon img {
+  .regime-sign-preview.is-icon img,
+  .regime-sign-preview.is-icon video {
     max-width: 132px;
     max-height: 132px;
   }
