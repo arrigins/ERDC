@@ -7,6 +7,10 @@ const base = process.env.GITHUB_PAGES === "true" ? `/${repoName}/` : "/";
 
 export default defineConfig({
   base,
+  // Дата сборки показывается в боковом меню как «Обновлено».
+  define: {
+    __BUILD_DATE__: JSON.stringify(new Date().toISOString()),
+  },
   build: {
     outDir: "dist/client",
   },

@@ -24,6 +24,7 @@ const ICONS = {
   close: "M6 6l12 12M18 6L6 18",
   copy: "M8 8h10v12H8zM6 4h10v12",
   download: "M12 3v12M7 10l5 5 5-5M5 21h14",
+  link: "M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1",
   menu: "M4 7h16M4 12h16M4 17h16",
 };
 
@@ -1204,16 +1205,125 @@ const routeAliases = {
   photo: "photostyle",
 };
 
-function getInitialPage() {
-  if (typeof window === "undefined") return "overview";
-  const raw = window.location.hash.replace(/^#\/?/, "");
-  const normalized = routeAliases[raw] || raw;
-  return pagesById[normalized] ? normalized : "overview";
+// Адрес вида #/<раздел> или #/<раздел>/<подраздел> — на подраздел можно дать прямую ссылку.
+function parseRoute() {
+  if (typeof window === "undefined") return { pageId: "overview", sectionId: "" };
+  const [rawPage = "", rawSection = ""] = window.location.hash.replace(/^#\/?/, "").split("/");
+  const normalized = routeAliases[rawPage] || rawPage;
+  const pageId = pagesById[normalized] ? normalized : "overview";
+  const sectionId = pagesById[pageId].sections.some((section) => section.id === rawSection) ? rawSection : "";
+  return { pageId, sectionId };
 }
+
+function getInitialPage() {
+  return parseRoute().pageId;
+}
+
+function routeHash(pageId, sectionId) {
+  return sectionId ? `#/${pageId}/${sectionId}` : `#/${pageId}`;
+}
+
+// Плавно прокручивает к подразделу и поправляет позицию, если выше успели догрузиться картинки.
+function scrollToSection(sectionId) {
+  const scroller = document.getElementById("page");
+  const target = document.getElementById(sectionId);
+  if (!scroller || !target) return;
+  target.scrollIntoView({ block: "start", behavior: "smooth" });
+  window.setTimeout(() => {
+    const offset = target.getBoundingClientRect().top - scroller.getBoundingClientRect().top;
+    if (Math.abs(offset) > 4) scroller.scrollTo({ top: scroller.scrollTop + offset, behavior: "instant" });
+  }, 900);
+}
+
+function sectionUrl(pageId, sectionId) {
+  return `${window.location.origin}${window.location.pathname}${routeHash(pageId, sectionId)}`;
+}
+
+const SEARCH_SKIP_KEYS = new Set(["id", "file", "image", "url", "href", "heroVideo", "heroLogo", "heroLibrary", "heroAnimation", "number", "src"]);
+
+function normalizeSearch(value) {
+  return String(value).toLowerCase().replace(/ё/g, "е").replace(/[\u00a0\u202f]/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function collectSearchText(value, key = "", output = []) {
+  if (SEARCH_SKIP_KEYS.has(key) || value == null) return output;
+  if (typeof value === "string") {
+    // Служебные ключи вида ru-horizontal и имена файлов в поиск не попадают.
+    if (!/^[a-z0-9._-]+$/i.test(value) || key === "title") output.push(value);
+    return output;
+  }
+  if (Array.isArray(value)) {
+    value.forEach((item) => {
+      if (key === "resourceLinks" && downloadResources[item]) {
+        output.push(downloadResources[item].title, downloadResources[item].description);
+        return;
+      }
+      collectSearchText(item, key, output);
+    });
+    return output;
+  }
+  if (typeof value === "object") {
+    Object.entries(value).forEach(([childKey, child]) => collectSearchText(child, childKey, output));
+  }
+  return output;
+}
+
+const searchIndex = pagesData.flatMap((page) => {
+  const pageLabel = `${page.number} ${page.navTitle || page.title}`;
+  const pageEntry = {
+    key: page.id,
+    pageId: page.id,
+    sectionId: "",
+    pageLabel,
+    title: page.title,
+    text: [page.title, page.navTitle, page.intro].filter(Boolean).join(" "),
+  };
+  const sectionEntries = page.sections.map((section) => ({
+    key: `${page.id}/${section.id}`,
+    pageId: page.id,
+    sectionId: section.id,
+    pageLabel,
+    title: section.navTitle || section.title,
+    text: collectSearchText(section).join(" · "),
+  }));
+  return [pageEntry, ...sectionEntries].map((entry) => ({
+    ...entry,
+    titleNorm: normalizeSearch(entry.title),
+    textNorm: normalizeSearch(entry.text),
+  }));
+});
+
+function searchGuidelines(query) {
+  const words = normalizeSearch(query).split(" ").filter(Boolean);
+  if (!words.length) return [];
+
+  return searchIndex
+    .map((entry) => {
+      const haystack = `${entry.titleNorm} ${entry.textNorm}`;
+      if (!words.every((word) => haystack.includes(word))) return null;
+      const titleHits = words.filter((word) => entry.titleNorm.includes(word)).length;
+      return { ...entry, score: titleHits * 10 + (entry.sectionId ? 0 : 1), snippet: titleHits === words.length ? "" : searchSnippet(entry.text, words[0]) };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 14);
+}
+
+function searchSnippet(text, word) {
+  const plain = String(text).replace(/[\u00a0\u202f]/g, " ").replace(/\s+/g, " ").trim();
+  const index = normalizeSearch(plain).indexOf(word);
+  if (index < 0) return "";
+  const start = Math.max(0, index - 36);
+  const end = Math.min(plain.length, index + word.length + 64);
+  return `${start > 0 ? "…" : ""}${plain.slice(start, end).trim()}${end < plain.length ? "…" : ""}`;
+}
+
+const BUILD_DATE = new Intl.DateTimeFormat("ru-RU", { day: "2-digit", month: "2-digit", year: "numeric" }).format(new Date(__BUILD_DATE__));
 
 function App() {
   const [activePageId, setActivePageId] = useState(getInitialPage);
   const [openGroup, setOpenGroup] = useState(getInitialPage);
+  const [pendingSection, setPendingSection] = useState(() => parseRoute().sectionId);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showPreloader, setShowPreloader] = useState(true);
   const activePage = pagesById[activePageId] || pagesById.overview;
@@ -1226,10 +1336,14 @@ function App() {
 
   useEffect(() => {
     const onHashChange = () => {
-      const next = getInitialPage();
+      const { pageId: next, sectionId } = parseRoute();
       setActivePageId(next);
       setOpenGroup(next);
       setMenuOpen(false);
+      if (sectionId) {
+        setPendingSection(sectionId);
+        return;
+      }
       document.getElementById("page")?.scrollTo({ top: 0, left: 0, behavior: "instant" });
     };
 
@@ -1288,20 +1402,34 @@ function App() {
     };
   }, [activePageId]);
 
-  function navigate(pageId) {
-    const nextHash = `#/${pageId}`;
+  // Переход к подразделу ждёт, пока новая страница отрисуется.
+  useEffect(() => {
+    if (!pendingSection) return undefined;
+    const timeout = window.setTimeout(() => {
+      scrollToSection(pendingSection);
+      setPendingSection("");
+    }, 80);
+    return () => window.clearTimeout(timeout);
+  }, [activePageId, pendingSection]);
+
+  function navigate(pageId, sectionId = "") {
+    const nextHash = routeHash(pageId, sectionId);
     if (window.location.hash !== nextHash) {
       window.history.pushState(null, "", nextHash);
     }
     setActivePageId(pageId);
     setOpenGroup(pageId);
     setMenuOpen(false);
+    if (sectionId) {
+      setPendingSection(sectionId);
+      return;
+    }
     document.getElementById("page")?.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }
 
   function jumpTo(sectionId) {
-    const target = document.getElementById(sectionId);
-    target?.scrollIntoView({ block: "start", behavior: "smooth" });
+    scrollToSection(sectionId);
+    window.history.replaceState(null, "", routeHash(activePageId, sectionId));
     setMenuOpen(false);
   }
 
@@ -1326,6 +1454,19 @@ function App() {
 }
 
 function Sidebar({ activePageId, openGroup, setOpenGroup, navigate, jumpTo, preloading }) {
+  const [query, setQuery] = useState("");
+  const results = useMemo(() => searchGuidelines(query), [query]);
+
+  function selectResult(result) {
+    setQuery("");
+    if (result.pageId === activePageId && result.sectionId) {
+      setOpenGroup(result.pageId);
+      jumpTo(result.sectionId);
+      return;
+    }
+    navigate(result.pageId, result.sectionId);
+  }
+
   return (
     <aside className="sidebar" aria-label={t("Навигация брендбука")}>
       <button className="brand-lockup" type="button" onClick={() => navigate("overview")} aria-label={t("Открыть обзор")}>
@@ -1334,8 +1475,14 @@ function Sidebar({ activePageId, openGroup, setOpenGroup, navigate, jumpTo, prel
 
       <div className="sidebar-meta">
         <strong>{t("Руководство по фирменному стилю")}</strong>
+        <span>{t(`Обновлено ${BUILD_DATE}`)}</span>
       </div>
 
+      <SidebarSearch query={query} setQuery={setQuery} results={results} onSelect={selectResult} />
+
+      {query.trim() ? (
+        <SearchResults query={query} results={results} onSelect={selectResult} />
+      ) : (
       <nav className="nav-list">
         {pagesData.map((group) => {
           const isOpen = openGroup === group.id;
@@ -1365,8 +1512,81 @@ function Sidebar({ activePageId, openGroup, setOpenGroup, navigate, jumpTo, prel
           );
         })}
       </nav>
+      )}
 
+      <button className="sidebar-download" type="button" onClick={() => navigate("overview", "downloads")}>
+        <span>{t("Скачать материалы")}</span>
+        <UiIcon icon={ICONS.download} className="sidebar-download-icon" />
+      </button>
     </aside>
+  );
+}
+
+function SidebarSearch({ query, setQuery, results, onSelect }) {
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    // «/» или Ctrl/Cmd + K ставят курсор в поиск.
+    const onKeyDown = (event) => {
+      const target = event.target;
+      const typing = target instanceof HTMLElement && (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
+      const isShortcut = (event.key === "k" || event.key === "K" || event.key === "л" || event.key === "Л") && (event.metaKey || event.ctrlKey);
+      if (isShortcut || (event.key === "/" && !typing)) {
+        event.preventDefault();
+        inputRef.current?.focus();
+        inputRef.current?.select();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  return (
+    <div className="sidebar-search" role="search">
+      <input
+        ref={inputRef}
+        type="search"
+        value={query}
+        placeholder={t("Поиск по руководству")}
+        aria-label={t("Поиск по руководству")}
+        autoComplete="off"
+        spellCheck="false"
+        onChange={(event) => setQuery(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            setQuery("");
+            event.currentTarget.blur();
+          }
+          if (event.key === "Enter" && results[0]) {
+            onSelect(results[0]);
+          }
+        }}
+      />
+      {query ? (
+        <button type="button" className="sidebar-search-clear" aria-label={t("Очистить поиск")} onClick={() => { setQuery(""); inputRef.current?.focus(); }}>
+          <UiIcon icon={ICONS.close} size={16} />
+        </button>
+      ) : (
+        <kbd aria-hidden="true">/</kbd>
+      )}
+    </div>
+  );
+}
+
+function SearchResults({ query, results, onSelect }) {
+  return (
+    <div className="nav-list search-results">
+      <p className="search-count" aria-live="polite">
+        {results.length ? t(`Найдено: ${results.length}`) : t(`По запросу «${query.trim()}» ничего не найдено`)}
+      </p>
+      {results.map((result) => (
+        <button key={result.key} type="button" className="search-result" onClick={() => onSelect(result)}>
+          <span>{t(result.pageLabel)}</span>
+          <strong>{t(result.sectionId ? result.title : "Вступление")}</strong>
+          {result.snippet ? <em>{t(result.snippet)}</em> : null}
+        </button>
+      ))}
+    </div>
   );
 }
 
@@ -1660,6 +1880,34 @@ function GuidelinePage({ page, activePageId, navigate }) {
   );
 }
 
+function SectionLinkButton({ pageId, sectionId }) {
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!copied) return undefined;
+    const timeout = window.setTimeout(() => setCopied(false), 1800);
+    return () => window.clearTimeout(timeout);
+  }, [copied]);
+
+  async function copyLink() {
+    const url = sectionUrl(pageId, sectionId);
+    window.history.replaceState(null, "", routeHash(pageId, sectionId));
+    setCopied(true);
+    try {
+      await navigator.clipboard?.writeText(url);
+    } catch {
+      // Clipboard access can be unavailable in local preview contexts; the address bar still has the link.
+    }
+  }
+
+  return (
+    <button className="section-link" type="button" data-copied={copied} onClick={copyLink}>
+      <UiIcon icon={copied ? ICONS.check : ICONS.link} size={15} className="section-link-icon" />
+      <span>{t(copied ? "Ссылка скопирована" : "Ссылка на раздел")}</span>
+    </button>
+  );
+}
+
 function ContentSection({ section, navigate, activePageId }) {
   const cardsBeforeAssets = section.cards && section.cardsPlacement !== "afterAssets";
   const cardsAfterAssets = section.cards && section.cardsPlacement === "afterAssets";
@@ -1668,6 +1916,7 @@ function ContentSection({ section, navigate, activePageId }) {
     <section className="content-section" id={section.id}>
       <div className="section-title">
         <h2>{t(section.title)}</h2>
+        <SectionLinkButton pageId={activePageId} sectionId={section.id} />
       </div>
       <div className="section-body">
         {section.lead ? <p className="lead-copy">{t(section.lead)}</p> : null}
