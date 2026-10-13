@@ -1946,18 +1946,38 @@ function SubsidiaryLogoLibrary({ setId }) {
   );
 }
 
+// Анимация иконки играет, пока курсор над карточкой; при уходе — снова статичная картинка.
+function playCardVideo(event) {
+  const video = event.currentTarget.querySelector("video");
+  if (!video) return;
+  video.play().then(() => video.parentElement?.classList.add("is-playing")).catch(() => {});
+}
+
+function resetCardVideo(event) {
+  const video = event.currentTarget.querySelector("video");
+  if (!video) return;
+  video.parentElement?.classList.remove("is-playing");
+  video.pause();
+  video.currentTime = 0;
+}
+
 function RegimeSignLibrary() {
   return (
     <LayoutGroup>
       <motion.div className="regime-sign-library" layout>
         {regimeSignLogos.map((item) => (
-          <motion.article className="regime-sign-card" key={item.slug} style={{ "--sign-color": item.color }} layout whileHover={{ y: -2 }}>
+          <motion.article
+            className="regime-sign-card"
+            key={item.slug}
+            style={{ "--sign-color": item.color }}
+            layout
+            whileHover={{ y: -2 }}
+            onMouseEnter={item.iconVideo ? playCardVideo : undefined}
+            onMouseLeave={item.iconVideo ? resetCardVideo : undefined}
+          >
             <div className={`regime-sign-preview ${item.hasIcon ? "is-icon" : ""}`}>
-              {item.iconVideo ? (
-                <video src={regimeSignAsset(item.iconVideo)} poster={regimeSignAsset(item.preview)} autoPlay muted loop playsInline preload="metadata" aria-label={t(item.short)} />
-              ) : (
-                <img src={regimeSignAsset(item.preview)} alt={t(item.short)} loading="lazy" />
-              )}
+              <img src={regimeSignAsset(item.preview)} alt={t(item.short)} loading="lazy" />
+              {item.iconVideo ? <video src={regimeSignAsset(item.iconVideo)} muted loop playsInline preload="auto" aria-hidden="true" /> : null}
             </div>
             <div className="regime-sign-copy">
               <span>{t(item.short)}</span>

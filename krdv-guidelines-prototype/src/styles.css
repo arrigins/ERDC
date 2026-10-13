@@ -1732,12 +1732,32 @@ img {
   padding: 12px;
 }
 
+.regime-sign-preview.is-icon {
+  position: relative;
+}
+
 .regime-sign-preview.is-icon img,
 .regime-sign-preview.is-icon video {
   width: 100%;
   max-width: 156px;
   max-height: 156px;
   object-fit: contain;
+}
+
+/* Видео лежит поверх картинки и становится видимым только во время проигрывания. */
+.regime-sign-preview.is-icon video {
+  aspect-ratio: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 160ms var(--ease-standard);
+  pointer-events: none;
+}
+
+.regime-sign-preview.is-playing video {
+  opacity: 1;
 }
 
 .made-sign-preview {
