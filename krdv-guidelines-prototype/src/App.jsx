@@ -520,7 +520,7 @@ const regimeSignLogos = [
   // Объёмные иконки для превью; файлы для скачивания — исходные векторные знаки.
   preview: regimeSignIcons.has(item.slug) ? `regime-${item.slug}-wide.webp` : `regime-${item.slug}.svg`,
   hasIcon: regimeSignIcons.has(item.slug),
-  iconVideo: regimeSignVideoIcons.has(item.slug) ? `regime-${item.slug}-wide.mp4` : "",
+  iconVideo: regimeSignVideoIcons.has(item.slug) ? `regime-${item.slug}-hover.mp4` : "",
   files: {
     svg: `regime-${item.slug}.svg`,
     png: `regime-${item.slug}.png`,
