@@ -1751,6 +1751,8 @@ img {
 }
 
 .regime-sign-preview.is-cover img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   max-width: none;
@@ -1768,6 +1770,17 @@ img {
   transform: translate(-50%, -50%);
   transition: opacity 160ms var(--ease-standard);
   pointer-events: none;
+}
+
+.regime-sign-preview.is-cover video {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  aspect-ratio: auto;
+  object-fit: cover;
+  transform: none;
 }
 
 .regime-sign-preview.is-playing video {
@@ -3414,12 +3427,6 @@ img {
   .made-sign-card {
     min-height: 292px;
     grid-template-rows: 156px 1fr;
-  }
-
-  .regime-sign-preview.is-icon img,
-  .regime-sign-preview.is-icon video {
-    max-width: 132px;
-    max-height: 132px;
   }
 
   .regime-sign-preview img,

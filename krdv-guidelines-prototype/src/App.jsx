@@ -518,9 +518,9 @@ const regimeSignLogos = [
   color: regimes.find((regime) => regime.short === item.short)?.color || "#050505",
   description: regimeNotes[item.short],
   // Объёмные иконки для превью; файлы для скачивания — исходные векторные знаки.
-  preview: regimeSignVideoIcons.has(item.slug) ? `regime-${item.slug}-icon.webp` : regimeSignIcons.has(item.slug) ? `regime-${item.slug}-wide.webp` : `regime-${item.slug}.svg`,
+  preview: regimeSignIcons.has(item.slug) ? `regime-${item.slug}-wide.webp` : `regime-${item.slug}.svg`,
   hasIcon: regimeSignIcons.has(item.slug),
-  iconVideo: regimeSignVideoIcons.has(item.slug) ? `regime-${item.slug}-icon.mp4` : "",
+  iconVideo: regimeSignVideoIcons.has(item.slug) ? `regime-${item.slug}-wide.mp4` : "",
   files: {
     svg: `regime-${item.slug}.svg`,
     png: `regime-${item.slug}.png`,
@@ -1975,7 +1975,7 @@ function RegimeSignLibrary() {
             onMouseEnter={item.iconVideo ? playCardVideo : undefined}
             onMouseLeave={item.iconVideo ? resetCardVideo : undefined}
           >
-            <div className={`regime-sign-preview ${item.hasIcon ? "is-icon" : ""} ${item.iconVideo ? "" : "is-cover"}`}>
+            <div className={`regime-sign-preview ${item.hasIcon ? "is-icon is-cover" : ""}`}>
               <img src={regimeSignAsset(item.preview)} alt={t(item.short)} loading="lazy" />
               {item.iconVideo ? <video src={regimeSignAsset(item.iconVideo)} muted loop playsInline preload="auto" aria-hidden="true" /> : null}
             </div>
