@@ -503,6 +503,8 @@ const subsidiaryLogoSets = subsidiaryLogos.reduce((sets, item) => {
   return sets;
 }, {});
 
+const regimeSignIcons = new Set(["intc", "sar", "korf", "azrf", "spv"]);
+
 const regimeSignLogos = [
   { slug: "tor", short: "ТОР", title: "Территории опережающего развития" },
   { slug: "spv", short: "СПВ", title: "Свободный порт Владивосток" },
@@ -514,7 +516,9 @@ const regimeSignLogos = [
   ...item,
   color: regimes.find((regime) => regime.short === item.short)?.color || "#050505",
   description: regimeNotes[item.short],
-  preview: `regime-${item.slug}.svg`,
+  // Объёмные иконки для превью; файлы для скачивания — исходные векторные знаки.
+  preview: regimeSignIcons.has(item.slug) ? `regime-${item.slug}-icon.webp` : `regime-${item.slug}.svg`,
+  hasIcon: regimeSignIcons.has(item.slug),
   files: {
     svg: `regime-${item.slug}.svg`,
     png: `regime-${item.slug}.png`,
@@ -1946,7 +1950,7 @@ function RegimeSignLibrary() {
       <motion.div className="regime-sign-library" layout>
         {regimeSignLogos.map((item) => (
           <motion.article className="regime-sign-card" key={item.slug} style={{ "--sign-color": item.color }} layout whileHover={{ y: -2 }}>
-            <div className="regime-sign-preview">
+            <div className={`regime-sign-preview ${item.hasIcon ? "is-icon" : ""}`}>
               <img src={regimeSignAsset(item.preview)} alt={t(item.short)} loading="lazy" />
             </div>
             <div className="regime-sign-copy">

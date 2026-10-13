@@ -1728,6 +1728,15 @@ img {
   object-fit: contain;
 }
 
+.regime-sign-preview.is-icon {
+  padding: 12px;
+}
+
+.regime-sign-preview.is-icon img {
+  max-width: 156px;
+  max-height: 156px;
+}
+
 .made-sign-preview {
   background: #f6f6f6;
 }
@@ -3368,6 +3377,11 @@ img {
   .made-sign-card {
     min-height: 292px;
     grid-template-rows: 156px 1fr;
+  }
+
+  .regime-sign-preview.is-icon img {
+    max-width: 132px;
+    max-height: 132px;
   }
 
   .regime-sign-preview img,
