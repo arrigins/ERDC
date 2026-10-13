@@ -195,7 +195,9 @@
   color: #050505;
   background: #ffffff;
   font-synthesis-weight: none;
-  --mono: "Unica 77 Mono LL", "SFMono-Regular", Menlo, Consolas, monospace;
+  --mono: "Geist Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  /* Разрядка для надписей капсом моноширинным шрифтом: кириллице нужно больше воздуха, чем латинице. */
+  --mono-tracking: 0.1em;
   --line: #dedede;
   --line-hover: #c4d0dc;
   --line-active: rgba(0, 86, 162, 0.42);
@@ -404,14 +406,14 @@ img {
   padding: 0 16px;
   font-family: var(--mono);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--mono-tracking);
 }
 
 .sidebar-meta strong,
 .sidebar-meta span {
   display: block;
-  font-size: 10px;
-  line-height: 1.35;
+  font-size: 11px;
+  line-height: 1.45;
   font-weight: 400;
 }
 
@@ -1209,7 +1211,7 @@ img {
   color: var(--muted);
   font-size: 12px;
   line-height: 1;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
   transition: color var(--motion-fast) var(--ease-standard), transform var(--motion-fast) var(--ease-standard);
 }
@@ -1252,7 +1254,7 @@ img {
   color: var(--muted);
   font-size: 12px;
   line-height: 1;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
 }
 
@@ -1528,7 +1530,7 @@ img {
   font-size: 12px;
   line-height: 1.2;
   font-weight: 400;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
 }
 
@@ -1662,7 +1664,7 @@ img {
   font-size: 12px;
   line-height: 1.2;
   font-weight: 400;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
 }
 
@@ -1845,7 +1847,7 @@ img {
   font-size: 12px;
   line-height: 1.2;
   font-style: normal;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
 }
 
@@ -2065,7 +2067,7 @@ img {
   color: var(--muted);
   font-size: 11px;
   font-style: normal;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
 }
 
@@ -2752,7 +2754,7 @@ img {
   font-family: var(--mono);
   color: var(--muted);
   font-size: 12px;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
 }
 
@@ -2873,7 +2875,7 @@ img {
   font-size: 13px;
   line-height: 1;
   font-weight: 400;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
 }
 
@@ -2919,6 +2921,99 @@ img {
 .end-links button:last-child {
   border-right: 0;
   text-align: right;
+}
+
+.site-footer {
+  background: #001d37;
+  color: #ffffff;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.site-footer a,
+.site-footer button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  transition: color var(--motion-fast) var(--ease-standard);
+}
+
+.site-footer .is-muted {
+  color: rgba(255, 255, 255, 0.56);
+}
+
+.site-footer a:hover,
+.site-footer a:focus-visible,
+.site-footer button:hover,
+.site-footer button:focus-visible {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Колонки футера выровнены по сетке страницы: первая — как колонка заголовков подразделов. */
+.site-footer-top,
+.site-footer-bottom {
+  display: grid;
+  grid-template-columns: clamp(220px, 27.5%, 520px) repeat(3, minmax(0, 1fr));
+  row-gap: 24px;
+  padding: 32px 0 0;
+}
+
+.site-footer-top > *,
+.site-footer-bottom > * {
+  padding-right: 24px;
+}
+
+.site-footer-top > :first-child,
+.site-footer-bottom > :first-child {
+  margin-left: 32px;
+}
+
+.site-footer-top {
+  min-height: 240px;
+  align-content: start;
+  padding-bottom: 40px;
+}
+
+.site-footer-top > div {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+}
+
+.site-footer-links a {
+  justify-self: start;
+}
+
+.site-footer-bottom {
+  align-items: start;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  padding-bottom: 48px;
+}
+
+.site-footer-mark {
+  width: 54px;
+  height: auto;
+  padding-right: 0;
+  fill: #ffffff;
+}
+
+.site-footer-bottom p {
+  grid-column: 3;
+}
+
+.site-footer-bottom button {
+  grid-column: 4;
+  justify-self: start;
 }
 
 .end-links button:hover {
@@ -3010,7 +3105,7 @@ img {
     color: #ffffff;
     font-family: var(--mono);
     font-size: 12px;
-    letter-spacing: 0.06em;
+    letter-spacing: var(--mono-tracking);
     text-transform: uppercase;
     transition: background var(--motion-standard) var(--ease), transform var(--motion-fast) var(--ease-standard);
   }
@@ -3373,6 +3468,36 @@ img {
 
   .end-links {
     min-height: 0;
+  }
+
+  .site-footer-top,
+  .site-footer-bottom {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 28px;
+    padding: 28px 0 0 20px;
+  }
+
+  .site-footer-top > :first-child,
+  .site-footer-bottom > :first-child {
+    margin-left: 0;
+  }
+
+  .site-footer-top {
+    min-height: 0;
+    padding-bottom: 36px;
+  }
+
+  .site-footer-bottom {
+    padding-bottom: 36px;
+  }
+
+  .site-footer-bottom p,
+  .site-footer-bottom button {
+    grid-column: auto;
+  }
+
+  .site-footer-mark {
+    grid-column: 1 / -1;
   }
 
   .end-links button,

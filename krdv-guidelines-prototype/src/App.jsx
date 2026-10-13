@@ -1656,6 +1656,7 @@ function GuidelinePage({ page, activePageId, navigate }) {
       ))}
 
       <EndLinks activePageId={activePageId} navigate={navigate} />
+      <SiteFooter />
     </article>
   );
 }
@@ -2468,6 +2469,41 @@ function EndLinks({ activePageId, navigate }) {
         </em>
       </button>
     </nav>
+  );
+}
+
+const footerContactHref = pagesById.contacts.sections[0].contactCta.href;
+
+function SiteFooter() {
+  return (
+    <footer className="site-footer">
+      <div className="site-footer-top">
+        <p>{t("Руководство по фирменному стилю")}</p>
+        <p className="is-muted">{t("Версия 1.0")}</p>
+        <div>
+          <p>{t("Вопросы по руководству:")}</p>
+          <a className="is-muted" href={footerContactHref} target="_blank" rel="noreferrer">
+            {t("написать в MAX")}
+          </a>
+        </div>
+        <div className="site-footer-links">
+          <a href="https://erdc.ru" target="_blank" rel="noreferrer">
+            erdc.ru
+          </a>
+        </div>
+      </div>
+      <div className="site-footer-bottom">
+        <svg className="site-footer-mark" viewBox="0 0 125.09 68.99" role="img" aria-label={t("Знак КРДВ")} focusable="false">
+          {LOTUS_MARK_PATHS.map((path) => (
+            <path key={path} d={path} />
+          ))}
+        </svg>
+        <p>{t(`© ${new Date().getFullYear()} АО «КРДВ»`)}</p>
+        <button type="button" onClick={() => document.getElementById("page")?.scrollTo({ top: 0, behavior: "smooth" })}>
+          {t("Наверх")}
+        </button>
+      </div>
+    </footer>
   );
 }
 
