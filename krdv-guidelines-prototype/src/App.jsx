@@ -176,15 +176,15 @@ const secondaryPalette = [
 ];
 
 const regimes = [
-  { short: "ТОР", title: "Территории опережающего развития", color: "#762a57" },
-  { short: "СПВ", title: "Свободный порт Владивосток", color: "#26579a" },
-  { short: "КОРФ", title: "Курильские острова Российской Федерации", color: "#5c829f" },
-  { short: "САР", title: "Специальный административный район", color: "#4d8b85" },
-  { short: "АЗРФ", title: "Арктическая зона Российской Федерации", color: "#51a5da" },
-  { short: "ИНТЦ", title: "Инновационный научно-технологический центр", color: "#b5a1ea" },
-  { short: "Гектар", title: "Программа гектар", color: "#20453a" },
-  { short: "Работа", title: "Программа работа", color: "#2b3a46" },
-  { short: "Ипотека", title: "Ипотека 2%", color: "#8a6f8e" },
+  { short: "ТОР", title: "Территории опережающего развития", color: "#53184f" },
+  { short: "СПВ", title: "Свободный порт Владивосток", color: "#223e9a" },
+  { short: "КОРФ", title: "Курильские острова Российской Федерации", color: "#f45858" },
+  { short: "САР", title: "Специальный административный район", color: "#17846f" },
+  { short: "АЗРФ", title: "Арктическая зона Российской Федерации", color: "#1ba7df" },
+  { short: "ИНТЦ", title: "Инновационный научно-технологический центр", color: "#0aaba5" },
+  { short: "Гектар", title: "Программа гектар", color: "#21ad49" },
+  { short: "Работа", title: "Программа работа", color: "#001d37" },
+  { short: "Ипотека", title: "Ипотека 2%", color: "#5884c4" },
 ];
 
 const subsidiaryHeroLogos = [
@@ -212,9 +212,31 @@ const regimeNotes = {
   Ипотека: "Отдельный маркер для льготных ипотечных программ и жилищных сценариев.",
 };
 
-const regimeColorCoding = ["Гектар", "СПВ", "КОРФ", "ТОР", "САР", "Работа", "АЗРФ", "Ипотека", "ИНТЦ"]
+const regimeColorCoding = ["ТОР", "СПВ", "АЗРФ", "ИНТЦ", "КОРФ", "САР", "Ипотека", "Гектар", "Работа"]
   .map((short) => regimes.find((item) => item.short === short))
   .filter(Boolean);
+
+function hexToRgbString(hex) {
+  const value = parseInt(hex.slice(1), 16);
+  return [(value >> 16) & 255, (value >> 8) & 255, value & 255].join("-");
+}
+
+// CMYK рассчитан из RGB автоматически — перед печатью сверить с типографией.
+function hexToCmykString(hex) {
+  const value = parseInt(hex.slice(1), 16);
+  const [r, g, b] = [(value >> 16) & 255, (value >> 8) & 255, value & 255].map((channel) => channel / 255);
+  const k = 1 - Math.max(r, g, b);
+  if (k >= 1) return "0-0-0-100";
+  return [(1 - r - k) / (1 - k), (1 - g - k) / (1 - k), (1 - b - k) / (1 - k), k].map((part) => Math.round(part * 100)).join("-");
+}
+
+const regimePaletteTiles = regimeColorCoding.map((item, index) => ({
+  name: item.short,
+  hex: item.color,
+  rgb: hexToRgbString(item.color),
+  cmyk: hexToCmykString(item.color),
+  area: [(index % 3) * 4 + 1, (index % 3) * 4 + 5, Math.floor(index / 3) + 1, Math.floor(index / 3) + 2],
+}));
 
 const textRecommendationImages = [
   { title: "Кавычки", caption: "Контроль русских кавычек «елочки» и вложенных „лапок“.", file: "text-recommendation-1.png" },
@@ -272,6 +294,11 @@ const downloadResources = {
     title: "Знак «Сделано в ТОР СПВ»",
     description: "Общий архив с версиями товарного знака.",
     url: "https://disk.yandex.ru/d/hwgUiBntRmelpA",
+  },
+  hectareBrandbook: {
+    title: "Брендбук «Гектар»",
+    description: "Руководство по фирменному стилю программы «Гектар».",
+    url: "https://disk.yandex.ru/i/58D6TDp8-ikn1w",
   },
   socialGuide: {
     title: "Гайд по социальным сетям",
@@ -797,7 +824,14 @@ const pagesData = [
         id: "coding",
         title: "Цветовое кодирование",
         paragraphs: ["Каждый цвет закреплен за конкретным направлением поддержки и используется как навигационный маркер в лифлетах, презентациях и информационных блоках."],
-        regimePalette: regimeColorCoding,
+        palette: regimePaletteTiles,
+      },
+      {
+        id: "hectare",
+        title: "Гектар",
+        paragraphs: ["У программы «Гектар» собственный брендбук. Логотип и правила его использования — в архиве ниже."],
+        brandLogo: { file: "hectare-logo.svg", alt: "Логотип «Гектар»" },
+        resourceLinks: ["hectareBrandbook"],
       },
     ],
   },
@@ -906,7 +940,7 @@ const pagesData = [
     number: "08",
     title: "Корпоративные материалы",
     navTitle: "Корп. материалы",
-    intro: "Корпоративные носители переводят фирменную систему в рабочие документы: визитки, QR-форматы, материалы дочерних обществ и бланки.",
+    intro: "Корпоративные носители переводят фирменную систему в рабочие документы: визитки, QR-форматы, материалы дочерних обществ, бланки, навигацию кабинетов, режимник и наградные документы.",
     sections: [
       {
         id: "business-card",
@@ -962,6 +996,23 @@ const pagesData = [
         resourceLinks: ["subsidiaryLetterheads"],
       },
       {
+        id: "office-navigation",
+        title: "Навигация кабинетов",
+        paragraphs: ["Кабинетные таблички подстраиваются под планировку офиса и видимость маршрута. Рекомендованное соотношение сторон: 3 по вертикали к 2 по горизонтали."],
+        rules: [{ label: "Заказ табличек", text: "Перед изготовлением нужно передать список кабинетов, размеры и условия размещения в профильный департамент." }],
+        assetImages: [
+          { title: "Кабинетная табличка", caption: "Базовый вариант с номером и названием кабинета.", file: "office-navigation-1.webp" },
+          { title: "Серия навигации", caption: "Несколько табличек должны сохранять единый масштаб набора.", file: "office-navigation-2.webp" },
+          { title: "Вертикальная табличка", caption: "Формат для узкой зоны или отдельной стены.", file: "office-navigation-3.webp" },
+        ],
+      },
+      {
+        id: "schedule-sign",
+        title: "Режимник",
+        paragraphs: ["Режимник фиксирует график работы предприятия или дочернего общества. Размер выбирается по месту установки, но композиция сохраняет вертикальную доминанту 3:2."],
+        assetImages: [{ title: "Режимник работы", caption: "Табличка объединяет расписание, адрес и контакты организации.", file: "schedule-sign-layout.webp" }],
+      },
+      {
         id: "awards",
         title: "Наградные документы",
         paragraphs: [
@@ -985,7 +1036,7 @@ const pagesData = [
     number: "09",
     title: "Рекламные материалы",
     navTitle: "Рекламные",
-    intro: "Рекламно-информационные материалы включают лифлеты, роллап, навигацию кабинетов, режимник и наградные документы.",
+    intro: "Рекламно-информационные материалы включают лифлеты и роллап.",
     sections: [
       {
         id: "leaflets",
@@ -1004,23 +1055,6 @@ const pagesData = [
         paragraphs: ["Мобильный вертикальный носитель для входных зон, небольших стендов и презентационных точек. Размер: 800×1800 мм."],
         rules: [{ label: "Отклонение от шаблона", text: "Измененный роллап передается на проверку до запуска в производство." }],
         assetImages: [{ title: "Роллап", caption: "Вертикальная конструкция с крупным сообщением и фирменным знаком.", file: "rollup-layout.webp", wide: true }],
-      },
-      {
-        id: "office-navigation",
-        title: "Навигация кабинетов",
-        paragraphs: ["Кабинетные таблички подстраиваются под планировку офиса и видимость маршрута. Рекомендованное соотношение сторон: 3 по вертикали к 2 по горизонтали."],
-        rules: [{ label: "Заказ табличек", text: "Перед изготовлением нужно передать список кабинетов, размеры и условия размещения в профильный департамент." }],
-        assetImages: [
-          { title: "Кабинетная табличка", caption: "Базовый вариант с номером и названием кабинета.", file: "office-navigation-1.webp" },
-          { title: "Серия навигации", caption: "Несколько табличек должны сохранять единый масштаб набора.", file: "office-navigation-2.webp" },
-          { title: "Вертикальная табличка", caption: "Формат для узкой зоны или отдельной стены.", file: "office-navigation-3.webp" },
-        ],
-      },
-      {
-        id: "schedule-sign",
-        title: "Режимник",
-        paragraphs: ["Режимник фиксирует график работы предприятия или дочернего общества. Размер выбирается по месту установки, но композиция сохраняет вертикальную доминанту 3:2."],
-        assetImages: [{ title: "Режимник работы", caption: "Табличка объединяет расписание, адрес и контакты организации.", file: "schedule-sign-layout.webp" }],
       },
     ],
   },
@@ -1705,7 +1739,7 @@ function ContentSection({ section, navigate, activePageId }) {
   const cardsAfterAssets = section.cards && section.cardsPlacement === "afterAssets";
 
   return (
-    <section className="content-section" id={section.id}>
+    <section className={`content-section ${section.palette ? "has-wide" : ""}`} id={section.id}>
       <div className="section-title">
         <h2>{t(section.title)}</h2>
       </div>
@@ -1724,7 +1758,11 @@ function ContentSection({ section, navigate, activePageId }) {
         {section.logos ? <LogoLibrary items={section.logos} /> : null}
         {section.subsidiaryLogos ? <SubsidiaryLogoLibrary setId={section.subsidiaryLogos} /> : null}
         {section.preAssetImages ? <AssetImageGrid items={section.preAssetImages} mode={section.preAssetImageMode} /> : null}
-        {section.palette ? <PaletteGrid colors={section.palette} /> : null}
+        {section.brandLogo ? (
+          <div className="brand-logo-preview">
+            <img src={logoAsset(section.brandLogo.file)} alt={t(section.brandLogo.alt)} loading="lazy" />
+          </div>
+        ) : null}
         {section.typeSamples ? <TypeSpecimens items={section.typeSamples} /> : null}
         {section.fontWorkbench ? <FontWorkbench /> : null}
         {section.regimePalette ? <RegimePalette items={section.regimePalette} /> : null}
@@ -1745,6 +1783,11 @@ function ContentSection({ section, navigate, activePageId }) {
         {section.contacts ? <ContactBlock items={section.contacts} /> : null}
         {section.contactCta ? <ContactCta item={section.contactCta} /> : null}
       </div>
+      {section.palette ? (
+        <div className="section-wide">
+          <PaletteGrid colors={section.palette} />
+        </div>
+      ) : null}
     </section>
   );
 }
@@ -2529,19 +2572,19 @@ function EndLinks({ activePageId, navigate }) {
 
   return (
     <nav className="end-links" aria-label={t("Переходы между разделами")}>
-      <button type="button" onClick={() => navigate(previous.id)}>
-        <span>{t(`${previous.number} ${previous.title}`)}</span>
-        <em>
-          <UiIcon icon={ICONS.arrowLeft} className="end-link-icon" />
-          {t("предыдущий раздел")}
-        </em>
+      <button type="button" onClick={() => navigate(previous.id)} aria-label={t(`Предыдущий раздел: ${previous.title}`)}>
+        <span>
+          <b>{previous.number}</b>
+          {t(previous.navTitle || previous.title)}
+        </span>
+        <UiIcon icon={ICONS.arrowLeft} className="end-link-icon" size={16} strokeWidth={1.4} />
       </button>
-      <button type="button" onClick={() => navigate(next.id)}>
-        <span>{t(`${next.number} ${next.title}`)}</span>
-        <em>
-          {t("следующий раздел")}
-          <UiIcon icon={ICONS.arrowRight} className="end-link-icon" />
-        </em>
+      <button type="button" onClick={() => navigate(next.id)} aria-label={t(`Следующий раздел: ${next.title}`)}>
+        <span>
+          <b>{next.number}</b>
+          {t(next.navTitle || next.title)}
+        </span>
+        <UiIcon icon={ICONS.arrowRight} className="end-link-icon" size={16} strokeWidth={1.4} />
       </button>
     </nav>
   );
@@ -2553,7 +2596,7 @@ function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="site-footer-top">
-        <p>{t("Руководство по фирменному стилю")}</p>
+        <p>{t("Руководство по использованию фирменного стиля")}</p>
         <p className="is-muted">{t("Версия 1.0")}</p>
         <div>
           <p>{t("Вопросы по руководству:")}</p>
