@@ -513,7 +513,15 @@ const subsidiaryLogoSets = subsidiaryLogos.reduce((sets, item) => {
 }, {});
 
 const regimeSignIcons = new Set(["tor", "intc", "sar", "korf", "azrf", "spv"]);
-const regimeSignVideoIcons = new Set(["tor", "azrf", "intc", "korf", "sar", "spv"]);
+// Ролики при наведении; при замене ролика меняем имя файла, чтобы браузер не взял старый из кэша.
+const regimeSignHoverVideos = {
+  tor: "regime-tor-hover.mp4",
+  spv: "regime-spv-hover.mp4",
+  korf: "regime-korf-hover.mp4",
+  sar: "regime-sar-hover-v2.mp4",
+  azrf: "regime-azrf-hover-v2.mp4",
+  intc: "regime-intc-hover-v2.mp4",
+};
 
 const regimeSignLogos = [
   { slug: "tor", short: "ТОР", title: "Территории опережающего развития" },
@@ -529,7 +537,7 @@ const regimeSignLogos = [
   // Объёмные иконки для превью; файлы для скачивания — исходные векторные знаки.
   preview: regimeSignIcons.has(item.slug) ? `regime-${item.slug}-wide.webp` : `regime-${item.slug}.svg`,
   hasIcon: regimeSignIcons.has(item.slug),
-  iconVideo: regimeSignVideoIcons.has(item.slug) ? `regime-${item.slug}-hover.mp4` : "",
+  iconVideo: regimeSignHoverVideos[item.slug] || "",
   files: {
     svg: `regime-${item.slug}.svg`,
     png: `regime-${item.slug}.png`,
