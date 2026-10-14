@@ -207,11 +207,11 @@
   --surface-hover: #fbfdff;
   --surface-active: #f3f8fc;
   --panel: #eeeeee;
-  --sidebar: clamp(313px, 16.5vw, 440px);
-  /* Пропорции меню сняты с DevRev: отступ слева 6.6% ширины меню, колонка номера 11.2%, стрелка 5.4%. */
-  --sb-pad: calc(var(--sidebar) * 0.066);
-  --sb-num: calc(var(--sidebar) * 0.112);
-  --sb-chevron: calc(var(--sidebar) * 0.054);
+  /* Меню по замерам DevRev в одинаковом масштабе: ширина 250, отступы 16, колонка номера 29, стрелка 14. */
+  --sidebar: 250px;
+  --sb-pad: 16px;
+  --sb-num: 29px;
+  --sb-chevron: 14px;
   --blue: #0056a2;
   --red: #de2327;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -404,12 +404,12 @@ img {
 }
 
 .sidebar-meta {
-  min-height: calc(var(--sidebar) * 0.36);
+  min-height: 90px;
   display: grid;
   align-content: start;
-  gap: 4px;
+  gap: 2px;
   border-bottom: 1px solid var(--line);
-  padding: calc(var(--sidebar) * 0.08) var(--sb-pad) calc(var(--sidebar) * 0.06);
+  padding: 22px var(--sb-pad) 20px;
   font-family: var(--mono);
   text-transform: uppercase;
   letter-spacing: var(--mono-tracking);
@@ -418,7 +418,7 @@ img {
 .sidebar-meta strong,
 .sidebar-meta span {
   display: block;
-  font-size: clamp(12px, 0.72vw, 16px);
+  font-size: 11px;
   line-height: 1.45;
   font-weight: 400;
 }
@@ -427,11 +427,16 @@ img {
   color: var(--muted);
 }
 
+.sidebar-meta strong,
+.sidebar-meta span {
+  letter-spacing: 0.08em;
+}
+
 .nav-list {
   min-height: 0;
   overflow: auto;
   overscroll-behavior: contain;
-  padding: calc(var(--sidebar) * 0.045) 0 22px;
+  padding: 12px 0 22px;
 }
 
 .nav-group {
@@ -443,8 +448,8 @@ img {
 .nav-group:nth-child(9),
 .nav-group:nth-child(11) {
   border-bottom: 1px solid var(--line);
-  padding-bottom: calc(var(--sidebar) * 0.045);
-  margin-bottom: calc(var(--sidebar) * 0.05);
+  padding-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .nav-parent,
@@ -457,13 +462,13 @@ img {
 
 .nav-parent {
   position: relative;
-  min-height: clamp(36px, 2.3vw, 50px);
+  min-height: 35px;
   display: grid;
   grid-template-columns: var(--sb-num) 1fr var(--sb-chevron);
   align-items: center;
   gap: 0;
   padding: 0 var(--sb-pad);
-  font-size: clamp(17px, 1.1vw, 24px);
+  font-size: 16px;
   font-weight: 350;
   line-height: 1;
   transition: background var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard);
@@ -553,7 +558,7 @@ img {
 .nav-children {
   display: grid;
   gap: 0;
-  padding: 0 0 22px;
+  padding: 0 0 30px;
   opacity: 0;
   transform: translateY(-6px);
   transition:
@@ -571,12 +576,12 @@ img {
 
 .nav-children button {
   position: relative;
-  min-height: clamp(36px, 2.1vw, 46px);
+  min-height: 31px;
   display: flex;
   align-items: center;
   padding: 6px var(--sb-pad) 6px calc(var(--sb-pad) + var(--sb-num));
   color: var(--muted);
-  font-size: clamp(16px, 1.02vw, 22px);
+  font-size: 16px;
   font-weight: 350;
   line-height: 1.22;
   transition: color var(--motion-fast) var(--ease-standard), background var(--motion-fast) var(--ease-standard);
@@ -617,7 +622,7 @@ img {
 .hero-band {
   position: relative;
   overflow: hidden;
-  height: 460px;
+  height: 380px;
   display: grid;
   grid-template-columns: clamp(220px, 27.5%, 520px) minmax(0, 1fr);
   align-items: end;
@@ -909,9 +914,9 @@ img {
   transform: translateY(0);
 }
 
-/* Обложка и блок под ней — размеры как на сайте коллеги (imonsergey.github.io/ERDCBB). */
+/* Обложка 380 и блок под ней 260 — по замерам DevRev в одинаковом масштабе. */
 .intro-panel {
-  min-height: 198px;
+  min-height: 260px;
   display: grid;
   grid-template-columns: clamp(220px, 27.5%, 520px) minmax(0, 1fr);
   align-content: start;
