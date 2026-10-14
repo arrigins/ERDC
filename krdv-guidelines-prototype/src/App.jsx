@@ -825,6 +825,7 @@ const pagesData = [
     navTitle: "Режимы и программы",
     heroImage: "cover-regimes-glass.webp",
     heroTone: "light",
+    softLayout: true,
     intro: "Для преференциальных режимов используется единая система сокращений, знаков и названий. Она помогает быстро различать программы поддержки в коммуникационных материалах.",
     sections: [
       {
@@ -1743,7 +1744,7 @@ function GuidelinePage({ page, activePageId, navigate }) {
   const hasLibraryHero = Boolean(page.heroLibrary);
 
   return (
-    <article className="guideline-page">
+    <article className={`guideline-page ${page.softLayout ? "is-soft" : ""}`}>
       <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""} ${hasLibraryHero ? "is-library" : ""} ${page.heroTone === "light" ? "is-light" : ""}`} aria-label={t(page.title)}>
         {page.heroVideo ? <video className="hero-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : null}
         {page.heroImage ? <img className="hero-video" src={heroAsset(page.heroImage)} alt="" aria-hidden="true" /> : null}
