@@ -207,7 +207,7 @@
   --surface-hover: #fbfdff;
   --surface-active: #f3f8fc;
   --panel: #eeeeee;
-  --sidebar: 313px;
+  --sidebar: clamp(313px, 16.5vw, 440px);
   --blue: #0056a2;
   --red: #de2327;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -368,7 +368,7 @@ img {
   width: var(--sidebar);
   height: 100vh;
   display: grid;
-  grid-template-rows: 104px minmax(72px, auto) minmax(0, 1fr);
+  grid-template-rows: clamp(104px, 6vw, 150px) minmax(72px, auto) minmax(0, 1fr);
   overflow: hidden;
   border-right: 1px solid var(--line);
   background: #ffffff;
@@ -387,7 +387,7 @@ img {
 }
 
 .brand-lockup img {
-  width: 236px;
+  width: clamp(236px, 11.5vw, 320px);
   max-width: 100%;
   height: auto;
   object-fit: contain;
@@ -413,7 +413,7 @@ img {
 .sidebar-meta strong,
 .sidebar-meta span {
   display: block;
-  font-size: 12px;
+  font-size: clamp(12px, 0.72vw, 16px);
   line-height: 1.45;
   font-weight: 400;
 }
@@ -452,13 +452,13 @@ img {
 
 .nav-parent {
   position: relative;
-  min-height: 36px;
+  min-height: clamp(36px, 2.3vw, 50px);
   display: grid;
-  grid-template-columns: 32px 1fr 18px;
+  grid-template-columns: 1.9em 1fr 18px;
   align-items: center;
   gap: 0;
   padding: 0 16px;
-  font-size: 17px;
+  font-size: clamp(17px, 1.1vw, 24px);
   font-weight: 350;
   line-height: 1;
   transition: background var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard);
@@ -566,12 +566,12 @@ img {
 
 .nav-children button {
   position: relative;
-  min-height: 36px;
+  min-height: clamp(36px, 2.1vw, 46px);
   display: flex;
   align-items: center;
-  padding: 6px 16px 6px 48px;
+  padding: 6px 16px calc(6px) calc(16px + 1.9em);
   color: var(--muted);
-  font-size: 16px;
+  font-size: clamp(16px, 1.02vw, 22px);
   font-weight: 350;
   line-height: 1.22;
   transition: color var(--motion-fast) var(--ease-standard), background var(--motion-fast) var(--ease-standard);
@@ -612,7 +612,7 @@ img {
 .hero-band {
   position: relative;
   overflow: hidden;
-  height: 460px;
+  height: clamp(460px, 25vw, 640px);
   display: grid;
   grid-template-columns: clamp(220px, 27.5%, 520px) minmax(0, 1fr);
   align-items: end;
@@ -869,7 +869,7 @@ img {
 .hero-title {
   min-width: 0;
   margin: 0;
-  font-size: clamp(46px, 5.4vw, 72px);
+  font-size: clamp(46px, 4.8vw, 116px);
   line-height: 0.98;
   font-weight: 400;
   letter-spacing: 0;
@@ -905,7 +905,7 @@ img {
 }
 
 .intro-panel {
-  min-height: 260px;
+  min-height: clamp(260px, 22vw, 520px);
   display: grid;
   grid-template-columns: clamp(220px, 27.5%, 520px) minmax(0, 1fr);
   align-content: start;
@@ -917,10 +917,10 @@ img {
 .intro-panel p {
   grid-column: 1 / -1;
   padding-left: 32px;
-  width: min(100%, 1320px);
+  width: 100%;
   margin: 0;
-  font-size: clamp(28px, 2.7vw, 40px);
-  line-height: 1.14;
+  font-size: clamp(28px, 2.4vw, 58px);
+  line-height: 1.12;
   font-weight: 400;
   letter-spacing: 0;
 }
@@ -983,7 +983,7 @@ img {
 .section-title h2 {
   max-width: 430px;
   margin: 0;
-  font-size: 26px;
+  font-size: clamp(26px, 1.6vw, 38px);
   line-height: 1.12;
   font-weight: 400;
   letter-spacing: 0;
@@ -999,17 +999,17 @@ img {
 }
 
 .section-body > p {
-  width: min(100%, 820px);
+  width: min(100%, 52em);
   margin: 0;
-  font-size: 19px;
+  font-size: clamp(19px, 1.15vw, 26px);
   line-height: 1.42;
   font-weight: 400;
   letter-spacing: 0;
 }
 
 .section-body .lead-copy {
-  width: min(100%, 940px);
-  font-size: 26px;
+  width: min(100%, 40em);
+  font-size: clamp(26px, 1.6vw, 38px);
   line-height: 1.2;
 }
 
@@ -2999,7 +2999,7 @@ img {
 .end-links span {
   display: flex;
   gap: 14px;
-  font-size: 22px;
+  font-size: clamp(22px, 1.4vw, 32px);
   line-height: 1.15;
   font-weight: 400;
 }
@@ -3024,7 +3024,7 @@ img {
 .site-footer {
   background: #07143a;
   color: #ffffff;
-  font-size: 18px;
+  font-size: clamp(18px, 1.05vw, 24px);
   line-height: 1.35;
 }
 
