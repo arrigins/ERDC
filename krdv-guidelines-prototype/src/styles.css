@@ -4023,15 +4023,16 @@ img {
 /* Эксперимент (только страница «Режимы и программы», page.softLayout):
    светло-серый фон страницы, белые скруглённые блоки без серых обводок. */
 .guideline-page.is-soft {
-  --soft-bg: #eff0f1;
-  --soft-card: #f1f2f3;
+  --soft-bg: #eceff0;
+  --soft-card: #fbf9f9;
+  --soft-line: #d7dbde;
   --soft-radius: 24px;
   background: var(--soft-bg);
 }
 
 .guideline-page.is-soft .intro-panel,
 .guideline-page.is-soft .content-section {
-  border-bottom: 0;
+  border-bottom: 1px solid var(--soft-line);
   background: transparent;
 }
 
@@ -4061,7 +4062,7 @@ img {
 
 .guideline-page.is-soft .logo-downloads a {
   border-color: transparent;
-  background: #ffffff;
+  background: var(--soft-bg);
 }
 
 .guideline-page.is-soft .logo-downloads a:hover,
