@@ -909,8 +909,9 @@ img {
   transform: translateY(0);
 }
 
+/* Высота блока под обложкой — как у DevRev: примерно ширина бокового меню. */
 .intro-panel {
-  min-height: clamp(260px, 22vw, 520px);
+  min-height: calc(var(--sidebar) * 1.05);
   display: grid;
   grid-template-columns: clamp(220px, 27.5%, 520px) minmax(0, 1fr);
   align-content: start;
@@ -924,7 +925,7 @@ img {
   padding-left: 32px;
   width: 100%;
   margin: 0;
-  font-size: clamp(28px, 2.4vw, 58px);
+  font-size: clamp(28px, 2.2vw, 52px);
   line-height: 1.12;
   font-weight: 400;
   letter-spacing: 0;
