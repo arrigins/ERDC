@@ -21,6 +21,8 @@ const ICONS = {
   check: "M5 12l4 4L19 6",
   chevronDown: "M6 9l6 6 6-6",
   chevronUp: "M6 15l6-6 6 6",
+  navChevronDown: "M4 9.5l8 6 8-6",
+  navChevronUp: "M4 14.5l8-6 8 6",
   close: "M6 6l12 12M18 6L6 18",
   copy: "M8 8h10v12H8zM6 4h10v12",
   download: "M12 3v12M7 10l5 5 5-5M5 21h14",
@@ -101,14 +103,19 @@ function typograf(value) {
 
 const t = typograf;
 
+// Плитки палитры: цвета и фотографии. area — [колонка с, колонка по, ряд с, ряд по] в сетке из 12 колонок.
 const primaryPalette = [
-  { name: "Дальневосточный синий", hex: "#0056a2", rgb: "0-86-162", cmyk: "100-75-00-00", pantone: "Pantone 286C" },
-  { name: "Голубой", hex: "#22a8e0", rgb: "34-168-225", cmyk: "72-15-00-00" },
-  { name: "Светло-синий", hex: "#9ec6eb", rgb: "158-198-235", cmyk: "24-13-00-00" },
-  { name: "Ледяной голубой", hex: "#d4e6fa", rgb: "212-230-250", cmyk: "15-5-00-00" },
-  { name: "Темно-синий", hex: "#001d37", rgb: "0-30-55", cmyk: "100-84-47-58" },
-  { name: "Глубокий синий", hex: "#0c5082", rgb: "12-80-130", cmyk: "100-73-24-9" },
-  { name: "Красный акцент", hex: "#de2327", rgb: "222-35-39", cmyk: "5-100-100-00", pantone: "Pantone 186C" },
+  { name: "Дальневосточный синий", hex: "#0056a2", rgb: "0-86-162", cmyk: "100-75-00-00", area: [1, 4, 1, 2] },
+  { name: "Голубой", hex: "#22a8e0", rgb: "34-168-225", cmyk: "72-15-00-00", area: [4, 7, 1, 2] },
+  { photo: "palette-photo-ocean.webp", alt: "Подводный мир", area: [7, 9, 1, 3] },
+  { name: "Светло-синий", hex: "#9ec6eb", rgb: "158-198-235", cmyk: "24-13-00-00", area: [9, 13, 1, 2] },
+  { name: "Ледяной голубой", hex: "#d4e6fa", rgb: "212-230-250", cmyk: "15-5-00-00", area: [9, 13, 2, 3] },
+  { name: "Темно-синий", hex: "#001d37", rgb: "0-30-55", cmyk: "100-84-47-58", area: [1, 4, 2, 3] },
+  { name: "Глубокий синий", hex: "#0c5082", rgb: "12-80-130", cmyk: "100-73-24-9", area: [4, 7, 2, 3] },
+  { name: "Красный акцент", hex: "#de2327", rgb: "222-35-39", cmyk: "5-100-100-00", area: [1, 4, 3, 4] },
+  { photo: "palette-photo-sunset.webp", alt: "Закат над сопками", area: [10, 13, 3, 4], position: "100% 60%" },
+  { name: "Розовый", hex: "#ef8a91", rgb: "239-138-145", cmyk: "0-42-39-6", area: [4, 7, 3, 4], proposal: true },
+  { name: "Светло-розовый", hex: "#fce8ea", rgb: "252-232-234", cmyk: "0-8-7-1", area: [7, 10, 3, 4], proposal: true },
 ];
 
 const colorHeroTiles = [
@@ -159,11 +166,13 @@ function buildColorHeroRects(state) {
 const colorHeroTileStates = colorHeroGridStates.map(buildColorHeroRects);
 
 const secondaryPalette = [
-  { name: "Арктический изумрудный", hex: "#003b39", rgb: "0-59-57", cmyk: "91-47-61-59" },
-  { name: "Изумрудный", hex: "#308d86", rgb: "48-141-134", cmyk: "78-24-49-7" },
-  { name: "Глубокий изумрудный", hex: "#0a5c57", rgb: "10-92-87", cmyk: "87-38-58-35" },
-  { name: "Светлый арктический", hex: "#cce0e6", rgb: "204-224-230", cmyk: "24-5-10-00" },
-  { name: "Ледяной арктический", hex: "#e4f0f2", rgb: "228-240-242", cmyk: "13-2-6-00" },
+  { name: "Арктический изумрудный", hex: "#003b39", rgb: "0-59-57", cmyk: "91-47-61-59", area: [1, 6, 1, 2] },
+  { photo: "palette-photo-aurora.webp", alt: "Северное сияние", area: [6, 9, 1, 3] },
+  { name: "Изумрудный", hex: "#308d86", rgb: "48-141-134", cmyk: "78-24-49-7", area: [9, 13, 1, 3] },
+  { name: "Глубокий изумрудный", hex: "#0a5c57", rgb: "10-92-87", cmyk: "87-38-58-35", area: [1, 6, 2, 3] },
+  { name: "Светлый арктический", hex: "#cce0e6", rgb: "204-224-230", cmyk: "24-5-10-00", area: [1, 7, 3, 4] },
+  { name: "Ледяной арктический", hex: "#e4f0f2", rgb: "228-240-242", cmyk: "13-2-6-00", area: [7, 10, 3, 4] },
+  { photo: "palette-photo-aurora-2.webp", alt: "Северное сияние над горизонтом", area: [10, 13, 3, 4] },
 ];
 
 const regimes = [
@@ -782,16 +791,6 @@ const pagesData = [
         paragraphs: ["Каждый цвет закреплен за конкретным направлением поддержки и используется как навигационный маркер в лифлетах, презентациях и информационных блоках."],
         regimePalette: regimeColorCoding,
       },
-      {
-        id: "programs",
-        title: "Программы",
-        paragraphs: ["В прикладной графике также используются направления «Гектар», «Работа» и «Ипотека». Они должны считываться в одной системе с режимами."],
-        cards: [
-          { title: "Гектар", text: "Программа, связанная с территорией и возможностью развития." },
-          { title: "Работа", text: "Коммуникационный маркер для карьерных и кадровых сценариев." },
-          { title: "Ипотека", text: "Ипотека 2% как отдельный узнаваемый элемент системы." },
-        ],
-      },
     ],
   },
   {
@@ -805,14 +804,12 @@ const pagesData = [
         id: "primary",
         title: "Фирменные цвета",
         paragraphs: ["Основная палитра задает узнаваемость бренда в интерфейсах, печатных материалах, презентациях и рекламных носителях."],
-        preAssetImages: [{ title: "Слайд основной палитры", caption: "Фрагмент брендбука с ключевыми цветами и логикой их применения.", file: "color-primary-slide.png", wide: true }],
         palette: primaryPalette,
       },
       {
         id: "secondary",
         title: "Дополнительные цвета",
         paragraphs: ["Дополнительная цветовая палитра используется для оформления презентаций."],
-        preAssetImages: [{ title: "Слайд расширенной палитры", caption: "Оттенки для режимов, акцентов и вспомогательной графики.", file: "color-secondary-slide.png", wide: true }],
         palette: secondaryPalette,
       },
     ],
@@ -956,6 +953,22 @@ const pagesData = [
         ],
         resourceLinks: ["subsidiaryLetterheads"],
       },
+      {
+        id: "awards",
+        title: "Наградные документы",
+        paragraphs: [
+          "Формат А4. Бумага — Majestic Classic белый мрамор, под заказ. Заголовки выполняются тиснением золотой фольгой, рама — тиснением серебряной фольгой.",
+          "Перед производством наградного комплекта нужно уточнить тираж, имена получателей и состав тиснения.",
+          "Дизайнерам: после внесения ФИО и текста в шаблон необходимо убрать на всех макетах два элемента: рамку и заголовок «Почетная грамота», «Благодарность» или «Благодарственное письмо». Они выполняются тиснением, поэтому предоставляются типографии отдельным файлом.",
+        ],
+        assetImageMode: "row3",
+        assetImages: [
+          { title: "Грамота", caption: "Композиция с рамой и крупным заголовком под тиснение.", file: "award-document-1.webp" },
+          { title: "Благодарность", caption: "Лист для официального текста с более спокойной иерархией.", file: "award-document-2.webp" },
+          { title: "Благодарственное письмо", caption: "Письменный формат с акцентной типографикой и фольгированием.", file: "award-document-3.webp" },
+        ],
+        resourceLinks: ["awards"],
+      },
     ],
   },
   {
@@ -1000,21 +1013,6 @@ const pagesData = [
         title: "Режимник",
         paragraphs: ["Режимник фиксирует график работы предприятия или дочернего общества. Размер выбирается по месту установки, но композиция сохраняет вертикальную доминанту 3:2."],
         assetImages: [{ title: "Режимник работы", caption: "Табличка объединяет расписание, адрес и контакты организации.", file: "schedule-sign-layout.webp" }],
-      },
-      {
-        id: "awards",
-        title: "Наградные документы",
-        paragraphs: [
-          "Формат А4. Бумага — Majestic Classic белый мрамор, под заказ. Заголовки выполняются тиснением золотой фольгой, рама — тиснением серебряной фольгой.",
-          "Перед производством наградного комплекта нужно уточнить тираж, имена получателей и состав тиснения.",
-          "Дизайнерам: после внесения ФИО и текста в шаблон необходимо убрать на всех макетах два элемента: рамку и заголовок «Почетная грамота», «Благодарность» или «Благодарственное письмо». Они выполняются тиснением, поэтому предоставляются типографии отдельным файлом.",
-        ],
-        assetImages: [
-          { title: "Грамота", caption: "Композиция с рамой и крупным заголовком под тиснение.", file: "award-document-1.webp" },
-          { title: "Благодарность", caption: "Лист для официального текста с более спокойной иерархией.", file: "award-document-2.webp" },
-          { title: "Благодарственное письмо", caption: "Письменный формат с акцентной типографикой и фольгированием.", file: "award-document-3.webp" },
-        ],
-        resourceLinks: ["awards"],
       },
     ],
   },
@@ -1361,11 +1359,12 @@ function Sidebar({ activePageId, activeSectionId, openGroup, setOpenGroup, navig
   return (
     <aside className="sidebar" aria-label={t("Навигация брендбука")}>
       <button className="brand-lockup" type="button" onClick={() => navigate("overview")} aria-label={t("Открыть обзор")}>
-        <motion.img layoutId={preloading ? undefined : "krdv-menu-logo"} src={logoAsset("krdv-logo-ru-square.svg")} alt={t("КРДВ")} />
+        <motion.img layoutId={preloading ? undefined : "krdv-menu-logo"} src={logoAsset("krdv-logo-ru-horizontal-menu.svg")} alt={t("КРДВ")} />
       </button>
 
       <div className="sidebar-meta">
-        <strong>{t("Руководство по фирменному стилю")}</strong>
+        <strong>{t("Руководство по использованию фирменного стиля")}</strong>
+        <span>{t("Обновлено: 1 ноября 2026")}</span>
       </div>
 
       <nav className="nav-list">
@@ -1390,7 +1389,7 @@ function Sidebar({ activePageId, activeSectionId, openGroup, setOpenGroup, navig
               >
                 <span>{group.number}</span>
                 <strong>{t(group.navTitle || group.title)}</strong>
-                <UiIcon icon={isOpen ? ICONS.chevronUp : ICONS.chevronDown} className="nav-chevron" />
+                <UiIcon icon={isOpen ? ICONS.navChevronUp : ICONS.navChevronDown} className="nav-chevron" strokeWidth={1} />
               </button>
               <NavChildren group={group} isOpen={isOpen} activePageId={activePageId} activeSectionId={isActive ? activeSectionId : ""} navigate={navigate} jumpTo={jumpTo} />
             </div>
@@ -1490,7 +1489,7 @@ function BrandPreloader() {
         <motion.img
           layoutId="krdv-menu-logo"
           className="preloader-logo"
-          src={logoAsset("krdv-logo-ru-square.svg")}
+          src={logoAsset("krdv-logo-ru-horizontal-menu.svg")}
           alt=""
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1742,12 +1741,12 @@ function ContentSection({ section, navigate, activePageId }) {
   );
 }
 
-function UiIcon({ icon, className = "", label, size = 18 }) {
+function UiIcon({ icon, className = "", label, size = 18, strokeWidth = 1.7 }) {
   return (
     <MorphIcon
       icon={icon}
       size={size}
-      strokeWidth={1.7}
+      strokeWidth={strokeWidth}
       absoluteStrokeWidth
       reducedMotion="user"
       spring="snappy"
@@ -1897,8 +1896,7 @@ function LogoLibrary({ items }) {
 function LogoDownloads({ variant }) {
   return (
     <div className="logo-downloads" aria-label={t(`Скачать ${variant.title}`)}>
-      <strong>{t("Скачать")}</strong>
-      <div>
+            <div>
         {logoFormats
           .filter((format) => variant.files[format])
           .map((format) => (
@@ -1925,8 +1923,7 @@ function SubsidiaryLogoLibrary({ setId }) {
               <h3>{t(item.title)}</h3>
               {item.note ? <p>{t(item.note)}</p> : null}
               <div className="logo-downloads" aria-label={t(`Скачать ${item.title}`)}>
-                <strong>{t("Скачать")}</strong>
-                <div>
+                                <div>
                   {subsidiaryFormats.map((format) => (
                     <LogoDownloadLink
                       key={format}
@@ -2011,8 +2008,7 @@ function MadeSignLibrary() {
               <span>{t("Знак")}</span>
               <h3>{t(item.title)}</h3>
               <div className="logo-downloads" aria-label={t(`Скачать ${item.title}`)}>
-                <strong>{t("Скачать")}</strong>
-                <div>
+                                <div>
                   {madeSignFormats.map((format) => (
                     <LogoDownloadLink key={format} file={item.files[format]} format={format} title={item.title} asset={madeSignAsset} />
                   ))}
@@ -2067,7 +2063,7 @@ function ResourceLinks({ keys }) {
 }
 
 function AssetImageGrid({ items, mode = "grid" }) {
-  const imagesOnly = mode === "imagesOnly" || mode === "stack";
+  const imagesOnly = mode === "imagesOnly" || mode === "stack" || mode === "row3";
 
   return (
     <LayoutGroup>
@@ -2161,10 +2157,23 @@ function MediaPlaceholder({ title, caption, selected, onSelect }) {
   );
 }
 
+function isDarkColor(hex) {
+  const value = parseInt(hex.slice(1), 16);
+  const r = (value >> 16) & 255;
+  const g = (value >> 8) & 255;
+  const b = value & 255;
+  return 0.299 * r + 0.587 * g + 0.114 * b < 150;
+}
+
+// Палитра как в DevRev: цветные плитки с кодами внутри, «Скопировать HEX» появляется при наведении.
 function PaletteGrid({ colors }) {
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const [copied, setCopied] = useState("");
-  const selected = colors[selectedIndex] || colors[0];
+
+  useEffect(() => {
+    if (!copied) return undefined;
+    const timeout = window.setTimeout(() => setCopied(""), 1600);
+    return () => window.clearTimeout(timeout);
+  }, [copied]);
 
   async function copyHex(hex) {
     setCopied(hex);
@@ -2176,38 +2185,41 @@ function PaletteGrid({ colors }) {
   }
 
   return (
-    <LayoutGroup>
-      <div className="palette-stage" style={{ "--active-color": selected?.hex }}>
-        <motion.div className="palette-grid" layout>
-          {colors.map((color, index) => (
-            <motion.button
-              key={color.hex}
-              type="button"
-              layout
-              data-active={selectedIndex === index}
-              onClick={() => {
-                setSelectedIndex(index);
-                copyHex(color.hex);
-              }}
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.992 }}
-              aria-label={t(`Скопировать HEX цвета ${color.name}`)}
-            >
-              <i style={{ backgroundColor: color.hex }} />
-              <strong>{t(color.name)}</strong>
-              <span>HEX: {color.hex}</span>
-              <span>RGB: {color.rgb}</span>
-              <span>CMYK: {color.cmyk}</span>
-              {color.pantone ? <span>{color.pantone}</span> : null}
-              <span className="copy-action" data-copied={copied === color.hex}>
-                <UiIcon icon={copied === color.hex ? ICONS.check : ICONS.copy} className="copy-action-icon" />
-                <span>{t(copied === color.hex ? "Скопировано" : "Скопировать HEX")}</span>
-              </span>
-            </motion.button>
-          ))}
-        </motion.div>
-      </div>
-    </LayoutGroup>
+    <div className="swatch-board">
+      {colors.map((item) => {
+        const [colStart, colEnd, rowStart, rowEnd] = item.area;
+        const style = { "--col": `${colStart} / ${colEnd}`, "--row": `${rowStart} / ${rowEnd}` };
+
+        if (item.photo) {
+          return (
+            <div className="swatch-photo" key={item.photo} style={style}>
+              <img src={rasterAsset(item.photo)} alt={t(item.alt)} loading="lazy" style={item.position ? { objectPosition: item.position } : undefined} />
+            </div>
+          );
+        }
+
+        return (
+          <button
+            key={item.hex}
+            type="button"
+            className={`swatch ${isDarkColor(item.hex) ? "is-dark" : ""}`}
+            style={{ ...style, backgroundColor: item.hex }}
+            onClick={() => copyHex(item.hex)}
+            aria-label={t(`Скопировать HEX цвета ${item.name}`)}
+          >
+            <span className="swatch-copy" data-copied={copied === item.hex}>
+              {t(copied === item.hex ? "Скопировано" : "Скопировать HEX")}
+            </span>
+            <span className="swatch-info">
+              <strong>{t(item.name)}</strong>
+              <span>HEX: {item.hex}</span>
+              <span>RGB: {item.rgb}</span>
+              <span>CMYK: {item.cmyk}</span>
+            </span>
+          </button>
+        );
+      })}
+    </div>
   );
 }
 

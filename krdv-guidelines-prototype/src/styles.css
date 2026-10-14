@@ -206,7 +206,7 @@
   --surface-hover: #fbfdff;
   --surface-active: #f3f8fc;
   --panel: #eeeeee;
-  --sidebar: 290px;
+  --sidebar: 313px;
   --blue: #0056a2;
   --red: #de2327;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -337,7 +337,7 @@ img {
 
 .preloader-logo {
   align-self: end;
-  width: clamp(112px, 9vw, 164px);
+  width: clamp(220px, 20vw, 320px);
   height: auto;
   object-fit: contain;
   margin-bottom: clamp(10px, 2.2vh, 22px);
@@ -367,7 +367,7 @@ img {
   width: var(--sidebar);
   height: 100vh;
   display: grid;
-  grid-template-rows: 156px 72px minmax(0, 1fr);
+  grid-template-rows: 104px minmax(72px, auto) minmax(0, 1fr);
   overflow: hidden;
   border-right: 1px solid var(--line);
   background: #ffffff;
@@ -386,7 +386,7 @@ img {
 }
 
 .brand-lockup img {
-  width: 184px;
+  width: 236px;
   max-width: 100%;
   height: auto;
   object-fit: contain;
@@ -403,14 +403,10 @@ img {
   align-content: center;
   gap: 6px;
   border-bottom: 1px solid var(--line);
-  padding: 0 16px;
+  padding: 16px;
   font-family: var(--mono);
   text-transform: uppercase;
   letter-spacing: var(--mono-tracking);
-}
-
-.sidebar-meta strong {
-  white-space: nowrap;
 }
 
 .sidebar-meta strong,
@@ -419,6 +415,10 @@ img {
   font-size: 11px;
   line-height: 1.45;
   font-weight: 400;
+}
+
+.sidebar-meta span {
+  color: var(--muted);
 }
 
 .nav-list {
@@ -488,24 +488,38 @@ img {
 }
 
 .nav-chevron {
-  color: #9a9a9a;
+  color: #b3b3b3;
   transition: color var(--motion-fast) var(--ease-standard);
 }
 
 .nav-parent:hover .nav-chevron,
 .nav-parent:focus-visible .nav-chevron,
 .nav-parent[aria-expanded="true"] .nav-chevron {
-  color: #050505;
+  color: #8f8f8f;
 }
 
 .nav-group.is-active .nav-parent {
   color: #050505;
 }
 
-.nav-group.is-active .nav-parent::before,
-.nav-parent:hover::before,
-.nav-parent:focus-visible::before {
-  transform: scaleY(1);
+.nav-parent::before {
+  display: none;
+}
+
+/* Пункт меню при наведении — серая плашка на всю ширину, как подпункты. */
+.nav-parent:hover,
+.nav-parent:focus-visible {
+  background: #f2f2f2;
+}
+
+.nav-parent:focus-visible {
+  outline-offset: -2px;
+}
+
+.nav-parent > span {
+  font-family: var(--mono);
+  font-size: 15px;
+  letter-spacing: 0.02em;
 }
 
 .nav-children-shell {
@@ -898,7 +912,8 @@ img {
 }
 
 .intro-panel p {
-  grid-column: 2;
+  grid-column: 1 / -1;
+  padding-left: 32px;
   width: min(100%, 1320px);
   margin: 0;
   font-size: 34px;
@@ -3113,6 +3128,7 @@ img {
 
   .intro-panel p {
     grid-column: 1;
+    padding-left: 0;
   }
 
   .content-section {
@@ -3563,12 +3579,6 @@ img {
   }
 }
 
-@media (max-width: 360px) {
-  .sidebar-meta strong {
-    white-space: normal;
-  }
-}
-
 @media (max-width: 420px) {
   .preloader-frame {
     width: calc(100vw - 34px);
@@ -3776,5 +3786,133 @@ img {
   to {
     opacity: 1;
     transform: translateY(0) scaleY(1);
+  }
+}
+
+/* Палитра: плитки цветов и фотографий в сетке из 12 колонок. */
+.swatch-board {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-rows: 210px;
+  width: 100%;
+}
+
+.swatch,
+.swatch-photo {
+  grid-column: var(--col);
+  grid-row: var(--row);
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.swatch {
+  display: flex;
+  align-items: flex-end;
+  border: 0;
+  padding: 18px;
+  color: #050505;
+  text-align: left;
+  cursor: copy;
+}
+
+.swatch.is-dark {
+  color: #ffffff;
+}
+
+.swatch-info {
+  display: grid;
+  gap: 2px;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.swatch-info span {
+  white-space: nowrap;
+}
+
+.swatch-info strong {
+  margin-bottom: 10px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  opacity: 1;
+}
+
+.swatch-copy {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  border-radius: 4px;
+  padding: 5px 8px;
+  background: #050505;
+  color: #ffffff;
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1.2;
+  letter-spacing: var(--mono-tracking);
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity var(--motion-fast) var(--ease-standard), transform var(--motion-fast) var(--ease-standard);
+  pointer-events: none;
+}
+
+.swatch.is-dark .swatch-copy {
+  background: #ffffff;
+  color: #050505;
+}
+
+.swatch:hover .swatch-copy,
+.swatch:focus-visible .swatch-copy,
+.swatch-copy[data-copied="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.swatch:focus-visible {
+  outline-offset: -3px;
+}
+
+.swatch-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 860px) {
+  .swatch-board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 150px;
+  }
+
+  .swatch,
+  .swatch-photo {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .swatch-photo {
+    grid-column: 1 / -1;
+  }
+
+  .swatch-board > .swatch:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Наградные документы — три бланка в один ряд, без подписей. */
+.asset-image-grid.is-row3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 860px) {
+  .asset-image-grid.is-row3 {
+    grid-template-columns: 1fr;
   }
 }
