@@ -1401,7 +1401,7 @@ function Sidebar({ activePageId, activeSectionId, openGroup, setOpenGroup, navig
   return (
     <aside className="sidebar" aria-label={t("Навигация брендбука")}>
       <button className="brand-lockup" type="button" onClick={() => navigate("overview")} aria-label={t("Открыть обзор")}>
-        <motion.img layoutId={preloading ? undefined : "krdv-menu-logo"} src={logoAsset("krdv-logo-ru-horizontal-menu.svg")} alt={t("КРДВ")} />
+        <motion.img layoutId={preloading ? undefined : "krdv-menu-logo"} src={logoAsset("krdv-logo-ru-square.svg")} alt={t("КРДВ")} />
       </button>
 
       <div className="sidebar-meta">
@@ -1531,7 +1531,7 @@ function BrandPreloader() {
         <motion.img
           layoutId="krdv-menu-logo"
           className="preloader-logo"
-          src={logoAsset("krdv-logo-ru-horizontal-menu.svg")}
+          src={logoAsset("krdv-logo-ru-square.svg")}
           alt=""
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}

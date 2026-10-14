@@ -342,7 +342,7 @@ img {
 
 .preloader-logo {
   align-self: end;
-  width: clamp(220px, 20vw, 320px);
+  width: clamp(112px, 9vw, 164px);
   height: auto;
   object-fit: contain;
   margin-bottom: clamp(10px, 2.2vh, 22px);
@@ -372,7 +372,7 @@ img {
   width: var(--sidebar);
   height: 100vh;
   display: grid;
-  grid-template-rows: calc(var(--sidebar) * 0.35) auto minmax(0, 1fr);
+  grid-template-rows: calc(var(--sidebar) * 0.5) auto minmax(0, 1fr);
   overflow: hidden;
   border-right: 1px solid var(--line);
   background: #ffffff;
@@ -391,7 +391,7 @@ img {
 }
 
 .brand-lockup img {
-  width: clamp(236px, 11.5vw, 320px);
+  width: calc(var(--sidebar) * 0.59);
   max-width: 100%;
   height: auto;
   object-fit: contain;
