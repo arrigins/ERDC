@@ -4020,6 +4020,38 @@ img {
   aspect-ratio: 2 / 1;
 }
 
+/* Эксперимент: скруглённые карточки без серой обводки — только в блоке знаков режимов.
+   Карточка залита лёгким оттенком цвета режима, картинка — отдельная скруглённая плашка внутри. */
+.section-wide.is-signs .regime-sign-card {
+  border: 0;
+  border-radius: 24px;
+  padding: 10px;
+  background: color-mix(in srgb, var(--sign-color) 7%, #f7f7f8);
+}
+
+.section-wide.is-signs .regime-sign-card:hover {
+  background: color-mix(in srgb, var(--sign-color) 12%, #f7f7f8);
+}
+
+.section-wide.is-signs .regime-sign-preview {
+  border-bottom: 0;
+  border-radius: 16px;
+}
+
+.section-wide.is-signs .regime-sign-copy {
+  padding: 18px 14px 14px;
+}
+
+.section-wide.is-signs .logo-downloads a {
+  border-color: transparent;
+}
+
+.section-wide.is-signs .resource-links a {
+  border: 0;
+  border-radius: 24px;
+  padding: 24px 28px;
+}
+
 .swatch-info strong {
   font-family: "TT Norms Pro", "Helvetica Neue", Arial, sans-serif;
   font-size: 17px;
