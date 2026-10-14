@@ -674,7 +674,8 @@ img {
   color: #001d37;
 }
 
-.hero-band.is-light::before {
+.hero-band.is-light::before,
+.hero-band.is-plain::before {
   display: none;
 }
 

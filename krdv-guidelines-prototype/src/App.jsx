@@ -823,8 +823,8 @@ const pagesData = [
     number: "04",
     title: "Преференциальные режимы и программы",
     navTitle: "Режимы и программы",
-    heroImage: "cover-regimes-glass.webp",
-    heroTone: "light",
+    heroImage: "cover-regimes-glass-dark.webp",
+    heroTone: "plain",
     softLayout: true,
     intro: "Для преференциальных режимов используется единая система сокращений, знаков и названий. Она помогает быстро различать программы поддержки в коммуникационных материалах.",
     sections: [
@@ -1745,7 +1745,7 @@ function GuidelinePage({ page, activePageId, navigate }) {
 
   return (
     <article className={`guideline-page ${page.softLayout ? "is-soft" : ""}`}>
-      <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""} ${hasLibraryHero ? "is-library" : ""} ${page.heroTone === "light" ? "is-light" : ""}`} aria-label={t(page.title)}>
+      <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""} ${hasLibraryHero ? "is-library" : ""} ${page.heroTone === "light" ? "is-light" : ""} ${page.heroTone === "plain" ? "is-plain" : ""}`} aria-label={t(page.title)}>
         {page.heroVideo ? <video className="hero-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : null}
         {page.heroImage ? <img className="hero-video" src={heroAsset(page.heroImage)} alt="" aria-hidden="true" /> : null}
         {page.heroAnimation === "colorTiles" ? <ColorHeroAnimation /> : null}
