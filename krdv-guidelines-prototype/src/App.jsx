@@ -1419,6 +1419,7 @@ function Sidebar({ activePageId, activeSectionId, openGroup, setOpenGroup, navig
         <motion.img layoutId={preloading ? undefined : "krdv-menu-logo"} src={logoAsset("krdv-logo-ru-square.svg")} alt={t("КРДВ")} />
       </button>
 
+      <div className="sidebar-scroll">
       <div className="sidebar-meta">
         <strong>{t("Руководство по использованию фирменного стиля")}</strong>
         <span>{t("Обновлено: 1 ноября 2026")}</span>
@@ -1453,7 +1454,7 @@ function Sidebar({ activePageId, activeSectionId, openGroup, setOpenGroup, navig
           );
         })}
       </nav>
-
+      </div>
     </aside>
   );
 }

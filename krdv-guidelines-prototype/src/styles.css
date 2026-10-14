@@ -374,7 +374,7 @@ img {
   width: var(--sidebar);
   height: 100vh;
   display: grid;
-  grid-template-rows: 156px auto minmax(0, 1fr);
+  grid-template-rows: 156px minmax(0, 1fr);
   overflow: hidden;
   border-right: 1px solid var(--line);
   background: #ffffff;
@@ -434,10 +434,14 @@ img {
   letter-spacing: 0.08em;
 }
 
-.nav-list {
+/* Логотип закреплён, подпись прокручивается вместе с меню. */
+.sidebar-scroll {
   min-height: 0;
   overflow: auto;
   overscroll-behavior: contain;
+}
+
+.nav-list {
   padding: 12px 0 22px;
 }
 
