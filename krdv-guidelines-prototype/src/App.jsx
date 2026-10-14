@@ -832,6 +832,7 @@ const pagesData = [
         title: "Цветовое кодирование",
         paragraphs: ["Каждый цвет закреплен за конкретным направлением поддержки и используется как навигационный маркер в лифлетах, презентациях и информационных блоках."],
         palette: regimePaletteTiles,
+        paletteSeparate: true,
       },
       {
         id: "hectare",
@@ -1811,7 +1812,7 @@ function ContentSection({ section, navigate, activePageId }) {
       </div>
       {section.palette ? (
         <div className="section-wide">
-          <PaletteGrid colors={section.palette} />
+          <PaletteGrid colors={section.palette} separate={section.paletteSeparate} />
         </div>
       ) : null}
     </section>
@@ -2243,7 +2244,7 @@ function isDarkColor(hex) {
 }
 
 // Палитра как в DevRev: цветные плитки с кодами внутри, «Скопировать HEX» появляется при наведении.
-function PaletteGrid({ colors }) {
+function PaletteGrid({ colors, separate = false }) {
   const [copied, setCopied] = useState("");
 
   useEffect(() => {
@@ -2262,7 +2263,7 @@ function PaletteGrid({ colors }) {
   }
 
   return (
-    <div className="swatch-board">
+    <div className={`swatch-board ${separate ? "is-separate" : ""}`}>
       {colors.map((item) => {
         const [colStart, colEnd, rowStart, rowEnd] = item.area;
         const style = { "--col": `${colStart} / ${colEnd}`, "--row": `${rowStart} / ${rowEnd}` };

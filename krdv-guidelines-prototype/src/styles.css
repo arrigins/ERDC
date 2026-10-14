@@ -3912,6 +3912,15 @@ img {
   outline-offset: -3px;
 }
 
+/* Цвета режимов — отдельные плитки: у каждого режима свой фирменный цвет, это не одна палитра. */
+.swatch-board.is-separate {
+  gap: 16px;
+}
+
+.swatch-board.is-separate .swatch {
+  border-radius: 8px;
+}
+
 .swatch-photo img {
   width: 100%;
   height: 100%;
@@ -3936,6 +3945,10 @@ img {
 
   .swatch-board > .swatch:first-child {
     grid-column: 1 / -1;
+  }
+
+  .swatch-board.is-separate {
+    gap: 10px;
   }
 }
 
