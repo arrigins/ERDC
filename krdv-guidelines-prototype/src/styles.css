@@ -49,7 +49,7 @@
 @font-face {
   font-family: "TT Norms Pro";
   src: url("/fonts/TT-Norms-Pro-Normal.woff2") format("woff2"), url("/fonts/TT-Norms-Pro-Normal.ttf") format("truetype");
-  font-weight: 350;
+  font-weight: 450;
   font-style: normal;
   font-display: swap;
 }
@@ -57,7 +57,7 @@
 @font-face {
   font-family: "TT Norms Pro";
   src: url("/fonts/TT-Norms-Pro-Normal-Italic.woff2") format("woff2"), url("/fonts/TT-Norms-Pro-Normal-Italic.ttf") format("truetype");
-  font-weight: 350;
+  font-weight: 450;
   font-style: italic;
   font-display: swap;
 }
@@ -475,7 +475,7 @@ img {
   gap: 0;
   padding: 0 var(--sb-pad);
   font-size: 16px;
-  font-weight: 350;
+  font-weight: 450;
   line-height: 1;
   transition: background var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard);
 }
@@ -496,7 +496,7 @@ img {
 .nav-parent span,
 .nav-parent strong {
   min-width: 0;
-  font-weight: 350;
+  font-weight: 450;
 }
 
 .nav-parent strong {
@@ -588,7 +588,7 @@ img {
   padding: 6px var(--sb-pad) 6px calc(var(--sb-pad) + var(--sb-num));
   color: var(--muted);
   font-size: 16px;
-  font-weight: 350;
+  font-weight: 450;
   line-height: 1.22;
   transition: color var(--motion-fast) var(--ease-standard), background var(--motion-fast) var(--ease-standard);
 }
@@ -938,7 +938,7 @@ img {
   margin: 0;
   font-size: clamp(27px, 2.2vw, 34px);
   line-height: 1.16;
-  font-weight: 500;
+  font-weight: 450;
   letter-spacing: -0.012em;
 }
 
