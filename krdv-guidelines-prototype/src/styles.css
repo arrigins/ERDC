@@ -669,6 +669,15 @@ img {
   display: none;
 }
 
+/* Светлая обложка (картинка): без затемнения, тёмный текст. */
+.hero-band.is-light {
+  color: #001d37;
+}
+
+.hero-band.is-light::before {
+  display: none;
+}
+
 .hero-band.is-media::after,
 .hero-band.is-animated::after,
 .hero-band.is-library::after,

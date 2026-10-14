@@ -300,6 +300,12 @@ const downloadResources = {
     description: "Руководство по фирменному стилю программы «Гектар».",
     url: "https://disk.yandex.ru/i/58D6TDp8-ikn1w",
   },
+  intcSite: {
+    title: "Сайт ИНТЦ «Русский»",
+    description: "Официальный сайт инновационного научно-технологического центра «Русский».",
+    url: "https://iostrov.ru/",
+    action: "Перейти на сайт",
+  },
   ma2030Brandbook: {
     title: "Брендбук «Муравьёв-Амурский 2030»",
     description: "Руководство по фирменному стилю программы «Муравьёв-Амурский 2030».",
@@ -815,13 +821,15 @@ const pagesData = [
   {
     id: "regimes",
     number: "04",
-    title: "Преференциальные режимы",
-    navTitle: "Режимы",
+    title: "Преференциальные режимы и программы",
+    navTitle: "Режимы и программы",
+    heroImage: "cover-regimes-glass.webp",
+    heroTone: "light",
     intro: "Для преференциальных режимов используется единая система сокращений, знаков и названий. Она помогает быстро различать программы поддержки в коммуникационных материалах.",
     sections: [
       {
         id: "signs",
-        title: "Знаки",
+        title: "Знаки режимов",
         lead: "Знаки преференциальных режимов.",
         paragraphs: ["Система включает сокращения и полные расшифровки режимов: ТОР, СПВ, КОРФ, САР, АЗРФ и ИНТЦ."],
         regimeSigns: true,
@@ -829,25 +837,33 @@ const pagesData = [
       },
       {
         id: "coding",
-        title: "Цветовое кодирование",
+        title: "Цвета направлений",
         paragraphs: ["Каждый цвет закреплен за конкретным направлением поддержки и используется как навигационный маркер в лифлетах, презентациях и информационных блоках."],
         palette: regimePaletteTiles,
         paletteSeparate: true,
       },
       {
         id: "hectare",
-        title: "Гектар",
-        paragraphs: ["У программы «Гектар» собственный брендбук. Логотип и правила его использования — в архиве ниже."],
+        title: "Дальневосточный и арктический гектар",
+        navTitle: "Гектар",
+        paragraphs: ["У программы «Дальневосточный и арктический гектар» собственный брендбук. Логотип и правила его использования — в архиве ниже."],
         brandLogo: { file: "hectare-logo.svg", alt: "Логотип «Гектар»" },
         resourceLinks: ["hectareBrandbook"],
       },
       {
         id: "ma2030",
         title: "Муравьёв-Амурский 2030",
-        navTitle: "МА2030",
+        navTitle: "МА 2030",
         paragraphs: ["«Муравьёв-Амурский 2030» — бесплатная годовая образовательная программа по подготовке управленческих кадров для государственной и муниципальной службы. Проект реализуется Министерством по развитию Дальнего Востока и Арктики совместно с АО «Корпорация развития Дальнего Востока и Арктики» (КРДВ)."],
         brandLogo: { file: "ma2030-logo.svg", alt: "Логотип «Муравьёв-Амурский 2030»" },
         resourceLinks: ["ma2030Brandbook"],
+      },
+      {
+        id: "intc",
+        title: "ИНТЦ «Русский»",
+        paragraphs: ["У ИНТЦ «Русский» нет отдельного брендбука. Познакомиться с проектом и его фирменным стилем можно на официальном сайте."],
+        brandLogo: { file: "intc-russky-logo.svg", alt: "Логотип ИНТЦ «Русский»" },
+        resourceLinks: ["intcSite"],
       },
     ],
   },
@@ -1720,15 +1736,16 @@ function LibraryHeroBackground({ variant, miniature = false }) {
 }
 
 function GuidelinePage({ page, activePageId, navigate }) {
-  const hasMediaHero = Boolean(page.heroVideo);
+  const hasMediaHero = Boolean(page.heroVideo || page.heroImage);
   const hasAnimatedHero = Boolean(page.heroAnimation);
   const hasSubsidiaryHero = page.heroAnimation === "subsidiaryRegions";
   const hasLibraryHero = Boolean(page.heroLibrary);
 
   return (
     <article className="guideline-page">
-      <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""} ${hasLibraryHero ? "is-library" : ""}`} aria-label={t(page.title)}>
+      <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""} ${hasLibraryHero ? "is-library" : ""} ${page.heroTone === "light" ? "is-light" : ""}`} aria-label={t(page.title)}>
         {page.heroVideo ? <video className="hero-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : null}
+        {page.heroImage ? <img className="hero-video" src={heroAsset(page.heroImage)} alt="" aria-hidden="true" /> : null}
         {page.heroAnimation === "colorTiles" ? <ColorHeroAnimation /> : null}
         {hasSubsidiaryHero ? <SubsidiaryHeroAnimation /> : null}
         {page.heroLibrary ? <LibraryHeroBackground variant={page.heroLibrary} /> : null}
@@ -1894,7 +1911,7 @@ function SectionDirectory({ navigate, activePageId }) {
       <motion.div className="section-directory" layout>
         {pagesData.map((page) => {
           const isCurrent = activePageId === page.id;
-          const hasCover = Boolean(page.heroVideo);
+          const hasCover = Boolean(page.heroVideo || page.heroImage);
           const hasMotionCover = page.heroAnimation === "colorTiles";
           const hasLibraryCover = Boolean(page.heroLibrary);
 
@@ -1913,6 +1930,7 @@ function SectionDirectory({ navigate, activePageId }) {
             >
               <div className={`directory-visual ${hasCover || hasMotionCover || hasLibraryCover ? "has-cover" : ""} ${hasMotionCover ? "has-motion-cover" : ""} ${hasLibraryCover ? "has-library-cover" : ""}`} aria-hidden="true">
                 {page.heroVideo ? <video className="directory-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" /> : null}
+                {page.heroImage ? <img className="directory-video" src={heroAsset(page.heroImage)} alt="" loading="lazy" /> : null}
                 {hasMotionCover ? <ColorHeroAnimation /> : null}
                 {hasLibraryCover ? <LibraryHeroBackground variant={page.heroLibrary} miniature /> : null}
                 {hasCover || hasMotionCover || hasLibraryCover ? null : <div className="directory-fallback" />}
@@ -2131,7 +2149,7 @@ function ResourceLinks({ keys }) {
             <p>{t(item.description)}</p>
           </div>
           <em>
-            {t("Открыть архив")}
+            {t(item.action || "Открыть архив")}
             <UiIcon icon={ICONS.arrowRight} className="resource-link-icon" />
           </em>
         </motion.a>
