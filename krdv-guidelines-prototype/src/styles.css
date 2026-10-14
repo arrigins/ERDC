@@ -4024,6 +4024,7 @@ img {
    светло-серый фон страницы, белые скруглённые блоки без серых обводок. */
 .guideline-page.is-soft {
   --soft-bg: #eff0f1;
+  --soft-card: #f1f2f3;
   --soft-radius: 24px;
   background: var(--soft-bg);
 }
@@ -4038,7 +4039,7 @@ img {
 .guideline-page.is-soft .brand-logo-preview {
   border: 0;
   border-radius: var(--soft-radius);
-  background: #ffffff;
+  background: var(--soft-card);
 }
 
 .guideline-page.is-soft .regime-sign-card {
@@ -4046,7 +4047,7 @@ img {
 }
 
 .guideline-page.is-soft .regime-sign-card:hover {
-  background: #ffffff;
+  background: var(--soft-card);
 }
 
 .guideline-page.is-soft .regime-sign-preview {
@@ -4060,7 +4061,7 @@ img {
 
 .guideline-page.is-soft .logo-downloads a {
   border-color: transparent;
-  background: var(--soft-bg);
+  background: #ffffff;
 }
 
 .guideline-page.is-soft .logo-downloads a:hover,
