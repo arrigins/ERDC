@@ -4005,6 +4005,21 @@ img {
   transform: translateY(0);
 }
 
+/* Знаки режимов на всю ширину секции: превью в пропорции картинок 2:1. */
+.section-wide.is-signs {
+  display: grid;
+  gap: 16px;
+}
+
+.section-wide.is-signs .regime-sign-card {
+  grid-template-rows: auto 1fr;
+}
+
+.section-wide.is-signs .regime-sign-preview {
+  position: relative;
+  aspect-ratio: 2 / 1;
+}
+
 .swatch-info strong {
   font-family: "TT Norms Pro", "Helvetica Neue", Arial, sans-serif;
   font-size: 17px;

@@ -833,6 +833,7 @@ const pagesData = [
         lead: "Знаки преференциальных режимов.",
         paragraphs: ["Система включает сокращения и полные расшифровки режимов: ТОР, СПВ, КОРФ, САР, АЗРФ и ИНТЦ."],
         regimeSigns: true,
+        signsWide: true,
         resourceLinks: ["regimeLogos"],
       },
       {
@@ -1783,7 +1784,7 @@ function ContentSection({ section, navigate, activePageId }) {
   const cardsAfterAssets = section.cards && section.cardsPlacement === "afterAssets";
 
   return (
-    <section className={`content-section ${section.palette ? "has-wide" : ""}`} id={section.id}>
+    <section className={`content-section ${section.palette || section.signsWide ? "has-wide" : ""}`} id={section.id}>
       <div className="section-title">
         <h2>{t(section.title)}</h2>
       </div>
@@ -1810,7 +1811,7 @@ function ContentSection({ section, navigate, activePageId }) {
         {section.typeSamples ? <TypeSpecimens items={section.typeSamples} /> : null}
         {section.fontWorkbench ? <FontWorkbench /> : null}
         {section.regimePalette ? <RegimePalette items={section.regimePalette} /> : null}
-        {section.regimeSigns ? <RegimeSignLibrary /> : null}
+        {section.regimeSigns && !section.signsWide ? <RegimeSignLibrary /> : null}
         {section.madeSigns ? <MadeSignLibrary /> : null}
         {section.assetImages ? <AssetImageGrid items={section.assetImages} mode={section.assetImageMode} /> : null}
         {cardsAfterAssets ? <CardGrid items={section.cards} /> : null}
@@ -1822,11 +1823,17 @@ function ContentSection({ section, navigate, activePageId }) {
           </p>
         ) : null}
         {section.visuals ? <PlaceholderGrid items={section.visuals} /> : null}
-        {section.resourceLinks ? <ResourceLinks keys={section.resourceLinks} /> : null}
+        {section.resourceLinks && !section.signsWide ? <ResourceLinks keys={section.resourceLinks} /> : null}
         {section.typografDemo ? <TypografDemo /> : null}
         {section.contacts ? <ContactBlock items={section.contacts} /> : null}
         {section.contactCta ? <ContactCta item={section.contactCta} /> : null}
       </div>
+      {section.regimeSigns && section.signsWide ? (
+        <div className="section-wide is-signs">
+          <RegimeSignLibrary />
+          {section.resourceLinks ? <ResourceLinks keys={section.resourceLinks} /> : null}
+        </div>
+      ) : null}
       {section.palette ? (
         <div className="section-wide">
           <PaletteGrid colors={section.palette} separate={section.paletteSeparate} />
