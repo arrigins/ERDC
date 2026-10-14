@@ -934,8 +934,31 @@ img {
   margin: 0;
   font-size: clamp(27px, 2.2vw, 34px);
   line-height: 1.16;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: -0.012em;
+}
+
+/* Кнопка «Скачать логотипы» во вступлении — как «Download logos» на DevRev. */
+.intro-action {
+  grid-column: 1 / -1;
+  justify-self: start;
+  margin: 48px 0 0 32px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: 6px;
+  background: var(--ui-blue);
+  color: #ffffff;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: var(--mono-tracking);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.intro-action:hover {
+  color: #ffffff;
 }
 
 .intro-panel p,
@@ -3130,6 +3153,11 @@ img {
   .intro-panel p {
     grid-column: 1;
     padding-left: 0;
+  }
+
+  .intro-action {
+    grid-column: 1;
+    margin-left: 0;
   }
 
   .content-section {

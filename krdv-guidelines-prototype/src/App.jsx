@@ -705,6 +705,7 @@ const pagesData = [
     title: "Логотип",
     heroVideo: "logo-cover.mp4",
     heroLogo: "krdv-logo-ru-horizontal.svg",
+    introAction: { label: "Скачать логотипы", resource: "logos" },
     intro: "Правила работы с логотипом: версии, размещение, охранное поле, работа с фоном и ограничения по использованию.",
     sections: [
       {
@@ -777,6 +778,7 @@ const pagesData = [
     title: "Дочерние общества",
     heroVideo: "subsidiaries-cover.mp4",
     heroAnimation: "subsidiaryRegions",
+    introAction: { label: "Скачать логотипы", resource: "subsidiaryLogos" },
     intro: "Раздел объединяет версии логотипов дочерних обществ: русские и английские, горизонтальные и вертикальные.",
     sections: [
       {
@@ -1735,6 +1737,16 @@ function GuidelinePage({ page, activePageId, navigate }) {
 
       <section className="intro-panel">
         <p>{t(page.intro)}</p>
+        {page.introAction && downloadResources[page.introAction.resource] ? (
+          <a
+            className="intro-action"
+            href={downloadResources[page.introAction.resource].url}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {page.introAction.label}
+          </a>
+        ) : null}
       </section>
 
       {page.sections.map((section) => (
