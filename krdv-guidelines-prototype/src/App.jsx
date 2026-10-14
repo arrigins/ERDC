@@ -2577,14 +2577,14 @@ function EndLinks({ activePageId, navigate }) {
           <b>{previous.number}</b>
           {t(previous.navTitle || previous.title)}
         </span>
-        <UiIcon icon={ICONS.arrowLeft} className="end-link-icon" size={16} strokeWidth={1.4} />
+        <UiIcon icon={ICONS.arrowLeft} className="end-link-icon" size={13} strokeWidth={1.3} />
       </button>
       <button type="button" onClick={() => navigate(next.id)} aria-label={t(`Следующий раздел: ${next.title}`)}>
         <span>
           <b>{next.number}</b>
           {t(next.navTitle || next.title)}
         </span>
-        <UiIcon icon={ICONS.arrowRight} className="end-link-icon" size={16} strokeWidth={1.4} />
+        <UiIcon icon={ICONS.arrowRight} className="end-link-icon" size={13} strokeWidth={1.3} />
       </button>
     </nav>
   );

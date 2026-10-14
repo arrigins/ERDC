@@ -2985,11 +2985,11 @@ img {
 
 /* Переходы между разделами — серые плашки как у DevRev, при наведении чуть темнее. */
 .end-links button {
-  min-height: 180px;
+  min-height: 167px;
   display: grid;
   align-content: start;
   justify-items: start;
-  gap: 14px;
+  gap: 10px;
   border: 0;
   padding: 32px;
   background: #f2f2f2;
@@ -3009,8 +3009,8 @@ img {
 
 .end-links span {
   display: flex;
-  gap: 14px;
-  font-size: clamp(22px, 1.4vw, 32px);
+  gap: 12px;
+  font-size: 18px;
   line-height: 1.15;
   font-weight: 400;
 }
@@ -3035,8 +3035,8 @@ img {
 .site-footer {
   background: #07143a;
   color: #ffffff;
-  font-size: clamp(18px, 1.05vw, 24px);
-  line-height: 1.35;
+  font-size: 15px;
+  line-height: 1.3;
 }
 
 .site-footer p {
@@ -3072,9 +3072,9 @@ img {
 .site-footer-top,
 .site-footer-bottom {
   display: grid;
-  grid-template-columns: clamp(220px, 27.5%, 520px) repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   row-gap: 24px;
-  padding: 32px 0 0;
+  padding: 32px 32px 0;
 }
 
 .site-footer-top > *,
@@ -3082,17 +3082,9 @@ img {
   padding-right: 24px;
 }
 
-.site-footer-top > :first-child,
-.site-footer-bottom > :first-child {
-  margin-left: 32px;
-}
-
-.site-footer-top > :first-child {
-  padding-right: 12px;
-}
 
 .site-footer-top {
-  min-height: 300px;
+  min-height: 232px;
   align-content: start;
   padding-bottom: 40px;
 }
@@ -3114,7 +3106,7 @@ img {
 }
 
 .site-footer-logo {
-  width: min(100%, 300px);
+  width: min(100%, 234px);
   height: auto;
   padding-right: 0;
 }
