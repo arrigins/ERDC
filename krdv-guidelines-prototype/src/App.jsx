@@ -562,11 +562,13 @@ const subsidiaryRegions = subsidiaryLogos
       slug: ruItem.slug,
       title: ruItem.title,
       enTitle: find("en-horizontal")?.title,
-      rows: [
-        { label: "RU", cells: [find("ru-horizontal"), find("ru-vertical")] },
-        { label: "EN", cells: [find("en-horizontal"), find("en-vertical")] },
-        ...(extra ? [{ label: "RU", note: "Дополнительный вертикальный вариант", cells: [null, extra] }] : []),
-      ],
+      cells: [
+        { label: "RU · горизонтальная", item: find("ru-horizontal") },
+        { label: "EN · горизонтальная", item: find("en-horizontal") },
+        { label: "RU · вертикальная", item: find("ru-vertical") },
+        { label: "EN · вертикальная", item: find("en-vertical") },
+        ...(extra ? [{ label: "RU · вертикальная, доп.", item: extra }] : []),
+      ].filter((cell) => cell.item),
     };
   });
 
@@ -666,17 +668,17 @@ const logoUsageExamples = [
 const logoBackgroundExamples = [
   { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", bg: "#d8e5f6" }, text: "Фирменные цвета и их оттенки с высоким уровнем контраста" },
   { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square-ondark.svg", bg: "#000000" }, text: "Черный фон — с версией логотипа с белым написанием" },
-  { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", photo: "photostyle-composition-15.webp", width: "34%", position: "top-left" }, text: "Фотография со светлым однородным участком под логотипом" },
-  { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", photo: "photostyle-composition-1.webp", width: "34%", position: "top-left", plate: true }, text: "Если однородного участка нет — используйте белую плашку" },
+  { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", photo: "photostyle-composition-15.webp", width: "20%", position: "top-left" }, text: "Фотография со светлым однородным участком под логотипом" },
+  { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", photo: "photostyle-composition-1.webp", position: "plate", plate: true }, text: "Если однородного участка нет — используйте белую плашку" },
   { verdict: "no", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", bg: "#2a64d8" }, text: "Фирменные цвета и оттенки с низким уровнем контраста" },
   { verdict: "no", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", bg: "#b06bff" }, text: "Нефирменные цвета ярких оттенков" },
-  { verdict: "no", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", bg: "conic-gradient(from 30deg at 30% 40%, #d43b5b, #f2b84b, #3cb39a, #6a3fb5, #d43b5b)" }, text: "Активные цветные паттерны и градиенты" },
-  { verdict: "no", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", photo: "photostyle-composition-11.webp", width: "34%", position: "top-left" }, text: "Неоднородный участок фотографии без плашки" },
+  { verdict: "no", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", bg: "linear-gradient(115deg, #3cb39a 0%, #6a3fb5 30%, #d43b5b 62%, #f2b84b 100%)" }, text: "Активные цветные паттерны и градиенты" },
+  { verdict: "no", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", photo: "photostyle-composition-11.webp", width: "20%", position: "top-left" }, text: "Неоднородный участок фотографии без плашки" },
 ];
 
 const logoMisuseExamples = [
   { verdict: "no", title: "Старые версии", preview: { kind: "logo", raster: "krdv-logo-old-version.webp", width: "58%" }, text: "Нельзя использовать прежние версии логотипа" },
-  { verdict: "no", title: "Цвет", preview: { kind: "logo", file: "krdv-logo-ru-square-misuse-color.svg" }, text: "Нельзя менять цвета знака и написания" },
+  { verdict: "no", title: "Цвет", preview: { kind: "logo", file: "krdv-logo-ru-square-misuse-color-v2.svg" }, text: "Нельзя менять цвета знака и написания" },
   { verdict: "no", title: "Пропорции", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", style: { transform: "scaleX(1.45)" } }, text: "Нельзя растягивать, сжимать и искажать пропорции" },
   { verdict: "no", title: "Поворот", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", style: { transform: "rotate(-14deg)" } }, text: "Нельзя поворачивать и наклонять логотип" },
   { verdict: "no", title: "Типографика", preview: { kind: "swapText", text: "КОРПОРАЦИЯ РАЗВИТИЯ\nДАЛЬНЕГО ВОСТОКА\nИ АРКТИКИ", font: "system" }, text: "Нельзя набирать написание другим шрифтом или менять его компоновку" },
@@ -699,12 +701,10 @@ const cobrandRules = [
 ];
 
 const cobrandExamples = [
-  { verdict: "yes", preview: { kind: "cobrand", logos: ["ministry", "krdv"], divider: true }, text: "Министерство слева, КРДВ справа, между ними — охранное поле и разделитель" },
-  { verdict: "no", preview: { kind: "cobrand", logos: ["krdv", "ministry"], divider: true }, text: "КРДВ не ставится перед логотипом министерства" },
-  { verdict: "yes", preview: { kind: "cobrand", logos: ["ministry", "krdv", "ma2030"], divider: true, scale: 0.7 }, text: "Три участника — в один ряд, в том же порядке и с равными отступами" },
-  { verdict: "no", preview: { kind: "cobrand", logos: ["krdv", "ma2030"], divider: true, sizes: { krdv: 84, ma2030: 26 } }, text: "Логотипы несоразмерны: один заметно крупнее другого" },
-  { verdict: "no", preview: { kind: "cobrand", logos: ["krdv", "hectare"], gap: 4 }, text: "Нарушено охранное поле: логотипы почти касаются друг друга" },
-  { verdict: "no", preview: { kind: "cobrand", logos: ["krdv", "hectare"], align: "start" }, text: "Логотипы не выровнены по горизонтальной оси" },
+  { verdict: "yes", preview: { kind: "cobrand", logos: ["ministry", "krdv"], divider: true }, text: "Министерство слева, КРДВ справа, между ними — охранное поле и тонкий разделитель" },
+  { verdict: "yes", preview: { kind: "cobrand", logos: ["ministry", "krdv", "ma2030"], divider: true, scale: 0.7 }, text: "Три участника — в один ряд, министерство первым, отступы между логотипами равные" },
+  { verdict: "yes", preview: { kind: "cobrand", logos: ["krdv", "hectare"], divider: true }, text: "КРДВ и проект: логотипы соразмерны и выровнены по горизонтальной оси" },
+  { verdict: "yes", preview: { kind: "cobrand", logos: ["ministry", "krdv", "hectare"], divider: true, scale: 0.7 }, text: "Министерство, КРДВ и проект — порядок и охранное поле сохраняются при любом количестве логотипов" },
 ];
 
 const LOGO_PETAL_PATH = "m74.38,25.03c-1.16-8.38-10.13-13.83-10.13-13.83,0,0,3.97,5.23,5.03,11.41.94,5.45-.59,9.24-.59,9.24,0,0-1.82-8.46-8.51-15.56-5.3-5.62-13.93-9.3-13.93-9.3,0,0-3.8,13.78,6.86,27.65-2.21-1.58-4.64-2.82-7.22-3.69-5.29-1.76-11.97-.96-11.97-.96,0,0,4.44,13.3,21.28,17.38-11.14-7.85-14.42-14.62-14.42-14.62,0,0,3.23.27,8.37,2.59,3.38,1.53,11.83,6.16,19.93,11.09-3.1-2.66-7.82-6.82-10.7-10.26-8.86-10.58-5.98-21.03-5.98-21.03,0,0,5.24,2.75,9.63,9.16,2.89,4.23,6.84,15.14,6.84,15.14,0,0,6.93-4.19,5.52-14.4";
@@ -843,7 +843,7 @@ const pagesData = [
           "Вертикальная и горизонтальная версии логотипа могут равноправно использоваться для идентификации компании.",
           "Русский и английский варианты являются основными видами логотипа. Следует выбирать подходящую версию, учитывая языковую группу аудитории, на которую направлено информационное или рекламное сообщение.",
         ],
-        logos: ["ru-square", "ru-horizontal", "en-square", "en-horizontal"],
+        logoPairs: true,
         resourceLinks: ["logos"],
       },
       {
@@ -861,7 +861,7 @@ const pagesData = [
         title: "Охранное поле",
         paragraphs: [
           "Охранное поле — пространство вокруг логотипа, в котором нельзя размещать другие графические элементы, текст и края носителя.",
-          "Размер поля равен x — высоте левого лепестка знака (около трети высоты логотипа). Поле одинаково для основной и дополнительной версий и считается от крайних точек логотипа.",
+          "Размер поля равен высоте левого лепестка знака — около трети высоты логотипа. На схеме этот модуль показан квадратами в углах. Поле одинаково для основной и дополнительной версий и отсчитывается от крайних точек логотипа.",
           "Если логотип используется в инвертированных цветах, белым начертанием на синем фоне, размеры фона сплошной заливки должны быть не меньше охранной зоны.",
         ],
         clearSpace: true,
@@ -1902,6 +1902,7 @@ function ContentSection({ section, navigate, activePageId }) {
     section.rules ? <RuleList key="rules" items={section.rules} /> : null,
     section.specs ? <SpecGrid key="specs" items={section.specs} /> : null,
     section.logos ? <LogoLibrary key="logos" items={section.logos} /> : null,
+    section.logoPairs ? <LogoPairLibrary key="logo-pairs" /> : null,
     section.subsidiaryLogos ? <SubsidiaryLogoLibrary key="subsidiary-logos" setId={section.subsidiaryLogos} /> : null,
     section.subsidiaryRegions ? <SubsidiaryRegionCards key="subsidiary-regions" /> : null,
     section.preAssetImages ? <AssetImageGrid key="pre-assets" items={section.preAssetImages} mode={section.preAssetImageMode} /> : null,
@@ -2150,6 +2151,67 @@ function pluralizeSections(count) {
   return "разделов";
 }
 
+// Версии логотипа парами: русская и английская одного вида в одной карточке.
+const logoPairs = [
+  {
+    id: "square",
+    role: "Основная версия",
+    title: "Вертикальная версия",
+    description: "Подходит для компактных зон, вертикальных композиций, карточек и носителей, где горизонтальная версия теряет масштаб. Русская — для русскоязычных материалов, английская — для международных коммуникаций и зарубежной аудитории",
+    langs: { ru: "ru-square", en: "en-square" },
+  },
+  {
+    id: "horizontal",
+    role: "Дополнительная версия",
+    title: "Горизонтальная версия",
+    description: "Используется, когда на носителе достаточно горизонтального пространства и логотип должен читаться как главный идентификатор. Русская — для русскоязычных материалов, английская — для англоязычных ресурсов и международных мероприятий",
+    langs: { ru: "ru-horizontal", en: "en-horizontal" },
+  },
+];
+
+function LogoPairLibrary() {
+  return (
+    <div className="logo-pair-library">
+      {logoPairs.map((pair) => (
+        <article className={`logo-pair-card is-${pair.id}`} key={pair.id}>
+          <div className="logo-pair-preview">
+            {Object.entries(pair.langs).map(([lang, id]) => (
+              <figure key={lang}>
+                <img src={logoAsset(logoVariants[id].preview)} alt={t(logoVariants[id].title)} loading="lazy" />
+                <figcaption>{lang.toUpperCase()}</figcaption>
+              </figure>
+            ))}
+          </div>
+          <div className="logo-pair-copy">
+            <span>{t(pair.role)}</span>
+            <h3>{t(pair.title)}</h3>
+            <p>{t(noDot(pair.description))}</p>
+            <div className="logo-pair-downloads">
+              {Object.entries(pair.langs).map(([lang, id]) => {
+                const variant = logoVariants[id];
+                return (
+                  <div className="logo-pair-download-row" key={lang}>
+                    <span>{lang.toUpperCase()}</span>
+                    <div className="logo-downloads">
+                      <div>
+                        {logoFormats
+                          .filter((format) => variant.files[format])
+                          .map((format) => (
+                            <LogoDownloadLink key={format} file={variant.files[format]} format={format} title={variant.title} />
+                          ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
 function LogoLibrary({ items }) {
   const variants = items.map((id) => logoVariants[id]).filter(Boolean);
 
@@ -2202,41 +2264,27 @@ function SubsidiaryRegionCards() {
             <h3>{t(region.title)}</h3>
             {region.enTitle ? <span>{region.enTitle}</span> : null}
           </header>
-          <div className="subsidiary-matrix">
-            <span />
-            <span className="subsidiary-matrix-head">{t("Горизонтальная")}</span>
-            <span className="subsidiary-matrix-head">{t("Вертикальная")}</span>
-            {region.rows.map((row, rowIndex) => (
-              <Fragment key={`${row.label}-${rowIndex}`}>
-                <span className="subsidiary-matrix-lang" title={row.note ? t(row.note) : undefined}>
-                  {row.label}
-                  {row.note ? <small>{t("доп.")}</small> : null}
-                </span>
-                {row.cells.map((item, cellIndex) =>
-                  item ? (
-                    <div className="subsidiary-cell" key={item.preview}>
-                      <div className={`subsidiary-cell-preview is-${item.orientation}`}>
-                        <img src={subsidiaryAsset(item.preview)} alt={t(`${item.title}, ${item.versionLabel.toLowerCase()}`)} loading="lazy" />
-                      </div>
-                      <div className="logo-downloads">
-                        <div>
-                          {subsidiaryFormats.map((format) => (
-                            <LogoDownloadLink
-                              key={format}
-                              file={item.files[format]}
-                              format={format}
-                              title={`${item.title}, ${item.versionLabel.toLowerCase()}`}
-                              asset={subsidiaryAsset}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <span key={`empty-${cellIndex}`} />
-                  ),
-                )}
-              </Fragment>
+          <div className={`subsidiary-row-cells ${region.cells.length > 4 ? "has-extra" : ""}`}>
+            {region.cells.map(({ item, label }) => (
+              <div className="subsidiary-cell" key={item.preview}>
+                <span className="subsidiary-cell-label">{t(label)}</span>
+                <div className={`subsidiary-cell-preview is-${item.orientation}`}>
+                  <img src={subsidiaryAsset(item.preview)} alt={t(`${item.title}, ${item.versionLabel.toLowerCase()}`)} loading="lazy" />
+                </div>
+                <div className="logo-downloads">
+                  <div>
+                    {subsidiaryFormats.map((format) => (
+                      <LogoDownloadLink
+                        key={format}
+                        file={item.files[format]}
+                        format={format}
+                        title={`${item.title}, ${item.versionLabel.toLowerCase()}`}
+                        asset={subsidiaryAsset}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </article>
@@ -2335,10 +2383,11 @@ function RegimeSignLibrary() {
 
 function VerdictBadge({ verdict }) {
   return (
-    <span className={`verdict-badge is-${verdict}`} aria-label={t(verdict === "yes" ? "Можно" : "Нельзя")}>
+    <span className={`verdict-badge is-${verdict}`}>
       <svg viewBox="0 0 24 24" aria-hidden="true">
         {verdict === "yes" ? <path d="M6 12.5l4 4 8-9" /> : <path d="M7 7l10 10M17 7L7 17" />}
       </svg>
+      {t(verdict === "yes" ? "Можно" : "Нельзя")}
     </span>
   );
 }
@@ -2411,7 +2460,7 @@ function LogoExampleGrid({ items, columns = 3 }) {
 }
 
 function LogoBackdrops() {
-  const versions = ["ru-square", "en-square", "ru-horizontal", "en-horizontal"];
+  const versions = ["ru-square", "en-square"];
   return (
     <div className="logo-backdrops">
       <figure className="logo-backdrop is-light">
@@ -2467,14 +2516,6 @@ function ClearSpaceDiagram({ file, width, height, label }) {
             <path d={LOGO_PETAL_PATH} transform={`translate(${cx - 33.9} ${cy - 7})`} />
           </g>
         ))}
-        <g className="cs-fade cs-measure" style={{ "--cs-delay": "2100ms" }}>
-          <line x1={width / 2} y1={-x + 4} x2={width / 2} y2={-4} />
-          <text x={width / 2 + 6} y={-x / 2 + 4}>x</text>
-          <line x1={-x + 4} y1={height / 2} x2={-4} y2={height / 2} />
-          <text x={-x / 2 - 3} y={height / 2 - 6}>x</text>
-          <line className="cs-petal-mark" x1={28} y1={7} x2={28} y2={47.4} />
-          <text x={18} y={31}>x</text>
-        </g>
       </svg>
       <figcaption>{t(label)}</figcaption>
     </figure>
