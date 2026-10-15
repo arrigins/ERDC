@@ -4384,7 +4384,7 @@ img {
   display: grid;
   margin: 0;
   color: #050505;
-  font-size: clamp(30px, 7.6cqi, 84px);
+  font-size: clamp(30px, 9.2cqi, 104px);
   line-height: 1.04;
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -4411,37 +4411,90 @@ img {
   will-change: transform, opacity, filter;
 }
 
-.promise-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.promise-groups {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 20px clamp(24px, 3vw, 48px);
   border-top: 1px solid var(--soft-line, #dddce2);
   padding-top: clamp(20px, 2.4vw, 28px);
 }
 
-.promise-tags button {
+.promise-group {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.promise-group.is-pairs {
+  border-left: 1px solid var(--soft-line, #dddce2);
+  padding-left: clamp(24px, 3vw, 48px);
+}
+
+.promise-group-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: var(--mono-tracking);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.promise-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.promise-tags button,
+.promise-tags span {
   min-height: 40px;
-  border: 0;
-  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--r-control, 12px);
   padding: 0 16px;
-  background: var(--soft-bg, #f6f5f8);
-  color: #3a3a3a;
   font: inherit;
   font-size: 15px;
   line-height: 1;
+}
+
+.promise-tags button {
+  border: 1px solid rgba(0, 86, 162, 0.28);
+  background: #ffffff;
+  color: var(--blue);
   cursor: pointer;
   transition:
     background var(--motion-standard) var(--ease),
+    border-color var(--motion-standard) var(--ease),
     color var(--motion-standard) var(--ease);
 }
 
 .promise-tags button:hover {
-  background: #e9eef5;
+  border-color: var(--blue);
 }
 
 .promise-tags button[data-active="true"] {
+  border-color: var(--blue);
   background: var(--blue);
   color: #ffffff;
+}
+
+.promise-tags span {
+  background: var(--soft-bg, #f6f5f8);
+  color: #3a3a3a;
+}
+
+@media (max-width: 900px) {
+  .promise-groups {
+    grid-template-columns: 1fr;
+  }
+
+  .promise-group.is-pairs {
+    border-left: 0;
+    padding-left: 0;
+    border-top: 1px solid var(--soft-line, #dddce2);
+    padding-top: 20px;
+  }
 }
 
 /* ── Позиционирование: принципы ── */
@@ -4513,11 +4566,6 @@ img {
 }
 
 @media (max-width: 640px) {
-  .promise-row {
-    flex-direction: column;
-    gap: 0;
-  }
-
   .principle-cards {
     grid-template-columns: 1fr;
   }

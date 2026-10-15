@@ -693,13 +693,13 @@ const pagesData = [
       {
         id: "principles",
         title: "Основные принципы",
-        lead: "Наша работа — ваши достижения.",
+        lead: "Наша работа — ваши достижения",
         paragraphs: ["Привлекаем активных граждан и организации на Дальний Восток и в Арктику, помогаем успешно реализовать проекты, направленные на ускоренное социально-экономическое развитие регионов, решаем проблемы."],
         principles: [
-          { title: "Качественно", tone: "#0b2a78", text: "Экспертиза и профессиональный опыт.", video: "cover-typography.mp4" },
-          { title: "Просто", tone: "#0f7a84", text: "Упрощенные процедуры, цифровые сервисы.", video: "cover-text.mp4" },
-          { title: "Выгодно", tone: "#8e1b1d", text: "Льготы и меры поддержки, повышающие экономическую эффективность проектов.", video: "cover-advertising.mp4" },
-          { title: "Надежно", tone: "#0c4fc4", text: "Защищаем интересы граждан и бизнеса, решаем сложные задачи.", video: "cover-corporate.mp4" },
+          { title: "Качественно", tone: "#0b2a78", text: "Экспертиза и профессиональный опыт", video: "cover-typography.mp4" },
+          { title: "Просто", tone: "#0f7a84", text: "Упрощенные процедуры, цифровые сервисы", video: "cover-text.mp4" },
+          { title: "Выгодно", tone: "#8e1b1d", text: "Льготы и меры поддержки, повышающие экономическую эффективность проектов", video: "cover-advertising.mp4" },
+          { title: "Надежно", tone: "#0c4fc4", text: "Защищаем интересы граждан и бизнеса, решаем сложные задачи", video: "cover-corporate.mp4" },
         ],
       },
     ],
@@ -744,8 +744,8 @@ const pagesData = [
           "Если задаче требуется иной состав, сначала фиксируется причина изменения, затем макет направляется в профильный департамент.",
         ],
         rules: [
-          { label: "Да", text: "Использовать логотип как неделимый блок с оригинальным написанием." },
-          { label: "Нет", text: "Использовать знак отдельно, менять фразу или подменять текстовую часть без письменного разрешения." },
+          { label: "Да", text: "Использовать логотип как неделимый блок с оригинальным написанием" },
+          { label: "Нет", text: "Использовать знак отдельно, менять фразу или подменять текстовую часть без письменного разрешения" },
         ],
         assetImages: [{ title: "Использование полного логотипа", caption: "Схема из брендбука: знак без текстовой части не используется как самостоятельный логотип.", file: "logo-usage-do-dont.png", wide: true }],
       },
@@ -762,7 +762,7 @@ const pagesData = [
       {
         id: "backgrounds",
         title: "Фоны и цвет",
-        lead: "Выбор фона и работа с цветом при использовании полноцветного логотипа.",
+        lead: "Выбор фона и работа с цветом при использовании полноцветного логотипа",
         paragraphs: ["Использование полноцветного логотипа допускается только на фоне, гарантирующем достаточный контраст для читаемости логотипа. В противном случае необходимо использовать дополнительные графические элементы, например плашки."],
         assetImages: [
           { title: "Версии для разных фонов", caption: "Светлые и темные фоны для русской и английской версий логотипа.", file: "logo-background-versions.png", wide: true, embeddedText: true },
@@ -798,7 +798,7 @@ const pagesData = [
       {
         id: "ru-horizontal",
         title: "Основная версия",
-        lead: "Основной способ подписи дочернего общества.",
+        lead: "Основной способ подписи дочернего общества",
         paragraphs: ["Используйте горизонтальную версию, когда носитель дает достаточно места для уверенного чтения полного названия общества."],
         subsidiaryLogos: "ru-horizontal",
         resourceLinks: ["subsidiaryLogos"],
@@ -806,14 +806,14 @@ const pagesData = [
       {
         id: "ru-vertical",
         title: "Дополнительная версия",
-        lead: "Решение для узких и компактных носителей.",
+        lead: "Решение для узких и компактных носителей",
         paragraphs: ["Вертикальный знак помогает сохранить масштаб и читаемость в карточках, стойках, боковых полях и других ограниченных форматах."],
         subsidiaryLogos: "ru-vertical",
       },
       {
         id: "en-horizontal",
         title: "Англоязычная горизонтальная",
-        lead: "Основная версия для внешней англоязычной коммуникации.",
+        lead: "Основная версия для внешней англоязычной коммуникации",
         paragraphs: ["Она используется на международных мероприятиях, англоязычных ресурсах и в материалах для зарубежных партнеров."],
         subsidiaryLogos: "en-horizontal",
       },
@@ -1037,7 +1037,7 @@ const pagesData = [
       {
         id: "letterhead",
         title: "Бланки ДО",
-        lead: "Официальная основа для писем, приказов и деловой переписки дочерних обществ.",
+        lead: "Официальная основа для писем, приказов и деловой переписки дочерних обществ",
         paragraphs: ["В шапке размещаются логотип ДЗО, наименование, полный адрес, телефон, электронная почта и сайт. Для печати используется офисная или офсетная бумага."],
         assetImages: [
           { title: "Бланк: фирменная шапка", caption: "Основная зона идентификации дочернего общества.", file: "subsidiary-letterhead-1.png" },
@@ -1127,7 +1127,7 @@ const pagesData = [
       {
         id: "accessories",
         title: "Аксессуары",
-        lead: "Практичные носители с короткими слоганами и крупной графикой.",
+        lead: "Практичные носители с короткими слоганами и крупной графикой",
         assetImages: [
           { title: "Шоппер", caption: "Синий стёганый шоппер «Когда работа дарит восторг».", file: "merch-shopper.webp" },
           { title: "Зонт", caption: "Складной синий зонт «Работаем в любую погоду».", file: "merch-umbrella.webp" },
@@ -1139,7 +1139,7 @@ const pagesData = [
       {
         id: "package",
         title: "Пакет",
-        lead: "Брендированный пакет с QR-кодом.",
+        lead: "Брендированный пакет с QR-кодом",
         paragraphs: ["Пакет используется для деловых наборов, мероприятий и передачи материалов. Новый рисунок или иной формат проверяется до печати."],
         specs: [{ title: "Производство", items: ["Материал: плотная бумага или картон.", "Вид нанесения: офсет или прямая печать."] }],
         assetImages: [{ title: "Пакет с QR-кодом", caption: "Бумажный носитель соединяет фирменный знак и цифровой переход.", file: "package-layout.webp", wide: true }],
@@ -1191,7 +1191,7 @@ const pagesData = [
       {
         id: "infrastructure",
         title: "Единый прогресс",
-        lead: "Единый прогресс, общие взгляды.",
+        lead: "Единый прогресс, общие взгляды",
         paragraphs: [
           "Ключевым аспектом деятельности КРДВ является достижение результатов, связанных с развитием инфраструктуры.",
           "Выбирая материал для презентаций, следует особое внимание уделять фотографиям, отражающим ключевые достижения.",
@@ -1201,8 +1201,8 @@ const pagesData = [
         assetImages: photostyleImages.infrastructure,
         cardsPlacement: "afterAssets",
         cards: [
-          { title: "ФГУП «Атомфлот»", text: "Фотоисточник для арктической инфраструктуры и Северного морского пути." },
-          { title: "Алена Медведева", text: "Авторские кадры для сюжетов о людях, командах и территориях." },
+          { title: "ФГУП «Атомфлот»", text: "Фотоисточник для арктической инфраструктуры и Северного морского пути" },
+          { title: "Алена Медведева", text: "Авторские кадры для сюжетов о людях, командах и территориях" },
         ],
       },
       {
@@ -1220,7 +1220,7 @@ const pagesData = [
       {
         id: "nature",
         title: "Природа",
-        lead: "Захватывающая природа.",
+        lead: "Захватывающая природа",
         paragraphs: [
           "Кадры природы, используемые в публикациях корпорации, следует подбирать визуально захватывающие, демонстрирующие уникальную красоту и разнообразие регионов Дальнего Востока и Арктики.",
           "Они особенно актуальны для публикаций о туризме.",
@@ -1233,7 +1233,7 @@ const pagesData = [
       {
         id: "people",
         title: "Люди",
-        lead: "Люди Дальнего Востока и Арктики.",
+        lead: "Люди Дальнего Востока и Арктики",
         paragraphs: [
           "Главным принципом съемки людей является запечатление оригинальных аутентичных сюжетов, связанных с их сферой деятельности, культурными обычаями, мероприятиями, демонстрирующими жизнь народов Дальнего Востока и Арктики.",
           "Рекомендации позволяют раскрыть сюжеты наиболее полно, создать убедительные эмоциональные образы, продемонстрировать культурное богатство и многообразие жизни в регионах.",
@@ -1906,21 +1906,11 @@ function CardGrid({ items }) {
   );
 }
 
-const promiseWords = [
-  { tag: "будущее", word: "будущему" },
-  { tag: "успех", word: "успеху" },
-  { tag: "мечта", word: "мечте" },
-  { tag: "земля", word: "земле" },
-  { tag: "знания", word: "знаниям" },
-  { tag: "инфраструктура", word: "инфраструктуре" },
-  { tag: "карьера", word: "карьере" },
-  { tag: "льготы", word: "льготам" },
-  { tag: "гектар", word: "гектару" },
-  { tag: "масштаб", word: "масштабу" },
-  { tag: "ипотека 2%", word: "ипотеке 2%" },
-];
+const promiseWords = ["будущему", "успеху", "мечте"];
+const promisePairs = ["земля", "знания", "инфраструктура", "карьера", "льготы", "гектар", "масштаб", "ипотека 2%"];
 
-// Бренд-обещание: статичная часть слогана и сменяющееся слово; теги под слоганом подсвечивают текущее слово.
+// Бренд-обещание: статичная часть слогана и сменяющееся слово (только «будущему / успеху / мечте»).
+// Под слоганом слева — переключатели этих трёх слов, справа отдельной группой — смысловые пары.
 function PositioningShowcase() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -1928,7 +1918,7 @@ function PositioningShowcase() {
 
   useEffect(() => {
     if (paused || reduceMotion) return undefined;
-    const timer = setInterval(() => setIndex((value) => (value + 1) % promiseWords.length), 2200);
+    const timer = setInterval(() => setIndex((value) => (value + 1) % promiseWords.length), 2400);
     return () => clearInterval(timer);
   }, [paused, reduceMotion]);
 
@@ -1938,8 +1928,8 @@ function PositioningShowcase() {
   };
 
   return (
-    <div className="promise-board" onMouseLeave={() => setPaused(false)}>
-      <p className="promise-slogan" aria-live="off">
+    <div className="promise-board">
+      <p className="promise-slogan">
         <span className="promise-static">Дальний Восток</span>
         <span className="promise-static">и{"\u00a0"}Арктика{"\u00a0"}—</span>
         <span className="promise-row">
@@ -1947,34 +1937,47 @@ function PositioningShowcase() {
           <span className="promise-slot">
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.span
-                key={promiseWords[index].word}
+                key={promiseWords[index]}
                 className="promise-word"
                 initial={{ y: "70%", opacity: 0, filter: "blur(8px)" }}
                 animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
                 exit={{ y: "-70%", opacity: 0, filter: "blur(8px)" }}
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               >
-                {promiseWords[index].word.replace(" ", "\u00a0")}
+                {promiseWords[index]}
               </motion.span>
             </AnimatePresence>
           </span>
         </span>
       </p>
-      <div className="promise-tags" aria-label={t("Смысловые пары")}>
-        {promiseWords.map((item, value) => (
-          <button
-            type="button"
-            key={item.tag}
-            data-active={value === index}
-            aria-pressed={value === index}
-            onMouseEnter={() => pick(value)}
-            onFocus={() => pick(value)}
-            onClick={() => pick(value)}
-            onBlur={() => setPaused(false)}
-          >
-            {item.tag}
-          </button>
-        ))}
+      <div className="promise-groups">
+        <div className="promise-group" onMouseLeave={() => setPaused(false)}>
+          <span className="promise-group-label">Ближе к</span>
+          <div className="promise-tags">
+            {promiseWords.map((word, value) => (
+              <button
+                type="button"
+                key={word}
+                data-active={value === index}
+                aria-pressed={value === index}
+                onMouseEnter={() => pick(value)}
+                onFocus={() => pick(value)}
+                onClick={() => pick(value)}
+                onBlur={() => setPaused(false)}
+              >
+                {word}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="promise-group is-pairs">
+          <span className="promise-group-label">{t("Смысловые пары")}</span>
+          <div className="promise-tags">
+            {promisePairs.map((word) => (
+              <span key={word}>{t(word)}</span>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
