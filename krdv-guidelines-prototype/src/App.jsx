@@ -102,6 +102,8 @@ function typograf(value) {
 }
 
 const t = typograf;
+// Подписи в карточках — без точки в конце.
+const noDot = (text) => (typeof text === "string" ? text.replace(/\.\s*$/, "") : text);
 
 // Плитки палитры: цвета и фотографии. area — [колонка с, колонка по, ряд с, ряд по] в сетке из 12 колонок.
 const primaryPalette = [
@@ -334,7 +336,7 @@ const allDownloadResourceKeys = [
 const logoFormats = ["svg", "png", "jpg", "pdf", "eps"];
 const regimeSignFormats = ["svg", "png", "pdf"];
 const subsidiaryFormats = ["svg", "png", "pdf"];
-const madeSignFormats = ["svg", "png", "jpg"];
+const madeSignFormats = ["svg", "png"];
 
 const ttNormsFontFiles = [
   { label: "Thin", weight: 100, style: "normal", file: "TT-Norms-Pro-Thin.ttf" },
@@ -583,23 +585,40 @@ const regimeSignLogos = [
   },
 }));
 
-const madeSignVariants = [
-  { slug: "made-tor-spv-ru-purple", title: "Русская фиолетовая версия", tone: "purple" },
-  { slug: "made-tor-spv-ru-black", title: "Русская черная версия", tone: "black" },
-  { slug: "made-tor-spv-ru-outline", title: "Русская контурная версия", tone: "outline" },
-  { slug: "made-tor-spv-ru-white", title: "Русская белая версия", tone: "white" },
-  { slug: "made-tor-spv-en-purple", title: "Английская фиолетовая версия", tone: "purple" },
-  { slug: "made-tor-spv-en-black", title: "Английская черная версия", tone: "black" },
-  { slug: "made-tor-spv-en-outline", title: "Английская контурная версия", tone: "outline" },
-].map((item) => ({
-  ...item,
-  preview: `${item.slug}.svg`,
-  files: {
-    svg: `${item.slug}.svg`,
-    png: `${item.slug}.png`,
-    jpg: `${item.slug}.jpg`,
+// Товарные знаки: одна карточка — один цвет, внутри русская и английская версии.
+const madeSignGroups = [
+  {
+    id: "tor-spv",
+    title: "Сделано в ТОР СПВ",
+    prefix: "made-tor-spv",
+    variants: [
+      { tone: "purple", title: "Фиолетовая версия", langs: ["ru", "en"] },
+      { tone: "black", title: "Черная версия", langs: ["ru", "en"] },
+      { tone: "outline", title: "Контурная версия", langs: ["ru", "en"] },
+      { tone: "white", title: "Белая версия", langs: ["ru"] },
+    ],
   },
+  {
+    id: "dvia",
+    title: "Сделано на Дальнем Востоке и в Арктике",
+    prefix: "made-dvia",
+    variants: [
+      { tone: "purple", title: "Фиолетовая версия", langs: ["ru", "en"] },
+      { tone: "black", title: "Черная версия", langs: ["ru", "en"] },
+      { tone: "outline", title: "Контурная версия", langs: ["ru", "en"] },
+    ],
+  },
+].map((group) => ({
+  ...group,
+  variants: group.variants.map((variant) => ({
+    ...variant,
+    key: `${group.prefix}-${variant.tone}`,
+    signs: variant.langs.map((lang) => ({ lang, file: `${group.prefix}-${lang}-${variant.tone}` })),
+  })),
 }));
+
+const madeSignLangLabels = { ru: "RU", en: "EN" };
+const madeSignLangNames = { ru: "русская", en: "английская" };
 
 const madeBrandingImages = [
   { title: "Упаковка резидента", caption: "Знак размещается как подтверждение происхождения продукции.", file: "made-branding-1.webp" },
@@ -607,7 +626,7 @@ const madeBrandingImages = [
   { title: "Серия упаковок", caption: "Единый знак помогает связать несколько товаров в одну линейку.", file: "made-branding-3.webp" },
   { title: "Бирка товара", caption: "Малый носитель сохраняет знак читаемым без лишней графики.", file: "made-branding-4.webp" },
   { title: "Потребительская тара", caption: "Размещение подбирается под форму и контраст упаковки.", file: "made-branding-5.webp" },
-  { title: "Полка продукции", caption: "Серийное нанесение делает маркировку заметной в группе товаров.", file: "made-branding-6.webp", wide: true },
+  { title: "Полка продукции", caption: "Серийное нанесение делает маркировку заметной в группе товаров.", file: "made-branding-6.webp" },
 ];
 
 const photostyleImages = {
@@ -1148,18 +1167,18 @@ const pagesData = [
   },
   {
     id: "made",
-    heroImage: "cover-made-stickers.webp",
+    heroImage: "cover-made-stickers-dark.webp",
+    heroTone: "plain",
     number: "11",
     title: "Товарный знак",
-    intro: "Самостоятельный раздел для товарного знака, который поддерживает продукцию резидентов и помогает маркировать происхождение товаров.",
+    intro: "Товарный знак помогает продвигать товары и услуги резидентов Дальнего Востока в России и за рубежом.",
     sections: [
       {
         id: "sign",
         title: "Знак",
         paragraphs: [
-          "Товарный знак «Сделано в ТОР СПВ» разработан для поддержки резидентов и дополнительной узнаваемости бренда. Он используется для брендирования продукции, произведенной резидентами, после одобрения заявки.",
-          "Версия на английском языке применяется при сотрудничестве с международными резидентами. Технология маркировки упаковки подбирается индивидуально для каждого товара и материала.",
-          "В отдельных случаях допускается адаптация цвета знака под цвет упаковки, если сохраняется читаемость и узнаваемость маркировки.",
+          "Знак используется для обозначения товаров и услуг резидентов ТОР и свободного порта Владивосток. Его размещают на упаковке, этикетках и рекламно-информационных материалах.",
+          "Право использования знака оформляется через КРДВ. Макеты с его размещением согласовываются с корпорацией.",
         ],
         madeSigns: true,
         resourceLinks: ["madeSigns"],
@@ -1898,7 +1917,7 @@ function CardGrid({ items }) {
         {items.map((item, index) => (
           <motion.article className="info-card" key={`${item.title}-${index}`} layout whileHover={{ y: -2 }}>
             <h3>{t(item.title)}</h3>
-            <p>{t(item.text)}</p>
+            <p>{t(noDot(item.text))}</p>
           </motion.article>
         ))}
       </motion.div>
@@ -2030,7 +2049,7 @@ function SectionDirectory({ navigate, activePageId }) {
               </div>
               <div className="directory-copy">
                 <h3>{t(page.cardTitle || page.title)}</h3>
-                <p>{t(page.intro)}</p>
+                <p>{t(noDot(page.intro))}</p>
                 <small>
                   <span>{t("Открыть раздел")}</span>
                   <UiIcon icon={ICONS.arrowRight} className="directory-arrow" />
@@ -2070,7 +2089,7 @@ function LogoLibrary({ items }) {
               <div className="logo-card-copy">
                 <span>{t(variant.role)}</span>
                 <h3>{t(variant.title)}</h3>
-                <p>{t(variant.description)}</p>
+                <p>{t(noDot(variant.description))}</p>
                 {variant.inlineDownloads ? downloads : null}
               </div>
               {variant.inlineDownloads ? null : downloads}
@@ -2110,7 +2129,7 @@ function SubsidiaryLogoLibrary({ setId }) {
             <div className="subsidiary-logo-copy">
               <span>{t(item.versionLabel)}</span>
               <h3>{t(item.title)}</h3>
-              {item.note ? <p>{t(item.note)}</p> : null}
+              {item.note ? <p>{t(noDot(item.note))}</p> : null}
               <div className="logo-downloads" aria-label={t(`Скачать ${item.title}`)}>
                                 <div>
                   {subsidiaryFormats.map((format) => (
@@ -2168,7 +2187,7 @@ function RegimeSignLibrary() {
             <div className="regime-sign-copy">
               <span>{t(item.short)}</span>
               <h3>{t(item.title)}</h3>
-              <p>{t(item.description)}</p>
+              <p>{t(noDot(item.description))}</p>
               <div className="logo-downloads" aria-label={t(`Скачать знак ${item.short}`)}>
                 <div>
                   {regimeSignFormats.map((format) => (
@@ -2186,28 +2205,50 @@ function RegimeSignLibrary() {
 
 function MadeSignLibrary() {
   return (
-    <LayoutGroup>
-      <motion.div className="made-sign-library" layout>
-        {madeSignVariants.map((item) => (
-          <motion.article className="made-sign-card" data-tone={item.tone} key={item.slug} layout whileHover={{ y: -2 }}>
-            <div className="made-sign-preview">
-              <img src={madeSignAsset(item.preview)} alt={t(item.title)} loading="lazy" />
-            </div>
-            <div className="made-sign-copy">
-              <span>{t("Знак")}</span>
-              <h3>{t(item.title)}</h3>
-              <div className="logo-downloads" aria-label={t(`Скачать ${item.title}`)}>
-                                <div>
-                  {madeSignFormats.map((format) => (
-                    <LogoDownloadLink key={format} file={item.files[format]} format={format} title={item.title} asset={madeSignAsset} />
+    <div className="made-sign-groups">
+      {madeSignGroups.map((group) => (
+        <div className="made-sign-group" key={group.id}>
+          <h3 className="made-sign-group-title">{t(group.title)}</h3>
+          <div className="made-sign-library">
+            {group.variants.map((item) => (
+              <motion.article className="made-sign-card" data-tone={item.tone} key={item.key} whileHover={{ y: -2 }}>
+                <div className="made-sign-preview">
+                  {item.signs.map((sign) => (
+                    <figure key={sign.lang}>
+                      <img src={madeSignAsset(`${sign.file}.svg`)} alt={t(`${group.title}: ${madeSignLangNames[sign.lang]} ${item.title.toLowerCase()}`)} loading="lazy" />
+                      <figcaption>{madeSignLangLabels[sign.lang]}</figcaption>
+                    </figure>
                   ))}
                 </div>
-              </div>
-            </div>
-          </motion.article>
-        ))}
-      </motion.div>
-    </LayoutGroup>
+                <div className="made-sign-copy">
+                  <h3>{t(item.title)}</h3>
+                  <div className="made-sign-downloads">
+                    {item.signs.map((sign) => (
+                      <div className="made-sign-download-row" key={sign.lang}>
+                        <span>{madeSignLangLabels[sign.lang]}</span>
+                        <div className="logo-downloads">
+                          <div>
+                            {madeSignFormats.map((format) => (
+                              <LogoDownloadLink
+                                key={format}
+                                file={`${sign.file}.${format}`}
+                                format={format}
+                                title={`${group.title}, ${madeSignLangNames[sign.lang]} ${item.title.toLowerCase()}`}
+                                asset={madeSignAsset}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -2239,7 +2280,7 @@ function ResourceLinks({ keys }) {
         <motion.a key={item.url} href={item.url} target="_blank" rel="noreferrer" whileHover={{ y: -2 }} whileTap={{ scale: 0.995 }}>
           <div>
             <strong>{t(item.title)}</strong>
-            <p>{t(item.description)}</p>
+            <p>{t(noDot(item.description))}</p>
           </div>
           <em>
             {t(item.action || "Открыть архив")}
@@ -2265,7 +2306,7 @@ function AssetImageGrid({ items, mode = "grid" }) {
             {item.embeddedText || imagesOnly ? null : (
               <div className="asset-image-copy">
                 <h3>{t(item.title)}</h3>
-                <p>{t(item.caption)}</p>
+                <p>{t(noDot(item.caption))}</p>
               </div>
             )}
           </motion.article>
@@ -2281,7 +2322,7 @@ function RuleList({ items }) {
       {items.map((item, index) => (
         <article key={`${item.label}-${index}`}>
           <strong>{t(item.label)}</strong>
-          <p>{t(item.text)}</p>
+          <p>{t(noDot(item.text))}</p>
         </article>
       ))}
     </div>
@@ -2341,7 +2382,7 @@ function MediaPlaceholder({ title, caption, selected, onSelect }) {
       <div>
         <span>{t(title)}</span>
       </div>
-      <span className="media-caption">{t(caption)}</span>
+      <span className="media-caption">{t(noDot(caption))}</span>
     </motion.button>
   );
 }
@@ -2429,7 +2470,7 @@ function TypeSpecimen({ title }) {
   return (
     <article className={`type-specimen is-${variant}`}>
       <span>{title}</span>
-      <p>{t(copy)}</p>
+      <p>{t(noDot(copy))}</p>
       <em>{t(variant === "tsars" ? "Гарнитура для наградных документов." : "Фирменная шрифтовая система КРДВ.")}</em>
     </article>
   );
@@ -2482,7 +2523,7 @@ function FontWorkbench() {
             {t(sample || selectedFamily.sample)}
           </motion.div>
         </AnimatePresence>
-        <p>{t(selectedFamily.description)}</p>
+        <p>{t(noDot(selectedFamily.description))}</p>
         {selectedFamily.unavailable ? <small>{t(selectedFamily.unavailable)}</small> : null}
       </div>
 
@@ -2688,7 +2729,7 @@ function ContactCta({ item }) {
     <a className="contact-cta" href={item.href} target="_blank" rel="noreferrer">
       <span className="contact-cta-copy">
         <span>{t(item.title)}</span>
-        <p>{t(item.text)}</p>
+        <p>{t(noDot(item.text))}</p>
         <strong>
           {t(item.label)}
           <UiIcon icon={ICONS.arrowRight} className="contact-cta-icon" />
