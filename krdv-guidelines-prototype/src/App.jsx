@@ -1077,8 +1077,8 @@ const pagesData = [
           { title: "QR-зона", items: ["Кегли и гарнитура сохраняют базовую сетку.", "Код размещается только в отведенной области.", "Контактный блок не сдвигается и не теряет иерархию."] },
         ],
         assetImages: [
-          { title: "Русская визитка с QR", caption: "Контактная информация дополнена переходом в цифровой профиль.", file: "business-card-qr-ru-white.webp", mockup: true },
-          { title: "Английская визитка с QR", caption: "Международная версия с тем же расположением кода.", file: "business-card-qr-en-white.webp", mockup: true },
+          { title: "Русская визитка с QR", caption: "Контактная информация дополнена переходом в цифровой профиль.", file: "business-card-qr-ru-43.webp", mockup: true },
+          { title: "Английская визитка с QR", caption: "Международная версия с тем же расположением кода.", file: "business-card-qr-en-43.webp", mockup: true },
         ],
         resourceLinks: ["businessCardsQr"],
       },
@@ -1869,7 +1869,6 @@ function ContentSection({ section, navigate, activePageId }) {
     section.examples ? <ExampleGrid key="examples" items={section.examples} /> : null,
     cardsBeforeAssets ? <CardGrid key="cards-before" items={section.cards} /> : null,
     section.rules ? <RuleList key="rules" items={section.rules} /> : null,
-    section.specs ? <SpecGrid key="specs" items={section.specs} /> : null,
     section.logos ? <LogoLibrary key="logos" items={section.logos} /> : null,
     section.logoPairs ? <LogoPairLibrary key="logo-pairs" /> : null,
     section.subsidiaryLogos ? <SubsidiaryLogoLibrary key="subsidiary-logos" setId={section.subsidiaryLogos} /> : null,
@@ -1917,6 +1916,16 @@ function ContentSection({ section, navigate, activePageId }) {
           <p key={paragraph}>{t(paragraph)}</p>
         ))}
         {section.keywords && !section.positioningShowcase ? <KeywordWall items={section.keywords} /> : null}
+        {section.specs?.map((spec) => (
+          <div className="spec-text" key={spec.title}>
+            <h3>{t(spec.title)}</h3>
+            <p>
+              {spec.items.map((item) => (
+                <span key={item}>{t(item)}</span>
+              ))}
+            </p>
+          </div>
+        ))}
       </div>
       {wideContent.length ? <div className={`section-wide ${section.regimeSigns ? "is-signs" : ""}`}>{wideContent}</div> : null}
     </section>
@@ -2714,23 +2723,6 @@ function RuleList({ items }) {
         <article key={`${item.label}-${index}`}>
           <strong>{t(item.label)}</strong>
           <p>{t(noDot(item.text))}</p>
-        </article>
-      ))}
-    </div>
-  );
-}
-
-function SpecGrid({ items }) {
-  return (
-    <div className="spec-grid">
-      {items.map((spec) => (
-        <article key={spec.title}>
-          <h3>{t(spec.title)}</h3>
-          <ul>
-            {spec.items.map((item) => (
-              <li key={item}>{t(item)}</li>
-            ))}
-          </ul>
         </article>
       ))}
     </div>
