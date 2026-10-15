@@ -918,7 +918,7 @@ const pagesData = [
   {
     id: "regimes",
     number: "04",
-    title: "Преференциальные режимы и программы",
+    title: "Префрежимы и программы",
     navTitle: "Режимы и программы",
     cardTitle: "Префрежимы и программы",
     heroImage: "cover-regimes-glass-dark.webp",
