@@ -109,7 +109,7 @@ const noDot = (text) => (typeof text === "string" ? text.replace(/\.\s*$/, "") :
 const primaryPalette = [
   { name: "Дальневосточный синий", hex: "#0056a2", rgb: "0-86-162", cmyk: "100-75-00-00", area: [1, 4, 1, 2] },
   { name: "Голубой", hex: "#22a8e0", rgb: "34-168-225", cmyk: "72-15-00-00", area: [4, 7, 1, 2] },
-  { photo: "palette-photo-ocean.webp", alt: "Подводный мир", area: [7, 9, 1, 3] },
+  { photo: "palette-ocean-kling25.webp", video: "palette-ocean-kling25.mp4", alt: "Подводный мир", area: [7, 9, 1, 3] },
   { name: "Светло-синий", hex: "#9ec6eb", rgb: "158-198-235", cmyk: "24-13-00-00", area: [9, 13, 1, 2] },
   { name: "Ледяной голубой", hex: "#d4e6fa", rgb: "212-230-250", cmyk: "15-5-00-00", area: [9, 13, 2, 3] },
   { name: "Темно-синий", hex: "#001d37", rgb: "0-30-55", cmyk: "100-84-47-58", area: [1, 4, 2, 3] },
@@ -169,12 +169,12 @@ const colorHeroTileStates = colorHeroGridStates.map(buildColorHeroRects);
 
 const secondaryPalette = [
   { name: "Арктический изумрудный", hex: "#003b39", rgb: "0-59-57", cmyk: "91-47-61-59", area: [1, 6, 1, 2] },
-  { photo: "palette-photo-aurora.webp", alt: "Северное сияние", area: [6, 9, 1, 3] },
+  { photo: "palette-green-aurora-kling25.webp", video: "palette-green-aurora-kling25.mp4", alt: "Северное сияние", area: [6, 9, 1, 3] },
   { name: "Изумрудный", hex: "#308d86", rgb: "48-141-134", cmyk: "78-24-49-7", area: [9, 13, 1, 3] },
   { name: "Глубокий изумрудный", hex: "#0a5c57", rgb: "10-92-87", cmyk: "87-38-58-35", area: [1, 6, 2, 3] },
   { name: "Светлый арктический", hex: "#cce0e6", rgb: "204-224-230", cmyk: "24-5-10-00", area: [1, 7, 3, 4] },
   { name: "Ледяной арктический", hex: "#e4f0f2", rgb: "228-240-242", cmyk: "13-2-6-00", area: [7, 10, 3, 4] },
-  { photo: "palette-photo-aurora-2.webp", alt: "Северное сияние над горизонтом", area: [10, 13, 3, 4] },
+  { photo: "palette-arctic-aurora-kling25.webp", video: "palette-arctic-aurora-kling25.mp4", alt: "Северное сияние над горизонтом", area: [10, 13, 3, 4] },
 ];
 
 const regimes = [
@@ -2494,48 +2494,40 @@ function isDarkColor(hex) {
 
 function PalettePhoto({ item, style }) {
   const videoRef = useRef(null);
-  const hoveringRef = useRef(false);
   const [playing, setPlaying] = useState(false);
+  const reduceMotion = useReducedMotion();
   const mediaStyle = item.position ? { objectPosition: item.position } : undefined;
-
-  function stopPreview() {
-    hoveringRef.current = false;
-    setPlaying(false);
-    const video = videoRef.current;
-    if (video) {
-      video.pause();
-      video.currentTime = 0;
-    }
-  }
-
-  function startPreview(event) {
-    if (!item.video || event.pointerType === "touch"
-      || !window.matchMedia("(hover: hover) and (pointer: fine)").matches
-      || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    hoveringRef.current = true;
-    videoRef.current?.play().catch(() => {
-      // A rejected play request keeps the original photograph visible.
-      if (hoveringRef.current && videoRef.current?.paused) setPlaying(false);
-    });
-  }
 
   useEffect(() => {
     const video = videoRef.current;
-    return () => video?.pause();
-  }, []);
+    if (!video) return undefined;
+    let cancelled = false;
+    if (reduceMotion) {
+      video.pause();
+      setPlaying(false);
+    } else {
+      video.play().catch(() => {
+        if (!cancelled) setPlaying(false);
+      });
+    }
+    return () => {
+      cancelled = true;
+      video.pause();
+    };
+  }, [reduceMotion]);
 
   return (
-    <div className="swatch-photo" style={style} data-playing={playing}
-      onPointerEnter={startPreview} onPointerLeave={stopPreview}>
+    <div className="swatch-photo" style={style} data-playing={playing}>
       <img src={rasterAsset(item.photo)} alt={t(item.alt)} loading="lazy" style={mediaStyle} />
       {item.video && (
-        <video ref={videoRef} src={rasterAsset(item.video)} muted playsInline preload="none"
+        <video ref={videoRef} src={rasterAsset(item.video)} poster={rasterAsset(item.photo)}
+          autoPlay={!reduceMotion} loop muted playsInline preload="metadata"
           aria-hidden="true" tabIndex={-1} style={mediaStyle}
           onPlaying={() => {
-            if (hoveringRef.current) setPlaying(true);
+            if (!reduceMotion) setPlaying(true);
             else videoRef.current?.pause();
           }}
-          onError={stopPreview} />
+          onError={() => setPlaying(false)} />
       )}
     </div>
   );
