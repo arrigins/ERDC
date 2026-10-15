@@ -5845,3 +5845,213 @@ img {
     padding: 0;
   }
 }
+
+/* ── ДО: единый масштаб всех логотипов ──
+   Лотос во всех исходниках одного размера, поэтому ширина картинки = её ширина в единицах исходника (--u) × общий коэффициент --k.
+   --k считается от ширины одной колонки карточки (контейнер — ряд ячеек), так что во всех карточках он одинаковый. */
+.subsidiary-row-cells {
+  container-type: inline-size;
+}
+
+.subsidiary-row-cells .subsidiary-cell {
+  --k: calc((25cqi - 32px) / 1250);
+  position: relative;
+  border-left: 0;
+}
+
+.subsidiary-row-cells .subsidiary-cell-preview {
+  display: grid;
+  place-items: center;
+  height: calc(700 * var(--k) + 24px);
+}
+
+.subsidiary-row-cells .subsidiary-cell-preview img,
+.subsidiary-row-cells .subsidiary-cell-preview.is-vertical img {
+  position: static;
+  inset: auto;
+  width: calc(var(--u, 1000) * var(--k));
+  max-width: none;
+  height: auto;
+  object-fit: initial;
+}
+
+/* Короткие разделители: только на высоту вертикальных логотипов */
+.subsidiary-row-cells .subsidiary-cell + .subsidiary-cell::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: calc(40 * var(--k) + 12px);
+  height: calc(620 * var(--k));
+  width: 1px;
+  background: var(--soft-line, #dddce2);
+}
+
+/* Сахалин и Курилы: горизонтальные версии длиннее колонки — карточка в два ряда, масштаб тот же */
+.subsidiary-row-cells.is-wide {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  row-gap: 24px;
+}
+
+.subsidiary-row-cells.is-wide .subsidiary-cell {
+  grid-column: span 2;
+}
+
+.subsidiary-row-cells.is-wide .subsidiary-cell:nth-child(3)::before {
+  display: none;
+}
+
+@media (max-width: 1180px) {
+  .subsidiary-row-cells .subsidiary-cell {
+    --k: calc((50cqi - 32px) / 1250);
+  }
+
+  .subsidiary-row-cells .subsidiary-cell:nth-child(odd)::before {
+    display: none;
+  }
+
+  .subsidiary-row-cells.is-wide .subsidiary-cell {
+    grid-column: span 2;
+  }
+
+  .subsidiary-row-cells.is-wide .subsidiary-cell::before {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .subsidiary-row-cells .subsidiary-cell {
+    --k: calc(100cqi / 1600);
+  }
+
+  .subsidiary-row-cells .subsidiary-cell::before {
+    display: none;
+  }
+}
+
+/* ── Версии логотипа проекта (ИНТЦ «Русский») ── */
+.brand-logo-versions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.brand-logo-version {
+  display: grid;
+  gap: 16px;
+  border-radius: var(--soft-radius, 24px);
+  padding: 10px 10px 18px;
+  background: #ffffff;
+}
+
+.brand-logo-version-preview {
+  display: grid;
+  place-items: center;
+  height: clamp(200px, 18vw, 280px);
+  border-radius: var(--r-inner, 16px);
+  background: var(--soft-bg, #f6f5f8);
+}
+
+.brand-logo-version-preview img {
+  width: auto;
+  max-width: 70%;
+  height: 52%;
+  object-fit: contain;
+}
+
+.brand-logo-version:first-child .brand-logo-version-preview img {
+  height: auto;
+  width: 66%;
+}
+
+.brand-logo-version-copy {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 8px;
+}
+
+.brand-logo-version-copy h3 {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+.brand-logo-version-copy .logo-downloads {
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 860px) {
+  .brand-logo-versions {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Кнопка «Скачать логотипы»: заметная реакция на наведение — лёгкий подъём и мягкая синяя тень */
+.intro-action {
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background var(--motion-fast) var(--ease-standard);
+}
+
+.intro-action:hover,
+.intro-action:focus-visible {
+  transform: translateY(-2px);
+  background: #24489f;
+  box-shadow: 0 10px 22px -10px rgba(27, 62, 146, 0.7);
+}
+
+/* Оформление текста: без вложенных серых подложек, между вариантами — линия на всю ширину карточки */
+.text-example-row,
+.line-break-sample {
+  border-radius: 0;
+  padding: 14px 0;
+  background: transparent;
+}
+
+.text-example-row.is-yes,
+.line-break-sample.is-no {
+  border-bottom: 1px solid var(--soft-line, #dddce2);
+}
+
+.text-example,
+.line-break-example {
+  gap: 6px;
+}
+
+.line-break-pair {
+  gap: 0;
+}
+
+/* Без линии между белым вводным блоком и первой серой секцией */
+.guideline-page.is-soft .intro-panel {
+  border-bottom: 0;
+}
+
+/* Стрелки навигации между разделами — тонкие, с острым наконечником */
+.end-link-icon {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+  overflow: visible;
+}
+
+.guideline-page.is-soft .end-links button:first-child .end-link-icon {
+  margin-left: -1.5px;
+}
+
+.guideline-page.is-soft .end-links button:last-child .end-link-icon {
+  margin-right: -2px;
+}
+
+.asset-image-card.is-mockup .asset-image-placeholder {
+  width: 100%;
+}

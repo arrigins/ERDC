@@ -290,7 +290,7 @@ const downloadResources = {
   },
   intcSite: {
     title: "Сайт ИНТЦ «Русский»",
-    description: "Официальный сайт инновационного научно-технологического центра «Русский».",
+    description: "Подробнее о проекте и его фирменном стиле — на сайте ИНТЦ «Русский».",
     url: "https://iostrov.ru/",
     action: "Перейти на сайт",
   },
@@ -485,7 +485,6 @@ const subsidiaryLogos = [
   { set: "ru-vertical", slug: "zabaikalye", title: "КРДВ Забайкалье" },
   { set: "ru-vertical", slug: "chukotka", title: "КРДВ Чукотка" },
   { set: "ru-vertical", slug: "yakutia", title: "КРДВ Якутия" },
-  { set: "ru-vertical", slug: "kamchatka-extra", title: "КРДВ Камчатка", note: "Дополнительный вариант из архива." },
   { set: "en-horizontal", slug: "amurskaya", title: "FEDC Amurskaya" },
   { set: "en-horizontal", slug: "buryatia", title: "FEDC Buryatia" },
   { set: "en-horizontal", slug: "murmansk", title: "FEDC Murmansk" },
@@ -523,6 +522,51 @@ const subsidiaryLogos = [
   };
 });
 
+// Ширина каждого SVG в единицах исходника. Лотос во всех файлах одного размера (≈575 ед.),
+// поэтому все логотипы ДО выводятся в одном масштабе: ширина = единицы × общий коэффициент (--k в CSS).
+const subsidiaryLogoUnits = {
+  "amurskaya-en-horizontal": 1102,
+  "amurskaya-en-vertical": 702,
+  "amurskaya-ru-horizontal": 1033,
+  "amurskaya-ru-vertical": 629,
+  "buryatia-en-horizontal": 989,
+  "buryatia-en-vertical": 606,
+  "buryatia-ru-horizontal": 1004,
+  "buryatia-ru-vertical": 618,
+  "chukotka-en-horizontal": 1028,
+  "chukotka-en-vertical": 628,
+  "chukotka-ru-horizontal": 1004,
+  "chukotka-ru-vertical": 618,
+  "kamchatka-en-horizontal": 1096,
+  "kamchatka-en-vertical": 697,
+  "kamchatka-ru-horizontal": 1051,
+  "kamchatka-ru-vertical": 648,
+  "khabarovsk-en-horizontal": 1112,
+  "khabarovsk-en-vertical": 712,
+  "khabarovsk-ru-horizontal": 1081,
+  "khabarovsk-ru-vertical": 678,
+  "murmansk-en-horizontal": 1057,
+  "murmansk-en-vertical": 657,
+  "murmansk-ru-horizontal": 1050,
+  "murmansk-ru-vertical": 644,
+  "primorye-en-horizontal": 1006,
+  "primorye-en-vertical": 606,
+  "primorye-ru-horizontal": 1042,
+  "primorye-ru-vertical": 639,
+  "sakhalin-kurils-en-horizontal": 1544,
+  "sakhalin-kurils-en-vertical": 787,
+  "sakhalin-kurils-ru-horizontal": 1373,
+  "sakhalin-kurils-ru-vertical": 970,
+  "yakutia-en-horizontal": 989,
+  "yakutia-en-vertical": 606,
+  "yakutia-ru-horizontal": 1004,
+  "yakutia-ru-vertical": 618,
+  "zabaikalye-en-horizontal": 1073,
+  "zabaikalye-en-vertical": 673,
+  "zabaikalye-ru-horizontal": 1107,
+  "zabaikalye-ru-vertical": 704,
+};
+
 const subsidiaryLogoSets = subsidiaryLogos.reduce((sets, item) => {
   sets[item.set] = [...(sets[item.set] || []), item];
   return sets;
@@ -533,7 +577,6 @@ const subsidiaryRegions = subsidiaryLogos
   .filter((item) => item.set === "ru-horizontal")
   .map((ruItem) => {
     const find = (set, slug = ruItem.slug) => subsidiaryLogos.find((item) => item.set === set && item.slug === slug);
-    const extra = find("ru-vertical", `${ruItem.slug}-extra`);
     return {
       slug: ruItem.slug,
       title: ruItem.title,
@@ -543,7 +586,6 @@ const subsidiaryRegions = subsidiaryLogos
         { label: "EN · горизонтальная", item: find("en-horizontal") },
         { label: "RU · вертикальная", item: find("ru-vertical") },
         { label: "EN · вертикальная", item: find("en-vertical") },
-        ...(extra ? [{ label: "RU · вертикальная, доп.", item: extra }] : []),
       ].filter((cell) => cell.item),
     };
   });
@@ -907,7 +949,7 @@ const pagesData = [
       },
       {
         id: "ma2030",
-        title: "Муравьёв-Амурский 2030",
+        title: "Программа «Муравьёв-Амурский 2030»",
         navTitle: "МА 2030",
         paragraphs: ["«Муравьёв-Амурский 2030» — бесплатная годовая образовательная программа по подготовке управленческих кадров для госслужбы. Проект реализуется Министерством по развитию Дальнего Востока и Арктики совместно с КРДВ. У программы свой фирменный стиль. Правила его использования — в брендбуке ниже."],
         brandLogo: { file: "ma2030-logo.svg", alt: "Логотип «Муравьёв-Амурский 2030»" },
@@ -916,8 +958,11 @@ const pagesData = [
       {
         id: "intc",
         title: "ИНТЦ «Русский»",
-        paragraphs: ["У ИНТЦ «Русский» нет отдельного брендбука. Познакомиться с проектом и его фирменным стилем можно на официальном сайте."],
-        brandLogo: { file: "intc-russky-logo.svg", alt: "Логотип ИНТЦ «Русский»" },
+        paragraphs: ["Логотип ИНТЦ «Русский» используется в двух версиях: горизонтальной и квадратной в рамке."],
+        brandLogoVersions: [
+          { title: "Горизонтальная версия", file: "intc-russky-logo", alt: "Логотип ИНТЦ «Русский», горизонтальная версия" },
+          { title: "Квадратная версия в рамке", file: "intc-russky-logo-frame", alt: "Логотип ИНТЦ «Русский», квадратная версия в рамке" },
+        ],
         resourceLinks: ["intcSite"],
       },
     ],
@@ -1127,13 +1172,16 @@ const pagesData = [
           { title: "Кабинетная табличка", caption: "Базовый вариант с номером и названием кабинета.", file: "office-navigation-1-white.webp", mockup: true },
           { title: "Серия навигации", caption: "Несколько табличек должны сохранять единый масштаб набора.", file: "office-navigation-2-white.webp", mockup: true },
           { title: "Вертикальная табличка", caption: "Формат для узкой зоны или отдельной стены.", file: "office-navigation-3-white.webp", mockup: true },
+          { title: "Место для мокапа", caption: "Пример будет добавлен.", file: "placeholder-office-navigation-4", placeholder: true, mockup: true, ratio: "861 / 548" },
         ],
       },
       {
         id: "schedule-sign",
         title: "Режимник",
         paragraphs: ["Режимник фиксирует график работы предприятия или дочернего общества. Размер выбирается по месту установки, но композиция сохраняет вертикальную доминанту 3:2."],
-        assetImages: [{ title: "Режимник работы", caption: "Табличка объединяет расписание, адрес и контакты организации.", file: "schedule-sign-layout-white.webp", mockup: true }],
+        assetImages: [{ title: "Режимник работы", caption: "Табличка объединяет расписание, адрес и контакты организации.", file: "schedule-sign-layout-white.webp", mockup: true },
+          { title: "Место для мокапа", caption: "Пример будет добавлен.", file: "placeholder-schedule-sign-2", placeholder: true, mockup: true, ratio: "959 / 1201" },
+        ],
       },
       {
         id: "awards",
@@ -1892,6 +1940,7 @@ function ContentSection({ section, navigate, activePageId }) {
         <img src={logoAsset(section.brandLogo.file)} alt={t(section.brandLogo.alt)} loading="lazy" />
       </div>
     ) : null,
+    section.brandLogoVersions ? <BrandLogoVersions key="brand-logo-versions" items={section.brandLogoVersions} /> : null,
     section.typeSamples ? <TypeSpecimens key="type-samples" items={section.typeSamples} /> : null,
     section.fontWorkbench ? <FontWorkbench key="font-workbench" /> : null,
     section.regimePalette ? <RegimePalette key="regime-palette" items={section.regimePalette} /> : null,
@@ -2342,11 +2391,16 @@ function SubsidiaryRegionCards() {
             <h3>{t(region.title)}</h3>
             {region.enTitle ? <span>{region.enTitle}</span> : null}
           </header>
-          <div className={`subsidiary-row-cells ${region.cells.length > 4 ? "has-extra" : ""}`}>
+          <div className={`subsidiary-row-cells ${region.cells.some(({ item }) => subsidiaryLogoUnits[item.preview.replace(/^subsidiary-|\.svg$/g, "")] > 1200) ? "is-wide" : ""}`}>
             {region.cells.map(({ item }) => (
               <div className="subsidiary-cell" key={item.preview}>
                 <div className={`subsidiary-cell-preview is-${item.orientation}`}>
-                  <img src={subsidiaryAsset(item.preview)} alt={t(`${item.title}, ${item.versionLabel.toLowerCase()}`)} loading="lazy" />
+                  <img
+                    src={subsidiaryAsset(item.preview)}
+                    alt={t(`${item.title}, ${item.versionLabel.toLowerCase()}`)}
+                    loading="lazy"
+                    style={{ "--u": subsidiaryLogoUnits[item.preview.replace(/^subsidiary-|\.svg$/g, "")] }}
+                  />
                 </div>
                 <div className="logo-downloads">
                   <div>
@@ -2728,6 +2782,31 @@ function MadeSignLibrary() {
   );
 }
 
+// Версии логотипа программы/проекта: превью и скачивание каждой версии в SVG и PNG.
+function BrandLogoVersions({ items }) {
+  return (
+    <div className="brand-logo-versions">
+      {items.map((item) => (
+        <motion.article className="brand-logo-version" key={item.file} whileHover={{ y: -2 }}>
+          <div className="brand-logo-version-preview">
+            <img src={logoAsset(`${item.file}.svg`)} alt={t(item.alt)} loading="lazy" />
+          </div>
+          <div className="brand-logo-version-copy">
+            <h3>{t(item.title)}</h3>
+            <div className="logo-downloads">
+              <div>
+                {["svg", "png"].map((format) => (
+                  <LogoDownloadLink key={format} file={`${item.file}.${format}`} format={format} title={item.alt} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.article>
+      ))}
+    </div>
+  );
+}
+
 function LogoDownloadLink({ file, format, title, asset = logoAsset }) {
   const [active, setActive] = useState(false);
 
@@ -2778,8 +2857,8 @@ function AssetImageGrid({ items, mode = "grid" }) {
           <motion.article className={`asset-image-card ${item.wide ? "is-wide" : ""} ${item.contained ? "is-contained" : ""} ${item.embeddedText ? "has-embedded-text" : ""} ${item.mockup ? "is-mockup" : ""}`} key={item.file} layout whileHover={{ y: -2 }}>
             <div className="asset-image-frame">
               {item.placeholder ? (
-                <div className="asset-image-placeholder" role="img" aria-label={t(item.title)}>
-                  <span>{t("Фото будет добавлено")}</span>
+                <div className="asset-image-placeholder" role="img" aria-label={t(item.title)} style={item.ratio ? { aspectRatio: item.ratio } : undefined}>
+                  <span>{t(item.mockup ? "Мокап будет добавлен" : "Фото будет добавлено")}</span>
                 </div>
               ) : (
                 <img src={rasterAsset(item.file)} alt={t(item.title)} loading="lazy" />
@@ -3158,6 +3237,15 @@ function ContactCta({ item }) {
   );
 }
 
+// Тонкая стрелка навигации между разделами: длинное древко, острый наконечник — в характере стрелок меню.
+function NavArrow({ direction }) {
+  return (
+    <svg className="end-link-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+      <path d={direction === "left" ? "M23 12H1.5M8.5 5L1.5 12l7 7" : "M1 12h21.5M15.5 5l7 7-7 7"} />
+    </svg>
+  );
+}
+
 function EndLinks({ activePageId, navigate }) {
   const currentIndex = pagesData.findIndex((page) => page.id === activePageId);
   const previous = pagesData[currentIndex - 1] || pagesData[pagesData.length - 1];
@@ -3170,14 +3258,14 @@ function EndLinks({ activePageId, navigate }) {
           <b>{previous.number}</b>
           {t(previous.navTitle || previous.title)}
         </span>
-        <UiIcon icon={ICONS.arrowLeft} className="end-link-icon" size={13} strokeWidth={1.3} />
+        <NavArrow direction="left" />
       </button>
       <button type="button" onClick={() => navigate(next.id)} aria-label={t(`Следующий раздел: ${next.title}`)}>
         <span>
           <b>{next.number}</b>
           {t(next.navTitle || next.title)}
         </span>
-        <UiIcon icon={ICONS.arrowRight} className="end-link-icon" size={13} strokeWidth={1.3} />
+        <NavArrow direction="right" />
       </button>
     </nav>
   );
