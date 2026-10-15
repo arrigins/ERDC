@@ -2608,7 +2608,6 @@ function MadeSignLibrary() {
                   {item.signs.map((sign) => (
                     <figure key={sign.lang}>
                       <img src={madeSignAsset(`${sign.file}.svg`)} alt={t(`${group.title}: ${madeSignLangNames[sign.lang]} ${item.title.toLowerCase()}`)} loading="lazy" />
-                      <figcaption>{madeSignLangLabels[sign.lang]}</figcaption>
                     </figure>
                   ))}
                 </div>
