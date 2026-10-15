@@ -4955,25 +4955,31 @@ img {
   line-height: 1.35;
 }
 
-/* Метка «можно / нельзя»: белый кружок с цветным значком. */
-.verdict-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 34px;
-  height: 34px;
+/* Метка «можно / нельзя» — как в исходном брендбуке: зелёная галочка в круге и знак запрета.
+   Стоит рядом с подписью на белом, поэтому одинаково читается при любом фоне примера. */
+.logo-example-copy {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  column-gap: 16px;
+}
+
+.logo-example-copy > div {
   display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 14px rgba(0, 0, 0, 0.08);
+  gap: 6px;
+}
+
+.verdict-badge {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
 }
 
 .verdict-badge svg {
-  width: 17px;
-  height: 17px;
+  display: block;
+  width: 100%;
+  height: 100%;
   fill: none;
-  stroke-width: 2.2;
+  stroke-width: 1.6;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -4984,15 +4990,6 @@ img {
 
 .verdict-badge.is-no svg {
   stroke: #e31f26;
-}
-
-/* Деликатная полоска под превью — светлый полупрозрачный оттенок. */
-.logo-example.is-yes .logo-example-preview {
-  box-shadow: inset 0 -2px 0 rgba(42, 157, 92, 0.35);
-}
-
-.logo-example.is-no .logo-example-preview {
-  box-shadow: inset 0 -2px 0 rgba(227, 31, 38, 0.3);
 }
 
 /* ── Логотип: светлые и темные фоны ── */
@@ -5020,7 +5017,7 @@ img {
 }
 
 .logo-backdrop img.is-square {
-  width: min(72%, 200px);
+  width: calc(min(72%, 200px) * var(--logo-ratio, 1));
 }
 
 .logo-backdrop img.is-horizontal {
@@ -5379,9 +5376,18 @@ img {
   height: auto;
 }
 
-.logo-pair-card.is-horizontal .logo-pair-preview {
+/* Горизонтальные версии — по левому краю, расстояние не меньше охранного поля (≈ треть высоты логотипа ×2). */
+.logo-pair-stack {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 3vw, 44px);
+}
+
+.logo-pair-card.is-horizontal .logo-pair-stack {
   flex-direction: column;
-  gap: 22px;
+  align-items: flex-start;
+  /* 2x: у каждого логотипа своё охранное поле x ≈ 0.104 ширины, зоны не пересекаются. */
+  gap: calc(clamp(200px, 22vw, 300px) * 0.21);
 }
 
 .logo-pair-card.is-horizontal .logo-pair-preview img {

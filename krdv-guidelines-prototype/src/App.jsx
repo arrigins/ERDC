@@ -2176,15 +2176,17 @@ function LogoPairLibrary() {
       {logoPairs.map((pair) => (
         <article className={`logo-pair-card is-${pair.id}`} key={pair.id}>
           <div className="logo-pair-preview">
-            {Object.entries(pair.langs).map(([lang, id]) => (
-              <img
-                key={lang}
-                src={logoAsset(logoVariants[id].preview)}
-                alt={t(logoVariants[id].title)}
-                loading="lazy"
-                style={{ "--logo-ratio": pair.ratios[lang] }}
-              />
-            ))}
+            <div className="logo-pair-stack">
+              {Object.entries(pair.langs).map(([lang, id]) => (
+                <img
+                  key={lang}
+                  src={logoAsset(logoVariants[id].preview)}
+                  alt={t(logoVariants[id].title)}
+                  loading="lazy"
+                  style={{ "--logo-ratio": pair.ratios[lang] }}
+                />
+              ))}
+            </div>
           </div>
           <div className="logo-pair-copy">
             <span>{t(pair.role)}</span>
@@ -2387,8 +2389,9 @@ function RegimeSignLibrary() {
 function VerdictBadge({ verdict }) {
   return (
     <span className={`verdict-badge is-${verdict}`} role="img" aria-label={t(verdict === "yes" ? "Можно" : "Нельзя")}>
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        {verdict === "yes" ? <path d="M6 12.5l4 4 8-9" /> : <path d="M7 7l10 10M17 7L7 17" />}
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="14" />
+        {verdict === "yes" ? <path d="M10 16.5l4 4 8-8.5" /> : <path d="M6.2 25.8L25.8 6.2" />}
       </svg>
     </span>
   );
@@ -2448,11 +2451,13 @@ function LogoExampleGrid({ items, columns = 3 }) {
           <article className={`logo-example is-${item.verdict}`} key={`${item.text}-${index}`}>
             <div className="logo-example-preview" style={background ? { background } : undefined}>
               <LogoExamplePreview preview={preview} />
-              <VerdictBadge verdict={item.verdict} />
             </div>
             <div className="logo-example-copy">
-              {item.title ? <h3>{t(item.title)}</h3> : null}
-              <p>{t(noDot(item.text))}</p>
+              <div>
+                {item.title ? <h3>{t(item.title)}</h3> : null}
+                <p>{t(noDot(item.text))}</p>
+              </div>
+              <VerdictBadge verdict={item.verdict} />
             </div>
           </article>
         );
@@ -2468,7 +2473,7 @@ function LogoBackdrops() {
       <figure className="logo-backdrop is-light">
         <div>
           {versions.map((id) => (
-            <img key={id} className={`is-${id.split("-")[1]}`} src={logoAsset(`krdv-logo-${id}.svg`)} alt="" loading="lazy" />
+            <img key={id} className={`is-${id.split("-")[1]}`} src={logoAsset(`krdv-logo-${id}.svg`)} alt="" loading="lazy" style={{ "--logo-ratio": id.startsWith("en") ? 183.59 / 209.8 : 1 }} />
           ))}
         </div>
         <figcaption>{t("Для светлых фонов — написание черного цвета")}</figcaption>
@@ -2476,7 +2481,7 @@ function LogoBackdrops() {
       <figure className="logo-backdrop is-dark">
         <div>
           {versions.map((id) => (
-            <img key={id} className={`is-${id.split("-")[1]}`} src={logoAsset(`krdv-logo-${id}-ondark.svg`)} alt="" loading="lazy" />
+            <img key={id} className={`is-${id.split("-")[1]}`} src={logoAsset(`krdv-logo-${id}-ondark.svg`)} alt="" loading="lazy" style={{ "--logo-ratio": id.startsWith("en") ? 183.59 / 209.8 : 1 }} />
           ))}
         </div>
         <figcaption>{t("Для темных фонов — написание белого цвета")}</figcaption>
