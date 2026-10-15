@@ -5591,3 +5591,22 @@ img {
     grid-template-columns: 1fr;
   }
 }
+
+/* Типографика: тот же фон-сияние, что у бренд-обещания */
+.font-preview-panel {
+  position: relative;
+  isolation: isolate;
+}
+
+.font-preview-aurora {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  border-radius: var(--soft-radius, 24px) 0 0 var(--soft-radius, 24px);
+  pointer-events: none;
+}
+
+.font-preview-aurora canvas {
+  display: block;
+}

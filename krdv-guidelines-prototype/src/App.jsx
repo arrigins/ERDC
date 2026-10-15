@@ -1986,6 +1986,28 @@ function CardGrid({ items }) {
   );
 }
 
+// Нежно-голубое «северное сияние» на фоне блока (позиционирование, типографика).
+function AuroraBackground({ className }) {
+  const reduceMotion = useReducedMotion();
+  return (
+    <div className={`aurora-bg ${className || ""}`} aria-hidden="true">
+      <MeshGradient
+        colors={["#ffffff", "#d6e9fb", "#a9d2f3", "#eef6ff", "#8fc3ee", "#cfe4f8"]}
+        distortion={0.85}
+        swirl={0.35}
+        grainMixer={0}
+        grainOverlay={0}
+        speed={reduceMotion ? 0 : 0.3}
+        frame={42000}
+        scale={1.15}
+        maxPixelCount={1600000}
+        minPixelRatio={1}
+        style={{ width: "100%", height: "100%" }}
+      />
+    </div>
+  );
+}
+
 const promiseWords = ["будущему", "успеху", "мечте"];
 const promisePairs = ["земля", "знания", "инфраструктура", "карьера", "льготы", "гектар", "масштаб", "ипотека 2%"];
 
@@ -2010,21 +2032,7 @@ function PositioningShowcase() {
 
   return (
     <div className="promise-board">
-      <div className="promise-aurora" aria-hidden="true">
-        <MeshGradient
-          colors={["#ffffff", "#d6e9fb", "#a9d2f3", "#eef6ff", "#8fc3ee", "#cfe4f8"]}
-          distortion={0.85}
-          swirl={0.35}
-          grainMixer={0}
-          grainOverlay={0}
-          speed={reduceMotion ? 0 : 0.3}
-          frame={42000}
-          scale={1.15}
-          maxPixelCount={1600000}
-          minPixelRatio={1}
-          style={{ width: "100%", height: "100%" }}
-        />
-      </div>
+      <AuroraBackground className="promise-aurora" />
       <p className="promise-slogan">
         <span className="promise-static">Дальний Восток</span>
         <span className="promise-static">и{"\u00a0"}Арктика{"\u00a0"}—</span>
@@ -2927,6 +2935,7 @@ function FontWorkbench() {
   return (
     <div className="font-workbench">
       <div className="font-preview-panel">
+        <AuroraBackground className="font-preview-aurora" />
         <div className="font-preview-meta">
           <span>{t(selectedFamily.role)}</span>
           <em>{selectedStyle ? `${selectedStyle.label} · ${selectedStyle.weight}` : t("Лицензионный пакет")}</em>
