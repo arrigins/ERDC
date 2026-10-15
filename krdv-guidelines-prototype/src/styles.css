@@ -5610,3 +5610,152 @@ img {
 .font-preview-aurora canvas {
   display: block;
 }
+
+/* Сияние: пока WebGL не запустился, под ним уже лежит похожий статичный градиент — блок не «пустой» ни секунды */
+.aurora-bg {
+  background:
+    radial-gradient(60% 80% at 85% 20%, #a9d2f3 0%, rgba(169, 210, 243, 0) 70%),
+    radial-gradient(55% 70% at 20% 90%, #cfe4f8 0%, rgba(207, 228, 248, 0) 70%),
+    radial-gradient(50% 60% at 60% 60%, #d6e9fb 0%, rgba(214, 233, 251, 0) 70%),
+    #f4f9ff;
+}
+
+/* Типографика: подписи на сиянии — фирменный синий, как слова и теги в «Позиционировании» */
+.font-preview-meta,
+.font-preview-panel > p {
+  color: var(--ui-blue);
+}
+
+/* ── Оформление текста: примеры «правильно / неправильно» ── */
+.text-example-grid,
+.line-break-examples {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.text-example,
+.line-break-example {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  border-radius: var(--soft-radius, 24px);
+  padding: 24px;
+  background: #ffffff;
+}
+
+.text-example-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: var(--mono-tracking);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.text-example-row,
+.line-break-sample {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  border-radius: var(--r-inner, 16px);
+  padding: 16px 18px;
+  background: var(--soft-bg, #f6f5f8);
+}
+
+.text-example-row .verdict-badge,
+.line-break-sample .verdict-badge {
+  width: 26px;
+  height: 26px;
+  margin-top: 2px;
+}
+
+.text-example-row p {
+  margin: 0;
+  min-width: 0;
+  color: #050505;
+  font-size: clamp(20px, 1.5vw, 28px);
+  line-height: 1.25;
+  user-select: text;
+}
+
+.text-example-row.is-no p,
+.line-break-sample.is-no p {
+  color: #6b6b70;
+}
+
+.line-break-example {
+  grid-column: span 1;
+}
+
+.line-break-pair {
+  display: grid;
+  gap: 10px;
+}
+
+.line-break-sample p {
+  display: grid;
+  margin: 0;
+  color: #050505;
+  font-size: clamp(18px, 1.25vw, 22px);
+  line-height: 1.35;
+}
+
+.line-break-sample p span {
+  white-space: nowrap;
+}
+
+.line-break-sample mark {
+  border-radius: 4px;
+  padding: 0 3px;
+  background: rgba(227, 31, 38, 0.12);
+  color: #c4161c;
+}
+
+@media (max-width: 860px) {
+  .text-example-grid,
+  .line-break-examples {
+    grid-template-columns: 1fr;
+  }
+
+  .line-break-sample p span {
+    white-space: normal;
+  }
+}
+
+/* Заглушка под будущую фотографию — в пропорциях соседних кадров */
+.asset-image-placeholder {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 920 / 591;
+  background: var(--soft-bg, #f6f5f8);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: var(--mono-tracking);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* Навигация между разделами: серая линия посередине, стрелки ровно по краю номера без наведения */
+.guideline-page.is-soft .end-links {
+  position: relative;
+}
+
+.guideline-page.is-soft .end-links::before {
+  content: "";
+  position: absolute;
+  top: 56px;
+  bottom: 56px;
+  left: 50%;
+  width: 1px;
+  background: var(--soft-line, #dddce2);
+}
+
+.guideline-page.is-soft .end-links button:first-child .end-link-icon {
+  margin-left: -6px;
+}
+
+.guideline-page.is-soft .end-links button:last-child .end-link-icon {
+  margin-right: -6px;
+}

@@ -166,12 +166,12 @@ const colorHeroTileStates = colorHeroGridStates.map(buildColorHeroRects);
 
 const secondaryPalette = [
   { name: "Арктический изумрудный", hex: "#003b39", rgb: "0-59-57", cmyk: "91-47-61-59", area: [1, 6, 1, 2] },
-  { photo: "palette-green-aurora-kling25.webp", video: "palette-green-aurora-kling25.mp4", alt: "Северное сияние", area: [6, 9, 1, 3] },
+  { photo: "palette-green-aurora-sky.webp", video: "palette-green-aurora-sky.mp4", alt: "Северное сияние", area: [6, 9, 1, 3] },
   { name: "Изумрудный", hex: "#308d86", rgb: "48-141-134", cmyk: "78-24-49-7", area: [9, 13, 1, 3] },
   { name: "Глубокий изумрудный", hex: "#0a5c57", rgb: "10-92-87", cmyk: "87-38-58-35", area: [1, 6, 2, 3] },
   { name: "Светлый арктический", hex: "#cce0e6", rgb: "204-224-230", cmyk: "24-5-10-00", area: [1, 7, 3, 4] },
   { name: "Ледяной арктический", hex: "#e4f0f2", rgb: "228-240-242", cmyk: "13-2-6-00", area: [7, 10, 3, 4] },
-  { photo: "palette-arctic-aurora-kling25.webp", video: "palette-arctic-aurora-kling25.mp4", alt: "Северное сияние над горизонтом", area: [10, 13, 3, 4] },
+  { photo: "palette-arctic-aurora-sky.webp", video: "palette-arctic-aurora-sky.mp4", alt: "Северное сияние над горизонтом", area: [10, 13, 3, 4] },
 ];
 
 const regimes = [
@@ -211,7 +211,7 @@ const regimeNotes = {
   Ипотека: "Отдельный маркер для льготных ипотечных программ и жилищных сценариев.",
 };
 
-const regimeColorCoding = ["ТОР", "СПВ", "АЗРФ", "ИНТЦ", "КОРФ", "САР", "Ипотека", "Гектар", "Работа"]
+const regimeColorCoding = ["ТОР", "СПВ", "КОРФ", "САР", "АЗРФ", "ИНТЦ", "Ипотека", "Гектар", "Работа"]
   .map((short) => regimes.find((item) => item.short === short))
   .filter(Boolean);
 
@@ -236,17 +236,6 @@ const regimePaletteTiles = regimeColorCoding.map((item, index) => ({
   cmyk: hexToCmykString(item.color),
   area: [(index % 3) * 4 + 1, (index % 3) * 4 + 5, Math.floor(index / 3) + 1, Math.floor(index / 3) + 2],
 }));
-
-const textRecommendationImages = [
-  { title: "Кавычки", caption: "Контроль русских кавычек «елочки» и вложенных „лапок“.", file: "text-recommendation-1.png" },
-  { title: "Тире", caption: "Разделение длинного тире в предложении и среднего тире в числовых интервалах.", file: "text-recommendation-2.png" },
-  { title: "Деньги", caption: "Неразрывный пробел между суммой и знаком валюты при постпозиции.", file: "text-recommendation-3.png" },
-  { title: "Телефоны", caption: "Единая запись номера с кодом страны, кодом города и группами цифр.", file: "text-recommendation-4.png" },
-  { title: "Сокращения", caption: "Сокращенные слова с точкой и физические единицы СИ без точки.", file: "text-recommendation-5.png" },
-  { title: "Млн и млрд", caption: "Количественные сокращения без точки в деловых и презентационных текстах.", file: "text-recommendation-6.png" },
-  { title: "География", caption: "Родовые термины, стороны света, официальные и неофициальные названия регионов.", file: "text-recommendation-7.png" },
-  { title: "Финальная проверка", caption: "Пробелы, служебные слова и знаки приводятся к единому наборному стандарту.", file: "text-recommendation-8.png" },
-];
 
 const downloadResources = {
   logos: {
@@ -389,7 +378,7 @@ const fontFamilies = [
   {
     id: "tsars",
     title: "TT Tsars A",
-    role: "Торжественная документация",
+    role: "Наградные документы",
     cssFamily: "TT Tsars",
     sample: "Грамота за развитие территорий",
     description: "Гарнитура для благодарностей, благодарственных писем, почетных грамот и других наградных документов.",
@@ -723,6 +712,7 @@ const photostyleImages = {
     { title: "Полярное сияние", caption: "Захватывающий природный кадр Арктики.", file: "photostyle-composition-10.webp" },
     { title: "Вулканический пейзаж", caption: "Достоверный региональный пейзаж Дальнего Востока.", file: "photostyle-composition-9.webp" },
     { title: "Арктический маршрут", caption: "Природа и маршрут в условиях северного региона.", file: "photostyle-composition-15.webp" },
+    { title: "Место для фотографии", caption: "Пример будет добавлен.", file: "placeholder-nature-4", placeholder: true },
   ],
   people: [
     { title: "Культурный сюжет", caption: "Люди в контексте традиций и региональной культуры.", file: "photostyle-composition-5.webp" },
@@ -958,7 +948,7 @@ const pagesData = [
     heroVideo: "cover-typography.mp4",
     number: "06",
     title: "Типографика",
-    intro: "Шрифтовая система включает основной гротеск, акцидентную пару для выразительных заголовков и отдельную гарнитуру для торжественных документов.",
+    intro: "Шрифтовая система включает основной гротеск, акцидентную пару для выразительных заголовков и отдельную гарнитуру для наградных документов.",
     sections: [
       {
         id: "families",
@@ -994,40 +984,61 @@ const pagesData = [
           "Для русскоязычных текстов основной используемый тип кавычек — «елочки». Если внутри закавыченного текста содержится другой закавыченный текст, то он оформляется кавычками типа „лапки“.",
           "Для обозначения тире нужно использовать знак «длинное тире» (—). Длинное тире отбивается пробелами с двух сторон. Для разделения числовых интервалов используется среднее тире (–), которое не отбивается пробелами.",
         ],
-        examples: ["«Цитата „внутри“ цитаты»", "Тире — знак препинания.", "1992–2021 год"],
+        textExamples: [
+          { label: "Кавычки", good: "«Цитата „внутри“ цитаты»", bad: "\"Цитата \"внутри\" цитаты\"" },
+          { label: "Название организации", good: "АО\u00a0«КРДВ»", bad: "АО \"КРДВ\"" },
+          { label: "Длинное тире", good: "Тире\u00a0— знак препинания.", bad: "Тире - знак препинания." },
+          { label: "Числовой интервал", good: "1992–2021\u00a0годы", bad: "1992 — 2021 годы" },
+        ],
       },
       {
         id: "money-phone",
         title: "Валюты и телефоны",
         paragraphs: [
           "Знаки валют, указываемые после числа, отбиваются неразрывным пробелом. Знаки валют, указываемые в препозиции, пишутся слитно с числом. В тексте рекомендуется написание валют словами.",
-          "Номера телефонов рекомендуется записывать в международном формате, со знаком «+» и кодом страны, или начинать с цифры «8» как оператора выхода на междугороднюю связь. Код страны, код города и номер телефона отбиваются друг от друга неразрывным пробелом.",
+          "Номера телефонов записываются в международном формате: со знаком «+» и кодом страны. Код страны, код города и номер отбиваются друг от друга неразрывным пробелом, внутри номера цифры делятся дефисами.",
         ],
-        examples: ["100 000 ₽", "¥100 000", "8 (495) 531-06-44"],
+        textExamples: [
+          { label: "Знак валюты после числа", good: "100\u00a0000\u00a0₽", bad: "100 000₽" },
+          { label: "Знак валюты перед числом", good: "¥100\u00a0000", bad: "¥ 100 000" },
+          { label: "Валюта в тексте", good: "Бюджет проекта — 100\u00a0000 рублей", bad: "Бюджет проекта — 100 000 ₽" },
+          { label: "Телефон", good: "+7\u00a0495\u00a0531-06-44", bad: "8 (495) 5310644" },
+        ],
       },
       {
         id: "abbr-geo",
         title: "Сокращения и география",
         paragraphs: [
-          "Сокращения с усечением части слова пишутся с точкой в конце, кроме обозначений физических единиц СИ.",
-          "Пишется без точки: млн, млрд.",
-          "Со строчной буквы пишутся родовые географические термины, названия сторон света и прилагательные от них.",
-          "С прописной буквы пишутся географические названия и неофициальные названия географических регионов.",
+          "Сокращения с усечением части слова пишутся с точкой в конце, кроме обозначений физических единиц СИ. Без точки пишутся также «млн» и «млрд».",
+          "Со строчной буквы пишутся родовые географические термины, названия сторон света и прилагательные от них. С прописной буквы — географические названия и неофициальные названия географических регионов.",
         ],
-        examples: ["г. (город), д. (дом)", "т. к. (так как)", "м (метр), ч (час)", "южный, дальневосточная ипотека, арктические льды", "Дальний Восток, Заполярье, Республика Бурятия"],
+        textExamples: [
+          { label: "Сокращения", good: "г.\u00a0Владивосток, д.\u00a05", bad: "г Владивосток, д 5" },
+          { label: "Составные сокращения", good: "т.\u00a0к., т.\u00a0е.", bad: "т.к., т.е." },
+          { label: "Единицы СИ", good: "5\u00a0м, 2\u00a0ч", bad: "5 м., 2 ч." },
+          { label: "Млн и млрд", good: "15\u00a0млн рублей", bad: "15 млн. рублей" },
+          { label: "Родовые термины и стороны света", good: "север Якутии, арктические льды", bad: "Север Якутии, Арктические льды" },
+          { label: "Названия регионов", good: "Дальний Восток, Заполярье, Республика Бурятия", bad: "дальний восток, заполярье, республика Бурятия" },
+        ],
       },
       {
-        id: "recommendations",
-        title: "Контрольные примеры",
-        paragraphs: ["Ниже собраны готовые контрольные ситуации из брендбука. Они не дублируют правила, а помогают быстро сверить набор перед публикацией."],
-        assetImageMode: "imagesOnly",
-        assetImages: textRecommendationImages,
-      },
-      {
-        id: "typograf",
-        title: "Типограф",
-        paragraphs: ["В русскоязычных материалах короткие союзы и предлоги не оставляются в конце строки, числа и единицы измерения не разрываются, кавычки приводятся к русской форме."],
-        typografDemo: true,
+        id: "line-breaks",
+        title: "Переносы строк",
+        paragraphs: [
+          "Короткие предлоги, союзы и частицы — «в», «и», «к», «с», «на», «по», «не» и другие — не оставляют в конце строки: их связывают со следующим словом неразрывным пробелом. Так же не разрывают число и единицу измерения, инициалы и фамилию.",
+        ],
+        lineBreakExamples: [
+          {
+            label: "Предлоги и союзы",
+            bad: ["Корпорация поддерживает бизнес |в|", "регионах Дальнего Востока |и|", "Арктики"],
+            good: ["Корпорация поддерживает бизнес", "в регионах Дальнего Востока", "и Арктики"],
+          },
+          {
+            label: "Числа и единицы измерения",
+            bad: ["Протяженность новой трассы — |120|", "км, строительство займет |2|", "года"],
+            good: ["Протяженность новой трассы —", "120 км, строительство займет", "2 года"],
+          },
+        ],
       },
     ],
   },
@@ -1325,13 +1336,13 @@ const pagesData = [
     number: "14",
     title: "Контакты",
     intro: "Реквизиты компании и обратная связь по руководству.",
+    hideIntro: true,
     sections: [
       {
         id: "contacts-info",
         title: "Контакты",
         contacts: [
           "Акционерное общество «Корпорация развития Дальнего Востока и Арктики»",
-          "erdc.ru",
           "Дата последнего обновления руководства: 01.11.2026",
         ],
         contactCta: {
@@ -1833,6 +1844,7 @@ function GuidelinePage({ page, activePageId, navigate }) {
         <h1 className="hero-title">{t(page.title)}</h1>
       </header>
 
+      {page.hideIntro ? null : (
       <section className="intro-panel">
         <p>{t(page.intro)}</p>
         {page.introAction && downloadResources[page.introAction.resource] ? (
@@ -1846,6 +1858,7 @@ function GuidelinePage({ page, activePageId, navigate }) {
           </a>
         ) : null}
       </section>
+      )}
 
       {page.sections.map((section) => (
         <ContentSection key={section.id} section={section} navigate={navigate} activePageId={activePageId} />
@@ -1866,9 +1879,9 @@ function ContentSection({ section, navigate, activePageId }) {
     section.positioningShowcase ? <PositioningShowcase key="positioning" /> : null,
     section.principles ? <PrincipleCards key="principles" items={section.principles} /> : null,
     section.directory ? <SectionDirectory key="directory" navigate={navigate} activePageId={activePageId} /> : null,
-    section.examples ? <ExampleGrid key="examples" items={section.examples} /> : null,
+    section.textExamples ? <TextExampleGrid key="text-examples" items={section.textExamples} /> : null,
+    section.lineBreakExamples ? <LineBreakExamples key="line-breaks" items={section.lineBreakExamples} /> : null,
     cardsBeforeAssets ? <CardGrid key="cards-before" items={section.cards} /> : null,
-    section.rules ? <RuleList key="rules" items={section.rules} /> : null,
     section.logos ? <LogoLibrary key="logos" items={section.logos} /> : null,
     section.logoPairs ? <LogoPairLibrary key="logo-pairs" /> : null,
     section.subsidiaryLogos ? <SubsidiaryLogoLibrary key="subsidiary-logos" setId={section.subsidiaryLogos} /> : null,
@@ -1900,7 +1913,6 @@ function ContentSection({ section, navigate, activePageId }) {
     section.visuals ? <PlaceholderGrid key="visuals" items={section.visuals} /> : null,
     section.palette ? <PaletteGrid key="palette" colors={section.palette} separate={section.paletteSeparate} /> : null,
     section.resourceLinks ? <ResourceLinks key="resources" keys={section.resourceLinks} /> : null,
-    section.typografDemo ? <TypografDemo key="typograf" /> : null,
     section.contacts ? <ContactBlock key="contacts" items={section.contacts} /> : null,
     section.contactCta ? <ContactCta key="contact-cta" item={section.contactCta} /> : null,
   ].filter(Boolean);
@@ -1916,9 +1928,17 @@ function ContentSection({ section, navigate, activePageId }) {
           <p key={paragraph}>{t(paragraph)}</p>
         ))}
         {section.keywords && !section.positioningShowcase ? <KeywordWall items={section.keywords} /> : null}
-        {section.specs ? (
+        {section.specs || section.rules ? (
           <div className="spec-columns">
-            {section.specs.map((spec) => (
+            {(section.rules || []).map((rule) => (
+              <div className="spec-text" key={rule.label}>
+                <h3>{t(rule.label)}</h3>
+                <p>
+                  <span>{t(rule.text)}</span>
+                </p>
+              </div>
+            ))}
+            {(section.specs || []).map((spec) => (
               <div className="spec-text" key={spec.title}>
                 <h3>{t(spec.title)}</h3>
                 <p>
@@ -1961,11 +1981,55 @@ function KeywordWall({ items }) {
   );
 }
 
-function ExampleGrid({ items }) {
+// Примеры «правильно / неправильно» для правил оформления текста. Текст выводится как есть, без типографа:
+// иначе типограф «исправил» бы и неправильные примеры.
+function TextExampleGrid({ items }) {
   return (
-    <div className="example-grid">
+    <div className="text-example-grid">
       {items.map((item) => (
-        <code key={item}>{t(item)}</code>
+        <article className="text-example" key={item.label}>
+          <span className="text-example-label">{t(item.label)}</span>
+          <div className="text-example-row is-yes">
+            <VerdictBadge verdict="yes" />
+            <p>{item.good}</p>
+          </div>
+          <div className="text-example-row is-no">
+            <VerdictBadge verdict="no" />
+            <p>{item.bad}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+// Наглядный перенос: одна и та же фраза с «висящими» словами в конце строк и с правильной привязкой.
+// В неправильном варианте слово между |…| подсвечивается.
+function LineBreakExamples({ items }) {
+  const renderLine = (line) =>
+    line.split(/\|(.+?)\|/).map((part, index) => (index % 2 ? <mark key={index}>{part}</mark> : part));
+
+  return (
+    <div className="line-break-examples">
+      {items.map((item) => (
+        <article className="line-break-example" key={item.label}>
+          <span className="text-example-label">{t(item.label)}</span>
+          <div className="line-break-pair">
+            {[
+              ["no", item.bad],
+              ["yes", item.good],
+            ].map(([verdict, lines]) => (
+              <div className={`line-break-sample is-${verdict}`} key={verdict}>
+                <VerdictBadge verdict={verdict} />
+                <p>
+                  {lines.map((line) => (
+                    <span key={line}>{renderLine(line)}</span>
+                  ))}
+                </p>
+              </div>
+            ))}
+          </div>
+        </article>
       ))}
     </div>
   );
@@ -1997,7 +2061,7 @@ function AuroraBackground({ className }) {
         swirl={0.35}
         grainMixer={0}
         grainOverlay={0}
-        speed={reduceMotion ? 0 : 0.3}
+        speed={reduceMotion ? 0 : 0.4}
         frame={42000}
         scale={1.15}
         maxPixelCount={1600000}
@@ -2713,7 +2777,13 @@ function AssetImageGrid({ items, mode = "grid" }) {
         {items.map((item) => (
           <motion.article className={`asset-image-card ${item.wide ? "is-wide" : ""} ${item.contained ? "is-contained" : ""} ${item.embeddedText ? "has-embedded-text" : ""} ${item.mockup ? "is-mockup" : ""}`} key={item.file} layout whileHover={{ y: -2 }}>
             <div className="asset-image-frame">
-              <img src={rasterAsset(item.file)} alt={t(item.title)} loading="lazy" />
+              {item.placeholder ? (
+                <div className="asset-image-placeholder" role="img" aria-label={t(item.title)}>
+                  <span>{t("Фото будет добавлено")}</span>
+                </div>
+              ) : (
+                <img src={rasterAsset(item.file)} alt={t(item.title)} loading="lazy" />
+              )}
             </div>
             {item.embeddedText || imagesOnly ? null : (
               <div className="asset-image-copy">
@@ -2725,19 +2795,6 @@ function AssetImageGrid({ items, mode = "grid" }) {
         ))}
       </motion.div>
     </LayoutGroup>
-  );
-}
-
-function RuleList({ items }) {
-  return (
-    <div className="rule-list">
-      {items.map((item, index) => (
-        <article key={`${item.label}-${index}`}>
-          <strong>{t(item.label)}</strong>
-          <p>{t(noDot(item.text))}</p>
-        </article>
-      ))}
-    </div>
   );
 }
 
@@ -3068,24 +3125,6 @@ function RegimePalette({ items }) {
         </motion.div>
       </div>
     </LayoutGroup>
-  );
-}
-
-function TypografDemo() {
-  const [value, setValue] = useState("АО КРДВ помогает бизнесу и гражданам на Дальнем Востоке и в Арктике.");
-  const output = useMemo(() => t(value), [value]);
-
-  return (
-    <div className="typograf-demo">
-      <label>
-        <span>{t("Ввод")}</span>
-        <textarea value={value} onChange={(event) => setValue(event.target.value)} />
-      </label>
-      <div>
-        <span>{t("Результат")}</span>
-        <p>{output}</p>
-      </div>
-    </div>
   );
 }
 
