@@ -115,7 +115,7 @@ const primaryPalette = [
   { name: "Темно-синий", hex: "#001d37", rgb: "0-30-55", cmyk: "100-84-47-58", area: [1, 4, 2, 3] },
   { name: "Глубокий синий", hex: "#0c5082", rgb: "12-80-130", cmyk: "100-73-24-9", area: [4, 7, 2, 3] },
   { name: "Красный акцент", hex: "#de2327", rgb: "222-35-39", cmyk: "5-100-100-00", area: [1, 4, 3, 4] },
-  { photo: "palette-photo-sunset.webp", alt: "Закат над сопками", area: [10, 13, 3, 4], position: "100% 60%" },
+  { photo: "palette-photo-sunset.webp", video: "palette-sunset-kling25.mp4", alt: "Закат над сопками", area: [10, 13, 3, 4], position: "100% 60%" },
   { name: "Розовый", hex: "#ef8a91", rgb: "239-138-145", cmyk: "0-42-39-6", area: [4, 7, 3, 4], proposal: true },
   { name: "Светло-розовый", hex: "#fce8ea", rgb: "252-232-234", cmyk: "0-8-7-1", area: [7, 10, 3, 4], proposal: true },
 ];
@@ -2394,6 +2394,55 @@ function isDarkColor(hex) {
   return 0.299 * r + 0.587 * g + 0.114 * b < 150;
 }
 
+function PalettePhoto({ item, style }) {
+  const videoRef = useRef(null);
+  const hoveringRef = useRef(false);
+  const [playing, setPlaying] = useState(false);
+  const mediaStyle = item.position ? { objectPosition: item.position } : undefined;
+
+  function stopPreview() {
+    hoveringRef.current = false;
+    setPlaying(false);
+    const video = videoRef.current;
+    if (video) {
+      video.pause();
+      video.currentTime = 0;
+    }
+  }
+
+  function startPreview(event) {
+    if (!item.video || event.pointerType === "touch"
+      || !window.matchMedia("(hover: hover) and (pointer: fine)").matches
+      || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    hoveringRef.current = true;
+    videoRef.current?.play().catch(() => {
+      // A rejected play request keeps the original photograph visible.
+      if (hoveringRef.current && videoRef.current?.paused) setPlaying(false);
+    });
+  }
+
+  useEffect(() => {
+    const video = videoRef.current;
+    return () => video?.pause();
+  }, []);
+
+  return (
+    <div className="swatch-photo" style={style} data-playing={playing}
+      onPointerEnter={startPreview} onPointerLeave={stopPreview}>
+      <img src={rasterAsset(item.photo)} alt={t(item.alt)} loading="lazy" style={mediaStyle} />
+      {item.video && (
+        <video ref={videoRef} src={rasterAsset(item.video)} muted playsInline preload="none"
+          aria-hidden="true" tabIndex={-1} style={mediaStyle}
+          onPlaying={() => {
+            if (hoveringRef.current) setPlaying(true);
+            else videoRef.current?.pause();
+          }}
+          onError={stopPreview} />
+      )}
+    </div>
+  );
+}
+
 // Палитра как в DevRev: цветные плитки с кодами внутри, «Скопировать HEX» появляется при наведении.
 function PaletteGrid({ colors, separate = false }) {
   const [copied, setCopied] = useState("");
@@ -2421,9 +2470,7 @@ function PaletteGrid({ colors, separate = false }) {
 
         if (item.photo) {
           return (
-            <div className="swatch-photo" key={item.photo} style={style}>
-              <img src={rasterAsset(item.photo)} alt={t(item.alt)} loading="lazy" style={item.position ? { objectPosition: item.position } : undefined} />
-            </div>
+            <PalettePhoto key={item.photo} item={item} style={style} />
           );
         }
 
