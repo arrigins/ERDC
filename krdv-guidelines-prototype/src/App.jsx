@@ -958,10 +958,10 @@ const pagesData = [
       {
         id: "intc",
         title: "ИНТЦ «Русский»",
-        paragraphs: ["Логотип ИНТЦ «Русский» используется в двух версиях: горизонтальной и квадратной в рамке."],
+        paragraphs: ["У логотипа ИНТЦ «Русский» две версии: основная и горизонтальная."],
         brandLogoVersions: [
-          { title: "Горизонтальная версия", file: "intc-russky-logo", alt: "Логотип ИНТЦ «Русский», горизонтальная версия" },
-          { title: "Квадратная версия в рамке", file: "intc-russky-logo-frame", alt: "Логотип ИНТЦ «Русский», квадратная версия в рамке" },
+          { title: "Основная версия", file: "intc-russky-logo-frame", alt: "Логотип ИНТЦ «Русский», основная версия", shape: "square" },
+          { title: "Горизонтальная версия", file: "intc-russky-logo", alt: "Логотип ИНТЦ «Русский», горизонтальная версия", shape: "wide" },
         ],
         resourceLinks: ["intcSite"],
       },
@@ -2788,7 +2788,7 @@ function BrandLogoVersions({ items }) {
     <div className="brand-logo-versions">
       {items.map((item) => (
         <motion.article className="brand-logo-version" key={item.file} whileHover={{ y: -2 }}>
-          <div className="brand-logo-version-preview">
+          <div className={`brand-logo-version-preview is-${item.shape}`}>
             <img src={logoAsset(`${item.file}.svg`)} alt={t(item.alt)} loading="lazy" />
           </div>
           <div className="brand-logo-version-copy">

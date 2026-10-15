@@ -356,7 +356,7 @@ img {
   margin: 0;
   color: var(--ui-blue);
   font-size: clamp(34px, 3.4vw, 60px);
-  line-height: 0.98;
+  line-height: 1.08;
   font-weight: 600;
   letter-spacing: 0;
 }
@@ -5951,16 +5951,23 @@ img {
   background: var(--soft-bg, #f6f5f8);
 }
 
+.brand-logo-version-preview {
+  position: relative;
+}
+
+/* Логотип по центру плашки: картинка вписывается в заданную область, без «проваливания» вниз */
 .brand-logo-version-preview img {
-  width: auto;
-  max-width: 70%;
-  height: 52%;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 64%;
+  height: 56%;
   object-fit: contain;
 }
 
-.brand-logo-version:first-child .brand-logo-version-preview img {
-  height: auto;
+.brand-logo-version-preview.is-wide img {
   width: 66%;
+  height: 30%;
 }
 
 .brand-logo-version-copy {
