@@ -4021,7 +4021,7 @@ img {
   aspect-ratio: 2 / 1;
 }
 
-/* Эксперимент (только страница «Режимы и программы», page.softLayout):
+/* Эксперимент «мягкий» вид — на всех страницах (отключается page.softLayout: false):
    светло-серый фон страницы, белые скруглённые блоки без серых обводок. */
 .guideline-page.is-soft {
   --soft-bg: #f6f5f8;
@@ -4126,4 +4126,132 @@ img {
 .nav-chevron {
   width: var(--sb-chevron);
   height: var(--sb-chevron);
+}
+
+
+/* Мягкий вид для остальных блоков сайта: белые скруглённые карточки без обводок. */
+.guideline-page.is-soft :is(
+  .directory-card,
+  .positioning-principles article,
+  .spec-grid article,
+  .logo-card,
+  .subsidiary-logo-card,
+  .made-sign-card,
+  .asset-image-card,
+  .media-placeholder,
+  .type-specimen,
+  .font-workbench,
+  .font-download-family,
+  .regime-palette-stage,
+  .typograf-demo textarea,
+  .typograf-demo p
+) {
+  border: 0;
+  border-radius: var(--soft-radius);
+  background: var(--soft-card);
+  overflow: hidden;
+}
+
+.guideline-page.is-soft :is(
+  .directory-card,
+  .positioning-principles article,
+  .spec-grid article,
+  .logo-card,
+  .subsidiary-logo-card,
+  .made-sign-card,
+  .asset-image-card,
+  .media-placeholder,
+  .type-specimen
+):is(:hover, :focus-visible, [data-current="true"], [data-active="true"]) {
+  background: var(--soft-card);
+}
+
+/* Карточки с превью: превью — отдельная скруглённая плашка внутри, как у знаков режимов. */
+.guideline-page.is-soft :is(.logo-card, .subsidiary-logo-card, .made-sign-card) {
+  padding: 10px;
+}
+
+.guideline-page.is-soft :is(.logo-preview, .subsidiary-logo-preview, .made-sign-preview) {
+  border-bottom: 0;
+  border-radius: 16px;
+  background: var(--soft-bg);
+}
+
+.guideline-page.is-soft .made-sign-card[data-tone="black"] .made-sign-preview {
+  background: #3a3e45;
+}
+
+.guideline-page.is-soft .made-sign-card[data-tone="white"] .made-sign-preview {
+  background: #0056a2;
+}
+
+.guideline-page.is-soft .made-sign-card[data-tone="purple"] .made-sign-preview {
+  background: #f2ecff;
+}
+
+.guideline-page.is-soft :is(.asset-image-frame, .directory-visual) {
+  border-bottom: 0;
+}
+
+.guideline-page.is-soft .keyword-wall span {
+  border: 0;
+  border-radius: 999px;
+  background: var(--soft-card);
+}
+
+.guideline-page.is-soft .example-grid code {
+  border: 0;
+  border-radius: 12px;
+  background: var(--soft-card);
+}
+
+.guideline-page.is-soft :is(.font-family-tabs button, .font-style-chips button, .font-preview-input input) {
+  border-color: transparent;
+  border-radius: 999px;
+  background: var(--soft-bg);
+}
+
+.guideline-page.is-soft :is(.font-family-tabs button, .font-style-chips button)[data-active="true"] {
+  background: var(--ui-blue);
+  color: #ffffff;
+}
+
+.guideline-page.is-soft :is(.contact-block, .intro-action, .resource-links a) {
+  border: 0;
+  border-radius: var(--soft-radius);
+}
+
+.guideline-page.is-soft .intro-action {
+  border-radius: 999px;
+}
+
+.guideline-page.is-soft .swatch-board:not(.is-separate) {
+  border-radius: var(--soft-radius);
+  overflow: hidden;
+}
+
+.guideline-page.is-soft .section-footnote {
+  border-top-color: var(--soft-line);
+}
+
+.guideline-page.is-soft .end-links {
+  gap: 16px;
+  padding: 32px;
+}
+
+.guideline-page.is-soft .end-links button {
+  border-radius: var(--soft-radius);
+  background: var(--soft-card);
+}
+
+.guideline-page.is-soft .end-links button:is(:hover, :focus-visible) {
+  background: #ffffff;
+  box-shadow: 0 0 0 1px var(--soft-line);
+}
+
+.guideline-page.is-soft .contact-cta,
+.guideline-page.is-soft .contact-cta:is(:hover, :focus-visible) {
+  border: 0;
+  border-radius: var(--soft-radius);
+  background: var(--soft-card);
 }
