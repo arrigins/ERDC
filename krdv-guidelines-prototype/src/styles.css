@@ -4600,7 +4600,12 @@ img {
 }
 
 .made-sign-groups .made-sign-library {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Под белой версией — фирменный синий, как у кнопок скачивания при наведении. */
+.guideline-page.is-soft .made-sign-groups .made-sign-card[data-tone="white"] .made-sign-preview {
+  background: var(--ui-blue);
 }
 
 .made-sign-groups .made-sign-card {

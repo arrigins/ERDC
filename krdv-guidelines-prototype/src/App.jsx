@@ -593,9 +593,8 @@ const madeSignGroups = [
     prefix: "made-tor-spv",
     variants: [
       { tone: "purple", title: "Фиолетовая версия", langs: ["ru", "en"] },
-      { tone: "black", title: "Черная версия", langs: ["ru", "en"] },
-      { tone: "outline", title: "Контурная версия", langs: ["ru", "en"] },
-      { tone: "white", title: "Белая версия", langs: ["ru"] },
+      { tone: "outline", title: "Черная версия", langs: ["ru", "en"] },
+      { tone: "white", title: "Белая версия", langs: ["ru", "en"] },
     ],
   },
   {
@@ -604,8 +603,8 @@ const madeSignGroups = [
     prefix: "made-dvia",
     variants: [
       { tone: "purple", title: "Фиолетовая версия", langs: ["ru", "en"] },
-      { tone: "black", title: "Черная версия", langs: ["ru", "en"] },
-      { tone: "outline", title: "Контурная версия", langs: ["ru", "en"] },
+      { tone: "outline", title: "Черная версия", langs: ["ru", "en"], version: "-v2" },
+      { tone: "white", title: "Белая версия", langs: ["ru", "en"] },
     ],
   },
 ].map((group) => ({
@@ -613,7 +612,7 @@ const madeSignGroups = [
   variants: group.variants.map((variant) => ({
     ...variant,
     key: `${group.prefix}-${variant.tone}`,
-    signs: variant.langs.map((lang) => ({ lang, file: `${group.prefix}-${lang}-${variant.tone}` })),
+    signs: variant.langs.map((lang) => ({ lang, file: `${group.prefix}-${lang}-${variant.tone}${variant.version || ""}` })),
   })),
 }));
 
