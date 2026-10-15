@@ -4456,7 +4456,7 @@ img {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   gap: 20px clamp(24px, 3vw, 48px);
-  border-top: 1px solid rgba(0, 29, 55, 0.12);
+  border-top: 1px solid rgba(27, 62, 146, 0.18);
   padding-top: clamp(20px, 2.4vw, 28px);
 }
 
@@ -4468,7 +4468,7 @@ img {
 }
 
 .promise-group.is-pairs {
-  border-left: 1px solid var(--soft-line, #dddce2);
+  border-left: 1px solid rgba(27, 62, 146, 0.18);
   padding-left: clamp(24px, 3vw, 48px);
 }
 
@@ -4533,7 +4533,7 @@ img {
   .promise-group.is-pairs {
     border-left: 0;
     padding-left: 0;
-    border-top: 1px solid var(--soft-line, #dddce2);
+    border-top: 1px solid rgba(27, 62, 146, 0.18);
     padding-top: 20px;
   }
 }
