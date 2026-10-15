@@ -5550,18 +5550,29 @@ img {
     0 10px 28px -8px rgba(10, 20, 40, 0.14);
 }
 
-/* Характеристики (шрифт, материал, печать…) — обычный текст под подзаголовками в колонке текста, без карточек */
+/* Характеристики (шрифт, материал, печать…) — две колонки под текстом, тонкая линия слева, заголовок чёрный, строки серые */
+.section-body .spec-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px clamp(24px, 3vw, 48px);
+  width: min(100%, 52em);
+  margin-top: 4px;
+}
+
 .section-body .spec-text {
   display: grid;
-  gap: 8px;
-  width: min(100%, 52em);
+  align-content: start;
+  gap: 6px;
+  border-left: 1px solid var(--soft-line, #dddce2);
+  padding-left: 18px;
 }
 
 .section-body .spec-text h3 {
   margin: 0;
-  font-size: clamp(19px, 1.15vw, 26px);
-  line-height: 1.3;
-  font-weight: 500;
+  color: #050505;
+  font-size: clamp(16px, 1vw, 20px);
+  line-height: 1.35;
+  font-weight: 400;
   letter-spacing: 0;
 }
 
@@ -5569,7 +5580,14 @@ img {
   display: grid;
   gap: 2px;
   margin: 0;
-  font-size: clamp(19px, 1.15vw, 26px);
-  line-height: 1.42;
+  color: var(--muted, #707070);
+  font-size: clamp(16px, 1vw, 20px);
+  line-height: 1.45;
   font-weight: 400;
+}
+
+@media (max-width: 720px) {
+  .section-body .spec-columns {
+    grid-template-columns: 1fr;
+  }
 }

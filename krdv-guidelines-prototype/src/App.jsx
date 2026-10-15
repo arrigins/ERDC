@@ -958,7 +958,7 @@ const pagesData = [
     heroVideo: "cover-typography.mp4",
     number: "06",
     title: "Типографика",
-    intro: "Раздел задает шрифтовую иерархию: рабочий гротеск, акцидентную пару и отдельную гарнитуру для торжественных документов.",
+    intro: "Шрифтовая система включает основной гротеск, акцидентную пару для выразительных заголовков и отдельную гарнитуру для торжественных документов.",
     sections: [
       {
         id: "families",
@@ -1916,16 +1916,20 @@ function ContentSection({ section, navigate, activePageId }) {
           <p key={paragraph}>{t(paragraph)}</p>
         ))}
         {section.keywords && !section.positioningShowcase ? <KeywordWall items={section.keywords} /> : null}
-        {section.specs?.map((spec) => (
-          <div className="spec-text" key={spec.title}>
-            <h3>{t(spec.title)}</h3>
-            <p>
-              {spec.items.map((item) => (
-                <span key={item}>{t(item)}</span>
-              ))}
-            </p>
+        {section.specs ? (
+          <div className="spec-columns">
+            {section.specs.map((spec) => (
+              <div className="spec-text" key={spec.title}>
+                <h3>{t(spec.title)}</h3>
+                <p>
+                  {spec.items.map((item) => (
+                    <span key={item}>{t(item)}</span>
+                  ))}
+                </p>
+              </div>
+            ))}
           </div>
-        ))}
+        ) : null}
       </div>
       {wideContent.length ? <div className={`section-wide ${section.regimeSigns ? "is-signs" : ""}`}>{wideContent}</div> : null}
     </section>
