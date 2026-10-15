@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, Fragment } from "react";
 import { AnimatePresence, LayoutGroup, MotionConfig, motion, useReducedMotion } from "motion/react";
 import { MorphIcon } from "morphicons/react";
-import { ColorPanels } from "@paper-design/shaders-react";
+import { ColorPanels, MeshGradient } from "@paper-design/shaders-react";
 
 const assetPath = (pathname) => `${import.meta.env.BASE_URL}${pathname.replace(/^\/+/, "")}`;
 const heroAsset = (filename) => assetPath(`/assets/hero/${filename}`);
@@ -767,7 +767,7 @@ const pagesData = [
       {
         id: "promise",
         title: "Бренд-обещание",
-        paragraphs: ["Вокруг этого обещания строятся смысловые пары: ближе к успеху, ближе к мечте, земля, знания, инфраструктура, карьера, льготы, гектар, масштаб, ипотека 2%."],
+        paragraphs: ["Дальний Восток и Арктика — ближе к будущему, ближе к успеху, ближе к мечте. В основе этого обещания — возможности для жизни, работы и развития бизнеса в этих регионах."],
         keywords: ["ближе к будущему", "ближе к успеху", "ближе к мечте", "земля", "знания", "инфраструктура", "карьера", "льготы", "гектар", "масштаб", "ипотека 2%"],
         positioningShowcase: true,
       },
@@ -1978,7 +1978,8 @@ const promiseWords = ["будущему", "успеху", "мечте"];
 const promisePairs = ["земля", "знания", "инфраструктура", "карьера", "льготы", "гектар", "масштаб", "ипотека 2%"];
 
 // Бренд-обещание: статичная часть слогана и сменяющееся слово (только «будущему / успеху / мечте»).
-// Под слоганом слева — переключатели этих трёх слов, справа отдельной группой — смысловые пары.
+// Под слоганом слева — переключатели этих трёх слов, справа отдельной группой — смысловые акценты.
+// На фоне — медленная нежно-голубая «северное сияние» анимация (MeshGradient).
 function PositioningShowcase() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -1997,6 +1998,20 @@ function PositioningShowcase() {
 
   return (
     <div className="promise-board">
+      <div className="promise-aurora" aria-hidden="true">
+        <MeshGradient
+          colors={["#ffffff", "#d6e9fb", "#a9d2f3", "#eef6ff", "#8fc3ee", "#cfe4f8"]}
+          distortion={0.85}
+          swirl={0.35}
+          grainMixer={0}
+          grainOverlay={0}
+          speed={reduceMotion ? 0 : 0.22}
+          scale={1.15}
+          maxPixelCount={1600000}
+          minPixelRatio={1}
+          style={{ width: "100%", height: "100%" }}
+        />
+      </div>
       <p className="promise-slogan">
         <span className="promise-static">Дальний Восток</span>
         <span className="promise-static">и{"\u00a0"}Арктика{"\u00a0"}—</span>
@@ -2039,7 +2054,7 @@ function PositioningShowcase() {
           </div>
         </div>
         <div className="promise-group is-pairs">
-          <span className="promise-group-label">{t("Смысловые пары")}</span>
+          <span className="promise-group-label">{t("Смысловые акценты")}</span>
           <div className="promise-tags">
             {promisePairs.map((word) => (
               <span key={word}>{t(word)}</span>
