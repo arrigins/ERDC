@@ -5,14 +5,11 @@ import { ColorPanels } from "@paper-design/shaders-react";
 
 const assetPath = (pathname) => `${import.meta.env.BASE_URL}${pathname.replace(/^\/+/, "")}`;
 const heroAsset = (filename) => assetPath(`/assets/hero/${filename}`);
-const vectorAsset = (filename) => assetPath(`/assets/brandbook/vector/${filename}`);
 const rasterAsset = (filename) => assetPath(`/assets/brandbook/raster/${filename}`);
 const logoAsset = (filename) => assetPath(`/assets/logos/${filename}`);
 const regimeSignAsset = (filename) => assetPath(`/assets/regime-signs/${filename}`);
 const subsidiaryAsset = (filename) => assetPath(`/assets/subsidiaries/${filename}`);
 const madeSignAsset = (filename) => assetPath(`/assets/made-signs/${filename}`);
-const fontAsset = (filename) => assetPath(`/fonts/${filename}`);
-const downloadAsset = (filename) => assetPath(`/downloads/${filename}`);
 
 const ICONS = {
   arrowLeft: "M15 6l-6 6 6 6M9 12h12",
@@ -401,16 +398,6 @@ const fontFamilies = [
   },
 ];
 
-const isDesktopFontFile = (fontFile) => /\.(ttf|otf)$/i.test(fontFile.file);
-const downloadableFontFamilies = fontFamilies
-  .map((family) => ({ ...family, files: family.files.filter(isDesktopFontFile) }))
-  .filter((family) => family.files.length > 0);
-const fontArchive = {
-  title: "Все шрифты КРДВ",
-  file: "krdv-fonts.zip",
-  count: downloadableFontFamilies.reduce((total, family) => total + family.files.length, 0),
-};
-
 const logoVariants = {
   "ru-horizontal": {
     title: "Русская горизонтальная версия",
@@ -748,21 +735,6 @@ const photostyleImages = {
 const appendixSocialImages = [
   { title: "Карточка с персоной", caption: "Формат для спикера, эксперта или героя материала.", file: "appendix-social-2.webp", contained: true },
 ];
-
-const logoMisuseImages = [
-  { title: "Старые версии", caption: "Запрещено использовать старые версии логотипа.", file: "logo-misuse-1.png" },
-  { title: "Цвет", caption: "Запрещено изменение цвета.", file: "logo-misuse-2.png" },
-  { title: "Знак без текста", caption: "Не допускается использование знака без текстовой части логотипа.", file: "logo-misuse-3.png" },
-  { title: "Пропорции", caption: "Не допускается искажение пропорций элементов логотипа.", file: "logo-misuse-4.png" },
-  { title: "Изменение типографики", caption: "Запрещено изменять типографику логотипа.", file: "logo-misuse-5.png" },
-  { title: "Эффекты", caption: "Запрещено использовать дополнительные эффекты для элементов логотипа.", file: "logo-misuse-6.png" },
-];
-
-const logoBackgroundRuleImages = Array.from({ length: 8 }, (_, index) => ({
-  title: `Фон и контраст ${index + 1}`,
-  file: `logo-background-rule-${index + 1}.png`,
-  embeddedText: true,
-}));
 
 const pagesData = [
   {
@@ -3029,66 +3001,6 @@ function FontWorkbench() {
       </div>
     </div>
   );
-}
-
-function FontDownloadLibrary() {
-  return (
-    <div className="font-download-library">
-      {downloadableFontFamilies.map((family) => (
-        <section className="font-download-family" key={family.id}>
-          <div>
-            <span>{t(family.role)}</span>
-            <h3>{family.title}</h3>
-            <p>{t(`${family.files.length} ${pluralizeFontFiles(family.files.length)} доступно для скачивания.`)}</p>
-          </div>
-          <div className="font-file-grid">
-            {family.files.map((file) => (
-              <FontFileLink key={file.file} file={file} familyTitle={family.title} />
-            ))}
-          </div>
-        </section>
-      ))}
-
-      <a className="font-archive-link" href={downloadAsset(fontArchive.file)} download={fontArchive.file}>
-        <span>
-          <strong>{t("Скачать весь архив шрифтов")}</strong>
-          <em>{t(`${fontArchive.count} ${pluralizeFontFiles(fontArchive.count)} · ZIP`)}</em>
-        </span>
-        <UiIcon icon={ICONS.download} className="font-archive-icon" />
-      </a>
-    </div>
-  );
-}
-
-function FontFileLink({ file, familyTitle, compact = false }) {
-  const [active, setActive] = useState(false);
-  const extension = file.file.split(".").pop()?.toUpperCase() || "FONT";
-
-  return (
-    <a
-      className={`font-file-link ${compact ? "is-compact" : ""}`}
-      href={fontAsset(file.file)}
-      download={file.file}
-      onBlur={() => setActive(false)}
-      onFocus={() => setActive(true)}
-      onMouseEnter={() => setActive(true)}
-      onMouseLeave={() => setActive(false)}
-      aria-label={t(`Скачать ${familyTitle} ${file.label}`)}
-    >
-      <UiIcon icon={active ? ICONS.arrowDown : ICONS.download} className="font-file-icon" />
-      <span>{file.label}</span>
-      <em>{extension}</em>
-    </a>
-  );
-}
-
-function pluralizeFontFiles(count) {
-  const lastTwo = count % 100;
-  const last = count % 10;
-  if (lastTwo >= 11 && lastTwo <= 14) return "файлов";
-  if (last === 1) return "файл";
-  if (last >= 2 && last <= 4) return "файла";
-  return "файлов";
 }
 
 function RegimePalette({ items }) {
