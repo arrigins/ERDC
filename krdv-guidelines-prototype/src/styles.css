@@ -5759,3 +5759,89 @@ img {
 .guideline-page.is-soft .end-links button:last-child .end-link-icon {
   margin-right: -6px;
 }
+
+/* Единый маркированный список по сайту: небольшие точки фирменного синего */
+.bullet-list {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bullet-list li {
+  position: relative;
+  padding-left: 16px;
+}
+
+.bullet-list li::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: calc(0.725em - 2.5px);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ui-blue);
+}
+
+.section-body .spec-text .bullet-list {
+  color: var(--muted, #707070);
+  font-size: clamp(16px, 1vw, 20px);
+  line-height: 1.45;
+}
+
+/* ДО: без серых подложек под логотипами — тонкие разделители между ячейками, кнопки по центру под логотипом */
+.subsidiary-row-cells {
+  gap: 0;
+}
+
+.subsidiary-row-cells .subsidiary-cell {
+  gap: 14px;
+  padding: 0 16px;
+  border-left: 1px solid var(--soft-line, #dddce2);
+}
+
+.subsidiary-row-cells .subsidiary-cell:first-child {
+  border-left: 0;
+}
+
+.subsidiary-row-cells .subsidiary-cell-preview {
+  border-radius: 0;
+  background: transparent;
+}
+
+.subsidiary-row-cells .subsidiary-cell .logo-downloads > div {
+  justify-content: center;
+}
+
+/* Русское и английское названия — через тонкую вертикальную линию */
+.subsidiary-region-card header {
+  align-items: center;
+  gap: 4px 0;
+}
+
+.subsidiary-region-card header span {
+  border-left: 1px solid var(--soft-line, #dddce2);
+  margin-left: 14px;
+  padding-left: 14px;
+  line-height: 1.2;
+}
+
+@media (max-width: 1180px) {
+  .subsidiary-row-cells,
+  .subsidiary-row-cells.has-extra {
+    row-gap: 20px;
+  }
+
+  .subsidiary-row-cells .subsidiary-cell:nth-child(odd) {
+    border-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .subsidiary-row-cells .subsidiary-cell {
+    border-left: 0;
+    padding: 0;
+  }
+}

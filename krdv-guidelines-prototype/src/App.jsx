@@ -1941,11 +1941,11 @@ function ContentSection({ section, navigate, activePageId }) {
             {(section.specs || []).map((spec) => (
               <div className="spec-text" key={spec.title}>
                 <h3>{t(spec.title)}</h3>
-                <p>
+                <ul className="bullet-list">
                   {spec.items.map((item) => (
-                    <span key={item}>{t(item)}</span>
+                    <li key={item}>{t(item)}</li>
                   ))}
-                </p>
+                </ul>
               </div>
             ))}
           </div>
@@ -1987,7 +1987,7 @@ function TextExampleGrid({ items }) {
   return (
     <div className="text-example-grid">
       {items.map((item) => (
-        <article className="text-example" key={item.label}>
+        <motion.article className="text-example" key={item.label} whileHover={{ y: -2 }}>
           <span className="text-example-label">{t(item.label)}</span>
           <div className="text-example-row is-yes">
             <VerdictBadge verdict="yes" />
@@ -1997,7 +1997,7 @@ function TextExampleGrid({ items }) {
             <VerdictBadge verdict="no" />
             <p>{item.bad}</p>
           </div>
-        </article>
+        </motion.article>
       ))}
     </div>
   );
@@ -2012,7 +2012,7 @@ function LineBreakExamples({ items }) {
   return (
     <div className="line-break-examples">
       {items.map((item) => (
-        <article className="line-break-example" key={item.label}>
+        <motion.article className="line-break-example" key={item.label} whileHover={{ y: -2 }}>
           <span className="text-example-label">{t(item.label)}</span>
           <div className="line-break-pair">
             {[
@@ -2029,7 +2029,7 @@ function LineBreakExamples({ items }) {
               </div>
             ))}
           </div>
-        </article>
+        </motion.article>
       ))}
     </div>
   );
@@ -2246,7 +2246,7 @@ function LogoPairLibrary() {
   return (
     <div className="logo-pair-library">
       {logoPairs.map((pair) => (
-        <article className={`logo-pair-card is-${pair.id}`} key={pair.id}>
+        <motion.article className={`logo-pair-card is-${pair.id}`} key={pair.id} whileHover={{ y: -2 }}>
           <div className="logo-pair-preview">
             <div className="logo-pair-stack">
               {Object.entries(pair.langs).map(([lang, id]) => (
@@ -2284,7 +2284,7 @@ function LogoPairLibrary() {
               })}
             </div>
           </div>
-        </article>
+        </motion.article>
       ))}
     </div>
   );
@@ -2337,7 +2337,7 @@ function SubsidiaryRegionCards() {
   return (
     <div className="subsidiary-region-grid">
       {subsidiaryRegions.map((region) => (
-        <article className="subsidiary-region-card" key={region.slug}>
+        <motion.article className="subsidiary-region-card" key={region.slug} whileHover={{ y: -2 }}>
           <header>
             <h3>{t(region.title)}</h3>
             {region.enTitle ? <span>{region.enTitle}</span> : null}
@@ -2364,7 +2364,7 @@ function SubsidiaryRegionCards() {
               </div>
             ))}
           </div>
-        </article>
+        </motion.article>
       ))}
     </div>
   );
@@ -2520,7 +2520,7 @@ function LogoExampleGrid({ items, columns = 3 }) {
         const { preview } = item;
         const background = preview.photo ? `center / cover no-repeat url(${rasterAsset(preview.photo)})` : preview.bg;
         return (
-          <article className={`logo-example is-${item.verdict}`} key={`${item.text}-${index}`}>
+          <motion.article className={`logo-example is-${item.verdict}`} key={`${item.text}-${index}`} whileHover={{ y: -2 }}>
             <div className="logo-example-preview" style={background ? { background } : undefined}>
               <LogoExamplePreview preview={preview} />
             </div>
@@ -2531,7 +2531,7 @@ function LogoExampleGrid({ items, columns = 3 }) {
               </div>
               <VerdictBadge verdict={item.verdict} />
             </div>
-          </article>
+          </motion.article>
         );
       })}
     </div>
@@ -2542,22 +2542,22 @@ function LogoBackdrops() {
   const versions = ["ru-square", "en-square"];
   return (
     <div className="logo-backdrops">
-      <figure className="logo-backdrop is-light">
+      <motion.figure className="logo-backdrop is-light" whileHover={{ y: -2 }}>
         <div>
           {versions.map((id) => (
             <img key={id} className={`is-${id.split("-")[1]}`} src={logoAsset(`krdv-logo-${id}.svg`)} alt="" loading="lazy" style={{ "--logo-ratio": id.startsWith("en") ? 183.59 / 209.8 : 1 }} />
           ))}
         </div>
         <figcaption>{t("Для светлых фонов — написание черного цвета")}</figcaption>
-      </figure>
-      <figure className="logo-backdrop is-dark">
+      </motion.figure>
+      <motion.figure className="logo-backdrop is-dark" whileHover={{ y: -2 }}>
         <div>
           {versions.map((id) => (
             <img key={id} className={`is-${id.split("-")[1]}`} src={logoAsset(`krdv-logo-${id}-ondark.svg`)} alt="" loading="lazy" style={{ "--logo-ratio": id.startsWith("en") ? 183.59 / 209.8 : 1 }} />
           ))}
         </div>
         <figcaption>{t("Для темных фонов — написание белого цвета")}</figcaption>
-      </figure>
+      </motion.figure>
     </div>
   );
 }
@@ -2580,7 +2580,7 @@ function ClearSpaceDiagram({ file, width, height, label }) {
   );
 
   return (
-    <figure className="clearspace-card">
+    <motion.figure className="clearspace-card" whileHover={{ y: -2 }}>
       <svg className="clearspace-diagram" viewBox={vb.join(" ")} role="img" aria-label={t(`Охранное поле: ${label}`)}>
         <rect className="cs-fade cs-zone" x={-x} y={-x} width={width + 2 * x} height={height + 2 * x} style={{ "--cs-delay": "200ms" }} />
         <image className="cs-fade cs-logo" href={logoAsset(file)} x={0} y={0} width={width} height={height} style={{ "--cs-delay": "0ms" }} />
@@ -2597,7 +2597,7 @@ function ClearSpaceDiagram({ file, width, height, label }) {
         ))}
       </svg>
       <figcaption>{t(label)}</figcaption>
-    </figure>
+    </motion.figure>
   );
 }
 
