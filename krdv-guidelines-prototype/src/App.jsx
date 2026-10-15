@@ -297,7 +297,7 @@ const downloadResources = {
   },
   hectareBrandbook: {
     title: "Брендбук «Гектар»",
-    description: "Руководство по фирменному стилю программы «Гектар».",
+    description: "Руководство по использованию фирменного стиля",
     url: "https://disk.yandex.ru/i/58D6TDp8-ikn1w",
   },
   intcSite: {
@@ -308,7 +308,7 @@ const downloadResources = {
   },
   ma2030Brandbook: {
     title: "Брендбук «Муравьёв-Амурский 2030»",
-    description: "Руководство по фирменному стилю программы «Муравьёв-Амурский 2030».",
+    description: "Руководство по использованию фирменного стиля",
     url: "https://disk.yandex.ru/d/dWSOvini_jmUzg",
   },
   socialGuide: {
@@ -776,6 +776,15 @@ const pagesData = [
         lead: "Любое отступление от рекомендаций по нанесению логотипа недопустимо.",
         assetImages: logoMisuseImages,
       },
+      {
+        id: "cobranding",
+        title: "Кобрендинг",
+        paragraphs: ["Правила совместного размещения логотипа КРДВ с логотипами партнёров. Раздел в разработке — материалы появятся позже."],
+        visuals: [
+          { title: "Горизонтальная схема", caption: "Скоро здесь появится пример" },
+          { title: "Вертикальная схема", caption: "Скоро здесь появится пример" },
+        ],
+      },
     ],
   },
   {
@@ -823,14 +832,14 @@ const pagesData = [
     number: "04",
     title: "Преференциальные режимы и программы",
     navTitle: "Режимы и программы",
+    cardTitle: "Префрежимы и программы",
     heroImage: "cover-regimes-glass-dark.webp",
     heroTone: "plain",
     intro: "Для преференциальных режимов используется единая система сокращений, знаков и названий. Она помогает быстро различать программы поддержки в коммуникационных материалах.",
     sections: [
       {
         id: "signs",
-        title: "Знаки режимов",
-        lead: "Знаки преференциальных режимов.",
+        title: "Знаки префрежимов",
         paragraphs: ["Система включает сокращения и полные расшифровки режимов: ТОР, СПВ, КОРФ, САР, АЗРФ и ИНТЦ."],
         regimeSigns: true,
         resourceLinks: ["regimeLogos"],
@@ -844,9 +853,9 @@ const pagesData = [
       },
       {
         id: "hectare",
-        title: "Дальневосточный и арктический гектар",
-        navTitle: "Гектар",
-        paragraphs: ["У программы «Дальневосточный и арктический гектар» собственный брендбук. Логотип и правила его использования — в архиве ниже."],
+        title: "Программа «Дальневосточный и арктический гектар»",
+        navTitle: "Программа Гектар",
+        paragraphs: ["Программа «Дальневосточный и арктический гектар» реализуется Минвостокразвития России совместно с корпорацией, КРДВ выступает оператором программы и помогает гражданам на всех этапах: от подачи заявления и выбора земли до сопровождения проектов. У программы свой фирменный стиль. Правила его использования — в брендбуке ниже."],
         brandLogo: { file: "hectare-logo.svg", alt: "Логотип «Гектар»" },
         resourceLinks: ["hectareBrandbook"],
       },
@@ -854,7 +863,7 @@ const pagesData = [
         id: "ma2030",
         title: "Муравьёв-Амурский 2030",
         navTitle: "МА 2030",
-        paragraphs: ["«Муравьёв-Амурский 2030» — бесплатная годовая образовательная программа по подготовке управленческих кадров для государственной и муниципальной службы. Проект реализуется Министерством по развитию Дальнего Востока и Арктики совместно с АО «Корпорация развития Дальнего Востока и Арктики» (КРДВ)."],
+        paragraphs: ["«Муравьёв-Амурский 2030» — бесплатная годовая образовательная программа по подготовке управленческих кадров для госслужбы. Проект реализуется Министерством по развитию Дальнего Востока и Арктики совместно с КРДВ. У программы свой фирменный стиль. Правила его использования — в брендбуке ниже."],
         brandLogo: { file: "ma2030-logo.svg", alt: "Логотип «Муравьёв-Амурский 2030»" },
         resourceLinks: ["ma2030Brandbook"],
       },
@@ -972,8 +981,18 @@ const pagesData = [
     number: "08",
     title: "Корпоративные материалы",
     navTitle: "Корп. материалы",
-    intro: "Корпоративные носители переводят фирменную систему в рабочие документы: визитки, QR-форматы, материалы дочерних обществ, бланки, навигацию кабинетов, режимник и наградные документы.",
+    intro: "Корпоративные носители переводят фирменную систему в рабочие документы: презентации, визитки, QR-форматы, материалы дочерних обществ, бланки, навигацию кабинетов, режимник и наградные документы.",
     sections: [
+      {
+        id: "presentations",
+        title: "Презентации",
+        paragraphs: ["Шаблоны и правила оформления корпоративных презентаций. Раздел в разработке — материалы появятся позже."],
+        visuals: [
+          { title: "Титульный слайд", caption: "Скоро здесь появится пример" },
+          { title: "Контентный слайд", caption: "Скоро здесь появится пример" },
+          { title: "Финальный слайд", caption: "Скоро здесь появится пример" },
+        ],
+      },
       {
         id: "business-card",
         title: "Визитки",
@@ -1130,7 +1149,7 @@ const pagesData = [
   },
   {
     id: "made",
-    heroVideo: "cover-made.mp4",
+    heroImage: "cover-made-stickers.webp",
     number: "11",
     title: "Товарный знак",
     intro: "Самостоятельный раздел для товарного знака, который поддерживает продукцию резидентов и помогает маркировать происхождение товаров.",
@@ -1788,6 +1807,7 @@ function ContentSection({ section, navigate, activePageId }) {
     section.directory ? <SectionDirectory key="directory" navigate={navigate} activePageId={activePageId} /> : null,
     section.examples ? <ExampleGrid key="examples" items={section.examples} /> : null,
     cardsBeforeAssets ? <CardGrid key="cards-before" items={section.cards} /> : null,
+    section.rules ? <RuleList key="rules" items={section.rules} /> : null,
     section.specs ? <SpecGrid key="specs" items={section.specs} /> : null,
     section.logos ? <LogoLibrary key="logos" items={section.logos} /> : null,
     section.subsidiaryLogos ? <SubsidiaryLogoLibrary key="subsidiary-logos" setId={section.subsidiaryLogos} /> : null,
@@ -1830,7 +1850,6 @@ function ContentSection({ section, navigate, activePageId }) {
           <p key={paragraph}>{t(paragraph)}</p>
         ))}
         {section.keywords && !section.positioningShowcase ? <KeywordWall items={section.keywords} /> : null}
-        {section.rules ? <RuleList items={section.rules} /> : null}
       </div>
       {wideContent.length ? <div className={`section-wide ${section.regimeSigns ? "is-signs" : ""}`}>{wideContent}</div> : null}
     </section>
@@ -1937,7 +1956,7 @@ function SectionDirectory({ navigate, activePageId }) {
                 {hasCover || hasMotionCover || hasLibraryCover ? null : <div className="directory-fallback" />}
               </div>
               <div className="directory-copy">
-                <h3>{t(page.title)}</h3>
+                <h3>{t(page.cardTitle || page.title)}</h3>
                 <p>{t(page.intro)}</p>
                 <small>
                   <span>{t("Открыть раздел")}</span>

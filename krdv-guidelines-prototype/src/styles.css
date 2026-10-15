@@ -4033,6 +4033,8 @@ img {
   --soft-card: #ffffff;
   --soft-line: #dddce2;
   --soft-radius: 24px;
+  --r-inner: 16px;
+  --r-control: 12px;
   background: var(--soft-bg);
 }
 
@@ -4239,20 +4241,6 @@ img {
   border-top-color: var(--soft-line);
 }
 
-.guideline-page.is-soft .end-links {
-  gap: 16px;
-  padding: 32px;
-}
-
-.guideline-page.is-soft .end-links button {
-  border-radius: var(--soft-radius);
-  background: var(--soft-card);
-}
-
-.guideline-page.is-soft .end-links button:is(:hover, :focus-visible) {
-  background: #ffffff;
-  box-shadow: 0 0 0 1px var(--soft-line);
-}
 
 .guideline-page.is-soft .contact-cta,
 .guideline-page.is-soft .contact-cta:is(:hover, :focus-visible) {
@@ -4267,15 +4255,116 @@ img {
   background: #ffffff;
 }
 
+
+/* Навигация между разделами: белый фон, без плашек; предыдущий — слева, следующий — справа. */
 .guideline-page.is-soft .end-links {
+  gap: 32px;
+  padding: 56px 32px;
   background: #ffffff;
 }
 
-.guideline-page.is-soft .end-links button {
+.guideline-page.is-soft .end-links button,
+.guideline-page.is-soft .end-links button:is(:hover, :focus-visible) {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.guideline-page.is-soft .end-links button:last-child {
+  justify-items: end;
+  text-align: right;
+}
+
+.guideline-page.is-soft .end-links span {
+  font-size: 24px;
+  font-weight: 450;
+}
+
+.guideline-page.is-soft .end-links b {
+  font-weight: 450;
+}
+
+.guideline-page.is-soft .end-links button:hover span {
+  color: var(--ui-blue);
+}
+
+@media (max-width: 860px) {
+  .guideline-page.is-soft .end-links {
+    padding: 36px 20px;
+  }
+
+  .guideline-page.is-soft .end-links button:first-child {
+    border-bottom: 0;
+  }
+
+  .guideline-page.is-soft .end-links span {
+    font-size: 19px;
+  }
+}
+
+/* Единые скругления: карточки 24px, превью внутри карточек 16px, кнопки и переключатели 12px. */
+.guideline-page.is-soft :is(
+  .logo-downloads a,
+  .intro-action,
+  .keyword-wall span,
+  .font-style-chips button,
+  .example-grid code,
+  .swatch-copy
+) {
+  border-radius: var(--r-control);
+}
+
+.guideline-page.is-soft :is(
+  .font-family-tabs button,
+  .font-preview-input input,
+  .regime-sign-preview,
+  .logo-preview,
+  .subsidiary-logo-preview,
+  .made-sign-preview
+) {
+  border-radius: var(--r-inner);
+}
+
+/* Подписи на синих плашках — светло-голубые, заголовки — белые. */
+.guideline-page.is-soft :is(.resource-links p, .resource-links em) {
+  color: #d9e9f7;
+}
+
+.guideline-page.is-soft .font-family-tabs button[data-active="true"] span {
+  color: #d9e9f7;
+}
+
+.guideline-page.is-soft .contact-block span:not(:first-child) {
+  color: #d9e9f7;
+}
+
+/* Остатки старого стиля: карточки правил и «Применение», обещание позиционирования, теги. */
+.guideline-page.is-soft :is(.info-card, .rule-list article, .positioning-promise),
+.guideline-page.is-soft :is(.info-card, .rule-list article):hover {
+  border: 0;
+  border-radius: var(--soft-radius);
+  background: var(--soft-card);
+}
+
+.guideline-page.is-soft :is(.info-card, .rule-list article, .spec-grid article) {
+  padding: 24px;
+}
+
+.guideline-page.is-soft .positioning-promise {
+  background:
+    linear-gradient(90deg, rgba(0, 86, 162, 0.08), transparent 44%),
+    var(--soft-card);
+}
+
+.guideline-page.is-soft .positioning-tag-cloud em {
+  border: 0;
+  border-radius: var(--r-control);
   background: var(--soft-bg);
 }
 
-.guideline-page.is-soft .end-links button:is(:hover, :focus-visible) {
-  background: #ecebf0;
-  box-shadow: none;
+.guideline-page.is-soft :is(.font-workbench-controls, .media-caption) {
+  border-color: var(--soft-line);
 }
