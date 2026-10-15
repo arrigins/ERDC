@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, LayoutGroup, MotionConfig, motion } from "motion/react";
+import { AnimatePresence, LayoutGroup, MotionConfig, motion, useReducedMotion } from "motion/react";
 import { MorphIcon } from "morphicons/react";
 import { ColorPanels } from "@paper-design/shaders-react";
 
@@ -686,7 +686,6 @@ const pagesData = [
       {
         id: "promise",
         title: "Бренд-обещание",
-        lead: "Дальний Восток и Арктика — ближе к будущему!",
         paragraphs: ["Вокруг этого обещания строятся смысловые пары: ближе к успеху, ближе к мечте, земля, знания, инфраструктура, карьера, льготы, гектар, масштаб, ипотека 2%."],
         keywords: ["ближе к будущему", "ближе к успеху", "ближе к мечте", "земля", "знания", "инфраструктура", "карьера", "льготы", "гектар", "масштаб", "ипотека 2%"],
         positioningShowcase: true,
@@ -696,11 +695,11 @@ const pagesData = [
         title: "Основные принципы",
         lead: "Наша работа — ваши достижения.",
         paragraphs: ["Привлекаем активных граждан и организации на Дальний Восток и в Арктику, помогаем успешно реализовать проекты, направленные на ускоренное социально-экономическое развитие регионов, решаем проблемы."],
-        cards: [
-          { title: "Качественно", text: "Экспертиза и профессиональный опыт." },
-          { title: "Просто", text: "Упрощенные процедуры, цифровые сервисы." },
-          { title: "Выгодно", text: "Льготы и меры поддержки, повышающие экономическую эффективность проектов." },
-          { title: "Надежно", text: "Защищаем интересы граждан и бизнеса, решаем сложные задачи." },
+        principles: [
+          { title: "Качественно", tone: "#0b2a78", text: "Экспертиза и профессиональный опыт.", video: "cover-typography.mp4" },
+          { title: "Просто", tone: "#0f7a84", text: "Упрощенные процедуры, цифровые сервисы.", video: "cover-text.mp4" },
+          { title: "Выгодно", tone: "#8e1b1d", text: "Льготы и меры поддержки, повышающие экономическую эффективность проектов.", video: "cover-advertising.mp4" },
+          { title: "Надежно", tone: "#0c4fc4", text: "Защищаем интересы граждан и бизнеса, решаем сложные задачи.", video: "cover-corporate.mp4" },
         ],
       },
     ],
@@ -1804,6 +1803,7 @@ function ContentSection({ section, navigate, activePageId }) {
   // Карточки, картинки и ссылки идут на всю ширину секции (под заголовком и текстом), текст — в правой колонке.
   const wideContent = [
     section.positioningShowcase ? <PositioningShowcase key="positioning" /> : null,
+    section.principles ? <PrincipleCards key="principles" items={section.principles} /> : null,
     section.directory ? <SectionDirectory key="directory" navigate={navigate} activePageId={activePageId} /> : null,
     section.examples ? <ExampleGrid key="examples" items={section.examples} /> : null,
     cardsBeforeAssets ? <CardGrid key="cards-before" items={section.cards} /> : null,
@@ -1906,21 +1906,91 @@ function CardGrid({ items }) {
   );
 }
 
+const promiseWords = [
+  { tag: "будущее", word: "будущему" },
+  { tag: "успех", word: "успеху" },
+  { tag: "мечта", word: "мечте" },
+  { tag: "земля", word: "земле" },
+  { tag: "знания", word: "знаниям" },
+  { tag: "инфраструктура", word: "инфраструктуре" },
+  { tag: "карьера", word: "карьере" },
+  { tag: "льготы", word: "льготам" },
+  { tag: "гектар", word: "гектару" },
+  { tag: "масштаб", word: "масштабу" },
+  { tag: "ипотека 2%", word: "ипотеке 2%" },
+];
+
+// Бренд-обещание: статичная часть слогана и сменяющееся слово; теги под слоганом подсвечивают текущее слово.
 function PositioningShowcase() {
-  const promiseTags = ["ближе к будущему", "ближе к успеху", "ближе к мечте", "земля", "знания", "инфраструктура", "карьера", "льготы", "гектар", "масштаб", "ипотека 2%"];
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (paused || reduceMotion) return undefined;
+    const timer = setInterval(() => setIndex((value) => (value + 1) % promiseWords.length), 2200);
+    return () => clearInterval(timer);
+  }, [paused, reduceMotion]);
+
+  const pick = (value) => {
+    setPaused(true);
+    setIndex(value);
+  };
 
   return (
-    <div className="positioning-showcase">
-      <div className="positioning-promise">
-        <div>
-          <strong>{t("Дальний Восток и Арктика — ближе к будущему")}</strong>
-        </div>
-        <div className="positioning-tag-cloud" aria-label={t("Смысловые направления")}>
-          {promiseTags.map((tag) => (
-            <em key={tag}>{t(tag)}</em>
-          ))}
-        </div>
+    <div className="promise-board" onMouseLeave={() => setPaused(false)}>
+      <p className="promise-slogan" aria-live="off">
+        <span className="promise-static">Дальний Восток</span>
+        <span className="promise-static">и{"\u00a0"}Арктика{"\u00a0"}—</span>
+        <span className="promise-row">
+          <span className="promise-static">ближе к</span>
+          <span className="promise-slot">
+            <AnimatePresence mode="popLayout" initial={false}>
+              <motion.span
+                key={promiseWords[index].word}
+                className="promise-word"
+                initial={{ y: "70%", opacity: 0, filter: "blur(8px)" }}
+                animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
+                exit={{ y: "-70%", opacity: 0, filter: "blur(8px)" }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              >
+                {promiseWords[index].word.replace(" ", "\u00a0")}
+              </motion.span>
+            </AnimatePresence>
+          </span>
+        </span>
+      </p>
+      <div className="promise-tags" aria-label={t("Смысловые пары")}>
+        {promiseWords.map((item, value) => (
+          <button
+            type="button"
+            key={item.tag}
+            data-active={value === index}
+            aria-pressed={value === index}
+            onMouseEnter={() => pick(value)}
+            onFocus={() => pick(value)}
+            onClick={() => pick(value)}
+            onBlur={() => setPaused(false)}
+          >
+            {item.tag}
+          </button>
+        ))}
       </div>
+    </div>
+  );
+}
+
+// Принципы: четыре карточки на фирменных «шёлковых» видео, крупное слово сверху и пояснение снизу.
+function PrincipleCards({ items }) {
+  return (
+    <div className="principle-cards">
+      {items.map((item) => (
+        <article className="principle-card" key={item.title} style={{ "--tone": item.tone }}>
+          <video className="principle-video" src={heroAsset(item.video)} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" />
+          <h3>{t(item.title)}</h3>
+          <p>{t(item.text)}</p>
+        </article>
+      ))}
     </div>
   );
 }
