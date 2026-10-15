@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, Fragment } from "react";
 import { AnimatePresence, LayoutGroup, MotionConfig, motion, useReducedMotion } from "motion/react";
 import { MorphIcon } from "morphicons/react";
 import { ColorPanels } from "@paper-design/shaders-react";
@@ -552,6 +552,24 @@ const subsidiaryLogoSets = subsidiaryLogos.reduce((sets, item) => {
   return sets;
 }, {});
 
+// Карточка региона: все четыре версии (RU/EN × горизонтальная/вертикальная) с кнопками скачивания под каждой.
+const subsidiaryRegions = subsidiaryLogos
+  .filter((item) => item.set === "ru-horizontal")
+  .map((ruItem) => {
+    const find = (set, slug = ruItem.slug) => subsidiaryLogos.find((item) => item.set === set && item.slug === slug);
+    const extra = find("ru-vertical", `${ruItem.slug}-extra`);
+    return {
+      slug: ruItem.slug,
+      title: ruItem.title,
+      enTitle: find("en-horizontal")?.title,
+      rows: [
+        { label: "RU", cells: [find("ru-horizontal"), find("ru-vertical")] },
+        { label: "EN", cells: [find("en-horizontal"), find("en-vertical")] },
+        ...(extra ? [{ label: "RU", note: "Дополнительный вертикальный вариант", cells: [null, extra] }] : []),
+      ],
+    };
+  });
+
 const regimeSignIcons = new Set(["tor", "intc", "sar", "korf", "azrf", "spv"]);
 // Ролики при наведении; при замене ролика меняем имя файла, чтобы браузер не взял старый из кэша.
 const regimeSignHoverVideos = {
@@ -637,6 +655,59 @@ const presentationDecks = [
     ],
   },
 ];
+
+// ── Логотип: примеры «можно / нельзя», собранные из исходников (вместо скриншотов из PDF) ──
+const logoUsageExamples = [
+  { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square.svg" }, text: "Логотип используется как неделимый блок: знак и написание вместе" },
+  { verdict: "no", preview: { kind: "logo", file: "krdv-mark-lotus.svg", width: "34%" }, text: "Знак не используется без текстовой части — его легко спутать со знаками других брендов" },
+  { verdict: "no", preview: { kind: "swapText", text: "Дальневосточный\nинвестиционный\nсовет" }, text: "Написание нельзя заменять другим текстом — только «Корпорация развития Дальнего Востока и Арктики»" },
+];
+
+const logoBackgroundExamples = [
+  { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", bg: "#d8e5f6" }, text: "Фирменные цвета и их оттенки с высоким уровнем контраста" },
+  { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square-ondark.svg", bg: "#000000" }, text: "Черный фон — с версией логотипа с белым написанием" },
+  { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", photo: "photostyle-composition-15.webp", width: "34%", position: "top-left" }, text: "Фотография со светлым однородным участком под логотипом" },
+  { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", photo: "photostyle-composition-1.webp", width: "34%", position: "top-left", plate: true }, text: "Если однородного участка нет — используйте белую плашку" },
+  { verdict: "no", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", bg: "#2a64d8" }, text: "Фирменные цвета и оттенки с низким уровнем контраста" },
+  { verdict: "no", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", bg: "#b06bff" }, text: "Нефирменные цвета ярких оттенков" },
+  { verdict: "no", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", bg: "conic-gradient(from 30deg at 30% 40%, #d43b5b, #f2b84b, #3cb39a, #6a3fb5, #d43b5b)" }, text: "Активные цветные паттерны и градиенты" },
+  { verdict: "no", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", photo: "photostyle-composition-11.webp", width: "34%", position: "top-left" }, text: "Неоднородный участок фотографии без плашки" },
+];
+
+const logoMisuseExamples = [
+  { verdict: "no", title: "Старые версии", preview: { kind: "logo", raster: "krdv-logo-old-version.webp", width: "58%" }, text: "Нельзя использовать прежние версии логотипа" },
+  { verdict: "no", title: "Цвет", preview: { kind: "logo", file: "krdv-logo-ru-square-misuse-color.svg" }, text: "Нельзя менять цвета знака и написания" },
+  { verdict: "no", title: "Пропорции", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", style: { transform: "scaleX(1.45)" } }, text: "Нельзя растягивать, сжимать и искажать пропорции" },
+  { verdict: "no", title: "Поворот", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", style: { transform: "rotate(-14deg)" } }, text: "Нельзя поворачивать и наклонять логотип" },
+  { verdict: "no", title: "Типографика", preview: { kind: "swapText", text: "КОРПОРАЦИЯ РАЗВИТИЯ\nДАЛЬНЕГО ВОСТОКА\nИ АРКТИКИ", font: "system" }, text: "Нельзя набирать написание другим шрифтом или менять его компоновку" },
+  { verdict: "no", title: "Эффекты", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", style: { filter: "drop-shadow(6px 8px 5px rgba(0, 0, 0, 0.38))" } }, text: "Нельзя добавлять тени, обводки, свечение и другие эффекты" },
+];
+
+// Кобрендинг: высоты логотипов подобраны так, чтобы знаки выглядели соразмерно.
+const cobrandLogos = {
+  ministry: { file: "minvostok-logo.webp", alt: "Минвостокразвития России", h: 58 },
+  krdv: { file: "krdv-logo-ru-horizontal.svg", alt: "КРДВ", h: 52 },
+  hectare: { file: "hectare-logo.svg", alt: "Гектар", h: 30 },
+  ma2030: { file: "ma2030-logo.svg", alt: "Муравьёв-Амурский 2030", h: 52 },
+};
+
+const cobrandRules = [
+  { label: "Порядок", text: "Если в коммуникации есть КРДВ и министерство, логотип министерства всегда стоит первым — слева" },
+  { label: "Охранное поле", text: "Расстояние между логотипами не меньше охранного поля x; между ними можно поставить тонкую вертикальную линию" },
+  { label: "Соразмерность", text: "Логотипы выравниваются по оптическому весу: ни один не доминирует и не выглядит мельче остальных" },
+  { label: "Расположение", text: "Логотипы стоят в один ряд и выравниваются по горизонтальной оси; все — в одной цветовой версии" },
+];
+
+const cobrandExamples = [
+  { verdict: "yes", preview: { kind: "cobrand", logos: ["ministry", "krdv"], divider: true }, text: "Министерство слева, КРДВ справа, между ними — охранное поле и разделитель" },
+  { verdict: "no", preview: { kind: "cobrand", logos: ["krdv", "ministry"], divider: true }, text: "КРДВ не ставится перед логотипом министерства" },
+  { verdict: "yes", preview: { kind: "cobrand", logos: ["ministry", "krdv", "ma2030"], divider: true, scale: 0.7 }, text: "Три участника — в один ряд, в том же порядке и с равными отступами" },
+  { verdict: "no", preview: { kind: "cobrand", logos: ["krdv", "ma2030"], divider: true, sizes: { krdv: 84, ma2030: 26 } }, text: "Логотипы несоразмерны: один заметно крупнее другого" },
+  { verdict: "no", preview: { kind: "cobrand", logos: ["krdv", "hectare"], gap: 4 }, text: "Нарушено охранное поле: логотипы почти касаются друг друга" },
+  { verdict: "no", preview: { kind: "cobrand", logos: ["krdv", "hectare"], align: "start" }, text: "Логотипы не выровнены по горизонтальной оси" },
+];
+
+const LOGO_PETAL_PATH = "m74.38,25.03c-1.16-8.38-10.13-13.83-10.13-13.83,0,0,3.97,5.23,5.03,11.41.94,5.45-.59,9.24-.59,9.24,0,0-1.82-8.46-8.51-15.56-5.3-5.62-13.93-9.3-13.93-9.3,0,0-3.8,13.78,6.86,27.65-2.21-1.58-4.64-2.82-7.22-3.69-5.29-1.76-11.97-.96-11.97-.96,0,0,4.44,13.3,21.28,17.38-11.14-7.85-14.42-14.62-14.42-14.62,0,0,3.23.27,8.37,2.59,3.38,1.53,11.83,6.16,19.93,11.09-3.1-2.66-7.82-6.82-10.7-10.26-8.86-10.58-5.98-21.03-5.98-21.03,0,0,5.24,2.75,9.63,9.16,2.89,4.23,6.84,15.14,6.84,15.14,0,0,6.93-4.19,5.52-14.4";
 
 const madeSignLangLabels = { ru: "RU", en: "EN" };
 const madeSignLangNames = { ru: "русская", en: "английская" };
@@ -762,7 +833,7 @@ const pagesData = [
           "Рост лотоса символизирует прогресс и развитие, способность противостоять любым трудностям на благо социально-экономического развития территорий Дальнего Востока и Арктики.",
           "Любая версия с измененной подписью или самостоятельным знаком допустима только по письменному решению Департамента визуальных коммуникаций АО «КРДВ».",
         ],
-        logos: ["ru-horizontal", "ru-square"],
+        logos: ["ru-square", "ru-horizontal"],
       },
       {
         id: "versions",
@@ -772,7 +843,7 @@ const pagesData = [
           "Вертикальная и горизонтальная версии логотипа могут равноправно использоваться для идентификации компании.",
           "Русский и английский варианты являются основными видами логотипа. Следует выбирать подходящую версию, учитывая языковую группу аудитории, на которую направлено информационное или рекламное сообщение.",
         ],
-        logos: ["ru-horizontal", "ru-square", "en-horizontal", "en-square"],
+        logos: ["ru-square", "ru-horizontal", "en-square", "en-horizontal"],
         resourceLinks: ["logos"],
       },
       {
@@ -783,46 +854,40 @@ const pagesData = [
           "Логотип нельзя использовать с другим текстом, кроме оригинального — Корпорация развития Дальнего Востока и Арктики.",
           "Если задаче требуется иной состав, сначала фиксируется причина изменения, затем макет направляется в профильный департамент.",
         ],
-        rules: [
-          { label: "Да", text: "Использовать логотип как неделимый блок с оригинальным написанием" },
-          { label: "Нет", text: "Использовать знак отдельно, менять фразу или подменять текстовую часть без письменного разрешения" },
-        ],
-        assetImages: [{ title: "Использование полного логотипа", caption: "Схема из брендбука: знак без текстовой части не используется как самостоятельный логотип.", file: "logo-usage-do-dont.png", wide: true }],
+        logoExamples: logoUsageExamples,
       },
       {
         id: "clearspace",
         title: "Охранное поле",
         paragraphs: [
-          "Охранное поле равно части знака логотипа.",
-          "Это пространство вокруг логотипа, в котором запрещено размещение каких-либо графических элементов, не являющихся частью логотипа.",
-          "В случае если логотип используется в инвертированных цветах, белым начертанием на синем фоне, размеры фона сплошной заливки должны быть не меньше охранной зоны.",
+          "Охранное поле — пространство вокруг логотипа, в котором нельзя размещать другие графические элементы, текст и края носителя.",
+          "Размер поля равен x — высоте левого лепестка знака (около трети высоты логотипа). Поле одинаково для основной и дополнительной версий и считается от крайних точек логотипа.",
+          "Если логотип используется в инвертированных цветах, белым начертанием на синем фоне, размеры фона сплошной заливки должны быть не меньше охранной зоны.",
         ],
-        assetImages: [{ title: "Схема охранного поля", caption: "Минимальное свободное пространство вокруг логотипа.", file: "logo-clearspace.png", wide: true }],
+        clearSpace: true,
       },
       {
         id: "backgrounds",
         title: "Фоны и цвет",
         lead: "Выбор фона и работа с цветом при использовании полноцветного логотипа",
         paragraphs: ["Использование полноцветного логотипа допускается только на фоне, гарантирующем достаточный контраст для читаемости логотипа. В противном случае необходимо использовать дополнительные графические элементы, например плашки."],
-        assetImages: [
-          { title: "Версии для разных фонов", caption: "Светлые и темные фоны для русской и английской версий логотипа.", file: "logo-background-versions.png", wide: true, embeddedText: true },
-          ...logoBackgroundRuleImages,
-        ],
+        logoBackdrops: true,
+        logoExamples: logoBackgroundExamples,
+        logoExampleColumns: 4,
       },
       {
         id: "misuse",
         title: "Запреты",
         lead: "Любое отступление от рекомендаций по нанесению логотипа недопустимо.",
-        assetImages: logoMisuseImages,
+        logoExamples: logoMisuseExamples,
       },
       {
         id: "cobranding",
         title: "Кобрендинг",
-        paragraphs: ["Правила совместного размещения логотипа КРДВ с логотипами партнёров. Раздел в разработке — материалы появятся позже."],
-        visuals: [
-          { title: "Горизонтальная схема", caption: "Скоро здесь появится пример" },
-          { title: "Вертикальная схема", caption: "Скоро здесь появится пример" },
-        ],
+        paragraphs: ["Правила совместного размещения логотипа КРДВ с логотипами министерств, партнеров и проектов."],
+        rules: cobrandRules,
+        logoExamples: cobrandExamples,
+        logoExampleColumns: 2,
       },
     ],
   },
@@ -836,33 +901,15 @@ const pagesData = [
     intro: "Раздел объединяет версии логотипов дочерних обществ: русские и английские, горизонтальные и вертикальные.",
     sections: [
       {
-        id: "ru-horizontal",
-        title: "Основная версия",
-        lead: "Основной способ подписи дочернего общества",
-        paragraphs: ["Используйте горизонтальную версию, когда носитель дает достаточно места для уверенного чтения полного названия общества."],
-        subsidiaryLogos: "ru-horizontal",
+        id: "logos",
+        title: "Логотипы обществ",
+        lead: "У каждого дочернего общества четыре версии логотипа: русская и английская, горизонтальная и вертикальная.",
+        paragraphs: [
+          "Горизонтальная версия — основная: используйте ее, когда носитель дает достаточно места для уверенного чтения полного названия. Вертикальная — для узких и компактных форматов: карточек, стоек, боковых полей.",
+          "Английские версии применяются на международных мероприятиях, англоязычных ресурсах и в материалах для зарубежных партнеров. Кнопки под каждым логотипом скачивают именно эту версию.",
+        ],
+        subsidiaryRegions: true,
         resourceLinks: ["subsidiaryLogos"],
-      },
-      {
-        id: "ru-vertical",
-        title: "Дополнительная версия",
-        lead: "Решение для узких и компактных носителей",
-        paragraphs: ["Вертикальный знак помогает сохранить масштаб и читаемость в карточках, стойках, боковых полях и других ограниченных форматах."],
-        subsidiaryLogos: "ru-vertical",
-      },
-      {
-        id: "en-horizontal",
-        title: "Англоязычная горизонтальная",
-        lead: "Основная версия для внешней англоязычной коммуникации",
-        paragraphs: ["Она используется на международных мероприятиях, англоязычных ресурсах и в материалах для зарубежных партнеров."],
-        subsidiaryLogos: "en-horizontal",
-      },
-      {
-        id: "en-vertical",
-        title: "Англоязычная вертикальная",
-        lead: "Вертикальная англоязычная версия закрывает компактные форматы.",
-        paragraphs: ["Выбирайте ее для международных материалов, где горизонтальная подпись становится слишком мелкой или нарушает композицию носителя."],
-        subsidiaryLogos: "en-vertical",
       },
     ],
   },
@@ -1856,6 +1903,7 @@ function ContentSection({ section, navigate, activePageId }) {
     section.specs ? <SpecGrid key="specs" items={section.specs} /> : null,
     section.logos ? <LogoLibrary key="logos" items={section.logos} /> : null,
     section.subsidiaryLogos ? <SubsidiaryLogoLibrary key="subsidiary-logos" setId={section.subsidiaryLogos} /> : null,
+    section.subsidiaryRegions ? <SubsidiaryRegionCards key="subsidiary-regions" /> : null,
     section.preAssetImages ? <AssetImageGrid key="pre-assets" items={section.preAssetImages} mode={section.preAssetImageMode} /> : null,
     section.brandLogo ? (
       <div className="brand-logo-preview" key="brand-logo">
@@ -1868,6 +1916,9 @@ function ContentSection({ section, navigate, activePageId }) {
     section.regimeSigns ? <RegimeSignLibrary key="regime-signs" /> : null,
     section.madeSigns ? <MadeSignLibrary key="made-signs" /> : null,
     section.slideDecks ? <SlideViewer key="slides" decks={section.slideDecks} /> : null,
+    section.logoBackdrops ? <LogoBackdrops key="logo-backdrops" /> : null,
+    section.clearSpace ? <ClearSpaceBoard key="clearspace" /> : null,
+    section.logoExamples ? <LogoExampleGrid key="logo-examples" items={section.logoExamples} columns={section.logoExampleColumns} /> : null,
     section.assetImages ? <AssetImageGrid key="assets" items={section.assetImages} mode={section.assetImageMode} /> : null,
     cardsAfterAssets ? <CardGrid key="cards-after" items={section.cards} /> : null,
     section.footnote ? (
@@ -2142,6 +2193,58 @@ function LogoDownloads({ variant }) {
   );
 }
 
+function SubsidiaryRegionCards() {
+  return (
+    <div className="subsidiary-region-grid">
+      {subsidiaryRegions.map((region) => (
+        <article className="subsidiary-region-card" key={region.slug}>
+          <header>
+            <h3>{t(region.title)}</h3>
+            {region.enTitle ? <span>{region.enTitle}</span> : null}
+          </header>
+          <div className="subsidiary-matrix">
+            <span />
+            <span className="subsidiary-matrix-head">{t("Горизонтальная")}</span>
+            <span className="subsidiary-matrix-head">{t("Вертикальная")}</span>
+            {region.rows.map((row, rowIndex) => (
+              <Fragment key={`${row.label}-${rowIndex}`}>
+                <span className="subsidiary-matrix-lang" title={row.note ? t(row.note) : undefined}>
+                  {row.label}
+                  {row.note ? <small>{t("доп.")}</small> : null}
+                </span>
+                {row.cells.map((item, cellIndex) =>
+                  item ? (
+                    <div className="subsidiary-cell" key={item.preview}>
+                      <div className={`subsidiary-cell-preview is-${item.orientation}`}>
+                        <img src={subsidiaryAsset(item.preview)} alt={t(`${item.title}, ${item.versionLabel.toLowerCase()}`)} loading="lazy" />
+                      </div>
+                      <div className="logo-downloads">
+                        <div>
+                          {subsidiaryFormats.map((format) => (
+                            <LogoDownloadLink
+                              key={format}
+                              file={item.files[format]}
+                              format={format}
+                              title={`${item.title}, ${item.versionLabel.toLowerCase()}`}
+                              asset={subsidiaryAsset}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <span key={`empty-${cellIndex}`} />
+                  ),
+                )}
+              </Fragment>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
 function SubsidiaryLogoLibrary({ setId }) {
   const items = subsidiaryLogoSets[setId] || [];
 
@@ -2227,6 +2330,163 @@ function RegimeSignLibrary() {
         ))}
       </motion.div>
     </LayoutGroup>
+  );
+}
+
+function VerdictBadge({ verdict }) {
+  return (
+    <span className={`verdict-badge is-${verdict}`} aria-label={t(verdict === "yes" ? "Можно" : "Нельзя")}>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        {verdict === "yes" ? <path d="M6 12.5l4 4 8-9" /> : <path d="M7 7l10 10M17 7L7 17" />}
+      </svg>
+    </span>
+  );
+}
+
+function LogoExamplePreview({ preview }) {
+  if (preview.kind === "cobrand") {
+    const scale = preview.scale || 1;
+    return (
+      <div className={`cobrand-row is-align-${preview.align || "center"}`} style={preview.gap != null ? { "--cobrand-gap": `${preview.gap}px` } : undefined}>
+        {preview.logos.map((id, index) => {
+          const logo = cobrandLogos[id];
+          const height = (preview.sizes?.[id] || logo.h) * scale;
+          return (
+            <Fragment key={id}>
+              {index > 0 && preview.divider ? <span className="cobrand-divider" /> : null}
+              <img src={logoAsset(logo.file)} alt={t(logo.alt)} style={{ height }} loading="lazy" />
+            </Fragment>
+          );
+        })}
+      </div>
+    );
+  }
+
+  if (preview.kind === "swapText") {
+    return (
+      <div className={`logo-swap-text ${preview.font === "system" ? "is-system" : ""}`}>
+        <img src={logoAsset("krdv-mark-lotus.svg")} alt="" />
+        <span>{preview.text}</span>
+      </div>
+    );
+  }
+
+  const img = (
+    <img
+      src={logoAsset(preview.raster || preview.file)}
+      alt=""
+      loading="lazy"
+      style={{ width: preview.width, ...preview.style }}
+    />
+  );
+
+  return (
+    <div className={`logo-example-art ${preview.position ? `is-${preview.position}` : ""}`}>
+      {preview.plate ? <span className="logo-example-plate">{img}</span> : img}
+    </div>
+  );
+}
+
+function LogoExampleGrid({ items, columns = 3 }) {
+  return (
+    <div className={`logo-example-grid cols-${columns}`}>
+      {items.map((item, index) => {
+        const { preview } = item;
+        const background = preview.photo ? `center / cover no-repeat url(${rasterAsset(preview.photo)})` : preview.bg;
+        return (
+          <article className={`logo-example is-${item.verdict}`} key={`${item.text}-${index}`}>
+            <div className="logo-example-preview" style={background ? { background } : undefined}>
+              <LogoExamplePreview preview={preview} />
+              <VerdictBadge verdict={item.verdict} />
+            </div>
+            <div className="logo-example-copy">
+              {item.title ? <h3>{t(item.title)}</h3> : null}
+              <p>{t(noDot(item.text))}</p>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  );
+}
+
+function LogoBackdrops() {
+  const versions = ["ru-square", "en-square", "ru-horizontal", "en-horizontal"];
+  return (
+    <div className="logo-backdrops">
+      <figure className="logo-backdrop is-light">
+        <div>
+          {versions.map((id) => (
+            <img key={id} className={`is-${id.split("-")[1]}`} src={logoAsset(`krdv-logo-${id}.svg`)} alt="" loading="lazy" />
+          ))}
+        </div>
+        <figcaption>{t("Для светлых фонов — написание черного цвета")}</figcaption>
+      </figure>
+      <figure className="logo-backdrop is-dark">
+        <div>
+          {versions.map((id) => (
+            <img key={id} className={`is-${id.split("-")[1]}`} src={logoAsset(`krdv-logo-${id}-ondark.svg`)} alt="" loading="lazy" />
+          ))}
+        </div>
+        <figcaption>{t("Для темных фонов — написание белого цвета")}</figcaption>
+      </figure>
+    </div>
+  );
+}
+
+// Схема охранного поля: x — высота левого лепестка знака (≈ треть высоты логотипа).
+const CLEARSPACE_X = 40;
+
+function ClearSpaceDiagram({ file, width, height, label }) {
+  const x = CLEARSPACE_X;
+  const pad = 30;
+  const vb = [-x - pad, -x - pad, width + 2 * (x + pad), height + 2 * (x + pad)];
+  const corners = [
+    [-x, -x],
+    [width, -x],
+    [-x, height],
+    [width, height],
+  ];
+  const guide = (key, x1, y1, x2, y2, delay) => (
+    <line key={key} className="cs-draw cs-guide" x1={x1} y1={y1} x2={x2} y2={y2} pathLength={1} style={{ "--cs-delay": `${delay}ms` }} />
+  );
+
+  return (
+    <figure className="clearspace-card">
+      <svg className="clearspace-diagram" viewBox={vb.join(" ")} role="img" aria-label={t(`Охранное поле: ${label}`)}>
+        <rect className="cs-fade cs-zone" x={-x} y={-x} width={width + 2 * x} height={height + 2 * x} style={{ "--cs-delay": "200ms" }} />
+        <image className="cs-fade cs-logo" href={logoAsset(file)} x={0} y={0} width={width} height={height} style={{ "--cs-delay": "0ms" }} />
+        {guide("t", vb[0], 0, vb[0] + vb[2], 0, 500)}
+        {guide("b", vb[0], height, vb[0] + vb[2], height, 620)}
+        {guide("l", 0, vb[1], 0, vb[1] + vb[3], 740)}
+        {guide("r", width, vb[1], width, vb[1] + vb[3], 860)}
+        <rect className="cs-draw cs-outline" x={-x} y={-x} width={width + 2 * x} height={height + 2 * x} pathLength={1} style={{ "--cs-delay": "1000ms" }} />
+        {corners.map(([cx, cy], index) => (
+          <g key={`${cx}-${cy}`} className="cs-fade cs-unit" style={{ "--cs-delay": `${1500 + index * 120}ms` }}>
+            <rect x={cx} y={cy} width={x} height={x} />
+            <path d={LOGO_PETAL_PATH} transform={`translate(${cx - 33.9} ${cy - 7})`} />
+          </g>
+        ))}
+        <g className="cs-fade cs-measure" style={{ "--cs-delay": "2100ms" }}>
+          <line x1={width / 2} y1={-x + 4} x2={width / 2} y2={-4} />
+          <text x={width / 2 + 6} y={-x / 2 + 4}>x</text>
+          <line x1={-x + 4} y1={height / 2} x2={-4} y2={height / 2} />
+          <text x={-x / 2 - 3} y={height / 2 - 6}>x</text>
+          <line className="cs-petal-mark" x1={28} y1={7} x2={28} y2={47.4} />
+          <text x={18} y={31}>x</text>
+        </g>
+      </svg>
+      <figcaption>{t(label)}</figcaption>
+    </figure>
+  );
+}
+
+function ClearSpaceBoard() {
+  return (
+    <div className="clearspace-board">
+      <ClearSpaceDiagram file="krdv-logo-ru-square.svg" width={209.8} height={125.31} label="Основная версия" />
+      <ClearSpaceDiagram file="krdv-logo-ru-horizontal.svg" width={384.61} height={69} label="Дополнительная версия" />
+    </div>
   );
 }
 

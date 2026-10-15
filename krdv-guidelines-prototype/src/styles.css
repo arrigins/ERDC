@@ -785,12 +785,12 @@ img {
 .hero-cover-mark-outline path {
   fill: transparent;
   stroke: rgba(255, 255, 255, 0.95);
-  stroke-width: 2;
+  stroke-width: 1.4;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  vector-effect: non-scaling-stroke;
+  /* Чуть длиннее 1, чтобы контур гарантированно замыкался до конца (раньше у нижнего лепестка оставался разрыв). */
+  stroke-dasharray: 1.04 1.04;
+  stroke-dashoffset: 1.04;
   animation: lotusContourTrace 5.8s var(--ease) infinite;
 }
 
@@ -3713,7 +3713,7 @@ img {
 @keyframes lotusContourTrace {
   0% {
     opacity: 0.14;
-    stroke-dashoffset: 1;
+    stroke-dashoffset: 1.04;
   }
 
   34% {
@@ -4824,5 +4824,490 @@ img {
 
   .slide-viewer-thumbs button {
     width: 30%;
+  }
+}
+
+/* ── Логотип: карточки «можно / нельзя» ── */
+.logo-example-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.logo-example-grid.cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.logo-example {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border-radius: var(--soft-radius, 24px);
+  padding: 10px;
+  background: #ffffff;
+}
+
+.logo-example-preview {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--r-inner, 16px);
+  background: var(--soft-bg, #f6f5f8);
+}
+
+.logo-example-art {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.logo-example-art img {
+  width: 52%;
+  height: auto;
+  max-height: 70%;
+  object-fit: contain;
+}
+
+.logo-example-art.is-top-left {
+  place-items: start;
+  padding: 7%;
+}
+
+.logo-example-plate {
+  display: grid;
+  place-items: center;
+  width: 42%;
+  border-radius: 10px;
+  padding: 5% 4%;
+  background: #ffffff;
+}
+
+.logo-example-plate img {
+  width: 100% !important;
+}
+
+.logo-swap-text {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: auto auto;
+  place-content: center;
+  align-items: end;
+  gap: 4px 8px;
+}
+
+.logo-swap-text img {
+  width: clamp(70px, 12vw, 120px);
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+.logo-swap-text span {
+  grid-column: 2;
+  white-space: pre-line;
+  color: #1d1d1b;
+  font-size: clamp(12px, 1.15vw, 16px);
+  line-height: 1.12;
+  font-weight: 500;
+}
+
+.logo-swap-text.is-system span {
+  font-family: Arial, "Helvetica Neue", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.logo-example-copy {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 16px 12px 10px;
+}
+
+.logo-example-copy h3 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+.logo-example-copy p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.verdict-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.verdict-badge svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.verdict-badge.is-yes svg {
+  stroke: #1f9d55;
+}
+
+.verdict-badge.is-no svg {
+  stroke: #e31f26;
+}
+
+/* ── Логотип: светлые и темные фоны ── */
+.logo-backdrops {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.logo-backdrop {
+  margin: 0;
+  display: grid;
+  gap: 0;
+  overflow: hidden;
+  border-radius: var(--soft-radius, 24px);
+}
+
+.logo-backdrop > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  justify-items: center;
+  gap: 36px 24px;
+  padding: 48px 36px;
+}
+
+.logo-backdrop img.is-square {
+  width: min(78%, 190px);
+}
+
+.logo-backdrop img.is-horizontal {
+  width: min(96%, 300px);
+}
+
+.logo-backdrop.is-light {
+  background: #ffffff;
+}
+
+/* Темный фон — холодный, без желтого оттенка. */
+.logo-backdrop.is-dark {
+  background: #10141c;
+}
+
+.logo-backdrop figcaption {
+  padding: 0 36px 28px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.logo-backdrop.is-dark figcaption {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+/* ── Логотип: охранное поле с анимацией построения ── */
+.clearspace-board {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+  gap: 16px;
+}
+
+.clearspace-card {
+  margin: 0;
+  display: grid;
+  align-content: space-between;
+  gap: 12px;
+  border-radius: var(--soft-radius, 24px);
+  padding: 24px 24px 20px;
+  background: #ffffff;
+}
+
+.clearspace-card figcaption {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.clearspace-diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  align-self: center;
+  overflow: visible;
+}
+
+.cs-zone {
+  fill: rgba(27, 62, 146, 0.06);
+}
+
+.cs-guide {
+  stroke: rgba(27, 62, 146, 0.35);
+  stroke-width: 0.6;
+}
+
+.cs-outline {
+  fill: none;
+  stroke: var(--ui-blue);
+  stroke-width: 0.9;
+}
+
+.cs-unit rect {
+  fill: rgba(27, 62, 146, 0.08);
+  stroke: rgba(27, 62, 146, 0.35);
+  stroke-width: 0.5;
+}
+
+.cs-unit path {
+  fill: rgba(27, 62, 146, 0.28);
+}
+
+.cs-measure line {
+  stroke: #e31f26;
+  stroke-width: 0.8;
+}
+
+.cs-measure text {
+  fill: #e31f26;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+/* До появления секции схема пустая; при прокрутке элементы выстраиваются по очереди. */
+.cs-draw {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+}
+
+.cs-fade {
+  opacity: 0;
+}
+
+.content-section[data-inview="true"] .cs-draw {
+  animation: csDraw 900ms cubic-bezier(0.65, 0, 0.35, 1) var(--cs-delay, 0ms) forwards;
+}
+
+.content-section[data-inview="true"] .cs-fade {
+  animation: csFade 600ms ease var(--cs-delay, 0ms) forwards;
+}
+
+@keyframes csDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes csFade {
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-draw {
+    stroke-dashoffset: 0;
+  }
+
+  .cs-fade {
+    opacity: 1;
+  }
+
+  .content-section[data-inview="true"] .cs-draw,
+  .content-section[data-inview="true"] .cs-fade {
+    animation: none;
+  }
+}
+
+/* ── Кобрендинг ── */
+.cobrand-row {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--cobrand-gap, clamp(14px, 2vw, 26px));
+  padding: 0 6%;
+}
+
+.cobrand-row.is-align-start {
+  align-items: flex-start;
+  padding-top: 18%;
+}
+
+.cobrand-row img {
+  flex: 0 1 auto;
+  min-width: 0;
+  width: auto;
+  object-fit: contain;
+}
+
+.logo-example-grid.cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.logo-example-grid.cols-2 .logo-example-preview {
+  aspect-ratio: 16 / 7;
+}
+
+.cobrand-divider {
+  flex: 0 0 1px;
+  align-self: center;
+  height: 56px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+@media (max-width: 1180px) {
+  .logo-example-grid,
+  .logo-example-grid.cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .logo-example-grid.cols-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .clearspace-board,
+  .logo-backdrops {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .logo-example-grid,
+  .logo-example-grid.cols-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .cobrand-row {
+    transform: scale(0.62);
+  }
+}
+
+/* ── Дочерние общества: карточка региона с матрицей версий ── */
+.subsidiary-region-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.subsidiary-region-card {
+  display: grid;
+  gap: 18px;
+  border-radius: var(--soft-radius, 24px);
+  padding: 22px 18px 18px;
+  background: #ffffff;
+}
+
+.subsidiary-region-card header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  padding: 0 4px;
+}
+
+.subsidiary-region-card h3 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.15;
+  font-weight: 450;
+}
+
+.subsidiary-region-card header span {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.subsidiary-matrix {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.subsidiary-matrix-head,
+.subsidiary-matrix-lang {
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: var(--mono-tracking);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.subsidiary-matrix-head {
+  padding-left: 2px;
+}
+
+.subsidiary-matrix-lang {
+  display: grid;
+  gap: 2px;
+  padding-top: 12px;
+}
+
+.subsidiary-matrix-lang small {
+  font-size: 9px;
+  text-transform: none;
+}
+
+.subsidiary-cell {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.subsidiary-cell-preview {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--r-inner, 16px);
+  background: var(--soft-bg, #f6f5f8);
+}
+
+.subsidiary-cell-preview img {
+  position: absolute;
+  inset: 16% 10%;
+  width: 80%;
+  height: 68%;
+  object-fit: contain;
+}
+
+.subsidiary-cell-preview.is-vertical img {
+  inset: 12% 20%;
+  width: 60%;
+  height: 76%;
+}
+
+.subsidiary-cell .logo-downloads {
+  margin: 0;
+  padding: 0;
+}
+
+.subsidiary-cell .logo-downloads > div {
+  gap: 6px;
+}
+
+.subsidiary-cell .logo-downloads a {
+  min-height: 32px;
+  gap: 5px;
+  padding: 0 9px;
+  font-size: 11px;
+}
+
+@media (max-width: 1180px) {
+  .subsidiary-region-grid {
+    grid-template-columns: 1fr;
   }
 }
