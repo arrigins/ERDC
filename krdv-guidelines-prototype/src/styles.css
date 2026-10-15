@@ -4024,9 +4024,9 @@ img {
 /* Эксперимент (только страница «Режимы и программы», page.softLayout):
    светло-серый фон страницы, белые скруглённые блоки без серых обводок. */
 .guideline-page.is-soft {
-  --soft-bg: #eceff0;
-  --soft-card: #fbf9f9;
-  --soft-line: #d7dbde;
+  --soft-bg: #f6f5f8;
+  --soft-card: #ffffff;
+  --soft-line: #dddce2;
   --soft-radius: 24px;
   background: var(--soft-bg);
 }
