@@ -4955,51 +4955,44 @@ img {
   line-height: 1.35;
 }
 
-/* Метка «Можно / Нельзя»: цветная плашка со значком и словом — считывается при быстром скролле. */
+/* Метка «можно / нельзя»: белый кружок с цветным значком. */
 .verdict-badge {
   position: absolute;
   top: 12px;
   right: 12px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 30px;
-  border-radius: var(--r-control, 12px);
-  padding: 0 12px 0 9px;
-  color: #ffffff;
-  font-family: var(--mono);
-  font-size: 12px;
-  line-height: 1;
-  letter-spacing: var(--mono-tracking);
-  text-transform: uppercase;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 
 .verdict-badge svg {
-  width: 15px;
-  height: 15px;
+  width: 17px;
+  height: 17px;
   fill: none;
-  stroke: currentColor;
-  stroke-width: 2.6;
+  stroke-width: 2.2;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-.verdict-badge.is-yes {
-  background: #1f9d55;
+.verdict-badge.is-yes svg {
+  stroke: #2a9d5c;
 }
 
-.verdict-badge.is-no {
-  background: #e31f26;
+.verdict-badge.is-no svg {
+  stroke: #e31f26;
 }
 
-/* Цветная полоска снизу превью дублирует метку цветом. */
+/* Деликатная полоска под превью — светлый полупрозрачный оттенок. */
 .logo-example.is-yes .logo-example-preview {
-  box-shadow: inset 0 -4px 0 #1f9d55;
+  box-shadow: inset 0 -2px 0 rgba(42, 157, 92, 0.35);
 }
 
 .logo-example.is-no .logo-example-preview {
-  box-shadow: inset 0 -4px 0 #e31f26;
+  box-shadow: inset 0 -2px 0 rgba(227, 31, 38, 0.3);
 }
 
 /* ── Логотип: светлые и темные фоны ── */
@@ -5382,7 +5375,7 @@ img {
 }
 
 .logo-pair-card.is-square .logo-pair-preview img {
-  width: clamp(110px, 12vw, 170px);
+  width: calc(clamp(110px, 12vw, 170px) * var(--logo-ratio, 1));
   height: auto;
 }
 
@@ -5392,17 +5385,14 @@ img {
 }
 
 .logo-pair-card.is-horizontal .logo-pair-preview img {
-  width: clamp(200px, 22vw, 300px);
+  width: calc(clamp(200px, 22vw, 300px) * var(--logo-ratio, 1));
   height: auto;
 }
 
-.logo-pair-preview figcaption,
 .logo-pair-download-row > span {
-  font-family: var(--mono);
-  font-size: 11px;
-  line-height: 1;
-  letter-spacing: var(--mono-tracking);
   color: var(--muted);
+  font-size: 14px;
+  line-height: 1.2;
 }
 
 .logo-pair-copy {
@@ -5441,7 +5431,7 @@ img {
 
 .logo-pair-download-row {
   display: grid;
-  grid-template-columns: 28px minmax(0, 1fr);
+  grid-template-columns: 86px minmax(0, 1fr);
   align-items: center;
   gap: 8px;
 }
@@ -5475,6 +5465,11 @@ img {
 .subsidiary-row-cells .subsidiary-cell-preview {
   aspect-ratio: auto;
   height: clamp(150px, 13vw, 200px);
+}
+
+/* Оптическая компенсация: тяжёлая надпись под знаком визуально тянет вправо — чуть сдвигаем влево. */
+.subsidiary-row-cells .subsidiary-cell-preview.is-vertical img {
+  transform: translateX(-4%);
 }
 
 .subsidiary-cell-label {

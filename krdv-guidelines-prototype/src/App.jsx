@@ -703,8 +703,6 @@ const cobrandRules = [
 const cobrandExamples = [
   { verdict: "yes", preview: { kind: "cobrand", logos: ["ministry", "krdv"], divider: true }, text: "Министерство слева, КРДВ справа, между ними — охранное поле и тонкий разделитель" },
   { verdict: "yes", preview: { kind: "cobrand", logos: ["ministry", "krdv", "ma2030"], divider: true, scale: 0.7 }, text: "Три участника — в один ряд, министерство первым, отступы между логотипами равные" },
-  { verdict: "yes", preview: { kind: "cobrand", logos: ["krdv", "hectare"], divider: true }, text: "КРДВ и проект: логотипы соразмерны и выровнены по горизонтальной оси" },
-  { verdict: "yes", preview: { kind: "cobrand", logos: ["ministry", "krdv", "hectare"], divider: true, scale: 0.7 }, text: "Министерство, КРДВ и проект — порядок и охранное поле сохраняются при любом количестве логотипов" },
 ];
 
 const LOGO_PETAL_PATH = "m74.38,25.03c-1.16-8.38-10.13-13.83-10.13-13.83,0,0,3.97,5.23,5.03,11.41.94,5.45-.59,9.24-.59,9.24,0,0-1.82-8.46-8.51-15.56-5.3-5.62-13.93-9.3-13.93-9.3,0,0-3.8,13.78,6.86,27.65-2.21-1.58-4.64-2.82-7.22-3.69-5.29-1.76-11.97-.96-11.97-.96,0,0,4.44,13.3,21.28,17.38-11.14-7.85-14.42-14.62-14.42-14.62,0,0,3.23.27,8.37,2.59,3.38,1.53,11.83,6.16,19.93,11.09-3.1-2.66-7.82-6.82-10.7-10.26-8.86-10.58-5.98-21.03-5.98-21.03,0,0,5.24,2.75,9.63,9.16,2.89,4.23,6.84,15.14,6.84,15.14,0,0,6.93-4.19,5.52-14.4";
@@ -2159,6 +2157,8 @@ const logoPairs = [
     title: "Вертикальная версия",
     description: "Подходит для компактных зон, вертикальных композиций, карточек и носителей, где горизонтальная версия теряет масштаб. Русская — для русскоязычных материалов, английская — для международных коммуникаций и зарубежной аудитории",
     langs: { ru: "ru-square", en: "en-square" },
+    // Ширина пропорциональна ширине исходного файла — знак в обеих версиях одного размера, без искажений.
+    ratios: { ru: 1, en: 183.59 / 209.8 },
   },
   {
     id: "horizontal",
@@ -2166,6 +2166,7 @@ const logoPairs = [
     title: "Горизонтальная версия",
     description: "Используется, когда на носителе достаточно горизонтального пространства и логотип должен читаться как главный идентификатор. Русская — для русскоязычных материалов, английская — для англоязычных ресурсов и международных мероприятий",
     langs: { ru: "ru-horizontal", en: "en-horizontal" },
+    ratios: { ru: 1, en: 343.43 / 384.61 },
   },
 ];
 
@@ -2176,10 +2177,13 @@ function LogoPairLibrary() {
         <article className={`logo-pair-card is-${pair.id}`} key={pair.id}>
           <div className="logo-pair-preview">
             {Object.entries(pair.langs).map(([lang, id]) => (
-              <figure key={lang}>
-                <img src={logoAsset(logoVariants[id].preview)} alt={t(logoVariants[id].title)} loading="lazy" />
-                <figcaption>{lang.toUpperCase()}</figcaption>
-              </figure>
+              <img
+                key={lang}
+                src={logoAsset(logoVariants[id].preview)}
+                alt={t(logoVariants[id].title)}
+                loading="lazy"
+                style={{ "--logo-ratio": pair.ratios[lang] }}
+              />
             ))}
           </div>
           <div className="logo-pair-copy">
@@ -2191,7 +2195,7 @@ function LogoPairLibrary() {
                 const variant = logoVariants[id];
                 return (
                   <div className="logo-pair-download-row" key={lang}>
-                    <span>{lang.toUpperCase()}</span>
+                    <span>{t(lang === "ru" ? "Русская" : "Английская")}</span>
                     <div className="logo-downloads">
                       <div>
                         {logoFormats
@@ -2265,9 +2269,8 @@ function SubsidiaryRegionCards() {
             {region.enTitle ? <span>{region.enTitle}</span> : null}
           </header>
           <div className={`subsidiary-row-cells ${region.cells.length > 4 ? "has-extra" : ""}`}>
-            {region.cells.map(({ item, label }) => (
+            {region.cells.map(({ item }) => (
               <div className="subsidiary-cell" key={item.preview}>
-                <span className="subsidiary-cell-label">{t(label)}</span>
                 <div className={`subsidiary-cell-preview is-${item.orientation}`}>
                   <img src={subsidiaryAsset(item.preview)} alt={t(`${item.title}, ${item.versionLabel.toLowerCase()}`)} loading="lazy" />
                 </div>
@@ -2383,11 +2386,10 @@ function RegimeSignLibrary() {
 
 function VerdictBadge({ verdict }) {
   return (
-    <span className={`verdict-badge is-${verdict}`}>
+    <span className={`verdict-badge is-${verdict}`} role="img" aria-label={t(verdict === "yes" ? "Можно" : "Нельзя")}>
       <svg viewBox="0 0 24 24" aria-hidden="true">
         {verdict === "yes" ? <path d="M6 12.5l4 4 8-9" /> : <path d="M7 7l10 10M17 7L7 17" />}
       </svg>
-      {t(verdict === "yes" ? "Можно" : "Нельзя")}
     </span>
   );
 }
