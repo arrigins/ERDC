@@ -2005,7 +2005,8 @@ function PositioningShowcase() {
           swirl={0.35}
           grainMixer={0}
           grainOverlay={0}
-          speed={reduceMotion ? 0 : 0.22}
+          speed={reduceMotion ? 0 : 0.3}
+          frame={42000}
           scale={1.15}
           maxPixelCount={1600000}
           minPixelRatio={1}
