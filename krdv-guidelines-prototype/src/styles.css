@@ -5524,6 +5524,15 @@ img {
 }
 
 /* ── Корп. материалы: носители (визитки, бланки, таблички) — белый носитель на сером поле с мягкой тенью ── */
+/* Как у знаков: белая карточка с отступом 10px, внутри отдельная скруглённая серая плашка */
+.guideline-page.is-soft .asset-image-card.is-mockup {
+  padding: 10px;
+}
+
+.guideline-page.is-soft .asset-image-card.is-mockup .asset-image-copy {
+  padding: 14px 6px 6px;
+}
+
 .asset-image-card.is-mockup .asset-image-frame {
   display: grid;
   place-items: center;
