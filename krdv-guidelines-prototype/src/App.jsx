@@ -616,6 +616,28 @@ const madeSignGroups = [
   })),
 }));
 
+// Слайды шаблонов презентаций — показываются листалкой.
+const presentationDecks = [
+  {
+    id: "light",
+    title: "Светлый",
+    slides: [
+      { title: "Таблица и ключевые цифры", file: "pres-light-slide-1.webp" },
+      { title: "Карточки услуг", file: "pres-light-slide-2.webp" },
+      { title: "Иконки-иллюстрации", file: "pres-light-slide-3.webp" },
+    ],
+  },
+  {
+    id: "dark",
+    title: "Темный",
+    slides: [
+      { title: "Инфографика", file: "pres-dark-slide-1.webp" },
+      { title: "Иконки-иллюстрации", file: "pres-dark-slide-2.webp" },
+      { title: "Карта и показатели", file: "pres-dark-slide-3.webp" },
+    ],
+  },
+];
+
 const madeSignLangLabels = { ru: "RU", en: "EN" };
 const madeSignLangNames = { ru: "русская", en: "английская" };
 
@@ -1003,12 +1025,17 @@ const pagesData = [
       {
         id: "presentations",
         title: "Презентации",
-        paragraphs: ["Шаблоны и правила оформления корпоративных презентаций. Раздел в разработке — материалы появятся позже."],
-        visuals: [
-          { title: "Титульный слайд", caption: "Скоро здесь появится пример" },
-          { title: "Контентный слайд", caption: "Скоро здесь появится пример" },
-          { title: "Финальный слайд", caption: "Скоро здесь появится пример" },
+        paragraphs: ["Для корпоративных презентаций есть два шаблона: светлый — для документов и отчетов, темный — для выступлений и мероприятий."],
+        assetImages: [
+          { title: "Светлый шаблон", caption: "Обложка", file: "pres-light-cover.webp" },
+          { title: "Темный шаблон", caption: "Обложка", file: "pres-dark-cover.webp" },
         ],
+      },
+      {
+        id: "presentation-slides",
+        title: "Слайды",
+        paragraphs: ["Примеры слайдов из шаблонов. Переключайте шаблон и листайте слайды стрелками."],
+        slideDecks: presentationDecks,
       },
       {
         id: "business-card",
@@ -1840,6 +1867,7 @@ function ContentSection({ section, navigate, activePageId }) {
     section.regimePalette ? <RegimePalette key="regime-palette" items={section.regimePalette} /> : null,
     section.regimeSigns ? <RegimeSignLibrary key="regime-signs" /> : null,
     section.madeSigns ? <MadeSignLibrary key="made-signs" /> : null,
+    section.slideDecks ? <SlideViewer key="slides" decks={section.slideDecks} /> : null,
     section.assetImages ? <AssetImageGrid key="assets" items={section.assetImages} mode={section.assetImageMode} /> : null,
     cardsAfterAssets ? <CardGrid key="cards-after" items={section.cards} /> : null,
     section.footnote ? (
@@ -2199,6 +2227,76 @@ function RegimeSignLibrary() {
         ))}
       </motion.div>
     </LayoutGroup>
+  );
+}
+
+function SlideViewer({ decks }) {
+  const [deckId, setDeckId] = useState(decks[0].id);
+  const [index, setIndex] = useState(0);
+  const deck = decks.find((item) => item.id === deckId) || decks[0];
+  const total = deck.slides.length;
+  const slide = deck.slides[index] || deck.slides[0];
+  const go = (step) => setIndex((current) => (current + step + total) % total);
+
+  return (
+    <div className="slide-viewer">
+      <div className="slide-viewer-bar">
+        <div className="slide-viewer-tabs" role="tablist" aria-label={t("Шаблон презентации")}>
+          {decks.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              role="tab"
+              aria-selected={item.id === deck.id}
+              data-active={item.id === deck.id}
+              onClick={() => {
+                setDeckId(item.id);
+                setIndex(0);
+              }}
+            >
+              {t(item.title)}
+            </button>
+          ))}
+        </div>
+        <div className="slide-viewer-nav">
+          <span>
+            {index + 1} / {total}
+          </span>
+          <button type="button" onClick={() => go(-1)} aria-label={t("Предыдущий слайд")}>
+            <UiIcon icon={ICONS.arrowLeft} size={16} strokeWidth={1.5} />
+          </button>
+          <button type="button" onClick={() => go(1)} aria-label={t("Следующий слайд")}>
+            <UiIcon icon={ICONS.arrowRight} size={16} strokeWidth={1.5} />
+          </button>
+        </div>
+      </div>
+      <div className="slide-viewer-stage">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.img
+            key={`${deck.id}-${index}`}
+            src={rasterAsset(slide.file)}
+            alt={t(slide.title)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+          />
+        </AnimatePresence>
+      </div>
+      <div className="slide-viewer-thumbs">
+        {deck.slides.map((item, itemIndex) => (
+          <button
+            key={item.file}
+            type="button"
+            data-active={itemIndex === index}
+            onClick={() => setIndex(itemIndex)}
+            aria-label={t(`Слайд ${itemIndex + 1}: ${item.title}`)}
+          >
+            <img src={rasterAsset(item.file)} alt="" loading="lazy" />
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
 
