@@ -1064,8 +1064,8 @@ const pagesData = [
           { title: "Способ печати", items: ["Офсетная печать.", "Цифровая печать.", "УФ-печать."] },
         ],
         assetImages: [
-          { title: "Русская визитка", caption: "Основной вариант для деловой коммуникации внутри России.", file: "business-card-ru.png" },
-          { title: "Английская визитка", caption: "Версия для международных встреч и англоязычных контактов.", file: "business-card-en.png" },
+          { title: "Русская визитка", caption: "Основной вариант для деловой коммуникации внутри России.", file: "business-card-ru-white.webp", mockup: true },
+          { title: "Английская визитка", caption: "Версия для международных встреч и англоязычных контактов.", file: "business-card-en-white.webp", mockup: true },
         ],
         resourceLinks: ["businessCards"],
       },
@@ -1077,8 +1077,8 @@ const pagesData = [
           { title: "QR-зона", items: ["Кегли и гарнитура сохраняют базовую сетку.", "Код размещается только в отведенной области.", "Контактный блок не сдвигается и не теряет иерархию."] },
         ],
         assetImages: [
-          { title: "Русская визитка с QR", caption: "Контактная информация дополнена переходом в цифровой профиль.", file: "business-card-qr-ru.png" },
-          { title: "Английская визитка с QR", caption: "Международная версия с тем же расположением кода.", file: "business-card-qr-en.png" },
+          { title: "Русская визитка с QR", caption: "Контактная информация дополнена переходом в цифровой профиль.", file: "business-card-qr-ru-white.webp", mockup: true },
+          { title: "Английская визитка с QR", caption: "Международная версия с тем же расположением кода.", file: "business-card-qr-en-white.webp", mockup: true },
         ],
         resourceLinks: ["businessCardsQr"],
       },
@@ -1090,9 +1090,9 @@ const pagesData = [
           { title: "Идентификатор ДО", items: ["Шрифтовая сетка наследует стандартную визитку АО «КРДВ».", "Логотип и адресный блок подставляются из комплекта дочернего общества.", "QR-зона используется только в макетах, где она предусмотрена."] },
         ],
         assetImages: [
-          { title: "Визитки ДО: серия", caption: "Группа карточек показывает, как меняется региональный идентификатор.", file: "subsidiary-card-1.png" },
-          { title: "Визитки ДО: контакты", caption: "Компоновка держит должность, телефон, почту и адрес в общей сетке.", file: "subsidiary-card-2.png" },
-          { title: "Визитки ДО: регионы", caption: "Серия проверяет единый масштаб логотипов разных обществ.", file: "subsidiary-card-3.png" },
+          { title: "Визитки ДО: серия", caption: "Группа карточек показывает, как меняется региональный идентификатор.", file: "subsidiary-card-1-white.webp", mockup: true },
+          { title: "Визитки ДО: контакты", caption: "Компоновка держит должность, телефон, почту и адрес в общей сетке.", file: "subsidiary-card-2-white.webp", mockup: true },
+          { title: "Визитки ДО: регионы", caption: "Серия проверяет единый масштаб логотипов разных обществ.", file: "subsidiary-card-3-white.webp", mockup: true },
         ],
         resourceLinks: ["businessCardsSubsidiary"],
       },
@@ -1102,8 +1102,8 @@ const pagesData = [
         lead: "Официальная основа для писем, приказов и деловой переписки дочерних обществ",
         paragraphs: ["В шапке размещаются логотип ДЗО, наименование, полный адрес, телефон, электронная почта и сайт. Для печати используется офисная или офсетная бумага."],
         assetImages: [
-          { title: "Бланк: фирменная шапка", caption: "Основная зона идентификации дочернего общества.", file: "subsidiary-letterhead-1.png" },
-          { title: "Бланк: реквизиты", caption: "Нижняя часть содержит контактные данные и служебную информацию.", file: "subsidiary-letterhead-2.png" },
+          { title: "Бланк: фирменная шапка", caption: "Основная зона идентификации дочернего общества.", file: "subsidiary-letterhead-1-white.webp", mockup: true },
+          { title: "Бланк: реквизиты", caption: "Нижняя часть содержит контактные данные и служебную информацию.", file: "subsidiary-letterhead-2-white.webp", mockup: true },
         ],
         resourceLinks: ["subsidiaryLetterheads"],
       },
@@ -1113,16 +1113,16 @@ const pagesData = [
         paragraphs: ["Кабинетные таблички подстраиваются под планировку офиса и видимость маршрута. Рекомендованное соотношение сторон: 3 по вертикали к 2 по горизонтали."],
         rules: [{ label: "Заказ табличек", text: "Перед изготовлением нужно передать список кабинетов, размеры и условия размещения в профильный департамент." }],
         assetImages: [
-          { title: "Кабинетная табличка", caption: "Базовый вариант с номером и названием кабинета.", file: "office-navigation-1.webp" },
-          { title: "Серия навигации", caption: "Несколько табличек должны сохранять единый масштаб набора.", file: "office-navigation-2.webp" },
-          { title: "Вертикальная табличка", caption: "Формат для узкой зоны или отдельной стены.", file: "office-navigation-3.webp" },
+          { title: "Кабинетная табличка", caption: "Базовый вариант с номером и названием кабинета.", file: "office-navigation-1-white.webp", mockup: true },
+          { title: "Серия навигации", caption: "Несколько табличек должны сохранять единый масштаб набора.", file: "office-navigation-2-white.webp", mockup: true },
+          { title: "Вертикальная табличка", caption: "Формат для узкой зоны или отдельной стены.", file: "office-navigation-3-white.webp", mockup: true },
         ],
       },
       {
         id: "schedule-sign",
         title: "Режимник",
         paragraphs: ["Режимник фиксирует график работы предприятия или дочернего общества. Размер выбирается по месту установки, но композиция сохраняет вертикальную доминанту 3:2."],
-        assetImages: [{ title: "Режимник работы", caption: "Табличка объединяет расписание, адрес и контакты организации.", file: "schedule-sign-layout.webp" }],
+        assetImages: [{ title: "Режимник работы", caption: "Табличка объединяет расписание, адрес и контакты организации.", file: "schedule-sign-layout-white.webp", mockup: true }],
       },
       {
         id: "awards",
@@ -2691,7 +2691,7 @@ function AssetImageGrid({ items, mode = "grid" }) {
     <LayoutGroup>
       <motion.div className={`asset-image-grid is-${mode}`} layout>
         {items.map((item) => (
-          <motion.article className={`asset-image-card ${item.wide ? "is-wide" : ""} ${item.contained ? "is-contained" : ""} ${item.embeddedText ? "has-embedded-text" : ""}`} key={item.file} layout whileHover={{ y: -2 }}>
+          <motion.article className={`asset-image-card ${item.wide ? "is-wide" : ""} ${item.contained ? "is-contained" : ""} ${item.embeddedText ? "has-embedded-text" : ""} ${item.mockup ? "is-mockup" : ""}`} key={item.file} layout whileHover={{ y: -2 }}>
             <div className="asset-image-frame">
               <img src={rasterAsset(item.file)} alt={t(item.title)} loading="lazy" />
             </div>
