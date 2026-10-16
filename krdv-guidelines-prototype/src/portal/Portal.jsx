@@ -10,7 +10,7 @@ import { NewsEditor } from "./CardEditor.jsx";
 
 const tasks = [
   { id: "photo", title: "Фото с логотипом", text: "Загрузите фотографию, выберите вариант логотипа и скачайте готовый пост.", image: "assets/social/demo-photo-branded.webp", status: "ready" },
-  { id: "quote", title: "Цитата", text: "Портрет, имя, должность и текст цитаты на фирменной карточке.", image: "assets/social/r14-sm.webp", status: "ready" },
+  { id: "quote", title: "Цитата", text: "Портрет, имя, должность и текст цитаты на фирменной карточке.", image: "assets/portal/examples/task-quote.webp", status: "ready" },
   { id: "news", title: "Новость", text: "Заголовок, подзаголовок, метка и иллюстрация из библиотеки.", image: "assets/social/r01-sm.webp", status: "ready" },
 ];
 
