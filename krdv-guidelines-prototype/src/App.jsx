@@ -949,7 +949,10 @@ const pagesData = [
         title: "Программа «Дальневосточный и арктический гектар»",
         navTitle: "Программа Гектар",
         paragraphs: ["Программа «Дальневосточный и арктический гектар» реализуется Минвостокразвития России совместно с корпорацией, КРДВ выступает оператором программы и помогает гражданам на всех этапах: от подачи заявления и выбора земли до сопровождения проектов. У программы свой фирменный стиль. Правила его использования — в брендбуке ниже."],
-        brandLogo: { file: "hectare-logo.svg", alt: "Логотип «Гектар»" },
+        brandLogoVersions: [
+          { title: "Основная версия", file: "hectare-logo-main", alt: "Логотип «Гектар», основная версия", shape: "square" },
+          { title: "Горизонтальная версия", file: "hectare-logo", alt: "Логотип «Гектар», горизонтальная версия", shape: "wide" },
+        ],
         resourceLinks: ["hectareBrandbook"],
       },
       {
@@ -957,7 +960,10 @@ const pagesData = [
         title: "Программа «Муравьёв-Амурский 2030»",
         navTitle: "МА 2030",
         paragraphs: ["«Муравьёв-Амурский 2030» — бесплатная годовая образовательная программа по подготовке управленческих кадров для госслужбы. Проект реализуется Министерством по развитию Дальнего Востока и Арктики совместно с КРДВ. У программы свой фирменный стиль. Правила его использования — в брендбуке ниже."],
-        brandLogo: { file: "ma2030-logo.svg", alt: "Логотип «Муравьёв-Амурский 2030»" },
+        brandLogoVersions: [
+          { title: "Основная версия", file: "ma2030-logo-main", alt: "Логотип «Муравьёв-Амурский 2030», основная версия", shape: "square" },
+          { title: "Горизонтальная версия", file: "ma2030-logo", alt: "Логотип «Муравьёв-Амурский 2030», горизонтальная версия", shape: "wide" },
+        ],
         resourceLinks: ["ma2030Brandbook"],
       },
       {
@@ -1116,8 +1122,8 @@ const pagesData = [
           { title: "Способ печати", items: ["Офсетная печать.", "Цифровая печать.", "УФ-печать."] },
         ],
         assetImages: [
-          { title: "Русская визитка", caption: "Основной вариант для деловой коммуникации внутри России.", file: "business-card-ru-white.webp", mockup: true },
-          { title: "Английская визитка", caption: "Версия для международных встреч и англоязычных контактов.", file: "business-card-en-white.webp", mockup: true },
+          { title: "Русская визитка", caption: "Без QR-кода, для партнеров в России.", file: "business-card-ru-white.webp", mockup: true },
+          { title: "Английская визитка", caption: "Без QR-кода, для иностранных партнеров.", file: "business-card-en-white.webp", mockup: true },
         ],
         resourceLinks: ["businessCards"],
       },
@@ -1129,8 +1135,8 @@ const pagesData = [
           { title: "QR-зона", items: ["Кегли и гарнитура сохраняют базовую сетку.", "Код размещается только в отведенной области.", "Контактный блок не сдвигается и не теряет иерархию."] },
         ],
         assetImages: [
-          { title: "Русская визитка с QR", caption: "Контактная информация дополнена переходом в цифровой профиль.", file: "business-card-qr-ru-43.webp", mockup: true },
-          { title: "Английская визитка с QR", caption: "Международная версия с тем же расположением кода.", file: "business-card-qr-en-43.webp", mockup: true },
+          { title: "Русская визитка с QR-кодом", caption: "QR-код размещается справа от контактов.", file: "business-card-qr-ru-43.webp", mockup: true },
+          { title: "Английская визитка с QR-кодом", caption: "Тот же макет на английском языке.", file: "business-card-qr-en-43.webp", mockup: true },
         ],
         resourceLinks: ["businessCardsQr"],
       },
@@ -1142,9 +1148,8 @@ const pagesData = [
           { title: "Идентификатор ДО", items: ["Шрифтовая сетка наследует стандартную визитку АО «КРДВ».", "Логотип и адресный блок подставляются из комплекта дочернего общества.", "QR-зона используется только в макетах, где она предусмотрена."] },
         ],
         assetImages: [
-          { title: "Визитки ДО: серия", caption: "Группа карточек показывает, как меняется региональный идентификатор.", file: "subsidiary-card-1-white.webp", mockup: true },
-          { title: "Визитки ДО: контакты", caption: "Компоновка держит должность, телефон, почту и адрес в общей сетке.", file: "subsidiary-card-2-white.webp", mockup: true },
-          { title: "Визитки ДО: регионы", caption: "Серия проверяет единый масштаб логотипов разных обществ.", file: "subsidiary-card-3-white.webp", mockup: true },
+          { title: "Визитка без QR-кода", caption: "Основной вариант визитки дочернего общества.", file: "subsidiary-card-2-white.webp", mockup: true },
+          { title: "Визитка с местом для QR-кода", caption: "QR-код размещается справа от контактов.", file: "subsidiary-card-1-white.webp", mockup: true },
         ],
         resourceLinks: ["businessCardsSubsidiary"],
       },
@@ -1165,10 +1170,10 @@ const pagesData = [
         paragraphs: ["Кабинетные таблички подстраиваются под планировку офиса и видимость маршрута. Рекомендованное соотношение сторон: 3 по вертикали к 2 по горизонтали."],
         rules: [{ label: "Заказ табличек", text: "Перед изготовлением нужно передать список кабинетов, размеры и условия размещения в профильный департамент." }],
         assetImages: [
-          { title: "Кабинетная табличка", caption: "Базовый вариант с номером и названием кабинета.", file: "office-navigation-1-white.webp", mockup: true },
-          { title: "Серия навигации", caption: "Несколько табличек должны сохранять единый масштаб набора.", file: "office-navigation-2-white.webp", mockup: true },
-          { title: "Вертикальная табличка", caption: "Формат для узкой зоны или отдельной стены.", file: "office-navigation-3-white.webp", mockup: true },
-          { title: "Место для мокапа", caption: "Пример будет добавлен.", file: "placeholder-office-navigation-4", placeholder: true, mockup: true, ratio: "861 / 548" },
+          { title: "Кабинеты", caption: "Табличка подразделения в интерьере офиса.", file: "office-navigation-mockup.webp", mockup: true },
+          { title: "Переговорные", caption: "Название и номер помогают быстро найти нужную комнату.", file: "office-sign-meeting.webp", mockup: true },
+          { title: "Кабинеты", caption: "Название подразделения на двери кабинета.", file: "office-sign-accounting.webp", mockup: true },
+          { title: "Общие зоны", caption: "Гардероб, кухня и другие помещения общего пользования.", file: "office-sign-cloakroom.webp", mockup: true },
         ],
       },
       {
@@ -1176,7 +1181,7 @@ const pagesData = [
         title: "Режимник",
         paragraphs: ["Режимник фиксирует график работы предприятия или дочернего общества. Размер выбирается по месту установки, но композиция сохраняет вертикальную доминанту 3:2."],
         assetImages: [{ title: "Режимник работы", caption: "Табличка объединяет расписание, адрес и контакты организации.", file: "schedule-sign-layout-white.webp", mockup: true },
-          { title: "Место для мокапа", caption: "Пример будет добавлен.", file: "placeholder-schedule-sign-2", placeholder: true, mockup: true, ratio: "959 / 1201" },
+          { title: "Режимник у входа", caption: "Табличка на фасаде рядом с входом в офис.", file: "schedule-sign-mockup.webp", mockup: true },
         ],
       },
       {
@@ -1947,7 +1952,7 @@ function CursorIconTrail() {
       if (!event.target.closest?.(".guideline-page") || event.target.closest(".site-footer")) return;
       const { clientX: x, clientY: y } = event;
       const prev = last.current;
-      if (prev && Math.hypot(x - prev.x, y - prev.y) < 110) return;
+      if (prev && Math.hypot(x - prev.x, y - prev.y) < 34) return;
       last.current = { x, y };
       counter.current += 1;
       const id = counter.current;
@@ -1959,7 +1964,7 @@ function CursorIconTrail() {
         tone: TRAIL_TONES[id % TRAIL_TONES.length],
         rotate: ((id * 37) % 30) - 15,
       };
-      setItems((current) => [...current.slice(-11), item]);
+      setItems((current) => [...current.slice(-27), item]);
       const timer = setTimeout(() => {
         setItems((current) => current.filter((entry) => entry.id !== id));
         timers.delete(timer);

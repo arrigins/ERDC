@@ -6195,16 +6195,16 @@ a.slide-viewer-download:focus-visible {
   position: absolute;
   display: grid;
   place-items: center;
-  width: 64px;
-  height: 64px;
-  margin: -32px 0 0 -32px;
-  border-radius: 18px;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border-radius: 11px;
   box-shadow: 0 12px 28px -14px rgba(7, 20, 58, 0.45);
 }
 
 .cursor-trail-icon svg {
-  width: 30px;
-  height: 30px;
+  width: 22px;
+  height: 22px;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.5;
@@ -6213,8 +6213,8 @@ a.slide-viewer-download:focus-visible {
 }
 
 .cursor-trail-icon svg.is-lotus {
-  width: 40px;
-  height: 22px;
+  width: 28px;
+  height: 16px;
   fill: currentColor;
   stroke: none;
 }
@@ -6232,4 +6232,9 @@ a.slide-viewer-download:focus-visible {
 .cursor-trail-icon.is-white {
   background: #ffffff;
   color: var(--ui-blue);
+}
+
+/* Карточки-носители в одном ряду — серое поле тянется на всю высоту, носитель по центру */
+.asset-image-card.is-mockup .asset-image-frame {
+  flex: 1 1 auto;
 }
