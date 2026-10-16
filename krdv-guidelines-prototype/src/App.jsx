@@ -3181,46 +3181,37 @@ function SocialMosaic({ rows, note }) {
   );
 }
 
-// Лента постов как в соцсети: бесконечно уходит влево, под каждой работой — условные кнопки.
+// Лента постов как в соцсети: бесконечно уходит влево, под каждой работой — условные кнопки (рисунок как в Instagram).
 function SocialFeedActions() {
-  const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.5, strokeLinecap: "round", strokeLinejoin: "round" };
+  const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.6, strokeLinejoin: "round" };
   return (
     <span className="social-feed-actions" aria-hidden="true">
-      <svg viewBox="0 0 24 24" {...common}><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z" /></svg>
-      <svg viewBox="0 0 24 24" {...common}><path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.4-4A8 8 0 1 1 20 11.5Z" /></svg>
-      <svg viewBox="0 0 24 24" {...common}><path d="M21 3 3 10.5l7 2.5 2.5 7L21 3Zm-11 10 5-5" /></svg>
-      <svg className="social-feed-save" viewBox="0 0 24 24" {...common}><path d="M6 3.5h12v17l-6-4.5-6 4.5v-17Z" /></svg>
+      <svg viewBox="0 0 24 24" {...common}><path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938Z" /></svg>
+      <svg viewBox="0 0 24 24" {...common}><path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" /></svg>
+      <svg viewBox="0 0 24 24" {...common}><path d="M22 3 9.218 10.083" /><path d="M11.698 20.334 22 3.001H2l7.218 7.083 2.48 10.25Z" /></svg>
+      <svg className="social-feed-save" viewBox="0 0 24 24" {...common}><path d="M20 21 12 13.44 4 21V3h16Z" /></svg>
     </span>
   );
 }
 
 function SocialFeed({ items, note }) {
-  const [open, lightbox] = useSocialLightbox();
   const renderSet = (copy) =>
-    items.map((work, index) => (
-      <button
-        key={`${copy}-${work.id}`}
-        type="button"
-        className="social-feed-post"
-        onClick={() => open(items, index)}
-        aria-label={t(`Открыть целиком: ${work.alt}`)}
-        aria-hidden={copy ? true : undefined}
-        tabIndex={copy ? -1 : undefined}
-      >
+    items.map((work) => (
+      <figure key={`${copy}-${work.id}`} className="social-feed-post" aria-hidden={copy ? true : undefined}>
         <img src={work.sm} alt={copy ? "" : t(work.alt)} loading="lazy" width={720} height={720} />
         <SocialFeedActions />
-      </button>
+      </figure>
     ));
   return (
     <div className="social-feed-wrap">
       <div className="social-feed">
+        <AuroraBackground className="social-feed-aurora" />
         <div className="social-feed-track" style={{ "--feed-duration": `${items.length * 6}s` }}>
           {renderSet(0)}
           {renderSet(1)}
         </div>
       </div>
       {note ? <p className="social-note">{t(note)}</p> : null}
-      {lightbox}
     </div>
   );
 }
