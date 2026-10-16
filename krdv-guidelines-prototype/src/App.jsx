@@ -658,8 +658,11 @@ const madeSignGroups = [
 const presentationDecks = [
   {
     id: "light",
-    title: "Светлый",
+    title: "Светлый шаблон",
+    // Ссылка на файл шаблона — вписать, когда будет (пока кнопка неактивна)
+    download: "",
     slides: [
+      { title: "Обложка", file: "pres-light-cover-v2.webp" },
       { title: "Таблица и ключевые цифры", file: "pres-light-slide-1.webp" },
       { title: "Карточки услуг", file: "pres-light-slide-2.webp" },
       { title: "Иконки-иллюстрации", file: "pres-light-slide-3.webp" },
@@ -667,8 +670,10 @@ const presentationDecks = [
   },
   {
     id: "dark",
-    title: "Темный",
+    title: "Темный шаблон",
+    download: "",
     slides: [
+      { title: "Обложка", file: "pres-dark-cover.webp" },
       { title: "Инфографика", file: "pres-dark-slide-1.webp" },
       { title: "Иконки-иллюстрации", file: "pres-dark-slide-2.webp" },
       { title: "Карта и показатели", file: "pres-dark-slide-3.webp" },
@@ -1098,16 +1103,7 @@ const pagesData = [
       {
         id: "presentations",
         title: "Презентации",
-        paragraphs: ["Для корпоративных презентаций есть два шаблона: светлый — для документов и отчетов, темный — для выступлений и мероприятий."],
-        assetImages: [
-          { title: "Светлый шаблон", caption: "Обложка", file: "pres-light-cover.webp" },
-          { title: "Темный шаблон", caption: "Обложка", file: "pres-dark-cover.webp" },
-        ],
-      },
-      {
-        id: "presentation-slides",
-        title: "Слайды",
-        paragraphs: ["Примеры слайдов из шаблонов. Переключайте шаблон и листайте слайды стрелками."],
+        paragraphs: ["Для корпоративных презентаций есть два шаблона: светлый — для документов и отчетов, темный — для выступлений и мероприятий.", "Листайте слайды каждого шаблона стрелками: первым идет обложка."],
         slideDecks: presentationDecks,
       },
       {
@@ -1385,6 +1381,7 @@ const pagesData = [
     title: "Контакты",
     intro: "Реквизиты компании и обратная связь по руководству.",
     hideIntro: true,
+    cursorIcons: true,
     sections: [
       {
         id: "contacts-info",
@@ -1914,7 +1911,99 @@ function GuidelinePage({ page, activePageId, navigate }) {
 
       <EndLinks activePageId={activePageId} navigate={navigate} />
       <SiteFooter />
+      {page.cursorIcons ? <CursorIconTrail /> : null}
     </article>
+  );
+}
+
+// «Контакты»: при движении курсора по странице появляются иконки на темы КРДВ —
+// всплывают с лёгким поворотом и через секунду растворяются. На тач-устройствах и при «уменьшении движения» выключено.
+const TRAIL_ICONS = [
+  { id: "globe", paths: ["M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z", "M3 12h18", "M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"] },
+  { id: "compass", paths: ["M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z", "M15.5 8.5l-2 5-5 2 2-5z"] },
+  { id: "pin", paths: ["M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z", "M12 7.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"] },
+  { id: "snowflake", paths: ["M12 3v18", "M4.2 7.5l15.6 9", "M4.2 16.5l15.6-9", "M9.5 4.5L12 6.5l2.5-2", "M9.5 19.5l2.5-2 2.5 2"] },
+  { id: "anchor", paths: ["M12 7.5V21", "M12 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4z", "M8 11h8", "M4.5 14.5c.8 3.6 3.8 6.5 7.5 6.5s6.7-2.9 7.5-6.5"] },
+  { id: "mountain", paths: ["M2.5 19.5l6.5-11 4 6.5", "M10.5 19.5l5-8 6 8z", "M2.5 19.5h19"] },
+  { id: "wave", paths: ["M3 9c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0 3 1.5 4.5 0", "M3 14c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0 3 1.5 4.5 0"] },
+  { id: "mail", paths: ["M3.5 6h17v12h-17z", "M3.5 6.5l8.5 6.5 8.5-6.5"] },
+  { id: "chat", paths: ["M4 5h16v11H9l-5 4z", "M8 9.5h8", "M8 12.5h5"] },
+  { id: "sun", paths: ["M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z", "M12 2.5v2.5", "M12 19v2.5", "M2.5 12H5", "M19 12h2.5", "M5.3 5.3l1.8 1.8", "M16.9 16.9l1.8 1.8", "M5.3 18.7l1.8-1.8", "M16.9 7.1l1.8-1.8"] },
+  { id: "lotus", lotus: true },
+];
+const TRAIL_TONES = ["is-blue", "is-light", "is-white", "is-blue", "is-light"];
+
+function CursorIconTrail() {
+  const [items, setItems] = useState([]);
+  const last = useRef(null);
+  const counter = useRef(0);
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (reduceMotion || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return undefined;
+    const timers = new Set();
+
+    const onMove = (event) => {
+      if (!event.target.closest?.(".guideline-page") || event.target.closest(".site-footer")) return;
+      const { clientX: x, clientY: y } = event;
+      const prev = last.current;
+      if (prev && Math.hypot(x - prev.x, y - prev.y) < 110) return;
+      last.current = { x, y };
+      counter.current += 1;
+      const id = counter.current;
+      const item = {
+        id,
+        x,
+        y,
+        icon: TRAIL_ICONS[id % TRAIL_ICONS.length],
+        tone: TRAIL_TONES[id % TRAIL_TONES.length],
+        rotate: ((id * 37) % 30) - 15,
+      };
+      setItems((current) => [...current.slice(-11), item]);
+      const timer = setTimeout(() => {
+        setItems((current) => current.filter((entry) => entry.id !== id));
+        timers.delete(timer);
+      }, 950);
+      timers.add(timer);
+    };
+
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      timers.forEach(clearTimeout);
+    };
+  }, [reduceMotion]);
+
+  return (
+    <div className="cursor-trail" aria-hidden="true">
+      <AnimatePresence>
+        {items.map((item) => (
+          <motion.span
+            key={item.id}
+            className={`cursor-trail-icon ${item.tone}`}
+            style={{ left: item.x, top: item.y }}
+            initial={{ opacity: 0, scale: 0.3, rotate: item.rotate - 20 }}
+            animate={{ opacity: 1, scale: 1, rotate: item.rotate }}
+            exit={{ opacity: 0, scale: 0.6, transition: { duration: 0.35, ease: [0.4, 0, 1, 1] } }}
+            transition={{ type: "spring", stiffness: 420, damping: 22 }}
+          >
+            {item.icon.lotus ? (
+              <svg viewBox="0 0 125.09 68.99" className="is-lotus">
+                {LOTUS_MARK_PATHS.map((path) => (
+                  <path key={path} d={path} />
+                ))}
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24">
+                {item.icon.paths.map((path) => (
+                  <path key={path} d={path} />
+                ))}
+              </svg>
+            )}
+          </motion.span>
+        ))}
+      </AnimatePresence>
+    </div>
   );
 }
 
@@ -2087,14 +2176,17 @@ function LineBreakExamples({ items }) {
 function CardGrid({ items }) {
   return (
     <LayoutGroup>
-      <motion.div className="card-grid" layout>
+      {/* Текстовые карточки — без белых плашек: серый текст с тонкой линией сбоку, как у визиток */}
+      <div className="spec-columns is-notes">
         {items.map((item, index) => (
-          <motion.article className="info-card" key={`${item.title}-${index}`} layout whileHover={{ y: -2 }}>
+          <div className="spec-text" key={`${item.title}-${index}`}>
             <h3>{t(item.title)}</h3>
-            <p>{t(noDot(item.text))}</p>
-          </motion.article>
+            <p>
+              <span>{t(item.text)}</span>
+            </p>
+          </div>
         ))}
-      </motion.div>
+      </div>
     </LayoutGroup>
   );
 }
@@ -2664,34 +2756,40 @@ function ClearSpaceBoard() {
   );
 }
 
+// Шаблоны презентаций: у каждого своя листалка (первый слайд — обложка) и кнопка скачивания.
 function SlideViewer({ decks }) {
-  const [deckId, setDeckId] = useState(decks[0].id);
+  return (
+    <div className="slide-decks">
+      {decks.map((deck) => (
+        <DeckViewer key={deck.id} deck={deck} />
+      ))}
+    </div>
+  );
+}
+
+function DeckViewer({ deck }) {
   const [index, setIndex] = useState(0);
-  const deck = decks.find((item) => item.id === deckId) || decks[0];
   const total = deck.slides.length;
   const slide = deck.slides[index] || deck.slides[0];
   const go = (step) => setIndex((current) => (current + step + total) % total);
 
   return (
     <div className="slide-viewer">
+      <div className="slide-viewer-stage">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.img
+            key={`${deck.id}-${index}`}
+            src={rasterAsset(slide.file)}
+            alt={t(`${deck.title}: ${slide.title}`)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+          />
+        </AnimatePresence>
+      </div>
       <div className="slide-viewer-bar">
-        <div className="slide-viewer-tabs" role="tablist" aria-label={t("Шаблон презентации")}>
-          {decks.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              role="tab"
-              aria-selected={item.id === deck.id}
-              data-active={item.id === deck.id}
-              onClick={() => {
-                setDeckId(item.id);
-                setIndex(0);
-              }}
-            >
-              {t(item.title)}
-            </button>
-          ))}
-        </div>
+        <h3 className="slide-viewer-title">{t(deck.title)}</h3>
         <div className="slide-viewer-nav">
           <span>
             {index + 1} / {total}
@@ -2703,19 +2801,6 @@ function SlideViewer({ decks }) {
             <UiIcon icon={ICONS.arrowRight} size={16} strokeWidth={1.5} />
           </button>
         </div>
-      </div>
-      <div className="slide-viewer-stage">
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.img
-            key={`${deck.id}-${index}`}
-            src={rasterAsset(slide.file)}
-            alt={t(slide.title)}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-          />
-        </AnimatePresence>
       </div>
       <div className="slide-viewer-thumbs">
         {deck.slides.map((item, itemIndex) => (
@@ -2730,6 +2815,17 @@ function SlideViewer({ decks }) {
           </button>
         ))}
       </div>
+      {deck.download ? (
+        <a className="slide-viewer-download" href={deck.download} target="_blank" rel="noreferrer">
+          <UiIcon icon={ICONS.download} size={16} strokeWidth={1.5} />
+          {t("Скачать шаблон")}
+        </a>
+      ) : (
+        <span className="slide-viewer-download is-pending" title={t("Ссылка на шаблон будет добавлена")}>
+          <UiIcon icon={ICONS.download} size={16} strokeWidth={1.5} />
+          {t("Скачать шаблон")}
+        </span>
+      )}
     </div>
   );
 }
@@ -3059,7 +3155,7 @@ function FontWorkbench() {
   const [sample, setSample] = useState(selectedFamily.sample);
   const selectedStyle = selectedFamily.files[styleIndex] || selectedFamily.files[0];
   const fallback = selectedFamily.id === "tsars" || selectedFamily.id === "serif" ? "Georgia, serif" : "Arial, sans-serif";
-  const preferredStyles = ["Regular", "Medium", "DemiBold", "Bold", "Black"];
+  const preferredStyles = ["Light", "Regular", "Normal", "Medium", "DemiBold", "Bold", "Black"];
   const styleOptions = selectedFamily.files.filter((file) => preferredStyles.includes(file.label) || file.file === selectedStyle?.file);
 
   function selectFamily(family) {

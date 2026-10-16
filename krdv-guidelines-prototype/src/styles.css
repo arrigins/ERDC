@@ -6062,3 +6062,174 @@ img {
 .asset-image-card.is-mockup .asset-image-placeholder {
   width: 100%;
 }
+
+/* ── Шаблоны презентаций: две листалки рядом ── */
+.slide-decks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.slide-decks .slide-viewer {
+  padding: 10px 10px 18px;
+  gap: 14px;
+}
+
+.slide-decks .slide-viewer-bar {
+  padding: 4px 8px 0;
+}
+
+.slide-viewer-title {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+.slide-decks .slide-viewer-thumbs {
+  padding: 0 8px;
+}
+
+.slide-decks .slide-viewer-thumbs button {
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
+}
+
+.slide-viewer-download {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin: 2px 8px 0;
+  border-radius: var(--r-control, 12px);
+  padding: 0 20px;
+  background: var(--ui-blue);
+  color: #ffffff;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: var(--mono-tracking);
+  text-transform: uppercase;
+  text-decoration: none;
+  transition:
+    transform var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background var(--motion-fast) var(--ease-standard);
+}
+
+a.slide-viewer-download:hover,
+a.slide-viewer-download:focus-visible {
+  color: #ffffff;
+  transform: translateY(-2px);
+  background: #24489f;
+  box-shadow: 0 10px 22px -10px rgba(27, 62, 146, 0.7);
+}
+
+.slide-viewer-download.is-pending {
+  opacity: 0.45;
+  cursor: default;
+}
+
+@media (max-width: 960px) {
+  .slide-decks {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Текстовые заметки на всю ширину секции (подписи-источники фото и т. п.) — тот же стиль, что у характеристик визиток */
+.section-wide .spec-columns.is-notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px clamp(24px, 3vw, 48px);
+}
+
+.section-wide .spec-columns.is-notes .spec-text {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  border-left: 1px solid var(--soft-line, #dddce2);
+  padding-left: 18px;
+}
+
+.section-wide .spec-columns.is-notes h3 {
+  margin: 0;
+  color: #050505;
+  font-size: clamp(16px, 1vw, 20px);
+  line-height: 1.35;
+  font-weight: 400;
+}
+
+.section-wide .spec-columns.is-notes p {
+  margin: 0;
+  color: var(--muted, #707070);
+  font-size: clamp(16px, 1vw, 20px);
+  line-height: 1.45;
+}
+
+/* Сноска об авторстве фото — серый текст с линией сбоку */
+.guideline-page.is-soft .section-footnote,
+.section-footnote {
+  border-top: 0;
+  border-left: 1px solid var(--soft-line, #dddce2);
+  padding: 0 0 0 18px;
+  font-size: clamp(14px, 0.9vw, 16px);
+}
+
+@media (max-width: 720px) {
+  .section-wide .spec-columns.is-notes {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── «Контакты»: иконки за курсором ── */
+.cursor-trail {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cursor-trail-icon {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  border-radius: 18px;
+  box-shadow: 0 12px 28px -14px rgba(7, 20, 58, 0.45);
+}
+
+.cursor-trail-icon svg {
+  width: 30px;
+  height: 30px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cursor-trail-icon svg.is-lotus {
+  width: 40px;
+  height: 22px;
+  fill: currentColor;
+  stroke: none;
+}
+
+.cursor-trail-icon.is-blue {
+  background: var(--ui-blue);
+  color: #ffffff;
+}
+
+.cursor-trail-icon.is-light {
+  background: #d9e9f7;
+  color: var(--ui-blue);
+}
+
+.cursor-trail-icon.is-white {
+  background: #ffffff;
+  color: var(--ui-blue);
+}
