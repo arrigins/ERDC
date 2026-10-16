@@ -5,6 +5,7 @@
 import qrcode from "qrcode-generator";
 import { asset } from "./photo.js";
 import { FONT, roundRect, wrap } from "./text.js";
+import { drawBrandBackground } from "./backgrounds.js";
 
 export const CARD_TEMPLATE_VERSION = "card-1.0-draft";
 
@@ -143,22 +144,13 @@ export function layoutCard(ctx, card) {
   return { titleBlock, subBlock, tagBlock, art: card.art ? art || (kind === "cover" ? compositions.large.art : null) : null, qr, issues, textBottom: y };
 }
 
-function drawBackground(ctx, tone) {
+function drawBackground(ctx, tone, bg) {
   if (tone === "milk") {
     ctx.fillStyle = "#FFFAF0";
     ctx.fillRect(0, 0, 1080, 1080);
     return;
   }
-  const base = ctx.createLinearGradient(0, 0, 1080, 1080);
-  base.addColorStop(0, "#1d3df3");
-  base.addColorStop(1, "#1230f2");
-  ctx.fillStyle = base;
-  ctx.fillRect(0, 0, 1080, 1080);
-  const glow = ctx.createRadialGradient(150, 120, 0, 150, 120, 760);
-  glow.addColorStop(0, "rgba(98, 196, 255, 0.55)");
-  glow.addColorStop(1, "rgba(98, 196, 255, 0)");
-  ctx.fillStyle = glow;
-  ctx.fillRect(0, 0, 1080, 1080);
+  drawBrandBackground(ctx, bg);
 }
 
 function drawContain(ctx, image, box) {
@@ -192,7 +184,7 @@ export function renderCard(ctx, card, layout, assets) {
   const tone = card.tone === "milk" ? "milk" : "blue";
   const palette = colors[tone];
   const direction = directionById(card.direction);
-  drawBackground(ctx, tone);
+  drawBackground(ctx, tone, card.bg);
 
   // Логотип: готовое начертание, обычный размер — круг 120 с отступом 60
   const badge = tone === "milk" ? assets.badgeBlue : assets.badgeWhite;

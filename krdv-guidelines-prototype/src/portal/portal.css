@@ -882,3 +882,56 @@ select.pp-input {
   color: #8a5300;
   font-size: 14px;
 }
+
+/* Фоны */
+.pp-bg-picker {
+  display: grid;
+  gap: 10px;
+}
+
+.pp-bg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+  gap: 8px;
+}
+
+.pp-bg-swatch {
+  border: 0;
+  border-radius: 12px;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.pp-bg-swatch canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 12px;
+}
+
+.pp-bg-swatch.is-active {
+  outline-color: var(--ui-blue);
+}
+
+.pp-bg-picker .pp-button.is-secondary {
+  justify-self: start;
+}
+
+.pp-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.pp-check input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--ui-blue);
+}

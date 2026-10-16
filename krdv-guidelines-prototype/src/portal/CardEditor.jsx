@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { FRAME, decodePhoto, downloadCanvas } from "./photo.js";
 import { badgeSources, cardKinds, compositions, directionById, directions, layoutCard, loadCached, renderCard, signSrc } from "./cardTemplate.js";
 import { makeZip } from "./zip.js";
+import { backgroundPresets, drawBrandBackground, randomSeed } from "./backgrounds.js";
 
 // «Новость» (ТЗ, раздел 7) и «Серия карточек» (ТЗ, раздел 8) на общем движке cardTemplate.js.
 
@@ -22,6 +23,7 @@ const newCard = (kind, extra = {}) => ({
   kind,
   composition: kind === "news" ? "large" : kind === "cover" ? "text" : null,
   tone: "blue",
+  bg: { preset: "glow" },
   title: "",
   subtitle: "",
   tag: "",
@@ -141,6 +143,49 @@ async function hasTransparency(bitmap) {
   return false;
 }
 
+const sameBg = (a, b) => Boolean(a && b) && (a.preset ? a.preset === b.preset : a.seed === b.seed);
+
+function BackgroundSwatch({ bg, active, onClick, label }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const ctx = ref.current?.getContext("2d");
+    if (!ctx) return;
+    ctx.setTransform(96 / FRAME, 0, 0, 96 / FRAME, 0, 0);
+    drawBrandBackground(ctx, bg);
+  }, [bg]);
+  return (
+    <button type="button" className={`pp-bg-swatch ${active ? "is-active" : ""}`} onClick={onClick} aria-label={label} aria-pressed={active}>
+      <canvas ref={ref} width={96} height={96} />
+    </button>
+  );
+}
+
+// Выбор фирменного фона: готовые варианты и генератор новых из тех же оттенков
+function BackgroundPicker({ value, onChange }) {
+  const [generated, setGenerated] = useState(() => (value?.seed ? [value.seed] : []));
+  const generate = () => {
+    const seed = randomSeed();
+    setGenerated((list) => [seed, ...list].slice(0, 7));
+    onChange({ seed });
+  };
+  return (
+    <div className="pp-bg-picker">
+      <div className="pp-bg-grid">
+        {backgroundPresets.map((preset) => (
+          <BackgroundSwatch key={preset.id} bg={{ preset: preset.id }} active={sameBg(value, { preset: preset.id })} onClick={() => onChange({ preset: preset.id })} label={`Фон «${preset.title}»`} />
+        ))}
+        {generated.map((seed, index) => (
+          <BackgroundSwatch key={seed} bg={{ seed }} active={sameBg(value, { seed })} onClick={() => onChange({ seed })} label={`Сгенерированный фон ${index + 1}`} />
+        ))}
+      </div>
+      <button type="button" className="pp-button is-secondary" onClick={generate}>
+        Новый вариант фона
+      </button>
+      <span className="pp-note">Градиент собирается из фирменных оттенков. Светлые пятна — справа и снизу, чтобы заголовок читался.</span>
+    </div>
+  );
+}
+
 // Поля одной карточки
 function CardFields({ card, layout, onChange, uploads, onUpload, artWarning, showTone, direction }) {
   const issueFor = (field) => layout?.issues.find((issue) => issue.field === field);
@@ -170,7 +215,8 @@ function CardFields({ card, layout, onChange, uploads, onUpload, artWarning, sho
       {showTone ? (
         <fieldset className="pp-field">
           <legend className="pp-label">Фон</legend>
-          <Segment name={`tone-${card.id}`} value={card.tone} options={[["blue", "Синий"], ["milk", "Бежевый"]]} onChange={(value) => onChange({ tone: value })} />
+          <Segment name={`tone-${card.id}`} value={card.tone} options={[["blue", "Градиент"], ["milk", "Бежевый"]]} onChange={(value) => onChange({ tone: value })} />
+          {card.tone === "blue" ? <BackgroundPicker value={card.bg} onChange={(bg) => onChange({ bg })} /> : null}
         </fieldset>
       ) : null}
 
@@ -444,6 +490,8 @@ export function SeriesEditor({ onBack }) {
   const [selected, setSelected] = useState(0);
   const [direction, setDirection] = useState("korf");
   const [rhythm, setRhythm] = useState("alternate");
+  const [seriesBg, setSeriesBg] = useState({ preset: "glow" });
+  const [varyBg, setVaryBg] = useState(true);
   const [format, setFormat] = useState("png");
   const [size, setSize] = useState(1080);
   const [error, setError] = useState("");
@@ -459,10 +507,13 @@ export function SeriesEditor({ onBack }) {
   const prepared = useMemo(
     () =>
       cards.map((card, index) => {
-        const real = { ...card, direction, tone: rhythms[rhythm].tone(index, cards.length) };
+        // Синие карточки серии: общий фон; по желанию — соседние варианты, чтобы карточки не повторялись
+        const presetIndex = Math.max(0, backgroundPresets.findIndex((item) => item.id === seriesBg.preset));
+        const bg = !varyBg ? seriesBg : seriesBg.preset ? { preset: backgroundPresets[(presetIndex + index) % backgroundPresets.length].id } : { seed: seriesBg.seed + index * 7919 };
+        const real = { ...card, bg, direction, tone: rhythms[rhythm].tone(index, cards.length) };
         return { real, preview: withPlaceholders(real) };
       }),
-    [cards, direction, rhythm],
+    [cards, direction, rhythm, seriesBg, varyBg],
   );
   const layouts = useMemo(() => {
     if (base.fontState !== "ready") return null;
@@ -627,6 +678,17 @@ export function SeriesEditor({ onBack }) {
             </select>
             <span className="pp-note">Направление и ритм фонов общие для всех карточек. Цвет направления — у меток, название — на каждой карточке.</span>
           </fieldset>
+
+          {rhythm !== "none" ? (
+            <fieldset className="pp-field">
+              <legend className="pp-label">Градиент синих карточек</legend>
+              <BackgroundPicker value={seriesBg} onChange={(bg) => { setSeriesBg(bg); setDone(false); }} />
+              <label className="pp-check">
+                <input type="checkbox" checked={varyBg} onChange={(event) => { setVaryBg(event.target.checked); setDone(false); }} />
+                Разные градиенты на соседних карточках
+              </label>
+            </fieldset>
+          ) : null}
 
           <h2 className="pp-panel-title">
             Карточка {selected + 1} · {cardKinds[current.kind].title}

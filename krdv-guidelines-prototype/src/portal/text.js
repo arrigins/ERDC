@@ -12,6 +12,15 @@ export function glueWords(words) {
       index += 1;
       word = `${word} ${words[index]}`;
     }
+    // Число не отрывается от короткого слова или знака после него: «2,5 трлн ₽», «20 лет», «7,6 %»
+    while (index + 1 < words.length && /^[<>~≈]?\d[\d.,]*%?$/.test(word.split("\u00a0").pop()) && /^[а-яёa-z₽$€%]{1,4}[.,:;]?$/i.test(words[index + 1])) {
+      index += 1;
+      word = `${word}\u00a0${words[index]}`;
+    }
+    if (/^(₽|%|руб\.?)$/.test(word) && glued.length) {
+      glued[glued.length - 1] = `${glued[glued.length - 1]}\u00a0${word}`;
+      continue;
+    }
     if (/^[—–]$/.test(word) && glued.length) {
       glued[glued.length - 1] = `${glued[glued.length - 1]} ${word}`;
     } else {
