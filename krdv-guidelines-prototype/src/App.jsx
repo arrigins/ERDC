@@ -914,6 +914,8 @@ const pagesData = [
     number: "00",
     title: "Обзор",
     heroLibrary: "overview-panels",
+    // Эксперимент: «Обзор» плиткой обложек по образцу DevRev. Откат к прежней вёрстке — удалить bento.
+    bento: true,
     intro: "Руководство по визуальной системе АО «КРДВ»: логотип, цвета, типографика, фотостиль, носители и материалы для скачивания.",
     sections: [
       {
@@ -2008,6 +2010,21 @@ function GuidelinePage({ page, activePageId, navigate }) {
   const hasSubsidiaryHero = page.heroAnimation === "subsidiaryRegions";
   const hasLibraryHero = Boolean(page.heroLibrary);
 
+  if (page.bento) {
+    return (
+      <article className="guideline-page is-soft is-bento">
+        <OverviewBento navigate={navigate} />
+        {page.sections
+          .filter((section) => !section.directory)
+          .map((section) => (
+            <ContentSection key={section.id} section={section} navigate={navigate} activePageId={activePageId} />
+          ))}
+        <EndLinks activePageId={activePageId} navigate={navigate} />
+        <SiteFooter />
+      </article>
+    );
+  }
+
   return (
     <article className={`guideline-page ${page.softLayout === false ? "" : "is-soft"}`}>
       <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""} ${hasLibraryHero ? "is-library" : ""} ${page.heroTone === "light" ? "is-light" : ""} ${page.heroTone === "plain" ? "is-plain" : ""}`} aria-label={t(page.title)}>
@@ -2496,6 +2513,48 @@ function PrincipleCards({ items }) {
         </article>
       ))}
     </div>
+  );
+}
+
+// «Обзор» плиткой: обложки разделов во всю плитку, название в левом верхнем углу.
+// Ряды чередуются: узкая + широкая, широкая + узкая (как в DevRev), углы скруглены.
+function OverviewBento({ navigate }) {
+  const tiles = pagesData.filter((page) => page.id !== "overview");
+  return (
+    <section className="overview-bento" aria-label={t("Разделы руководства")}>
+      {tiles.map((page, index) => {
+        const row = Math.floor(index / 2);
+        const wide = row % 2 === 0 ? index % 2 === 1 : index % 2 === 0;
+        const hasCover = Boolean(page.heroVideo || page.heroImage || page.heroGlass);
+        const isPositioning = page.id === "positioning";
+        return (
+          <motion.button
+            type="button"
+            key={page.id}
+            className={`bento-tile ${wide ? "is-wide" : ""} ${isPositioning ? "is-light" : ""}`}
+            onClick={() => navigate(page.id)}
+            whileTap={{ scale: 0.995 }}
+            aria-label={t(`Открыть раздел ${page.title}`)}
+          >
+            <span className="bento-visual" aria-hidden="true">
+              {page.heroVideo ? <video className="directory-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" /> : null}
+              {page.heroGlass ? <GlassHero data={page.heroGlass} compact /> : page.heroImage ? <img className="directory-video" src={heroAsset(page.heroImage)} alt="" loading="lazy" /> : null}
+              {page.heroAnimation === "colorTiles" ? <ColorHeroAnimation /> : null}
+              {page.heroLibrary ? <LibraryHeroBackground variant={page.heroLibrary} miniature /> : null}
+              {page.id === "logo" ? <img className="bento-logo" src={logoAsset("krdv-logo-ru-horizontal-white.svg")} alt="" /> : null}
+              {isPositioning ? (
+                <>
+                  <AuroraBackground className="bento-aurora" />
+                  <span className="bento-slogan">{t("Ближе к будущему")}</span>
+                </>
+              ) : null}
+              {!hasCover && !isPositioning && !page.heroAnimation && !page.heroLibrary ? <span className="directory-fallback" /> : null}
+            </span>
+            <span className="bento-label">{t(page.cardTitle || page.title)}</span>
+          </motion.button>
+        );
+      })}
+    </section>
   );
 }
 

@@ -7603,3 +7603,134 @@ a.slide-viewer-download:focus-visible {
     animation: none;
   }
 }
+
+/* ── Эксперимент: «Обзор» плиткой обложек (по образцу DevRev). Откат — убрать bento у страницы overview ── */
+.guideline-page.is-bento {
+  padding-top: 8px;
+}
+
+.overview-bento {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 8px;
+}
+
+.bento-tile {
+  position: relative;
+  isolation: isolate;
+  display: block;
+  min-height: clamp(300px, 34vw, 500px);
+  border: 0;
+  border-radius: var(--soft-radius, 24px);
+  padding: 0;
+  overflow: hidden;
+  background: #0b1a33;
+  color: #ffffff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.bento-tile.is-wide {
+  grid-column: span 2;
+}
+
+.bento-visual {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  transition: transform 1.2s var(--ease);
+}
+
+.bento-visual > * {
+  position: absolute;
+  inset: 0;
+}
+
+.bento-visual .directory-video,
+.bento-visual video,
+.bento-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bento-tile:hover .bento-visual {
+  transform: scale(1.03);
+}
+
+/* Лёгкое затемнение сверху — чтобы название читалось на любой обложке */
+.bento-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 0;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(0, 12, 30, 0.35), rgba(0, 12, 30, 0));
+  pointer-events: none;
+}
+
+.bento-tile.is-light::after {
+  content: none;
+}
+
+.bento-label {
+  position: absolute;
+  z-index: 1;
+  top: clamp(20px, 2.2vw, 32px);
+  left: clamp(20px, 2.2vw, 32px);
+  right: 20px;
+  font-size: clamp(20px, 1.6vw, 26px);
+  font-weight: 450;
+  line-height: 1.15;
+}
+
+.bento-tile.is-light {
+  color: var(--ui-blue);
+}
+
+.bento-aurora {
+  position: absolute;
+  inset: 0;
+}
+
+.bento-aurora canvas {
+  display: block;
+}
+
+.bento-slogan {
+  position: absolute;
+  inset: auto clamp(20px, 2.2vw, 32px) clamp(24px, 3vw, 44px);
+  color: var(--ui-blue);
+  font-size: clamp(28px, 2.8vw, 44px);
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.bento-tile:focus-visible {
+  outline: 3px solid var(--ui-blue);
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .overview-bento {
+    grid-template-columns: 1fr;
+  }
+
+  .bento-tile.is-wide {
+    grid-column: auto;
+  }
+
+  .bento-tile {
+    min-height: 260px;
+  }
+}
+
+.bento-visual .bento-logo {
+  inset: 50% auto auto 50%;
+  width: min(56%, 520px);
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+}
