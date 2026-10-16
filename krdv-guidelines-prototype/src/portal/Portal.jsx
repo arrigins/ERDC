@@ -6,12 +6,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { FRAME, MAX_ZOOM, asset, clamp, coverCrop, decodePhoto, downloadCanvas, loadImage, moveCrop, zoomCrop } from "./photo.js";
 import { QuoteEditor } from "./QuoteEditor.jsx";
+import { NewsEditor, SeriesEditor } from "./CardEditor.jsx";
 
 const tasks = [
   { id: "photo", title: "Фото с логотипом", text: "Загрузите фотографию, выберите вариант логотипа и скачайте готовый пост.", image: "assets/social/demo-photo-branded.webp", status: "ready" },
   { id: "quote", title: "Цитата", text: "Портрет, имя, должность и текст цитаты на фирменной карточке.", image: "assets/social/r14-sm.webp", status: "ready" },
-  { id: "news", title: "Новость", text: "Заголовок, подзаголовок, метка и иллюстрация из библиотеки.", image: "assets/social/r01-sm.webp", status: "В полной версии" },
-  { id: "series", title: "Серия карточек", text: "От 2 до 10 карточек: обложка, сообщения и завершение.", image: "assets/social/r35-sm.webp", status: "В полной версии" },
+  { id: "news", title: "Новость", text: "Заголовок, подзаголовок, метка и иллюстрация из библиотеки.", image: "assets/social/r01-sm.webp", status: "ready" },
+  { id: "series", title: "Серия карточек", text: "От 2 до 10 карточек: обложка, сообщения и завершение.", image: "assets/social/r35-sm.webp", status: "ready" },
 ];
 
 const overlays = {
@@ -402,7 +403,7 @@ function PhotoEditor({ onBack }) {
   );
 }
 
-const routes = ["photo", "quote"];
+const routes = ["photo", "quote", "news", "series"];
 const readRoute = () => {
   const value = window.location.hash.replace(/^#\/?/, "");
   return routes.includes(value) ? value : "home";
@@ -428,7 +429,15 @@ export function Portal() {
 
   const screen = useMemo(
     () =>
-      route === "photo" ? <PhotoEditor onBack={() => go("home")} /> : route === "quote" ? <QuoteEditor onBack={() => go("home")} /> : <Home onOpen={go} />,
+      route === "photo" ? <PhotoEditor onBack={() => go("home")} /> : route === "quote" ? (
+        <QuoteEditor onBack={() => go("home")} />
+      ) : route === "news" ? (
+        <NewsEditor onBack={() => go("home")} />
+      ) : route === "series" ? (
+        <SeriesEditor onBack={() => go("home")} />
+      ) : (
+        <Home onOpen={go} />
+      ),
     [route],
   );
 

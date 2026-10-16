@@ -699,3 +699,186 @@ button.pp-task:hover {
 .pp-missing {
   margin: 0 0 10px;
 }
+
+/* Новость и серия */
+select.pp-input {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.pp-choice {
+  display: grid;
+  gap: 8px;
+}
+
+.pp-choice label {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  border: 1px solid var(--soft-line);
+  border-radius: var(--r-control);
+  padding: 12px 14px;
+  cursor: pointer;
+}
+
+.pp-choice label.is-active {
+  border-color: var(--ui-blue);
+  box-shadow: inset 0 0 0 1px var(--ui-blue);
+}
+
+.pp-choice input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pp-choice label:has(input:focus-visible) {
+  outline: 2px solid var(--ui-blue);
+  outline-offset: 2px;
+}
+
+.pp-choice strong {
+  font-weight: 450;
+}
+
+.pp-choice span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.pp-library {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: 8px;
+}
+
+.pp-library-item {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  min-height: 44px;
+  border: 1px solid var(--soft-line);
+  border-radius: var(--r-control);
+  padding: 8px 6px;
+  background: #fffaf0;
+  cursor: pointer;
+}
+
+.pp-library-item.is-active {
+  border-color: var(--ui-blue);
+  box-shadow: inset 0 0 0 1px var(--ui-blue);
+}
+
+.pp-library-item img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.pp-library-item span {
+  overflow: hidden;
+  max-width: 100%;
+  color: var(--muted);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pp-library-empty {
+  display: grid;
+  place-items: center;
+  height: 48px;
+}
+
+.pp-series-strip {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  margin-bottom: 20px;
+  padding: 4px 2px 10px;
+}
+
+.pp-series-thumb {
+  display: grid;
+  flex: 0 0 auto;
+  gap: 6px;
+  width: 136px;
+  border: 0;
+  padding: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pp-series-thumb canvas {
+  display: block;
+  width: 136px;
+  height: 136px;
+  border-radius: 10px;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.pp-series-thumb.is-active canvas {
+  outline-color: var(--ui-blue);
+}
+
+.pp-series-thumb.has-issue span::after {
+  content: " •";
+  color: var(--danger);
+}
+
+.pp-series-thumb span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.pp-series-thumb.is-active span {
+  color: var(--ink);
+}
+
+.pp-card-tools,
+.pp-card-add {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.pp-card-tools .pp-button,
+.pp-card-add .pp-button {
+  min-height: 44px;
+  padding: 0 14px;
+  background: #ffffff;
+}
+
+.pp-undo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: var(--r-control);
+  padding: 4px 4px 4px 14px;
+  background: #ffffff;
+  font-size: 15px;
+}
+
+.pp-panel-title {
+  margin: 14px 0 0;
+  font-size: 20px;
+  font-weight: 450;
+}
+
+.pp-problems {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 12px;
+  border-radius: var(--r-control);
+  padding: 12px 14px 12px 32px;
+  background: var(--warn-bg);
+  color: #8a5300;
+  font-size: 14px;
+}

@@ -5,7 +5,7 @@
 
 export const QUOTE_TEMPLATE_VERSION = "quote-1.0-draft";
 
-const FONT = '"TT Norms Pro"';
+import { FONT, roundRect, wrap } from "./text.js";
 const card = { x: 46, y: 44, w: 989, h: 987, r: 52 };
 const text = { x: 105, width: 870, bottom: 985 };
 export const portraitCircle = { cx: 298, cy: 296, r: 188 };
@@ -24,48 +24,6 @@ export const fontRequests = [`700 72px ${FONT}`, `500 34px ${FONT}`, `400 30px $
 // Кавычки задаёт шаблон: снимаем кавычки по краям вставленного текста, чтобы не было двойных
 export function cleanQuote(value) {
   return value.trim().replace(/^[«"„“”']+\s*/, "").replace(/\s*[»"“”']+$/, "");
-}
-
-// Вёрстка без изменения текста: короткие предлоги и союзы не остаются в конце строки,
-// тире не начинает строку (как в постах КРДВ)
-function glueWords(words) {
-  const glued = [];
-  for (let index = 0; index < words.length; index += 1) {
-    let word = words[index];
-    while (index + 1 < words.length && /^[«(„"]?[а-яёa-z]{1,2}$/i.test(word.replace(/[,.;:]$/, "")) && !/[,.;:]$/.test(word)) {
-      index += 1;
-      word = `${word}\u00a0${words[index]}`;
-    }
-    if (/^[—–]$/.test(word) && glued.length) {
-      glued[glued.length - 1] = `${glued[glued.length - 1]}\u00a0${word}`;
-    } else {
-      glued.push(word);
-    }
-  }
-  return glued;
-}
-
-// Перенос по словам; неразрывные пробелы и ручные переносы сохраняются
-function wrap(ctx, value, width) {
-  const lines = [];
-  let tooLong = false;
-  for (const paragraph of value.split("\n")) {
-    const words = glueWords(paragraph.split(" ").filter((word, index, all) => word !== "" || all.length === 1));
-    let line = "";
-    for (const word of words) {
-      const next = line ? `${line} ${word}` : word;
-      if (ctx.measureText(next).width <= width || !line) {
-        line = next;
-        if (ctx.measureText(line).width > width) tooLong = true;
-      } else {
-        lines.push(line);
-        line = word;
-        if (ctx.measureText(line).width > width) tooLong = true;
-      }
-    }
-    lines.push(line);
-  }
-  return { lines, tooLong };
 }
 
 function setFont(ctx, spec, size = spec.size) {
@@ -117,16 +75,6 @@ export function layoutQuote(ctx, data) {
   }
 
   return { nameBlock, roleBlock, markY: markTop, quoteBlock, issues, quoteLines: quoteWrap.lines.length };
-}
-
-function roundRect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.arcTo(x + w, y, x + w, y + h, r);
-  ctx.arcTo(x + w, y + h, x, y + h, r);
-  ctx.arcTo(x, y + h, x, y, r);
-  ctx.arcTo(x, y, x + w, y, r);
-  ctx.closePath();
 }
 
 // Знак цитаты: две «девятки» фирменного синего
