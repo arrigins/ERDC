@@ -7540,3 +7540,22 @@ a.slide-viewer-download:focus-visible {
 .site-footer-top div > a + a {
   margin-left: 14px;
 }
+
+/* «Основные принципы»: градиенты в стиле бренд-обещания. Под WebGL — статичный градиент тех же цветов. */
+.principle-gradient {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(70% 60% at 80% 20%, var(--g3) 0%, transparent 70%),
+    radial-gradient(60% 70% at 15% 85%, var(--g2) 0%, transparent 70%),
+    var(--g1);
+}
+
+.principle-gradient canvas {
+  display: block;
+}
+
+.principle-card:has(.principle-gradient)::after {
+  background: linear-gradient(180deg, rgba(0, 10, 30, 0.12) 0%, rgba(0, 10, 30, 0) 35%, rgba(0, 10, 30, 0.28) 100%);
+}

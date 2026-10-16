@@ -949,10 +949,11 @@ const pagesData = [
         lead: "Наша работа — ваши достижения",
         paragraphs: ["Привлекаем активных граждан и организации на Дальний Восток и в Арктику, помогаем успешно реализовать проекты, направленные на ускоренное социально-экономическое развитие регионов, решаем проблемы."],
         principles: [
-          { title: "Качественно", tone: "#0b2a78", text: "Экспертиза и профессиональный опыт", video: "cover-typography.mp4" },
-          { title: "Просто", tone: "#0f7a84", text: "Упрощенные процедуры, цифровые сервисы", video: "cover-text.mp4" },
-          { title: "Выгодно", tone: "#8e1b1d", text: "Льготы и меры поддержки, повышающие экономическую эффективность проектов", video: "cover-advertising.mp4" },
-          { title: "Надежно", tone: "#0c4fc4", text: "Защищаем интересы граждан и бизнеса, решаем сложные задачи", video: "cover-corporate.mp4" },
+          // Плавные градиенты в стиле бренд-обещания (MeshGradient). Откат к видео: убрать поле colors — останется video.
+          { title: "Качественно", tone: "#0b2a78", text: "Экспертиза и профессиональный опыт", video: "cover-typography.mp4", colors: ["#081d5a", "#0e2f86", "#1b4fc0", "#0a2470", "#3a6fd8", "#102f8f"] },
+          { title: "Просто", tone: "#0f7a84", text: "Упрощенные процедуры, цифровые сервисы", video: "cover-text.mp4", colors: ["#07505a", "#0d6f78", "#15949c", "#095f68", "#33aeb3", "#0b6670"] },
+          { title: "Выгодно", tone: "#8e1b1d", text: "Льготы и меры поддержки, повышающие экономическую эффективность проектов", video: "cover-advertising.mp4", colors: ["#5c0f14", "#86181d", "#b3262b", "#6e1318", "#cc3a3d", "#7a1519"] },
+          { title: "Надежно", tone: "#0c4fc4", text: "Защищаем интересы граждан и бизнеса, решаем сложные задачи", video: "cover-corporate.mp4", colors: ["#083a96", "#0c4fc4", "#2a72e6", "#0a42a8", "#4f8ef0", "#0b47b5"] },
         ],
       },
     ],
@@ -2429,12 +2430,39 @@ function PositioningShowcase() {
 }
 
 // Принципы: четыре карточки на фирменных «шёлковых» видео, крупное слово сверху и пояснение снизу.
+// Фон карточки принципа: такой же мягкий «живой» градиент, как в бренд-обещании, но в цвете принципа.
+// Цвета только средние и тёмные оттенки одного тона — белый текст остаётся контрастным, без «грязных» смесей.
+function PrincipleGradient({ colors, seed }) {
+  const reduceMotion = useReducedMotion();
+  return (
+    <div className="principle-gradient" aria-hidden="true" style={{ "--g1": colors[0], "--g2": colors[2], "--g3": colors[4] }}>
+      <MeshGradient
+        colors={colors}
+        distortion={0.85}
+        swirl={0.35}
+        grainMixer={0}
+        grainOverlay={0}
+        speed={reduceMotion ? 0 : 0.4}
+        frame={42000 + seed * 9000}
+        scale={1.15}
+        maxPixelCount={900000}
+        minPixelRatio={1}
+        style={{ width: "100%", height: "100%" }}
+      />
+    </div>
+  );
+}
+
 function PrincipleCards({ items }) {
   return (
     <div className="principle-cards">
-      {items.map((item) => (
+      {items.map((item, index) => (
         <article className="principle-card" key={item.title} style={{ "--tone": item.tone }}>
-          <video className="principle-video" src={heroAsset(item.video)} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" />
+          {item.colors ? (
+            <PrincipleGradient colors={item.colors} seed={index} />
+          ) : (
+            <video className="principle-video" src={heroAsset(item.video)} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" />
+          )}
           <h3>{t(item.title)}</h3>
           <p>{t(item.text)}</p>
         </article>
