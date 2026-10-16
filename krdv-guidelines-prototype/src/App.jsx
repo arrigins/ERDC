@@ -707,12 +707,12 @@ const logoUsageExamples = [
 const logoBackgroundExamples = [
   { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", bg: "#d8e5f6" }, text: "Фирменные цвета и их оттенки с высоким уровнем контраста" },
   { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square-ondark.svg", bg: "#000000" }, text: "Черный фон — с версией логотипа с белым написанием" },
-  { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", photo: "photostyle-composition-15.webp", width: "20%", position: "top-left" }, text: "Фотография со светлым однородным участком под логотипом" },
+  { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", photo: "photostyle-composition-15.webp", width: "30%", position: "top-left" }, text: "Фотография со светлым однородным участком под логотипом" },
   { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", photo: "photostyle-composition-1.webp", position: "plate", plate: true }, text: "Если однородного участка нет — используйте белую плашку" },
   { verdict: "no", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", bg: "#2a64d8" }, text: "Фирменные цвета и оттенки с низким уровнем контраста" },
   { verdict: "no", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", bg: "#b06bff" }, text: "Нефирменные цвета ярких оттенков" },
   { verdict: "no", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", bg: "linear-gradient(115deg, #3cb39a 0%, #6a3fb5 30%, #d43b5b 62%, #f2b84b 100%)" }, text: "Активные цветные паттерны и градиенты" },
-  { verdict: "no", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", photo: "photostyle-composition-11.webp", width: "20%", position: "top-left" }, text: "Неоднородный участок фотографии без плашки" },
+  { verdict: "no", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", photo: "photostyle-composition-11.webp", width: "30%", position: "top-left" }, text: "Неоднородный участок фотографии без плашки" },
 ];
 
 const logoMisuseExamples = [
@@ -1517,12 +1517,11 @@ const pagesData = [
         contactCta: {
           title: "Нашли ошибку?",
           text: "Если заметили неточность в макете, ссылке, формулировке или составе файлов, напишите нам — поправим материалы и обновим веб-версию.",
-          // Контакт по руководству: Арина. Ссылку на её профиль в MAX подставить в maxHref, когда она будет
-          // (не составлять адрес по номеру телефона); пока карточка ведёт на звонок.
+          // Контакт по руководству — профиль Арины в MAX (ссылка от пользователя). Имя и телефон на сайте не показываются.
           person: "Арина",
           phone: "+7 999 605-51-26",
           phoneHref: "tel:+79996055126",
-          maxHref: "",
+          maxHref: "https://max.ru/u/f9LHodD0cOIgbTuSE-E8sFHKs5tOnUoIi2ZK5C9JwQqQeFvc1ASaXZA2k0Q",
           image: "contact-support-icon.png",
         },
       },
@@ -3949,7 +3948,6 @@ function ContactCta({ item }) {
       <span className="contact-cta-copy">
         <span>{t(item.title)}</span>
         <p>{t(noDot(item.text))}</p>
-        <em className="contact-cta-person">{t(`${item.person}, ${item.phone}`)}</em>
         <strong>
           {t(item.maxHref ? "Написать в MAX" : "Позвонить")}
           <UiIcon icon={ICONS.arrowRight} className="contact-cta-icon" />
@@ -4009,14 +4007,9 @@ function SiteFooter() {
         <p className="is-muted">{t("Версия 1.0")}</p>
         <div>
           <p>{t("Вопросы по руководству:")}</p>
-          <a className="is-muted" href={footerContact.phoneHref}>
-            {t(`${footerContact.person}, ${footerContact.phone}`)}
+          <a className="is-muted" href={footerContact.maxHref || footerContact.phoneHref} target="_blank" rel="noreferrer">
+            {t("написать в MAX")}
           </a>
-          {footerContact.maxHref ? (
-            <a className="is-muted" href={footerContact.maxHref} target="_blank" rel="noreferrer">
-              {t("написать в MAX")}
-            </a>
-          ) : null}
         </div>
         <div className="site-footer-links">
           <a href="https://erdc.ru" target="_blank" rel="noreferrer">
