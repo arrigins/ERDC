@@ -6914,3 +6914,133 @@ a.slide-viewer-download:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Дизайн соцсетей, правки 16.10 ── */
+.social-clearspace-stage {
+  display: grid;
+  place-items: center;
+  height: clamp(260px, 22vw, 340px);
+  border-radius: var(--r-inner, 16px);
+  background: var(--soft-bg, #f6f5f8);
+}
+
+.social-clearspace {
+  width: auto;
+  height: 88%;
+  background: none;
+  aspect-ratio: 1;
+}
+
+.social-clearspace .cs-post { fill: #ffffff; stroke: var(--soft-line, #dddce2); }
+.social-clearspace .cs-zone-fill { fill: rgba(27, 62, 146, 0.06); }
+.social-clearspace .cs-zone { fill: none; stroke: var(--ui-blue); stroke-width: 1; stroke-dasharray: 1 1; }
+.social-clearspace .cs-guide-box { fill: none; stroke: var(--ui-blue); stroke-width: 1; }
+.social-clearspace .cs-badge { fill: var(--ui-blue); }
+.social-clearspace .cs-badge-text { fill: #ffffff; font-size: 19px; font-weight: 700; text-anchor: middle; }
+.social-clearspace .cs-measure { stroke: #e31f26; stroke-width: 1.2; }
+.social-clearspace .cs-label { fill: #e31f26; font-size: 13px; text-anchor: middle; }
+.social-clearspace .cs-note-strong { fill: #050505; font-size: 14px; }
+.social-clearspace .cs-note { fill: var(--muted); font-size: 12px; }
+.social-clearspace .cs-post-label { fill: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-anchor: middle; }
+
+.social-badge-stage {
+  height: clamp(260px, 22vw, 340px);
+}
+
+.social-photo-intro {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+}
+
+.social-variant {
+  display: grid;
+  align-content: start;
+}
+
+.social-overlay-downloads {
+  margin: 12px 8px 0;
+  padding: 0;
+}
+
+.social-overlay-downloads > div {
+  gap: 6px;
+}
+
+.social-overlay-downloads a {
+  min-height: 34px;
+  padding: 0 10px;
+  font-size: 11px;
+}
+
+.social-large {
+  display: grid;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.social-large > .social-overlay-downloads {
+  margin: 0;
+}
+
+.social-album figcaption {
+  text-align: center;
+}
+
+/* Разбор карточки: маленькие аккуратные указатели слева */
+.social-anatomy-media {
+  padding-left: 30px;
+}
+
+.social-anatomy-markers {
+  width: 30px;
+}
+
+.social-anatomy-markers li {
+  left: 4px;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--ui-blue);
+  background: #ffffff;
+  color: var(--ui-blue);
+  font-size: 9px;
+}
+
+.social-anatomy-markers li::after {
+  width: 9px;
+  background: rgba(27, 62, 146, 0.5);
+}
+
+/* Карточка-ссылка, ссылка на которую ещё не готова */
+.resource-links .resource-link-pending {
+  display: grid;
+  align-content: space-between;
+  gap: 18px;
+  border-radius: var(--soft-radius, 24px);
+  padding: 28px;
+  background: var(--ui-blue);
+  color: #ffffff;
+  opacity: 0.55;
+}
+
+.resource-links .resource-link-pending strong {
+  font-size: clamp(22px, 1.6vw, 28px);
+  font-weight: 400;
+}
+
+.resource-links .resource-link-pending p {
+  margin: 10px 0 0;
+  color: #d9e9f7;
+}
+
+.resource-links .resource-link-pending em {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-style: normal;
+  letter-spacing: var(--mono-tracking);
+  text-transform: uppercase;
+}
+
+.social-clearspace .cs-label { font-size: 17px; }
+.social-clearspace .cs-note-strong { font-size: 19px; }
+.social-clearspace .cs-note { font-size: 15px; }
+.social-clearspace .cs-post-label { font-size: 13px; }
+.social-large > .social-overlay-downloads { margin: -4px 0 0 18px; }

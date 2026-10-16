@@ -299,11 +299,19 @@ const downloadResources = {
     description: "Руководство по использованию фирменного стиля",
     url: "https://disk.yandex.ru/d/dWSOvini_jmUzg",
   },
+  socialPortal: {
+    title: "Портал для оформления постов",
+    description: "Готовые шаблоны и наложения в одном месте — оформите пост без дизайнера",
+    // Ссылка появится после запуска портала; пока карточка неактивна
+    url: "",
+    action: "Перейти на портал",
+    pending: "Ссылка появится после запуска портала",
+  },
   socialEmoji: {
-    title: "Эмодзи в Telegram",
-    description: "Фирменный набор эмодзи КРДВ для текста публикаций · Telegram",
+    title: "Эмодзи КРДВ в Telegram",
+    description: "Добавьте фирменный набор себе в Telegram и используйте эмодзи в тексте публикаций",
     url: "https://t.me/addemoji/ERDC_emoji",
-    action: "Открыть набор эмодзи в Telegram",
+    action: "Добавить набор в Telegram",
   },
   socialGuidePdf: {
     title: "Гайд в PDF",
@@ -785,6 +793,141 @@ const appendixSocialImages = [
   { title: "Карточка с персоной", caption: "Формат для спикера, эксперта или героя материала.", file: "appendix-social-2.webp", contained: true },
 ];
 
+// ── «Дизайн соцсетей» по ТЗ WebGuide (16.10.2026) с правками пользователя.
+// Все работы — примеры оформления с историческими текстами.
+const socialAsset = (filename) => assetPath(`/assets/social/${filename}`);
+const socialWork = (id, alt, extra = {}) => ({
+  id,
+  sm: socialAsset(`${id}-sm.webp`),
+  lg: socialAsset(`${id}-lg.webp`),
+  alt,
+  ratio: id === "r41" ? 4735 / 2663 : 1,
+  ...extra,
+});
+
+const socialWorks = {
+  r01: socialWork("r01", "Новостная карточка: 14 соглашений на 2,5 трлн рублей в сфере транспортной и логистической инфраструктуры"),
+  r03: socialWork("r03", "Обложка программы: 2% ипотека в 2026 году, объёмная иллюстрация с креслом"),
+  r08: socialWork("r08", "Обложка серии КОРФ: 20 лет без налогов"),
+  r09: socialWork("r09", "Светлая карточка серии КОРФ: налоговые льготы"),
+  r10: socialWork("r10", "Карточка серии КОРФ: пониженный тариф по страховым взносам 7,6%"),
+  r11: socialWork("r11", "Светлая карточка серии КОРФ: административная поддержка"),
+  r12: socialWork("r12", "Карточка серии КОРФ: как получить статус резидента"),
+  r13: socialWork("r13", "Завершающая карточка серии: узнайте больше на сайте КРДВ, QR-код"),
+  r14: socialWork("r14", "Цитата: Александр Колобов, компания «Умбатревел», резидент АЗРФ"),
+  r15: socialWork("r15", "Цитата: Василий Гребенников, морской фермер, резидент Свободного порта"),
+  r16: socialWork("r16", "Цитата: Оксана Цветкова, учитель математики из Приморского края"),
+  r17: socialWork("r17", "Цитата: Федор Бондарчук, режиссер, продюсер, актер"),
+  r18: socialWork("r18", "Цитата: Эльвира Нургалиева, заместитель главы Минвостокразвития России"),
+  r20: socialWork("r20", "Светлая карточка ярмарки трудоустройства: более 300 вакансий от 25 работодателей"),
+  r22: socialWork("r22", "Карточка ярмарки: даты и адреса, рукописные штрихи и объёмное сердце"),
+  r28: socialWork("r28", "Обложка грантового конкурса на съёмку фильмов с объёмной хлопушкой"),
+  r35: socialWork("r35", "Обложка серии: программа профпереподготовки «Управление креативными пространствами»"),
+  r36: socialWork("r36", "Светлая карточка серии: от идеи к проекту, цифры программы"),
+  r37: socialWork("r37", "Светлая карточка серии: что в программе"),
+  r38: socialWork("r38", "Карточка серии: 6% — вклад креативных индустрий в ВВП к 2030 году"),
+  r39: socialWork("r39", "Карточка серии: ДФО — лидер креативной экономики страны"),
+  r40: socialWork("r40", "Завершающая светлая карточка серии: креативные индустрии"),
+  r41: socialWork("r41", "Горизонтальный коллаж: второй победитель «Дальневосточного квеста» отправится в Бурятию"),
+  r42: socialWork("r42", "Шаблон цитаты: портрет, имя, подпись и текст высказывания"),
+};
+
+const socialPhotoBranded = {
+  id: "photo",
+  sm: socialAsset("demo-photo-branded.webp"),
+  lg: socialAsset("demo-photo-branded.webp"),
+  alt: "Фотография вулкана с белым круглым знаком КРДВ в левом верхнем углу",
+  ratio: 1,
+};
+
+const socialPage = {
+  id: "social",
+  number: "13",
+  cursorIcons: true,
+  title: "Дизайн соцсетей",
+  intro:
+    "В соцсетях КРДВ фирменный стиль становится более эмоциональным. Фотографии, крупная типографика, градиенты и объёмные иллюстрации помогают рассказывать о проектах, людях и возможностях Дальнего Востока и Арктики.",
+  sections: [
+    {
+      id: "social-guide",
+      title: "Визуальный язык соцсетей",
+      paragraphs: ["Общий язык объединяет разные форматы: фотографию с логотипом, новостную карточку, цитату и пост из нескольких карточек."],
+      socialMosaic: [
+        [socialWorks.r01, socialWorks.r03, socialWorks.r14],
+        [socialWorks.r20, socialWorks.r35, socialWorks.r41],
+      ],
+      socialNote: "Примеры оформления. Даты, суммы и условия в работах исторические и могли измениться.",
+    },
+    {
+      id: "social-photo",
+      title: "Логотип для соцсетей",
+      paragraphs: [
+        "Используйте готовое PNG наложение поверх фотографии. Не меняйте пропорции, надпись и положение логотипа. В публикации с одной фотографией брендируется эта фотография; в альбоме — первая.",
+        "Охранное поле со всех сторон — минимум половина диаметра круга, в том числе до края изображения. Размер и положение уже заданы в наложениях: вычислять их вручную не нужно.",
+      ],
+      socialPhoto: true,
+    },
+    {
+      id: "social-formats",
+      title: "Форматы публикаций",
+      paragraphs: ["Для каждого формата — назначение и короткое правило. Нажмите на пример, чтобы открыть его целиком."],
+      socialFormats: [
+        { title: "Фото с логотипом", purpose: "Документальные и репортажные публикации.", rule: "Фотография остаётся главной, логотип не перекрывает важные детали кадра.", work: socialPhotoBranded },
+        { title: "Новостная карточка", purpose: "Одна главная мысль: заголовок и при необходимости иллюстрация.", rule: "Цифра или главный факт читаются первыми.", work: socialWorks.r01 },
+        { title: "Цитата", purpose: "Портрет, имя, должность и высказывание.", rule: "Имя и высказывание должны читаться в ленте. Длинную цитату сокращают редакционно с согласованием смысла или делят на несколько карточек.", work: socialWorks.r14, group: [socialWorks.r14, socialWorks.r15, socialWorks.r16, socialWorks.r17, socialWorks.r18, socialWorks.r42] },
+        { title: "Пост из нескольких карточек", purpose: "Последовательное раскрытие темы в одном посте.", rule: "Обложка, основные сообщения и завершающее действие.", work: socialWorks.r35, group: [socialWorks.r35, socialWorks.r36, socialWorks.r37, socialWorks.r38, socialWorks.r39, socialWorks.r40], count: 6 },
+        { title: "Горизонтальный коллаж", purpose: "Несколько визуальных свидетельств в одной композиции.", rule: "Изображения дополняют одну историю. Коллаж сохраняет крупный главный акцент и читаемый заголовок.", work: socialWorks.r41, wide: true },
+      ],
+      socialNote: "Примеры оформления. Даты, суммы и условия в работах исторические и могли измениться.",
+    },
+    {
+      id: "social-anatomy",
+      title: "Устройство карточки",
+      paragraphs: [
+        "Одна карточка передаёт одну главную мысль. Заголовок задаёт иерархию, подзаголовок уточняет сообщение, иллюстрация поддерживает тему. Дополнительные метки выделяют дату, условие или действие.",
+      ],
+      socialAnatomy: {
+        work: socialWorks.r03,
+        parts: [
+          { at: 10, title: "Логотип", text: "Круглый логотип КРДВ в левом верхнем углу." },
+          { at: 31, title: "Заголовок", text: "Главная мысль карточки, самый крупный текст." },
+          { at: 41, title: "Подзаголовок", text: "Уточняет сообщение заголовка." },
+          { at: 48, title: "Дополнительная метка", text: "Дата, условие или действие на цветной плашке." },
+          { at: 74, title: "Иллюстрация", text: "Объёмный образ поддерживает тему." },
+          { at: 92, title: "Фон", text: "Фирменный синий градиент или светлый бежевый." },
+        ],
+      },
+    },
+    {
+      id: "social-series",
+      title: "Пост из нескольких карточек",
+      paragraphs: [
+        "Карточки в одном посте раскрывают тему последовательно: обложка, основные сообщения и завершающее действие. Синие и бежевые карточки создают ритм. Композиция и акценты меняются по содержанию, а сетка и типографика связывают карточки между собой.",
+      ],
+      socialSeries: [
+        { title: "Пост о программе «Управление креативными пространствами»", alt: "Шесть карточек одного поста о программе профпереподготовки с чередованием синего и светлого фона", items: [socialWorks.r35, socialWorks.r36, socialWorks.r37, socialWorks.r38, socialWorks.r39, socialWorks.r40] },
+      ],
+    },
+    {
+      id: "social-graphics",
+      title: "Иллюстрации и эмодзи",
+      paragraphs: [
+        "Иллюстрации помогают быстро передать тему. Используйте согласованные изображения с общим характером объёма, света и материалов. Линии, стрелки и плашки расставляют акценты и помогают читать карточку.",
+      ],
+      socialGraphics: [
+        { title: "Объёмные иллюстрации", text: "Передают тему карточки: транспорт, дом, кино. Один образ — одна мысль.", works: [socialWorks.r01, socialWorks.r03, socialWorks.r28] },
+        { title: "Линии, стрелки и плашки", text: "Рукописные штрихи, стрелки и цветные плашки выделяют даты, условия и действия.", works: [socialWorks.r22, socialWorks.r35] },
+      ],
+    },
+    {
+      id: "social-downloads",
+      title: "Материалы для работы",
+      paragraphs: ["Посты можно оформить на новом портале. Фирменные эмодзи добавляются в Telegram одной кнопкой и используются в тексте публикаций."],
+      resourceLinks: ["socialPortal", "socialEmoji"],
+    },
+  ],
+};
+
 const pagesData = [
   {
     id: "overview",
@@ -981,7 +1124,7 @@ const pagesData = [
       {
         id: "intc",
         title: "ИНТЦ «Русский»",
-        paragraphs: ["У логотипа ИНТЦ «Русский» две версии: основная и горизонтальная."],
+        paragraphs: ["ИНТЦ «Русский» — это территория с особым преференциальным режимом, созданная для развития высокотехнологичного бизнеса на Дальнем Востоке и продвижения наукоемких продуктов и технологий на рынки стран Азиатско-Тихоокеанского региона.", "У логотипа ИНТЦ «Русский» две версии: основная и горизонтальная."],
         brandLogoVersions: [
           { title: "Основная версия", file: "intc-russky-logo-frame", alt: "Логотип ИНТЦ «Русский», основная версия", shape: "square" },
           { title: "Горизонтальная версия", file: "intc-russky-logo", alt: "Логотип ИНТЦ «Русский», горизонтальная версия", shape: "wide" },
@@ -1375,22 +1518,7 @@ const pagesData = [
       },
     ],
   },
-  {
-    id: "social",
-    number: "13",
-    title: "Дизайн соцсетей",
-    intro: "Гайд по оформлению публикаций в соцсетях",
-    sections: [
-      {
-        id: "social-guide",
-        title: "Социальные сети",
-        paragraphs: ["Гайд помогает сохранять узнаваемый визуальный язык в постах, карточках, обложках и регулярных публикациях КРДВ."],
-        assetImageMode: "stack",
-        assetImages: appendixSocialImages,
-        resourceLinks: ["socialGuide"],
-      },
-    ],
-  },
+  socialPage,
   {
     id: "contacts",
     heroVideo: "cover-contacts.mp4",
@@ -1398,7 +1526,6 @@ const pagesData = [
     title: "Контакты",
     intro: "Реквизиты компании и обратная связь по руководству.",
     hideIntro: true,
-    cursorIcons: true,
     sections: [
       {
         id: "contacts-info",
@@ -1419,157 +1546,7 @@ const pagesData = [
   },
 ];
 
-// ── «Дизайн соцсетей» по ТЗ WebGuide (16.10.2026). Пока доступен только по скрытому адресу /#/social-preview,
-// после утверждения заменяет текущую страницу social. Все работы — примеры оформления с историческими текстами.
-const socialAsset = (filename) => assetPath(`/assets/social/${filename}`);
-const socialWork = (id, alt, extra = {}) => ({
-  id,
-  sm: socialAsset(`${id}-sm.webp`),
-  lg: socialAsset(`${id}-lg.webp`),
-  alt,
-  ratio: id === "r41" ? 4735 / 2663 : 1,
-  ...extra,
-});
-
-const socialWorks = {
-  r01: socialWork("r01", "Новостная карточка: 14 соглашений на 2,5 трлн рублей в сфере транспортной и логистической инфраструктуры"),
-  r03: socialWork("r03", "Обложка программы: 2% ипотека в 2026 году, объёмная иллюстрация с креслом"),
-  r08: socialWork("r08", "Обложка серии КОРФ: 20 лет без налогов"),
-  r09: socialWork("r09", "Светлая карточка серии КОРФ: налоговые льготы"),
-  r10: socialWork("r10", "Карточка серии КОРФ: пониженный тариф по страховым взносам 7,6%"),
-  r11: socialWork("r11", "Светлая карточка серии КОРФ: административная поддержка"),
-  r12: socialWork("r12", "Карточка серии КОРФ: как получить статус резидента"),
-  r13: socialWork("r13", "Завершающая карточка серии: узнайте больше на сайте КРДВ, QR-код"),
-  r14: socialWork("r14", "Цитата: Александр Колобов, компания «Умбатревел», резидент АЗРФ"),
-  r15: socialWork("r15", "Цитата: Василий Гребенников, морской фермер, резидент Свободного порта"),
-  r16: socialWork("r16", "Цитата: Оксана Цветкова, учитель математики из Приморского края"),
-  r17: socialWork("r17", "Цитата: Федор Бондарчук, режиссер, продюсер, актер"),
-  r18: socialWork("r18", "Цитата: Эльвира Нургалиева, заместитель главы Минвостокразвития России"),
-  r20: socialWork("r20", "Светлая карточка ярмарки трудоустройства: более 300 вакансий от 25 работодателей"),
-  r22: socialWork("r22", "Карточка ярмарки: даты и адреса, рукописные штрихи и объёмное сердце"),
-  r28: socialWork("r28", "Обложка грантового конкурса на съёмку фильмов с объёмной хлопушкой"),
-  r35: socialWork("r35", "Обложка серии: программа профпереподготовки «Управление креативными пространствами»"),
-  r36: socialWork("r36", "Светлая карточка серии: от идеи к проекту, цифры программы"),
-  r37: socialWork("r37", "Светлая карточка серии: что в программе"),
-  r38: socialWork("r38", "Карточка серии: 6% — вклад креативных индустрий в ВВП к 2030 году"),
-  r39: socialWork("r39", "Карточка серии: ДФО — лидер креативной экономики страны"),
-  r40: socialWork("r40", "Завершающая светлая карточка серии: креативные индустрии"),
-  r41: socialWork("r41", "Горизонтальный коллаж: второй победитель «Дальневосточного квеста» отправится в Бурятию"),
-  r42: socialWork("r42", "Шаблон цитаты: портрет, имя, подпись и текст высказывания"),
-};
-
-const socialPhotoBranded = {
-  id: "photo",
-  sm: socialAsset("demo-photo-branded.webp"),
-  lg: socialAsset("demo-photo-branded.webp"),
-  alt: "Фотография вулкана с белым круглым знаком КРДВ в левом верхнем углу",
-  ratio: 1,
-};
-
-const socialPreviewPage = {
-  id: "social-preview",
-  previewOf: "social",
-  heroVideo: undefined,
-  number: "13",
-  title: "Дизайн соцсетей",
-  intro:
-    "В соцсетях КРДВ фирменный стиль становится более эмоциональным. Фотографии, крупная типографика, градиенты и объёмные иллюстрации помогают рассказывать о проектах, людях и возможностях Дальнего Востока и Арктики.",
-  sections: [
-    {
-      id: "social-guide",
-      title: "Визуальный язык соцсетей",
-      paragraphs: ["Общий язык объединяет разные форматы: фотографию с логотипом, новостную карточку, цитату и серию."],
-      socialMosaic: [
-        [socialWorks.r01, socialWorks.r03, socialWorks.r14],
-        [socialWorks.r20, socialWorks.r35, socialWorks.r41],
-      ],
-      socialNote: "Примеры оформления. Даты, суммы и условия в работах исторические и могли измениться.",
-    },
-    {
-      id: "social-workflow",
-      title: "Как работать с материалами",
-      paragraphs: [
-        "Пресс-служба самостоятельно брендирует фотографии готовыми наложениями. Карточки с заголовками, иллюстрациями, цитатами и сложной композицией готовит дизайн-команда.",
-      ],
-      socialWorkflow: [
-        { who: "Пресс-служба", steps: ["Фотография", "Выбор наложения", "Готовый пост"] },
-        { who: "Дизайн-команда", steps: ["Задача и текст", "Дизайн-команда", "Карточка или серия"] },
-      ],
-    },
-    {
-      id: "social-photo",
-      title: "Фото с логотипом",
-      paragraphs: [
-        "Используйте готовое PNG наложение поверх фотографии. Не меняйте пропорции, надпись и положение логотипа. В публикации с одной фотографией брендируется эта фотография; в серии — первая.",
-        "Охранное поле со всех сторон — минимум половина диаметра круга, в том числе до края изображения. Размер и положение задаются готовыми шаблонами: вычислять их вручную не нужно.",
-      ],
-      socialPhoto: true,
-    },
-    {
-      id: "social-formats",
-      title: "Форматы публикаций",
-      paragraphs: ["Для каждого формата — назначение и короткое правило. Нажмите на пример, чтобы открыть его целиком."],
-      socialFormats: [
-        { title: "Фото с логотипом", purpose: "Документальные и репортажные публикации.", rule: "Фотография остаётся главной, знак не перекрывает важные детали кадра.", work: socialPhotoBranded },
-        { title: "Новостная карточка", purpose: "Одна главная мысль: заголовок и при необходимости иллюстрация.", rule: "Цифра или главный факт читаются первыми.", work: socialWorks.r01 },
-        { title: "Цитата", purpose: "Портрет, имя, должность и высказывание.", rule: "Имя и высказывание должны читаться в ленте. Длинную цитату сокращают редакционно с согласованием смысла или делят на несколько карточек.", work: socialWorks.r14, group: [socialWorks.r14, socialWorks.r15, socialWorks.r16, socialWorks.r17, socialWorks.r18, socialWorks.r42] },
-        { title: "Серия", purpose: "Последовательное раскрытие темы.", rule: "Обложка, основные сообщения и завершающее действие.", work: socialWorks.r08, group: [socialWorks.r08, socialWorks.r09, socialWorks.r10, socialWorks.r11, socialWorks.r12, socialWorks.r13], count: 6 },
-        { title: "Горизонтальный коллаж", purpose: "Несколько визуальных свидетельств в одной композиции.", rule: "Изображения дополняют одну историю. Коллаж сохраняет крупный главный акцент и читаемый заголовок.", work: socialWorks.r41, wide: true },
-      ],
-      socialNote: "Примеры оформления. Даты, суммы и условия в работах исторические и могли измениться.",
-    },
-    {
-      id: "social-anatomy",
-      title: "Устройство карточки",
-      paragraphs: [
-        "Одна карточка передаёт одну главную мысль. Заголовок задаёт иерархию, подзаголовок уточняет сообщение, иллюстрация поддерживает тему. Дополнительные метки выделяют дату, условие или действие.",
-      ],
-      socialAnatomy: {
-        work: socialWorks.r03,
-        parts: [
-          { at: 10, title: "Логотип", text: "Круглый знак КРДВ в левом верхнем углу." },
-          { at: 31, title: "Заголовок", text: "Главная мысль карточки, самый крупный текст." },
-          { at: 41, title: "Подзаголовок", text: "Уточняет сообщение заголовка." },
-          { at: 48, title: "Дополнительная метка", text: "Дата, условие или действие на цветной плашке." },
-          { at: 74, title: "Иллюстрация", text: "Объёмный образ поддерживает тему." },
-          { at: 92, title: "Фон", text: "Фирменный синий градиент или светлый бежевый." },
-        ],
-      },
-    },
-    {
-      id: "social-series",
-      title: "Серии и направления",
-      paragraphs: [
-        "Серия раскрывает тему последовательно: обложка, основные сообщения и завершающее действие. Синие и бежевые карточки создают ритм. Композиция и акценты меняются по содержанию, а сетка и типографика связывают серию.",
-      ],
-      socialSeries: [
-        { title: "Серия о КОРФ", alt: "Шесть карточек о программе КОРФ с чередованием синего и светлого фона", items: [socialWorks.r08, socialWorks.r09, socialWorks.r10, socialWorks.r11, socialWorks.r12, socialWorks.r13] },
-        { title: "Серия о программе «Управление креативными пространствами»", alt: "Шесть карточек о программе профпереподготовки с чередованием синего и светлого фона", items: [socialWorks.r35, socialWorks.r36, socialWorks.r37, socialWorks.r38, socialWorks.r39, socialWorks.r40] },
-      ],
-      socialSeriesLink: { label: "Знаки и цвета направлений", page: "regimes" },
-    },
-    {
-      id: "social-graphics",
-      title: "Иллюстрации и эмодзи",
-      paragraphs: [
-        "Иллюстрации помогают быстро передать тему. Используйте согласованные изображения с общим характером объёма, света и материалов. Линии, стрелки и плашки расставляют акценты и помогают читать карточку.",
-      ],
-      socialGraphics: [
-        { title: "Объёмные иллюстрации", text: "Передают тему карточки: транспорт, дом, кино. Один образ — одна мысль.", works: [socialWorks.r01, socialWorks.r03, socialWorks.r28] },
-        { title: "Линии, стрелки и плашки", text: "Рукописные штрихи, стрелки и цветные плашки выделяют даты, условия и действия.", works: [socialWorks.r22, socialWorks.r35] },
-      ],
-    },
-    {
-      id: "social-downloads",
-      title: "Материалы для работы",
-      paragraphs: ["Эмодзи используются в тексте публикаций. Гайд в PDF — предыдущая редакция: правила на этой странице актуальнее."],
-      resourceLinks: ["socialEmoji", "socialGuidePdf"],
-    },
-  ],
-};
-
-// Скрытая страница-предпросмотр: есть в pagesById, но не в меню и не в обзоре.
-const pagesById = Object.fromEntries([...pagesData, socialPreviewPage].map((page) => [page.id, page]));
+const pagesById = Object.fromEntries(pagesData.map((page) => [page.id, page]));
 const routeAliases = {
   strategy: "positioning",
   gallery: "overview",
@@ -1581,6 +1558,7 @@ const routeAliases = {
   language: "text",
   resources: "social",
   appendix: "social",
+  "social-preview": "social",
   photo: "photostyle",
 };
 
@@ -2184,7 +2162,6 @@ function ContentSection({ section, navigate, activePageId }) {
     section.principles ? <PrincipleCards key="principles" items={section.principles} /> : null,
     section.directory ? <SectionDirectory key="directory" navigate={navigate} activePageId={activePageId} /> : null,
     section.socialMosaic ? <SocialMosaic key="social-mosaic" rows={section.socialMosaic} note={section.socialNote} /> : null,
-    section.socialWorkflow ? <SocialWorkflow key="social-workflow" items={section.socialWorkflow} /> : null,
     section.socialPhoto ? <SocialPhotoBlock key="social-photo" /> : null,
     section.socialFormats ? <SocialFormats key="social-formats" items={section.socialFormats} note={section.socialNote} /> : null,
     section.socialAnatomy ? <SocialAnatomy key="social-anatomy" data={section.socialAnatomy} /> : null,
@@ -3204,46 +3181,69 @@ function SocialMosaic({ rows, note }) {
   );
 }
 
-function SocialWorkflow({ items }) {
+const socialOverlayVariants = [
+  { id: "white", file: "white", title: "Белый", text: "Для фона, на котором логотип хорошо читается." },
+  { id: "translucent", file: "translucent", title: "Полупрозрачный", text: "Для спокойного контрастного фона, когда нужен более мягкий акцент." },
+  { id: "shade", file: "white-shade", title: "Белый с затемнением", text: "Для светлого или пёстрого фона в зоне логотипа." },
+  { id: "translucent-shade", file: "translucent-shade", title: "Полупрозрачный с затемнением", text: "Мягкий акцент на светлом или пёстром фоне." },
+];
+
+function SocialBrandedPhoto({ variant = "white", className = "", label }) {
+  const translucent = variant.startsWith("translucent");
+  const shaded = variant.endsWith("shade");
   return (
-    <div className="social-workflow">
-      {items.map((flow) => (
-        <div className="social-flow" key={flow.who}>
-          <span className="text-example-label">{t(flow.who)}</span>
-          <ol>
-            {flow.steps.map((step, index) => (
-              <Fragment key={step}>
-                {index > 0 ? (
-                  <li className="social-flow-arrow" aria-hidden="true">
-                    <svg viewBox="0 0 24 24">
-                      <path d="M1 12h21.5M15.5 5l7 7-7 7" />
-                    </svg>
-                  </li>
-                ) : null}
-                <li className="social-flow-step">{t(step)}</li>
-              </Fragment>
-            ))}
-          </ol>
-        </div>
-      ))}
+    <div className={`social-branded is-${variant} ${className}`} role={label ? "img" : undefined} aria-label={label ? t(label) : undefined} aria-hidden={label ? undefined : true}>
+      <img src={socialAsset("demo-photo.webp")} alt="" loading="lazy" width={1080} height={1080} />
+      {shaded ? <span className="social-branded-shade" /> : null}
+      <img className="social-branded-badge" src={socialAsset(translucent ? "badge-translucent.png" : "badge-white.png")} alt="" loading="lazy" />
     </div>
   );
 }
 
-const socialOverlayVariants = [
-  { id: "white", title: "Белый знак", text: "Для фона, на котором знак хорошо читается." },
-  { id: "translucent", title: "Полупрозрачный", text: "Для спокойного контрастного фона, когда нужен более мягкий акцент." },
-  { id: "shade", title: "Белый с затемнением", text: "Для светлого или пёстрого фона в зоне логотипа." },
-  { id: "large", title: "Укрупнённый", text: "Для первой фотографии альбома, если обычный знак теряется в миниатюре." },
-];
-
-function SocialBrandedPhoto({ variant = "white", className = "" }) {
+function SocialOverlayDownloads({ file, title }) {
   return (
-    <div className={`social-branded is-${variant} ${className}`} role="img" aria-label={t(`Фотография со знаком КРДВ: ${socialOverlayVariants.find((item) => item.id === variant)?.title.toLowerCase()}`)}>
-      <img src={socialAsset("demo-photo.webp")} alt="" loading="lazy" width={1080} height={1080} />
-      {variant === "shade" ? <span className="social-branded-shade" /> : null}
-      <img className="social-branded-badge" src={socialAsset(variant === "translucent" ? "badge-translucent.png" : "badge-white.png")} alt="" loading="lazy" />
+    <div className="logo-downloads social-overlay-downloads">
+      <div>
+        {[1080, 2160].map((size) => (
+          <a key={size} href={socialAsset(`overlays/krdv-social-${file}-${size}.png`)} download={`krdv-social-${file}-${size}.png`} aria-label={t(`Скачать наложение «${title}», PNG ${size} пикселей`)}>
+            <UiIcon icon={ICONS.download} className="format-icon" />
+            <span>PNG {size}</span>
+          </a>
+        ))}
+      </div>
     </div>
+  );
+}
+
+// Охранное поле на квадратном посте: при появлении блока по очереди рисуются отступы ½ диаметра
+// от логотипа до краёв кадра и до зоны, куда нельзя ставить другие элементы (как схема охранного поля логотипа КРДВ).
+function SocialClearSpace() {
+  const d = 90;
+  const x = d / 2;
+  const c = x + d / 2;
+  const zone = x + d + x;
+  return (
+    <svg className="social-clearspace" viewBox="0 0 360 360" role="img" aria-label={t("Схема охранного поля на квадратном посте: от логотипа до краёв кадра и до других элементов — не меньше половины диаметра круга")}>
+      <rect x="0.5" y="0.5" width="359" height="359" rx="8" className="cs-post" />
+      <rect x="0.5" y="0.5" width={zone} height={zone} className="cs-zone-fill cs-fade" style={{ "--cs-delay": "1200ms" }} />
+      <rect x={x} y={x} width={d} height={d} pathLength={1} className="cs-draw cs-guide-box" style={{ "--cs-delay": "250ms" }} />
+      <circle cx={c} cy={c} r={d / 2} className="cs-badge cs-fade" />
+      <text x={c} y={c + 6} className="cs-badge-text cs-fade">КРДВ</text>
+      <line x1="1" y1={c} x2={x} y2={c} pathLength={1} className="cs-draw cs-measure" style={{ "--cs-delay": "500ms" }} />
+      <line x1={c} y1="1" x2={c} y2={x} pathLength={1} className="cs-draw cs-measure" style={{ "--cs-delay": "650ms" }} />
+      <line x1={x + d} y1={c} x2={zone} y2={c} pathLength={1} className="cs-draw cs-measure" style={{ "--cs-delay": "800ms" }} />
+      <line x1={c} y1={x + d} x2={c} y2={zone} pathLength={1} className="cs-draw cs-measure" style={{ "--cs-delay": "950ms" }} />
+      <rect x="0.5" y="0.5" width={zone} height={zone} pathLength={1} className="cs-draw cs-zone" style={{ "--cs-delay": "1100ms" }} />
+      <text x={x / 2} y={c - 8} className="cs-label cs-fade" style={{ "--cs-delay": "700ms" }}>½</text>
+      <text x={c + 8} y={x / 2 + 4} className="cs-label cs-fade" style={{ "--cs-delay": "800ms" }}>½</text>
+      <text x={x + d + x / 2} y={c - 8} className="cs-label cs-fade" style={{ "--cs-delay": "950ms" }}>½</text>
+      <text x={c + 8} y={x + d + x / 2 + 4} className="cs-label cs-fade" style={{ "--cs-delay": "1100ms" }}>½</text>
+      <text x={zone + 18} y={c - 6} className="cs-note-strong cs-fade" style={{ "--cs-delay": "1300ms" }}>Охранное поле</text>
+      <text x={zone + 18} y={c + 18} className="cs-note cs-fade" style={{ "--cs-delay": "1350ms" }}>½ диаметра круга</text>
+      <text x={zone + 18} y={c + 40} className="cs-note cs-fade" style={{ "--cs-delay": "1400ms" }}>до краёв кадра</text>
+      <text x={zone + 18} y={c + 62} className="cs-note cs-fade" style={{ "--cs-delay": "1450ms" }}>и других элементов</text>
+      <text x="180" y="330" className="cs-post-label cs-fade" style={{ "--cs-delay": "1500ms" }}>Пост 1:1</text>
+    </svg>
   );
 }
 
@@ -3253,50 +3253,51 @@ function SocialPhotoBlock() {
       <div className="social-photo-intro">
         <figure className="social-card social-badge-card">
           <div className="social-badge-stage">
-            <img src={socialAsset("badge-white.png")} alt={t("Круглый соцсеточный знак КРДВ")} loading="lazy" />
+            <img src={socialAsset("badge-white.png")} alt={t("Логотип для соцсетей КРДВ")} loading="lazy" />
           </div>
-          <figcaption>{t("Круглый знак для соцсетей")}</figcaption>
+          <figcaption>{t("Логотип для соцсетей КРДВ")}</figcaption>
         </figure>
         <figure className="social-card social-clearspace-card">
-          <svg className="social-clearspace" viewBox="0 0 300 220" role="img" aria-label={t("Схема охранного поля: от знака до края изображения не меньше половины диаметра круга")}>
-            <rect x="0.5" y="0.5" width="299" height="219" className="cs-frame" />
-            <rect x="40" y="40" width="80" height="80" className="cs-zone" />
-            <circle cx="80" cy="80" r="40" className="cs-badge" />
-            <text x="80" y="85" className="cs-badge-text">КРДВ</text>
-            <line x1="0.5" y1="80" x2="40" y2="80" className="cs-measure" />
-            <line x1="80" y1="0.5" x2="80" y2="40" className="cs-measure" />
-            <line x1="120" y1="80" x2="160" y2="80" className="cs-measure" />
-            <line x1="80" y1="120" x2="80" y2="160" className="cs-measure" />
-            <text x="20" y="74" className="cs-label">½</text>
-            <text x="86" y="24" className="cs-label">½</text>
-            <text x="140" y="74" className="cs-label">½</text>
-            <text x="86" y="146" className="cs-label">½</text>
-          </svg>
-          <figcaption>{t("Охранное поле — половина диаметра круга со всех сторон")}</figcaption>
+          <div className="social-clearspace-stage">
+            <SocialClearSpace />
+          </div>
+          <figcaption>{t("Охранное поле на квадратном посте")}</figcaption>
         </figure>
       </div>
       <div className="social-variants">
         {socialOverlayVariants.map((variant) => (
           <figure className="social-card social-variant" key={variant.id}>
-            <SocialBrandedPhoto variant={variant.id} />
+            <SocialBrandedPhoto variant={variant.id} label={`Фотография с логотипом КРДВ: ${variant.title.toLowerCase()}`} />
             <figcaption>
               <strong>{t(variant.title)}</strong>
               <span>{t(variant.text)}</span>
             </figcaption>
+            <SocialOverlayDownloads file={variant.file} title={variant.title} />
           </figure>
         ))}
       </div>
-      <div className="social-albums">
-        {[6, 9].map((count) => (
-          <figure className="social-card social-album" key={count}>
-            <div className={`social-album-grid is-${count}`} role="img" aria-label={t(`Схема альбома из ${count} фотографий: первая — с укрупнённым знаком`)}>
-              {Array.from({ length: count }, (_, index) =>
-                index === 0 ? <SocialBrandedPhoto key={index} variant="large" className="is-tile" /> : <span key={index} className="social-album-tile" />,
-              )}
-            </div>
-            <figcaption>{t(`Альбом из ${count} фотографий: укрупнённый знак — только на первой. Схема условная, раскладка в соцсети может отличаться.`)}</figcaption>
-          </figure>
-        ))}
+      <div className="social-large">
+        <div className="spec-columns is-notes">
+          <div className="spec-text">
+            <h3>{t("Укрупнённый логотип")}</h3>
+            <p>
+              <span>{t("Для альбома из нескольких фотографий есть укрупнённый логотип: в миниатюре альбома обычный теряется. Его ставят только на первую фотографию, остальные публикуются без логотипа. Раскладка альбома в соцсети может отличаться от схемы.")}</span>
+            </p>
+          </div>
+        </div>
+        <SocialOverlayDownloads file="large" title="Укрупнённый" />
+        <div className="social-albums">
+          {[6, 9].map((count) => (
+            <figure className="social-card social-album" key={count}>
+              <div className={`social-album-grid is-${count}`} role="img" aria-label={t(`Схема альбома из ${count} фотографий: первая — с укрупнённым логотипом`)}>
+                {Array.from({ length: count }, (_, index) =>
+                  index === 0 ? <SocialBrandedPhoto key={index} variant="large" className="is-tile" /> : <span key={index} className="social-album-tile" />,
+                )}
+              </div>
+              <figcaption>{t(`Альбом из ${count} фотографий`)}</figcaption>
+            </figure>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -3381,8 +3382,7 @@ function SocialSeries({ series, link, navigate }) {
           <ol className="social-series-grid" aria-label={t(item.alt)}>
             {item.items.map((work, index) => (
               <li key={work.id}>
-                <span className="social-series-index">{index + 1}</span>
-                <SocialThumb work={work} onOpen={() => open(item.items, index)} />
+                <SocialThumb work={work} onOpen={() => open(item.items, index)} label={`${item.title}, карточка ${index + 1} из ${item.items.length}`} />
               </li>
             ))}
           </ol>
@@ -3430,7 +3430,16 @@ function ResourceLinks({ keys }) {
 
   return (
     <div className={`resource-links ${links.length === 1 ? "is-single" : ""}`}>
-      {links.map((item) => (
+      {links.map((item) =>
+        !item.url ? (
+          <div className="resource-link-pending" key={item.title} aria-disabled="true">
+            <div>
+              <strong>{t(item.title)}</strong>
+              <p>{t(noDot(item.description))}</p>
+            </div>
+            <em>{t(item.pending || "Ссылка появится позже")}</em>
+          </div>
+        ) : (
         <motion.a key={item.url} href={item.url} target="_blank" rel="noreferrer" whileHover={{ y: -2 }} whileTap={{ scale: 0.995 }}>
           <div>
             <strong>{t(item.title)}</strong>
@@ -3441,7 +3450,8 @@ function ResourceLinks({ keys }) {
             <UiIcon icon={ICONS.arrowRight} className="resource-link-icon" />
           </em>
         </motion.a>
-      ))}
+        ),
+      )}
     </div>
   );
 }
