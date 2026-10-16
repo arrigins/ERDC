@@ -7044,3 +7044,112 @@ a.slide-viewer-download:focus-visible {
 .social-clearspace .cs-note { font-size: 15px; }
 .social-clearspace .cs-post-label { font-size: 13px; }
 .social-large > .social-overlay-downloads { margin: -4px 0 0 18px; }
+
+/* «Дизайн соцсетей»: лента постов, уходящая влево (как лента в соцсети) */
+.social-feed-wrap {
+  min-width: 0;
+}
+
+.social-feed {
+  overflow: hidden;
+  border-radius: var(--soft-radius, 24px);
+  padding: clamp(40px, 6vw, 88px) 0;
+  background: #ebeaef;
+}
+
+.social-feed-track {
+  display: flex;
+  gap: clamp(12px, 1.4vw, 20px);
+  width: max-content;
+  padding-right: clamp(12px, 1.4vw, 20px);
+  animation: social-feed-scroll var(--feed-duration, 70s) linear infinite;
+}
+
+.social-feed:hover .social-feed-track,
+.social-feed:focus-within .social-feed-track {
+  animation-play-state: paused;
+}
+
+@keyframes social-feed-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.social-feed-post {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  width: clamp(200px, 19vw, 280px);
+  border: 0;
+  border-radius: var(--r-inner, 16px);
+  padding: 0;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(7, 20, 58, 0.06);
+  cursor: zoom-in;
+  text-align: left;
+  transition: transform var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+.social-feed-post:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -18px rgba(7, 20, 58, 0.45);
+}
+
+.social-feed-post:focus-visible {
+  outline: 2px solid var(--ui-blue);
+  outline-offset: 3px;
+}
+
+.social-feed-post img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.social-feed-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px 11px;
+  color: #8a8d96;
+}
+
+.social-feed-actions svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.social-feed-actions .social-feed-save {
+  margin-left: auto;
+}
+
+@media (max-width: 760px) {
+  .social-feed {
+    padding: 28px 0;
+  }
+
+  .social-feed-post {
+    width: 62vw;
+    max-width: 260px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social-feed {
+    overflow-x: auto;
+  }
+
+  .social-feed-track {
+    animation: none;
+    padding-left: 20px;
+  }
+
+  .social-feed-track > [aria-hidden="true"] {
+    display: none;
+  }
+}

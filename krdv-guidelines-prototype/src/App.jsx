@@ -844,6 +844,8 @@ const socialPage = {
   id: "social",
   number: "13",
   cursorIcons: true,
+  heroImage: "cover-social-bubbles.webp",
+  heroTone: "plain",
   title: "Дизайн соцсетей",
   intro:
     "В соцсетях КРДВ фирменный стиль становится более эмоциональным. Фотографии, крупная типографика, градиенты и объёмные иллюстрации помогают рассказывать о проектах, людях и возможностях Дальнего Востока и Арктики.",
@@ -852,10 +854,7 @@ const socialPage = {
       id: "social-guide",
       title: "Визуальный язык соцсетей",
       paragraphs: ["Общий язык объединяет разные форматы: фотографию с логотипом, новостную карточку, цитату и пост из нескольких карточек."],
-      socialMosaic: [
-        [socialWorks.r01, socialWorks.r03, socialWorks.r14],
-        [socialWorks.r20, socialWorks.r35, socialWorks.r41],
-      ],
+      socialFeed: ["r01", "r03", "r14", "r20", "r28", "r35", "r08", "r17", "r22", "r38", "r10", "r16", "r39", "r12"].map((id) => socialWorks[id]),
       socialNote: "Примеры оформления. Даты, суммы и условия в работах исторические и могли измениться.",
     },
     {
@@ -2162,6 +2161,7 @@ function ContentSection({ section, navigate, activePageId }) {
     section.principles ? <PrincipleCards key="principles" items={section.principles} /> : null,
     section.directory ? <SectionDirectory key="directory" navigate={navigate} activePageId={activePageId} /> : null,
     section.socialMosaic ? <SocialMosaic key="social-mosaic" rows={section.socialMosaic} note={section.socialNote} /> : null,
+    section.socialFeed ? <SocialFeed key="social-feed" items={section.socialFeed} note={section.socialNote} /> : null,
     section.socialPhoto ? <SocialPhotoBlock key="social-photo" /> : null,
     section.socialFormats ? <SocialFormats key="social-formats" items={section.socialFormats} note={section.socialNote} /> : null,
     section.socialAnatomy ? <SocialAnatomy key="social-anatomy" data={section.socialAnatomy} /> : null,
@@ -3174,6 +3174,50 @@ function SocialMosaic({ rows, note }) {
             ))}
           </div>
         ))}
+      </div>
+      {note ? <p className="social-note">{t(note)}</p> : null}
+      {lightbox}
+    </div>
+  );
+}
+
+// Лента постов как в соцсети: бесконечно уходит влево, под каждой работой — условные кнопки.
+function SocialFeedActions() {
+  const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.5, strokeLinecap: "round", strokeLinejoin: "round" };
+  return (
+    <span className="social-feed-actions" aria-hidden="true">
+      <svg viewBox="0 0 24 24" {...common}><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z" /></svg>
+      <svg viewBox="0 0 24 24" {...common}><path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.4-4A8 8 0 1 1 20 11.5Z" /></svg>
+      <svg viewBox="0 0 24 24" {...common}><path d="M21 3 3 10.5l7 2.5 2.5 7L21 3Zm-11 10 5-5" /></svg>
+      <svg className="social-feed-save" viewBox="0 0 24 24" {...common}><path d="M6 3.5h12v17l-6-4.5-6 4.5v-17Z" /></svg>
+    </span>
+  );
+}
+
+function SocialFeed({ items, note }) {
+  const [open, lightbox] = useSocialLightbox();
+  const renderSet = (copy) =>
+    items.map((work, index) => (
+      <button
+        key={`${copy}-${work.id}`}
+        type="button"
+        className="social-feed-post"
+        onClick={() => open(items, index)}
+        aria-label={t(`Открыть целиком: ${work.alt}`)}
+        aria-hidden={copy ? true : undefined}
+        tabIndex={copy ? -1 : undefined}
+      >
+        <img src={work.sm} alt={copy ? "" : t(work.alt)} loading="lazy" width={720} height={720} />
+        <SocialFeedActions />
+      </button>
+    ));
+  return (
+    <div className="social-feed-wrap">
+      <div className="social-feed">
+        <div className="social-feed-track" style={{ "--feed-duration": `${items.length * 6}s` }}>
+          {renderSet(0)}
+          {renderSet(1)}
+        </div>
       </div>
       {note ? <p className="social-note">{t(note)}</p> : null}
       {lightbox}
