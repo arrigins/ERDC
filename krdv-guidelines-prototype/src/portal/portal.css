@@ -1012,3 +1012,159 @@ select.pp-input {
   justify-self: start;
   padding: 0;
 }
+
+/* Три задачи */
+.pp-tasks {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Что делают дизайнеры: две ленты примеров */
+.pp-designers {
+  display: grid;
+  gap: 20px;
+  border-radius: var(--radius);
+  padding: clamp(20px, 2.4vw, 32px) 0;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.pp-designers-head,
+.pp-feed-copy {
+  padding: 0 clamp(20px, 2.4vw, 32px);
+}
+
+.pp-designers-head h2 {
+  margin: 0 0 6px;
+  font-size: clamp(22px, 2vw, 28px);
+  font-weight: 400;
+}
+
+.pp-designers-head p,
+.pp-feed-copy p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.pp-feed-block {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.pp-feed-copy h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 450;
+}
+
+.pp-feed {
+  overflow: hidden;
+  padding: 18px 0;
+  background: #ebeaef;
+}
+
+.pp-feed-track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  padding-right: 16px;
+  animation: pp-feed-scroll var(--feed-duration, 40s) linear infinite;
+}
+
+@keyframes pp-feed-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.pp-feed-post {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  width: clamp(170px, 16vw, 230px);
+  margin: 0;
+  border-radius: var(--r-inner);
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(7, 20, 58, 0.06);
+}
+
+.pp-feed-post img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+}
+
+.pp-feed-actions {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px 11px;
+}
+
+.pp-feed-actions svg {
+  width: auto;
+  height: 18px;
+}
+
+.pp-feed-actions .pp-feed-save {
+  margin-left: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pp-feed {
+    overflow-x: auto;
+  }
+
+  .pp-feed-track {
+    animation: none;
+  }
+
+  .pp-feed-track > [aria-hidden="true"] {
+    display: none;
+  }
+}
+
+/* Вход по паролю */
+.pp-gate {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 24px 16px;
+}
+
+.pp-gate-card {
+  display: grid;
+  gap: 12px;
+  width: min(100%, 420px);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  background: #ffffff;
+}
+
+.pp-gate-card img {
+  height: 40px;
+  justify-self: start;
+}
+
+.pp-gate-card h1 {
+  margin: 12px 0 0;
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.pp-gate-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.pp-gate-card .pp-field {
+  border-bottom: 0;
+  padding-bottom: 4px;
+}
+
+@media (max-width: 760px) {
+  .pp-tasks {
+    grid-template-columns: 1fr;
+  }
+}

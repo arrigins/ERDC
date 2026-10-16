@@ -29,14 +29,13 @@ export const backgroundPresets = [
     ],
   },
   {
-    id: "silk",
-    title: "Шёлк",
-    base: "#1a3bf2",
-    edge: { x: 1560, y: -760, r: 1520, c: "lavender" },
+    id: "ray",
+    title: "Луч",
+    base: "#0a24f2",
     blobs: [
-      { x: 540, y: 1220, r: 760, c: "sky", a: 0.9 },
-      { x: -40, y: 1120, r: 360, c: "cyan", a: 0.95 },
-      { x: 1100, y: 1100, r: 420, c: "lavender", a: 0.75 },
+      { x: 860, y: 760, r: 560, c: "azure", a: 0.4, sx: 0.42, rot: -0.32 },
+      { x: 930, y: 960, r: 300, c: "sky", a: 0.95, sx: 0.5, rot: -0.32 },
+      { x: 800, y: -40, r: 300, c: "azure", a: 0.45, sx: 0.5, rot: -0.3 },
     ],
   },
   {
@@ -44,9 +43,9 @@ export const backgroundPresets = [
     title: "Лагуна",
     base: "#0130f0",
     blobs: [
-      { x: -160, y: 360, r: 980, c: "sky", a: 0.85 },
+      { x: -160, y: 360, r: 900, c: "sky", a: 0.7 },
       { x: -30, y: -30, r: 260, c: "cyan", a: 0.9 },
-      { x: -40, y: 1120, r: 620, c: "lavender", a: 0.85 },
+      { x: -40, y: 1120, r: 420, c: "lavender", a: 0.8 },
       { x: 1120, y: -60, r: 520, c: "deep", a: 0.9 },
     ],
   },
@@ -89,38 +88,26 @@ export function generatedSpec(seed) {
   const pick = (list) => list[Math.floor(rand() * list.length)];
   const between = (min, max) => min + rand() * (max - min);
   const blobs = [];
-  const count = 3 + Math.floor(rand() * 3);
-  for (let i = 0; i < count; i += 1) {
-    const light = rand() < 0.45;
-    const c = light ? pick(LIGHT) : pick(MID);
-    // Светлые пятна — справа или снизу, чтобы белый заголовок слева сверху читался
-    let x;
-    let y;
-    if (light) {
-      if (rand() < 0.5) {
-        x = between(820, 1180);
-        y = between(-120, 1180);
-      } else {
-        x = between(-120, 1180);
-        y = between(820, 1180);
-      }
-    } else {
-      x = between(-150, 1230);
-      y = between(-150, 1230);
-    }
+  // Средние тона — мягкие и неяркие, могут быть где угодно
+  const mids = 2 + Math.floor(rand() * 2);
+  for (let i = 0; i < mids; i += 1) {
+    blobs.push({ x: between(-150, 1230), y: between(-150, 1230), r: between(320, 680), c: pick(MID), a: between(0.3, 0.6), sx: rand() < 0.5 ? between(0.45, 0.8) : 1, rot: between(-1.2, 1.2) });
+  }
+  // Светлые акценты — небольшие, у края справа или снизу, часто вытянутые «лучом»: без огромных светлых пятен
+  const lights = 1 + Math.floor(rand() * 2);
+  for (let i = 0; i < lights; i += 1) {
+    const side = rand() < 0.5;
     blobs.push({
-      x,
-      y,
-      r: between(light ? 260 : 380, light ? 620 : 900),
-      c,
-      a: light ? between(0.6, 0.95) : between(0.45, 0.8),
-      sx: rand() < 0.4 ? between(0.55, 2.1) : 1,
-      rot: between(-1.2, 1.2),
+      x: side ? between(900, 1160) : between(300, 1150),
+      y: side ? between(-60, 1150) : between(900, 1160),
+      r: between(200, 380),
+      c: pick(["sky", "cyan", "lavender"]),
+      a: between(0.55, 0.9),
+      sx: rand() < 0.6 ? between(0.4, 0.7) : 1,
+      rot: between(-1, 1),
     });
   }
-  // Кромка — только в правом нижнем углу, чтобы светлая дуга не проходила через текст
-  const edge = rand() < 0.35 ? { x: between(1650, 1850), y: between(1650, 1850), r: between(1150, 1300), c: rand() < 0.6 ? "lavender" : "cyan" } : null;
-  return { base: pick(["#0120f2", "#0a24f2", "#1a3bf2", "#0130f0"]), blobs, edge };
+  return { base: pick(["#0120f2", "#0a24f2", "#0a24f2", "#0130f0"]), blobs, edge: null };
 }
 
 export function specFor(bg) {

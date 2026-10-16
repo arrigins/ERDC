@@ -228,6 +228,23 @@ export function renderCard(ctx, card, layout, assets) {
       const inner = d * 0.62;
       drawContain(ctx, assets.art, { x: cx - inner / 2, y: cy - inner / 2, w: inner, h: inner });
     } else {
+      // Иллюстрация не должна сливаться с фоном: на градиенте под ней мягкое светлое сияние
+      if (tone === "blue") {
+        const box = layout.art;
+        const ratio = Math.min(box.w / assets.art.width, box.h / assets.art.height);
+        const w = assets.art.width * ratio;
+        const h = assets.art.height * ratio;
+        const cx = box.x + box.w - w / 2;
+        const cy = box.y + box.h - h / 2;
+        const r = Math.max(w, h) * 0.8;
+        const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+        glow.addColorStop(0, "rgba(190, 236, 255, 1)");
+        glow.addColorStop(0.5, "rgba(140, 214, 255, 0.85)");
+        glow.addColorStop(0.75, "rgba(100, 190, 255, 0.4)");
+        glow.addColorStop(1, "rgba(80, 170, 255, 0)");
+        ctx.fillStyle = glow;
+        ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+      }
       drawContain(ctx, assets.art, layout.art);
     }
   }

@@ -7514,3 +7514,15 @@ a.slide-viewer-download:focus-visible {
   font-size: 15px;
   line-height: 1.45;
 }
+
+/* Пометка о доступе на карточке-ссылке (портал пресс-службы) */
+.resource-links .resource-link-note {
+  display: block;
+  width: fit-content;
+  margin-top: 14px;
+  border-radius: 999px;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  font-size: 14px;
+}

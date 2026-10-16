@@ -6,13 +6,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { FRAME, MAX_ZOOM, asset, clamp, coverCrop, decodePhoto, downloadCanvas, loadImage, moveCrop, zoomCrop } from "./photo.js";
 import { QuoteEditor } from "./QuoteEditor.jsx";
-import { NewsEditor, SeriesEditor } from "./CardEditor.jsx";
+import { NewsEditor } from "./CardEditor.jsx";
 
 const tasks = [
   { id: "photo", title: "Фото с логотипом", text: "Загрузите фотографию, выберите вариант логотипа и скачайте готовый пост.", image: "assets/social/demo-photo-branded.webp", status: "ready" },
   { id: "quote", title: "Цитата", text: "Портрет, имя, должность и текст цитаты на фирменной карточке.", image: "assets/social/r14-sm.webp", status: "ready" },
   { id: "news", title: "Новость", text: "Заголовок, подзаголовок, метка и иллюстрация из библиотеки.", image: "assets/social/r01-sm.webp", status: "ready" },
-  { id: "series", title: "Серия карточек", text: "От 2 до 10 карточек: обложка, сообщения и завершение.", image: "assets/social/r35-sm.webp", status: "ready" },
 ];
 
 const overlays = {
@@ -37,12 +36,54 @@ function Header({ onHome }) {
   );
 }
 
+// Лента примеров, как в гайде («Визуальный язык соцсетей»): посты на белых плашках уходят влево
+function FeedActions() {
+  const common = { fill: "none", stroke: "#757575", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" };
+  return (
+    <span className="pp-feed-actions" aria-hidden="true">
+      <svg className="pp-feed-icons" viewBox="4 4 113 27" {...common}>
+        <path d="M17.8682 27.8545L7.99276 18.2035C5.29946 15.5102 5.29946 11.0214 8.2172 8.55256C10.9105 6.0837 14.9504 6.75703 17.8682 9.67476C20.7859 6.75703 24.8259 6.0837 27.5192 8.55256C30.4369 11.0214 30.4369 15.5102 27.7436 18.2035L17.8682 27.8545Z" />
+        <path d="M70.286 24.3833C72.0213 22.1057 72.8398 19.2605 72.5803 16.4089C72.3208 13.5574 71.0019 10.9067 68.884 8.97983C66.7661 7.05293 64.0029 5.98976 61.1397 6.00007C58.2764 6.01039 55.5209 7.09346 53.417 9.03558C51.313 10.9777 50.0133 13.6378 49.7743 16.4911C49.5354 19.3444 50.3744 22.1837 52.126 24.4488C53.8776 26.7138 56.4145 28.2401 59.2362 28.7266C62.0578 29.2131 64.9594 28.6244 67.3683 27.0766L72.7549 27.9744L70.286 24.3833Z" />
+        <path d="M92.7578 7.23438H115.202L103.755 27.6585L101.062 15.9876L92.7578 7.23438Z" />
+        <path d="M101.062 15.9876L115.202 7.23438" />
+      </svg>
+      <svg className="pp-feed-save" viewBox="134 4 25 27" {...common}>
+        <path d="M138 6.65332H154.567V27.7508L146.284 20.7931L138 27.7508V6.65332Z" />
+      </svg>
+    </span>
+  );
+}
+
+function ExamplesFeed({ title, text, items }) {
+  const renderSet = (copy) =>
+    items.map((id) => (
+      <figure className="pp-feed-post" key={`${copy}-${id}`} aria-hidden={copy ? true : undefined}>
+        <img src={asset(`assets/portal/examples/ex-${id}.webp`)} alt={copy ? "" : `Пример поста ${id.toUpperCase()}`} loading="lazy" width={640} height={640} />
+        <FeedActions />
+      </figure>
+    ));
+  return (
+    <div className="pp-feed-block">
+      <div className="pp-feed-copy">
+        <h3>{title}</h3>
+        <p>{text}</p>
+      </div>
+      <div className="pp-feed">
+        <div className="pp-feed-track" style={{ "--feed-duration": `${items.length * 6}s` }}>
+          {renderSet(0)}
+          {renderSet(1)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Home({ onOpen }) {
   return (
     <main className="pp-home">
       <section className="pp-hello">
         <h1>Что оформляем?</h1>
-        <p>Выберите задачу. Готовый пост можно скачать сразу — без Figma и дизайнера.</p>
+        <p>Выберите задачу. Готовый пост можно скачать сразу.</p>
       </section>
       <div className="pp-tasks">
         {tasks.map((task) => {
@@ -70,9 +111,21 @@ function Home({ onOpen }) {
           );
         })}
       </div>
-      <section className="pp-recent">
-        <h2>Последние проекты</h2>
-        <p>Сохранение проектов появится, когда платформу подключат к корпоративному входу. В прототипе результат сразу скачивается.</p>
+      <section className="pp-designers">
+        <div className="pp-designers-head">
+          <h2>Что делают дизайнеры</h2>
+          <p>Для этих задач шаблонов в портале нет — обратитесь к дизайн-команде.</p>
+        </div>
+        <ExamplesFeed
+          title="Посты из нескольких карточек"
+          text="Например, анонс ярмарки трудоустройства: обложка, детали, адреса и призыв."
+          items={["r19", "r20", "r21", "r22", "r23"]}
+        />
+        <ExamplesFeed
+          title="Сложные иллюстрации"
+          text="Если ни одна иллюстрация из библиотеки не подходит к новости, дизайнеры подготовят свою."
+          items={["r01", "r02", "r03", "r24", "r25", "r26", "r27"]}
+        />
       </section>
       <p className="pp-privacy">Прототип работает в браузере: фотографии никуда не отправляются и не сохраняются.</p>
     </main>
@@ -403,13 +456,85 @@ function PhotoEditor({ onBack }) {
   );
 }
 
-const routes = ["photo", "quote", "news", "series"];
+const routes = ["photo", "quote", "news"];
 const readRoute = () => {
   const value = window.location.hash.replace(/^#\/?/, "");
   return routes.includes(value) ? value : "home";
 };
 
+// Вход по паролю пресс-службы. Это «шторка» для прототипа на публичном хостинге,
+// а не защита: настоящий закрытый доступ — корпоративный вход на домене КРДВ (ТЗ, раздел 3).
+const PASSWORD_HASH = "a0aec6870866732458ae392301c1a743b87f2ce4b8faa850940415a23d285b1d";
+const UNLOCK_KEY = "krdv-portal-unlocked";
+
+async function sha256(value) {
+  const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
+  return [...new Uint8Array(bytes)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+function readUnlocked() {
+  try {
+    return sessionStorage.getItem(UNLOCK_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function PasswordGate({ onUnlock }) {
+  const [value, setValue] = useState("");
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const submit = async (event) => {
+    event.preventDefault();
+    setBusy(true);
+    const ok = (await sha256(value.trim())) === PASSWORD_HASH;
+    setBusy(false);
+    if (!ok) {
+      setError("Неверный пароль. Уточните его у руководителя пресс-службы.");
+      return;
+    }
+    try {
+      sessionStorage.setItem(UNLOCK_KEY, "1");
+    } catch {
+      // без хранилища вход действует до закрытия вкладки
+    }
+    onUnlock();
+  };
+  return (
+    <main className="pp-gate">
+      <form className="pp-gate-card" onSubmit={submit}>
+        <img src={asset("assets/logos/krdv-logo-ru-horizontal.svg")} alt="КРДВ" />
+        <h1>Платформа публикаций</h1>
+        <p>Доступно для пресс-службы КРДВ. Введите пароль, чтобы продолжить.</p>
+        <label className="pp-field">
+          <span className="pp-label">Пароль</span>
+          <input
+            className="pp-input"
+            type="password"
+            value={value}
+            onChange={(event) => {
+              setValue(event.target.value);
+              setError("");
+            }}
+            autoComplete="current-password"
+            autoFocus
+          />
+        </label>
+        {error ? (
+          <div className="pp-error" role="alert">
+            {error}
+          </div>
+        ) : null}
+        <button type="submit" className="pp-button is-primary" disabled={!value || busy}>
+          Войти
+        </button>
+      </form>
+    </main>
+  );
+}
+
 export function Portal() {
+  const [unlocked, setUnlocked] = useState(readUnlocked);
   const [route, setRoute] = useState(readRoute);
 
   useEffect(() => {
@@ -433,13 +558,13 @@ export function Portal() {
         <QuoteEditor onBack={() => go("home")} />
       ) : route === "news" ? (
         <NewsEditor onBack={() => go("home")} />
-      ) : route === "series" ? (
-        <SeriesEditor onBack={() => go("home")} />
       ) : (
         <Home onOpen={go} />
       ),
     [route],
   );
+
+  if (!unlocked) return <PasswordGate onUnlock={() => setUnlocked(true)} />;
 
   return (
     <div className="pp-app">

@@ -301,11 +301,11 @@ const downloadResources = {
   },
   socialPortal: {
     title: "Портал для оформления постов",
-    description: "Готовые шаблоны и наложения в одном месте — оформите пост без дизайнера",
-    // Ссылка появится после запуска портала; пока карточка неактивна
-    url: "",
+    description: "Готовые шаблоны и наложения в одном месте",
+    // Вход по паролю пресс-службы (запрашивается на самом портале)
+    url: assetPath("/portal.html"),
     action: "Перейти на портал",
-    pending: "Ссылка появится после запуска портала",
+    note: "Доступно для пресс-службы КРДВ",
   },
   socialEmoji: {
     title: "Эмодзи КРДВ в Telegram",
@@ -3515,6 +3515,7 @@ function ResourceLinks({ keys }) {
           <div>
             <strong>{t(item.title)}</strong>
             <p>{t(noDot(item.description))}</p>
+            {item.note ? <span className="resource-link-note">{t(item.note)}</span> : null}
           </div>
           <em>
             {t(item.action || "Открыть архив")}
