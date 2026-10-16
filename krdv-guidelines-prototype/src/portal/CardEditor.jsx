@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { FRAME, decodePhoto, downloadCanvas } from "./photo.js";
-import { badgeSources, cardKinds, compositions, directionById, directions, layoutCard, loadCached, renderCard, signSrc } from "./cardTemplate.js";
+import { FRAME, downloadCanvas } from "./photo.js";
+import { badgeSources, cardKinds, compositions, layoutCard, loadCached, renderCard } from "./cardTemplate.js";
+import { groupOf, illustrationGroups, illustrationSrc } from "./illustrations.js";
 import { makeZip } from "./zip.js";
 import { backgroundPresets, drawBrandBackground, randomSeed } from "./backgrounds.js";
 
@@ -65,26 +66,67 @@ function useTemplateBase() {
   return { fontState, badges, error };
 }
 
-// Картинки иллюстраций: знак программы из библиотеки или загруженный PNG
-function useArtImages(cards, uploads) {
+// Картинки иллюстраций из библиотеки
+function useArtImages(cards) {
   const [images, setImages] = useState({});
   useEffect(() => {
     let alive = true;
     cards.forEach((card) => {
-      if (card.art?.type === "sign" && !images[`sign:${card.art.id}`]) {
-        loadCached(signSrc(card.art.id)).then((image) => alive && setImages((current) => ({ ...current, [`sign:${card.art.id}`]: image })));
+      const id = card.art?.id;
+      if (card.art?.type === "il" && !images[id]) {
+        loadCached(illustrationSrc(id)).then((image) => alive && setImages((current) => ({ ...current, [id]: image })));
       }
     });
     return () => {
       alive = false;
     };
   }, [cards]); // eslint-disable-line react-hooks/exhaustive-deps
-  return (art) => {
-    if (!art) return null;
-    if (art.type === "sign") return images[`sign:${art.id}`] || null;
-    if (art.type === "upload") return uploads[art.key]?.bitmap || null;
-    return null;
-  };
+  return (art) => (art?.type === "il" ? images[art.id] || null : null);
+}
+
+// Выбор иллюстрации: вкладки групп и короткий ряд картинок выбранной группы
+function IllustrationPicker({ value, onChange, required }) {
+  const [groupId, setGroupId] = useState(() => (value ? groupOf(value).id : illustrationGroups[0].id));
+  const group = illustrationGroups.find((item) => item.id === groupId) || illustrationGroups[0];
+  return (
+    <div className="pp-illu">
+      <div className="pp-illu-tabs" role="tablist" aria-label="Группы иллюстраций">
+        {illustrationGroups.map((item) => (
+          <button
+            type="button"
+            key={item.id}
+            role="tab"
+            aria-selected={item.id === group.id}
+            className={item.id === group.id ? "is-active" : ""}
+            onClick={() => setGroupId(item.id)}
+          >
+            {item.title}
+            {value && groupOf(value).id === item.id ? <span className="pp-illu-dot" aria-hidden="true" /> : null}
+          </button>
+        ))}
+      </div>
+      <div className="pp-illu-grid" role="tabpanel">
+        {group.items.map((item) => (
+          <button
+            type="button"
+            key={item.id}
+            className={`pp-illu-item ${value === item.id ? "is-active" : ""}`}
+            onClick={() => onChange(value === item.id && !required ? null : item.id)}
+            aria-label={item.title}
+            aria-pressed={value === item.id}
+            title={item.title}
+          >
+            <img src={illustrationSrc(item.id)} alt="" loading="lazy" />
+          </button>
+        ))}
+      </div>
+      {value && !required ? (
+        <button type="button" className="pp-button is-text" onClick={() => onChange(null)}>
+          Убрать иллюстрацию
+        </button>
+      ) : null}
+    </div>
+  );
 }
 
 // Данные для вёрстки: пустые поля в предпросмотре заменяются бледной подсказкой
@@ -132,17 +174,6 @@ async function renderToBlob(card, layout, base, artImage, size, format) {
   return canvas;
 }
 
-async function hasTransparency(bitmap) {
-  const canvas = document.createElement("canvas");
-  canvas.width = 48;
-  canvas.height = 48;
-  const ctx = canvas.getContext("2d");
-  ctx.drawImage(bitmap, 0, 0, 48, 48);
-  const data = ctx.getImageData(0, 0, 48, 48).data;
-  for (let i = 3; i < data.length; i += 4) if (data[i] < 250) return true;
-  return false;
-}
-
 const sameBg = (a, b) => Boolean(a && b) && (a.preset ? a.preset === b.preset : a.seed === b.seed);
 
 function BackgroundSwatch({ bg, active, onClick, label }) {
@@ -187,13 +218,11 @@ function BackgroundPicker({ value, onChange }) {
 }
 
 // Поля одной карточки
-function CardFields({ card, layout, onChange, uploads, onUpload, artWarning, showTone, direction }) {
+function CardFields({ card, layout, onChange, showTone }) {
   const issueFor = (field) => layout?.issues.find((issue) => issue.field === field);
   const set = (key) => (event) => onChange({ [key]: event.target.value });
-  const inputRef = useRef(null);
   const composition = card.composition ? compositions[card.composition] : null;
   const canHaveArt = Boolean(composition?.art);
-  const signs = directions.filter((item) => item.sign);
 
   return (
     <>
@@ -245,7 +274,7 @@ function CardFields({ card, layout, onChange, uploads, onUpload, artWarning, sho
           <span className="pp-label">Метка</span>
           <input className="pp-input" value={card.tag} onChange={set("tag")} placeholder="Например: действует 20 лет" maxLength={48} />
           <span className="pp-note">
-            Необязательно. Дата, условие или действие на плашке цвета {direction.id === "none" ? "фирменного красного" : `направления «${direction.title}»`}.
+            Необязательно. Дата, условие или действие на красной плашке.
           </span>
           {issueFor("tag") ? <span className="pp-warning">{issueFor("tag").text}</span> : null}
         </label>
@@ -254,54 +283,8 @@ function CardFields({ card, layout, onChange, uploads, onUpload, artWarning, sho
       {canHaveArt ? (
         <fieldset className="pp-field">
           <legend className="pp-label">Иллюстрация{composition.art.required ? " *" : ""}</legend>
-          <div className="pp-library">
-            <button type="button" className={`pp-library-item ${!card.art ? "is-active" : ""}`} onClick={() => onChange({ art: null })}>
-              <span className="pp-library-empty">Нет</span>
-            </button>
-            {signs.map((item) => (
-              <button
-                type="button"
-                key={item.sign}
-                className={`pp-library-item ${card.art?.type === "sign" && card.art.id === item.sign ? "is-active" : ""}`}
-                onClick={() => onChange({ art: { type: "sign", id: item.sign } })}
-                aria-label={`Знак ${item.title}`}
-              >
-                <img src={signSrc(item.sign)} alt="" />
-                <span>{item.title}</span>
-              </button>
-            ))}
-            {Object.entries(uploads).map(([key, upload]) => (
-              <button
-                type="button"
-                key={key}
-                className={`pp-library-item ${card.art?.type === "upload" && card.art.key === key ? "is-active" : ""}`}
-                onClick={() => onChange({ art: { type: "upload", key } })}
-                aria-label={`Иллюстрация ${upload.name}`}
-              >
-                <img src={upload.url} alt="" />
-                <span>{upload.name}</span>
-              </button>
-            ))}
-          </div>
-          <button type="button" className="pp-button is-secondary" onClick={() => inputRef.current?.click()}>
-            Загрузить PNG для проверки
-          </button>
-          <span className="pp-note">
-            Утверждённую библиотеку иллюстраций наполнит дизайн-команда. Пока доступны знаки программ и своя картинка для проверки — PNG с прозрачным фоном.
-          </span>
-          {artWarning ? <span className="pp-warning">{artWarning}</span> : null}
+          <IllustrationPicker value={card.art?.id || null} required={composition.art.required} onChange={(id) => onChange({ art: id ? { type: "il", id } : null })} />
           {issueFor("art") ? <span className="pp-warning">{issueFor("art").text}</span> : null}
-          <input
-            ref={inputRef}
-            type="file"
-            accept="image/png,image/webp"
-            hidden
-            onChange={async (event) => {
-              const file = event.target.files?.[0];
-              event.target.value = "";
-              if (file) onUpload(file);
-            }}
-          />
         </fieldset>
       ) : null}
 
@@ -322,26 +305,6 @@ function CardFields({ card, layout, onChange, uploads, onUpload, artWarning, sho
       {issueFor("layout") ? <span className="pp-warning">{issueFor("layout").text}</span> : null}
     </>
   );
-}
-
-function useUploads(setError) {
-  const [uploads, setUploads] = useState({});
-  const [artWarning, setArtWarning] = useState("");
-  const add = async (file) => {
-    setError("");
-    setArtWarning("");
-    try {
-      const photo = await decodePhoto(file);
-      if (!(await hasTransparency(photo.bitmap))) setArtWarning("У картинки нет прозрачного фона — вокруг иллюстрации будет видна подложка. Для библиотеки нужен PNG с прозрачностью.");
-      const key = `u${Date.now()}`;
-      setUploads((current) => ({ ...current, [key]: photo }));
-      return key;
-    } catch (problem) {
-      setError(problem.message);
-      return null;
-    }
-  };
-  return { uploads, add, artWarning };
 }
 
 function useLeaveWarning(active) {
@@ -385,14 +348,13 @@ const measureCtx = () => document.createElement("canvas").getContext("2d");
 export function NewsEditor({ onBack }) {
   const base = useTemplateBase();
   const [card, setCard] = useState(() => newCard("news"));
-  const [direction, setDirection] = useState("none");
+  const direction = "none";
   const [format, setFormat] = useState("png");
   const [size, setSize] = useState(1080);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
-  const { uploads, add, artWarning } = useUploads(setError);
-  const artOf = useArtImages([card], uploads);
+  const artOf = useArtImages([card]);
 
   const dirty = Boolean(card.title || card.subtitle || card.tag || card.art);
   useLeaveWarning(dirty && !done);
@@ -443,27 +405,11 @@ export function NewsEditor({ onBack }) {
         <section className="pp-panel" aria-label="Настройки">
           {base.fontState === "failed" ? <div className="pp-error" role="alert">Не загрузился фирменный шрифт TT Norms Pro, поэтому скачать карточку нельзя. Проверьте интернет и обновите страницу.</div> : null}
           {error || base.error ? <div className="pp-error" role="alert">{error || base.error}</div> : null}
-          <fieldset className="pp-field">
-            <legend className="pp-label">Направление</legend>
-            <select className="pp-input" value={direction} onChange={(event) => { setDirection(event.target.value); setDone(false); }}>
-              {directions.map((item) => (
-                <option key={item.id} value={item.id}>{item.title}</option>
-              ))}
-            </select>
-            <span className="pp-note">Название направления появится на карточке, его цвет — у метки.</span>
-          </fieldset>
           <CardFields
             card={card}
             layout={realLayout}
             onChange={change}
-            uploads={uploads}
-            onUpload={async (file) => {
-              const key = await add(file);
-              if (key) change({ art: { type: "upload", key } });
-            }}
-            artWarning={artWarning}
             showTone
-            direction={directionById(direction)}
           />
           <ExportFields format={format} setFormat={setFormat} size={size} setSize={setSize} name="news" />
           <div className="pp-actions">
@@ -488,7 +434,7 @@ export function SeriesEditor({ onBack }) {
   const base = useTemplateBase();
   const [cards, setCards] = useState(() => [newCard("cover"), newCard("info"), newCard("final")]);
   const [selected, setSelected] = useState(0);
-  const [direction, setDirection] = useState("korf");
+  const direction = "none";
   const [rhythm, setRhythm] = useState("alternate");
   const [seriesBg, setSeriesBg] = useState({ preset: "glow" });
   const [varyBg, setVaryBg] = useState(true);
@@ -498,8 +444,7 @@ export function SeriesEditor({ onBack }) {
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [removed, setRemoved] = useState(null);
-  const { uploads, add, artWarning } = useUploads(setError);
-  const artOf = useArtImages(cards, uploads);
+  const artOf = useArtImages(cards);
 
   const dirty = cards.some((card) => card.title || card.subtitle || card.tag || card.art);
   useLeaveWarning(dirty && !done);
@@ -579,7 +524,7 @@ export function SeriesEditor({ onBack }) {
     setBusy(true);
     setError("");
     try {
-      const slug = direction === "none" ? "seriya" : direction;
+      const slug = "seriya";
       const ext = format === "jpg" ? "jpg" : "png";
       const files = [];
       for (let index = 0; index < prepared.length; index += 1) {
@@ -666,17 +611,12 @@ export function SeriesEditor({ onBack }) {
 
           <fieldset className="pp-field">
             <legend className="pp-label">Вся серия</legend>
-            <select className="pp-input" value={direction} onChange={(event) => { setDirection(event.target.value); setDone(false); }} aria-label="Направление">
-              {directions.map((item) => (
-                <option key={item.id} value={item.id}>{item.title}</option>
-              ))}
-            </select>
             <select className="pp-input" value={rhythm} onChange={(event) => { setRhythm(event.target.value); setDone(false); }} aria-label="Ритм фонов">
               {Object.entries(rhythms).map(([id, item]) => (
                 <option key={id} value={id}>{item.title}</option>
               ))}
             </select>
-            <span className="pp-note">Направление и ритм фонов общие для всех карточек. Цвет направления — у меток, название — на каждой карточке.</span>
+            <span className="pp-note">Порядок фонов общий для всех карточек.</span>
           </fieldset>
 
           {rhythm !== "none" ? (
@@ -698,14 +638,7 @@ export function SeriesEditor({ onBack }) {
             card={current}
             layout={selectedLayout?.real}
             onChange={change}
-            uploads={uploads}
-            onUpload={async (file) => {
-              const key = await add(file);
-              if (key) change({ art: { type: "upload", key } });
-            }}
-            artWarning={artWarning}
             showTone={false}
-            direction={directionById(direction)}
           />
 
           <ExportFields format={format} setFormat={setFormat} size={size} setSize={setSize} name="series" />

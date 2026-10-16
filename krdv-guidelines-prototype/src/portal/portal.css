@@ -935,3 +935,80 @@ select.pp-input {
   height: 20px;
   accent-color: var(--ui-blue);
 }
+
+/* Иллюстрации: вкладки групп + короткий ряд */
+.pp-illu {
+  display: grid;
+  gap: 10px;
+}
+
+.pp-illu-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pp-illu-tabs button {
+  position: relative;
+  min-height: 40px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 14px;
+  background: var(--soft-bg);
+  color: var(--muted);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.pp-illu-tabs button.is-active {
+  background: var(--ui-blue);
+  color: #ffffff;
+}
+
+.pp-illu-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  vertical-align: middle;
+}
+
+.pp-illu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  gap: 8px;
+}
+
+.pp-illu-item {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border: 1px solid transparent;
+  border-radius: var(--r-control);
+  padding: 8px;
+  background: linear-gradient(160deg, #1d3df3, #1230f2);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.pp-illu-item:hover {
+  transform: translateY(-2px);
+}
+
+.pp-illu-item.is-active {
+  outline: 3px solid var(--ui-blue);
+  outline-offset: 2px;
+}
+
+.pp-illu-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.pp-illu .pp-button.is-text {
+  justify-self: start;
+  padding: 0;
+}
