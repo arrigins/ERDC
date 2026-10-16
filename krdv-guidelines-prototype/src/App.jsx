@@ -961,7 +961,7 @@ const pagesData = [
         navTitle: "МА 2030",
         paragraphs: ["«Муравьёв-Амурский 2030» — бесплатная годовая образовательная программа по подготовке управленческих кадров для госслужбы. Проект реализуется Министерством по развитию Дальнего Востока и Арктики совместно с КРДВ. У программы свой фирменный стиль. Правила его использования — в брендбуке ниже."],
         brandLogoVersions: [
-          { title: "Основная версия", file: "ma2030-logo-main", alt: "Логотип «Муравьёв-Амурский 2030», основная версия", shape: "square" },
+          { title: "Основная версия", file: "ma2030-logo-main-v2", alt: "Логотип «Муравьёв-Амурский 2030», основная версия", shape: "square" },
           { title: "Горизонтальная версия", file: "ma2030-logo", alt: "Логотип «Муравьёв-Амурский 2030», горизонтальная версия", shape: "wide" },
         ],
         resourceLinks: ["ma2030Brandbook"],
@@ -1170,7 +1170,7 @@ const pagesData = [
         paragraphs: ["Кабинетные таблички подстраиваются под планировку офиса и видимость маршрута. Рекомендованное соотношение сторон: 3 по вертикали к 2 по горизонтали."],
         rules: [{ label: "Заказ табличек", text: "Перед изготовлением нужно передать список кабинетов, размеры и условия размещения в профильный департамент." }],
         assetImages: [
-          { title: "Кабинеты", caption: "Табличка подразделения в интерьере офиса.", file: "office-navigation-mockup.webp", mockup: true },
+          { title: "Кабинеты", caption: "Табличка подразделения в интерьере офиса.", file: "office-navigation-mockup.webp", mockup: true, cover: true },
           { title: "Переговорные", caption: "Название и номер помогают быстро найти нужную комнату.", file: "office-sign-meeting.webp", mockup: true },
           { title: "Кабинеты", caption: "Название подразделения на двери кабинета.", file: "office-sign-accounting.webp", mockup: true },
           { title: "Общие зоны", caption: "Гардероб, кухня и другие помещения общего пользования.", file: "office-sign-cloakroom.webp", mockup: true },
@@ -1181,7 +1181,7 @@ const pagesData = [
         title: "Режимник",
         paragraphs: ["Режимник фиксирует график работы предприятия или дочернего общества. Размер выбирается по месту установки, но композиция сохраняет вертикальную доминанту 3:2."],
         assetImages: [{ title: "Режимник работы", caption: "Табличка объединяет расписание, адрес и контакты организации.", file: "schedule-sign-layout-white.webp", mockup: true },
-          { title: "Режимник у входа", caption: "Табличка на фасаде рядом с входом в офис.", file: "schedule-sign-mockup.webp", mockup: true },
+          { title: "Режимник у входа", caption: "Табличка на фасаде рядом с входом в офис.", file: "schedule-sign-mockup.webp", mockup: true, cover: true },
         ],
       },
       {
@@ -2955,7 +2955,7 @@ function AssetImageGrid({ items, mode = "grid" }) {
     <LayoutGroup>
       <motion.div className={`asset-image-grid is-${mode}`} layout>
         {items.map((item) => (
-          <motion.article className={`asset-image-card ${item.wide ? "is-wide" : ""} ${item.contained ? "is-contained" : ""} ${item.embeddedText ? "has-embedded-text" : ""} ${item.mockup ? "is-mockup" : ""}`} key={item.file} layout whileHover={{ y: -2 }}>
+          <motion.article className={`asset-image-card ${item.wide ? "is-wide" : ""} ${item.contained ? "is-contained" : ""} ${item.embeddedText ? "has-embedded-text" : ""} ${item.mockup ? "is-mockup" : ""} ${item.cover ? "is-cover" : ""}`} key={item.file} layout whileHover={{ y: -2 }}>
             <div className="asset-image-frame">
               {item.placeholder ? (
                 <div className="asset-image-placeholder" role="img" aria-label={t(item.title)} style={item.ratio ? { aspectRatio: item.ratio } : undefined}>
