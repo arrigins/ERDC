@@ -1063,6 +1063,9 @@ const pagesData = [
     navTitle: "Режимы и программы",
     cardTitle: "Префрежимы и программы",
     heroImage: "cover-regimes-glass-dark.webp",
+    // Живая обложка: те же лепестки поверх мягкого анимированного градиента (как в бренд-обещании).
+    // Откат — удалить heroGlass, останется статичная heroImage.
+    heroGlass: { petals: "cover-regimes-petals.webp", colors: ["#041b38", "#0b2c6e", "#2a2472", "#05284a", "#0e4f7c", "#0a1f4c"] },
     heroTone: "plain",
     intro: "Для преференциальных режимов используется единая система сокращений, знаков и названий. Она помогает быстро различать программы поддержки в коммуникационных материалах.",
     sections: [
@@ -2009,7 +2012,7 @@ function GuidelinePage({ page, activePageId, navigate }) {
     <article className={`guideline-page ${page.softLayout === false ? "" : "is-soft"}`}>
       <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""} ${hasLibraryHero ? "is-library" : ""} ${page.heroTone === "light" ? "is-light" : ""} ${page.heroTone === "plain" ? "is-plain" : ""}`} aria-label={t(page.title)}>
         {page.heroVideo ? <video className="hero-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : null}
-        {page.heroImage ? <img className="hero-video" src={heroAsset(page.heroImage)} alt="" aria-hidden="true" /> : null}
+        {page.heroGlass ? <GlassHero data={page.heroGlass} /> : page.heroImage ? <img className="hero-video" src={heroAsset(page.heroImage)} alt="" aria-hidden="true" /> : null}
         {page.heroAnimation === "colorTiles" ? <ColorHeroAnimation /> : null}
         {hasSubsidiaryHero ? <SubsidiaryHeroAnimation /> : null}
         {page.heroLibrary ? <LibraryHeroBackground variant={page.heroLibrary} /> : null}
@@ -2453,6 +2456,31 @@ function PrincipleGradient({ colors, seed }) {
   );
 }
 
+// Обложка «Режимов и программ»: тёмный «живой» градиент + стеклянные лепестки в цветах режимов, которые медленно покачиваются
+function GlassHero({ data, compact = false }) {
+  const reduceMotion = useReducedMotion();
+  return (
+    <div className={`${compact ? "directory-video" : "hero-video"} glass-hero`} aria-hidden="true">
+      <div className="glass-hero-mesh" style={{ "--g1": data.colors[0], "--g2": data.colors[2] }}>
+        <MeshGradient
+          colors={data.colors}
+          distortion={0.85}
+          swirl={0.35}
+          grainMixer={0}
+          grainOverlay={0}
+          speed={reduceMotion ? 0 : 0.35}
+          frame={61000}
+          scale={1.2}
+          maxPixelCount={compact ? 400000 : 1800000}
+          minPixelRatio={1}
+          style={{ width: "100%", height: "100%" }}
+        />
+      </div>
+      <img className="glass-hero-petals" src={heroAsset(data.petals)} alt="" loading={compact ? "lazy" : undefined} />
+    </div>
+  );
+}
+
 function PrincipleCards({ items }) {
   return (
     <div className="principle-cards">
@@ -2496,7 +2524,7 @@ function SectionDirectory({ navigate, activePageId }) {
             >
               <div className={`directory-visual ${hasCover || hasMotionCover || hasLibraryCover ? "has-cover" : ""} ${hasMotionCover ? "has-motion-cover" : ""} ${hasLibraryCover ? "has-library-cover" : ""}`} aria-hidden="true">
                 {page.heroVideo ? <video className="directory-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" /> : null}
-                {page.heroImage ? <img className="directory-video" src={heroAsset(page.heroImage)} alt="" loading="lazy" /> : null}
+                {page.heroGlass ? <GlassHero data={page.heroGlass} compact /> : page.heroImage ? <img className="directory-video" src={heroAsset(page.heroImage)} alt="" loading="lazy" /> : null}
                 {hasMotionCover ? <ColorHeroAnimation /> : null}
                 {hasLibraryCover ? <LibraryHeroBackground variant={page.heroLibrary} miniature /> : null}
                 {hasCover || hasMotionCover || hasLibraryCover ? null : <div className="directory-fallback" />}
