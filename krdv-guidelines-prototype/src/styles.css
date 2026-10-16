@@ -175,22 +175,6 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "TT Tsars";
-  src: url("/fonts/TT-Tsars-A-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "TT Tsars";
-  src: url("/fonts/TT-Tsars-A-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   /* Синий интерфейсных элементов (кнопки, карточки-ссылки, плашки). При наведении цвет не меняется. */
   --ui-blue: #1b3e92;
@@ -7507,4 +7491,26 @@ a.slide-viewer-download:focus-visible {
 .social-feed-actions .social-feed-save {
   width: auto;
   height: 22px;
+}
+
+/* Типографика: шрифты с десктоп-лицензией (Serif, Tsars) показаны картинкой, без поля ввода и размера */
+.font-preview-sample.is-image img {
+  display: block;
+  height: auto;
+}
+
+.font-preview-pending {
+  display: inline-block;
+  border: 1px dashed rgba(27, 62, 146, 0.35);
+  border-radius: var(--r-control, 12px);
+  padding: 18px 22px;
+  color: var(--ui-blue);
+  font-size: 17px;
+}
+
+.font-image-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.45;
 }

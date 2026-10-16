@@ -369,11 +369,6 @@ const ttNormsFontFiles = [
   { label: "ExtraBlack Italic", weight: 950, style: "italic", file: "TT-Norms-Pro-ExtraBlack-Italic.ttf" },
 ];
 
-const ttTsarsFontFiles = [
-  { label: "Regular", weight: 400, style: "normal", file: "TT-Tsars-A-Regular.woff2" },
-  { label: "Bold", weight: 700, style: "normal", file: "TT-Tsars-A-Bold.woff2" },
-];
-
 const fontFamilies = [
   {
     id: "norms",
@@ -389,8 +384,11 @@ const fontFamilies = [
     id: "serif",
     title: "TT Norms Pro Serif",
     role: "Акцидентная фирменная пара",
-    cssFamily: "Georgia",
-    sample: "Территория будущего начинается с ясной коммуникации",
+    // Десктоп-лицензия без веб-опции: на сайте только картинка-образец (файлы шрифта не подключаются)
+    // Временно — картинка прежнего образца (до замены на набор в настоящем Norms Serif)
+    imageOnly: true,
+    imageMeta: "Лицензионный пакет",
+    sampleImage: { src: "font-sample-serif.webp", alt: "Территория будущего начинается с ясной коммуникации", width: 539, height: 160 },
     description: "Семейство используется как второй, преимущественно акцидентный элемент шрифтовой пары.",
     unavailable: "Для Serif-семейства используется отдельный лицензионный пакет TypeType.",
     files: [],
@@ -399,11 +397,12 @@ const fontFamilies = [
     id: "tsars",
     title: "TT Tsars A",
     role: "Наградные документы",
-    cssFamily: "TT Tsars",
-    sample: "Грамота за развитие территорий",
+    // Десктоп-лицензия без веб-опции: образец — картинка, файлы шрифта на сайт не подключаются
+    imageOnly: true,
+    imageMeta: "Regular · 400",
+    sampleImage: { src: "font-sample-tsars-v2.webp", alt: "Грамота за развитие территорий", width: 556, height: 94 },
     description: "Гарнитура для благодарностей, благодарственных писем, почетных грамот и других наградных документов.",
-    defaultFile: "TT-Tsars-A-Regular.woff2",
-    files: ttTsarsFontFiles,
+    files: [],
   },
 ];
 
@@ -3755,9 +3754,31 @@ function FontWorkbench() {
         <AuroraBackground className="font-preview-aurora" />
         <div className="font-preview-meta">
           <span>{t(selectedFamily.role)}</span>
-          <em>{selectedStyle ? `${selectedStyle.label} · ${selectedStyle.weight}` : t("Лицензионный пакет")}</em>
+          <em>{selectedFamily.imageMeta || (selectedStyle ? `${selectedStyle.label} · ${selectedStyle.weight}` : t("Лицензионный пакет"))}</em>
         </div>
         <AnimatePresence mode="wait">
+          {selectedFamily.imageOnly ? (
+            <motion.div
+              key={`${selectedFamily.id}-image`}
+              className="font-preview-sample is-image"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {selectedFamily.sampleImage ? (
+                <img
+                  src={assetPath(`/assets/brandbook/raster/${selectedFamily.sampleImage.src}`)}
+                  alt={t(selectedFamily.sampleImage.alt)}
+                  width={selectedFamily.sampleImage.width}
+                  height={selectedFamily.sampleImage.height}
+                  style={{ width: `min(100%, ${selectedFamily.sampleImage.width}px)` }}
+                />
+              ) : (
+                <span className="font-preview-pending">{t(selectedFamily.imagePending)}</span>
+              )}
+            </motion.div>
+          ) : (
           <motion.div
             key={`${selectedFamily.id}-${selectedStyle?.file || "missing"}-${sample}-${previewSize}`}
             className="font-preview-sample"
@@ -3774,6 +3795,7 @@ function FontWorkbench() {
           >
             {t(sample || selectedFamily.sample)}
           </motion.div>
+          )}
         </AnimatePresence>
         <p>{t(noDot(selectedFamily.description))}</p>
         {selectedFamily.unavailable ? <small>{t(selectedFamily.unavailable)}</small> : null}
@@ -3796,6 +3818,8 @@ function FontWorkbench() {
           ))}
         </div>
 
+        {selectedFamily.imageOnly ? null : (
+        <>
         <label className="font-preview-input">
           <span>{t("Фраза для проверки")}</span>
           <input
@@ -3833,6 +3857,8 @@ function FontWorkbench() {
             onChange={(event) => setPreviewSize(Number(event.target.value))}
           />
         </label>
+        </>
+        )}
 
       </div>
     </div>
