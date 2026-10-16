@@ -229,14 +229,9 @@ button.pp-task:hover {
   font-weight: 400;
 }
 
-.pp-recent p,
-.pp-privacy {
+.pp-recent p {
   margin: 0;
   color: var(--muted);
-}
-
-.pp-privacy {
-  font-size: 14px;
 }
 
 /* Редактор */
@@ -877,10 +872,43 @@ select.pp-input {
   gap: 4px;
   margin: 0 0 12px;
   border-radius: var(--r-control);
-  padding: 12px 14px 12px 32px;
+  padding: 12px 14px;
   background: var(--warn-bg);
   color: #8a5300;
-  font-size: 14px;
+  font-size: 15px;
+}
+
+.pp-problems strong {
+  font-weight: 450;
+}
+
+.pp-problems ul,
+ul.pp-problems {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-left: 18px;
+}
+
+ul.pp-problems {
+  padding-left: 32px;
+}
+
+.pp-button-wrap {
+  display: block;
+}
+
+.pp-button-wrap .pp-button:disabled {
+  pointer-events: none;
+}
+
+.pp-limit {
+  color: #8a5300;
+}
+
+.pp-choice label.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 /* Фоны */

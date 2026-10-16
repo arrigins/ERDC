@@ -218,8 +218,16 @@ function BackgroundPicker({ value, onChange }) {
 }
 
 // Поля одной карточки
-function CardFields({ card, layout, onChange, showTone }) {
+const LIMIT_TEXT = {
+  title: "Больше не помещается — это предел для заголовка в этой композиции.",
+  subtitle: "Больше не помещается — сократите подзаголовок или заголовок.",
+  tag: "Больше не помещается — метка должна быть короткой.",
+  art: "Иллюстрация не поместится рядом с этим текстом. Сократите текст или выберите другую композицию.",
+};
+
+function CardFields({ card, layout, onChange, showTone, limit = null, compositionFits = null }) {
   const issueFor = (field) => layout?.issues.find((issue) => issue.field === field);
+  const limitNote = (field) => (limit === field ? <span className="pp-note pp-limit" role="status">{LIMIT_TEXT[field]}</span> : null);
   const set = (key) => (event) => onChange({ [key]: event.target.value });
   const composition = card.composition ? compositions[card.composition] : null;
   const canHaveArt = Boolean(composition?.art);
@@ -230,13 +238,16 @@ function CardFields({ card, layout, onChange, showTone }) {
         <fieldset className="pp-field">
           <legend className="pp-label">Композиция</legend>
           <div className="pp-choice">
-            {Object.entries(compositions).map(([id, item]) => (
-              <label key={id} className={card.composition === id ? "is-active" : ""}>
-                <input type="radio" name={`composition-${card.id}`} value={id} checked={card.composition === id} onChange={() => onChange({ composition: id })} />
-                <strong>{item.title}</strong>
-                <span>{item.hint}</span>
-              </label>
-            ))}
+            {Object.entries(compositions).map(([id, item]) => {
+              const off = card.composition !== id && compositionFits && !compositionFits[id];
+              return (
+                <label key={id} className={`${card.composition === id ? "is-active" : ""} ${off ? "is-disabled" : ""}`}>
+                  <input type="radio" name={`composition-${card.id}`} value={id} checked={card.composition === id} disabled={off} onChange={() => onChange({ composition: id })} />
+                  <strong>{item.title}</strong>
+                  <span>{off ? "Текущий текст сюда не поместится — сначала сократите его" : item.hint}</span>
+                </label>
+              );
+            })}
           </div>
         </fieldset>
       ) : null}
@@ -252,6 +263,7 @@ function CardFields({ card, layout, onChange, showTone }) {
       <label className="pp-field">
         <span className="pp-label">{card.kind === "final" ? "Призыв *" : "Заголовок *"}</span>
         <textarea className="pp-input" rows={2} value={card.title} onChange={set("title")} placeholder={placeholders[card.kind]?.title} />
+        {limitNote("title")}
         {issueFor("title") ? <span className="pp-warning">{issueFor("title").text}</span> : null}
       </label>
 
@@ -265,6 +277,7 @@ function CardFields({ card, layout, onChange, showTone }) {
             onChange={set("subtitle")}
             placeholder={card.kind === "info" ? "Каждый пункт с новой строки" : "Необязательно"}
           />
+          {limitNote("subtitle")}
           {issueFor("subtitle") ? <span className="pp-warning">{issueFor("subtitle").text}</span> : null}
         </label>
       ) : null}
@@ -276,6 +289,7 @@ function CardFields({ card, layout, onChange, showTone }) {
           <span className="pp-note">
             Необязательно. Дата, условие или действие на красной плашке.
           </span>
+          {limitNote("tag")}
           {issueFor("tag") ? <span className="pp-warning">{issueFor("tag").text}</span> : null}
         </label>
       ) : null}
@@ -284,6 +298,7 @@ function CardFields({ card, layout, onChange, showTone }) {
         <fieldset className="pp-field">
           <legend className="pp-label">Иллюстрация{composition.art.required ? " *" : ""}</legend>
           <IllustrationPicker value={card.art?.id || null} required={composition.art.required} onChange={(id) => onChange({ art: id ? { type: "il", id } : null })} />
+          {limitNote("art")}
           {issueFor("art") ? <span className="pp-warning">{issueFor("art").text}</span> : null}
         </fieldset>
       ) : null}
@@ -345,6 +360,24 @@ function ExportFields({ format, setFormat, size, setSize, name }) {
 
 const measureCtx = () => document.createElement("canvas").getContext("2d");
 
+const TEXT_KEYS = ["title", "subtitle", "tag"];
+const TEXT_FIELDS = ["title", "subtitle", "tag", "layout"];
+const textFits = (layout) => !layout.issues.some((issue) => TEXT_FIELDS.includes(issue.field));
+
+export function DownloadReasons({ reasons }) {
+  if (!reasons.length) return null;
+  return (
+    <div className="pp-problems" role="status">
+      <strong>Чтобы скачать:</strong>
+      <ul>
+        {reasons.map((reason) => (
+          <li key={reason}>{reason}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export function NewsEditor({ onBack }) {
   const base = useTemplateBase();
   const [card, setCard] = useState(() => newCard("news"));
@@ -363,13 +396,59 @@ export function NewsEditor({ onBack }) {
   const layout = useMemo(() => (base.fontState === "ready" ? layoutCard(measureCtx(), data) : null), [data, base.fontState]);
   const realLayout = useMemo(() => (base.fontState === "ready" ? layoutCard(measureCtx(), { ...card, direction }) : null), [card, direction, base.fontState]);
 
-  const change = (patch) => {
+  const [limit, setLimit] = useState(null);
+  const fits = (candidate) => textFits(layoutCard(measureCtx(), { ...candidate, direction }));
+
+  // Жёсткий предел: текст, который не помещается или заходит на иллюстрацию, просто не вводится.
+  // Удалять можно всегда; вставку в конец обрезаем до того, что помещается.
+  const change = (rawPatch) => {
+    let patch = rawPatch;
+    if (base.fontState === "ready" && !fits({ ...card, ...patch })) {
+      const key = TEXT_KEYS.find((item) => item in patch);
+      if (key) {
+        const before = card[key];
+        const after = patch[key];
+        if (after.length > before.length) {
+          let fitted = before;
+          if (after.startsWith(before)) {
+            let low = before.length;
+            let high = after.length - 1;
+            while (low < high) {
+              const mid = Math.ceil((low + high) / 2);
+              if (fits({ ...card, [key]: after.slice(0, mid) })) low = mid;
+              else high = mid - 1;
+            }
+            fitted = after.slice(0, low);
+          }
+          setLimit(key);
+          if (fitted === before) return;
+          patch = { [key]: fitted };
+        }
+      } else if (patch.art) {
+        setLimit("art");
+        return;
+      }
+    } else {
+      setLimit(null);
+    }
     setCard((current) => ({ ...current, ...patch }));
     setDone(false);
   };
+  const compositionFits = useMemo(
+    () => (base.fontState === "ready" ? Object.fromEntries(Object.keys(compositions).map((id) => [id, textFits(layoutCard(measureCtx(), { ...card, composition: id, direction }))])) : null),
+    [card, direction, base.fontState],
+  );
+
   const missing = missingFields(card);
   const issues = realLayout ? realLayout.issues : [];
   const blocked = base.fontState !== "ready" || !base.badges || missing.length > 0 || issues.length > 0;
+  // Почему нельзя скачать — списком над кнопкой и подсказкой при наведении
+  const reasons = [
+    base.fontState === "loading" ? "Загружается фирменный шрифт — подождите пару секунд." : null,
+    base.fontState === "failed" ? "Не загрузился фирменный шрифт TT Norms Pro — обновите страницу." : null,
+    ...missing.map((field) => `Добавьте ${field}.`),
+    ...issues.map((issue) => issue.text),
+  ].filter(Boolean);
 
   const download = async () => {
     if (blocked) return;
@@ -410,13 +489,17 @@ export function NewsEditor({ onBack }) {
             layout={realLayout}
             onChange={change}
             showTone
+            limit={limit}
+            compositionFits={compositionFits}
           />
           <ExportFields format={format} setFormat={setFormat} size={size} setSize={setSize} name="news" />
           <div className="pp-actions">
-            {missing.length && base.fontState === "ready" ? <p className="pp-note pp-missing">Чтобы скачать, добавьте {missing.join(", ")}.</p> : null}
-            <button type="button" className="pp-button is-primary" onClick={download} disabled={blocked || busy}>
-              {busy ? "Готовим файл…" : "Скачать"}
-            </button>
+            <DownloadReasons reasons={blocked ? reasons : []} />
+            <span className="pp-button-wrap" title={blocked && reasons.length ? `Скачать пока нельзя. ${reasons.join(" ")}` : undefined}>
+              <button type="button" className="pp-button is-primary" onClick={download} disabled={blocked || busy}>
+                {busy ? "Готовим файл…" : "Скачать"}
+              </button>
+            </span>
           </div>
         </section>
       </div>

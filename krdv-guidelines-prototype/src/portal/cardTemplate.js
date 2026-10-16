@@ -91,14 +91,17 @@ export function layoutCard(ctx, card) {
   const titleFont = composition ? composition.titleFont : { size: 72, line: 80, max: 3 };
   const subFont = composition ? composition.subFont : { size: 36, line: 48, max: kind === "info" ? 12 : 3 };
   const art = composition ? composition.art : null;
-  let bottomLimit = composition ? composition.bottom : 1000;
+  let bottomLimit = 1000;
   const wantsQr = kind === "final" && card.qr !== null && card.qr !== undefined;
   if (wantsQr) bottomLimit = 560;
 
+  // Прямоугольники всех строк текста — для точной проверки наложения на иллюстрацию
+  const rects = [];
   let y = TOP;
   setFont(ctx, 700, titleFont.size);
   const title = wrap(ctx, card.title.trim(), WIDTH);
-  if (title.lines.length > titleFont.max || title.tooLong) issues.push({ field: "title", text: `Заголовок не помещается в ${titleFont.max} ${titleFont.max > 1 ? "строки" : "строку"}. Сократите его.` });
+  if (title.lines.length > titleFont.max) issues.push({ field: "title", text: `Заголовок не помещается в ${titleFont.max} ${titleFont.max > 1 ? "строки" : "строку"}. Сократите его.` });
+  title.lines.forEach((line, index) => rects.push({ x: X, y: y + index * titleFont.line, w: ctx.measureText(line).width, h: titleFont.size }));
   const titleBlock = { y, lines: title.lines, font: titleFont };
   y += title.lines.length * titleFont.line;
 
@@ -110,9 +113,14 @@ export function layoutCard(ctx, card) {
     const items = bullets ? card.subtitle.split("\n").map((line) => line.trim()).filter(Boolean) : [card.subtitle.trim()];
     const blocks = items.map((item) => wrap(ctx, item, bullets ? WIDTH - 40 : WIDTH));
     const lines = blocks.reduce((sum, block) => sum + block.lines.length, 0) + (bullets ? (items.length - 1) * 0.35 : 0);
-    if (lines > subFont.max || blocks.some((block) => block.tooLong)) {
+    if (lines > subFont.max) {
       issues.push({ field: "subtitle", text: bullets ? "Список не помещается. Сократите пункты или перенесите часть на следующую карточку." : "Подзаголовок слишком длинный. Сократите его." });
     }
+    let row = y;
+    blocks.forEach((block) => {
+      block.lines.forEach((line, index) => rects.push({ x: X, y: row + index * subFont.line, w: ctx.measureText(line).width + (bullets ? 40 : 0), h: subFont.size }));
+      row += block.lines.length * subFont.line + (bullets ? subFont.line * 0.35 : 0);
+    });
     subBlock = { y, items: blocks.map((block) => block.lines), font: subFont, bullets };
     y += lines * subFont.line;
   }
@@ -124,11 +132,18 @@ export function layoutCard(ctx, card) {
     const width = ctx.measureText(card.tag.trim()).width + 44;
     if (width > WIDTH) issues.push({ field: "tag", text: "Метка должна быть короткой — в одну строку." });
     tagBlock = { y, width: Math.min(width, WIDTH), text: card.tag.trim() };
+    rects.push({ x: X, y, w: tagBlock.width, h: 54 });
     y += 54;
   }
 
-  if (y > bottomLimit) {
-    issues.push({ field: "layout", text: art ? "Текст заходит на место иллюстрации. Сократите текст или выберите композицию «Текст без иллюстрации»." : "Текст не помещается на карточке. Сократите его или разделите на две карточки." });
+  // Наложение считается по настоящим строкам: короткая строка слева не мешает иллюстрации справа
+  const artBox = art && card.art ? art : null;
+  const gap = 24;
+  const hitsArt = artBox && rects.some((r) => r.x < artBox.x + artBox.w && r.x + r.w + gap > artBox.x && r.y < artBox.y + artBox.h && r.y + r.h + gap > artBox.y);
+  if (hitsArt) {
+    issues.push({ field: "layout", text: "Текст заходит на иллюстрацию. Сократите текст, уберите иллюстрацию или выберите композицию «Текст без иллюстрации»." });
+  } else if (y > bottomLimit) {
+    issues.push({ field: "layout", text: "Текст не помещается на карточке. Сократите его." });
   }
 
   const needsArt = art?.required && !card.art;

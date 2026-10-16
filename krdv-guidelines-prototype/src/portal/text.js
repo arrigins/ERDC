@@ -30,6 +30,22 @@ export function glueWords(words) {
   return glued;
 }
 
+// Слово шире строки режется по буквам: текст никогда не выходит за правое поле
+function splitWord(ctx, word, width) {
+  const parts = [];
+  let part = "";
+  for (const char of word) {
+    if (part && ctx.measureText(part + char).width > width) {
+      parts.push(part);
+      part = char;
+    } else {
+      part += char;
+    }
+  }
+  parts.push(part);
+  return parts;
+}
+
 // Перенос по словам; неразрывные пробелы и ручные переносы сохраняются
 export function wrap(ctx, value, width) {
   const lines = [];
@@ -39,13 +55,17 @@ export function wrap(ctx, value, width) {
     let line = "";
     for (const word of words) {
       const next = line ? `${line} ${word}` : word;
-      if (ctx.measureText(next).width <= width || !line) {
+      if (ctx.measureText(next).width <= width) {
         line = next;
-        if (ctx.measureText(line).width > width) tooLong = true;
-      } else {
-        lines.push(line);
-        line = word;
-        if (ctx.measureText(line).width > width) tooLong = true;
+        continue;
+      }
+      if (line) lines.push(line);
+      line = word;
+      if (ctx.measureText(word).width > width) {
+        tooLong = true;
+        const parts = splitWord(ctx, word, width);
+        lines.push(...parts.slice(0, -1));
+        line = parts[parts.length - 1];
       }
     }
     lines.push(line);

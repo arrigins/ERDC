@@ -127,7 +127,6 @@ function Home({ onOpen }) {
           items={["r01", "r02", "r03", "r24", "r25", "r26", "r27"]}
         />
       </section>
-      <p className="pp-privacy">Прототип работает в браузере: фотографии никуда не отправляются и не сохраняются.</p>
     </main>
   );
 }
@@ -446,9 +445,12 @@ function PhotoEditor({ onBack }) {
           </div>
 
           <div className="pp-actions">
-            <button type="button" className="pp-button is-primary" onClick={download} disabled={!photo || busy}>
-              {busy ? "Готовим файл…" : "Скачать"}
-            </button>
+            {!photo ? <div className="pp-problems" role="status"><strong>Чтобы скачать:</strong><ul><li>Загрузите фотографию.</li></ul></div> : null}
+            <span className="pp-button-wrap" title={!photo ? "Скачать пока нельзя. Загрузите фотографию." : undefined}>
+              <button type="button" className="pp-button is-primary" onClick={download} disabled={!photo || busy}>
+                {busy ? "Готовим файл…" : "Скачать"}
+              </button>
+            </span>
           </div>
         </section>
       </div>

@@ -38,7 +38,7 @@ export function layoutQuote(ctx, data) {
 
   setFont(ctx, name);
   const nameWrap = wrap(ctx, data.name.trim(), text.width);
-  if (nameWrap.lines.length > name.maxLines || nameWrap.tooLong) issues.push({ field: "name", text: "Имя не помещается в две строки. Сократите его или перенесите часть в должность." });
+  if (nameWrap.lines.length > name.maxLines) issues.push({ field: "name", text: "Имя не помещается в две строки. Сократите его или перенесите часть в должность." });
   const nameBlock = { y, lines: nameWrap.lines };
   y += nameWrap.lines.length * name.line;
 
@@ -47,7 +47,7 @@ export function layoutQuote(ctx, data) {
     y += style.gapName - 8;
     setFont(ctx, role);
     const roleWrap = wrap(ctx, data.role.trim(), text.width);
-    if (roleWrap.lines.length > role.maxLines || roleWrap.tooLong) issues.push({ field: "role", text: "Должность не помещается в три строки. Сократите её." });
+    if (roleWrap.lines.length > role.maxLines) issues.push({ field: "role", text: "Должность не помещается в три строки. Сократите её." });
     roleBlock = { y, lines: roleWrap.lines };
     y += roleWrap.lines.length * role.line;
   }
@@ -60,7 +60,7 @@ export function layoutQuote(ctx, data) {
   const quoteWrap = wrap(ctx, cleanQuote(data.quote), text.width);
   const quoteBlock = { y, lines: quoteWrap.lines, size: style.quoteSize, line: style.quoteLine };
   const quoteBottom = y + quoteWrap.lines.length * style.quoteLine;
-  if (quoteWrap.lines.length > quote.maxLines || quoteBottom > text.bottom || quoteWrap.tooLong) {
+  if (quoteWrap.lines.length > quote.maxLines || quoteBottom > text.bottom) {
     issues.push({ field: "quote", text: "Сократите цитату или разделите её на карточки." });
   }
 

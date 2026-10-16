@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FRAME, MAX_ZOOM, coverCrop, decodePhoto, downloadCanvas, moveCrop, zoomCrop } from "./photo.js";
 import { fontRequests, layoutQuote, portraitCircle, renderQuote } from "./quoteTemplate.js";
+import { DownloadReasons } from "./CardEditor.jsx";
 
 // Сценарий «Цитата» (ТЗ, раздел 6): портрет в круглой маске, имя, должность, текст цитаты.
 // Предпросмотр и экспорт рисуются одной функцией renderQuote — переносы строк совпадают.
@@ -72,17 +73,13 @@ export function QuoteEditor({ onBack }) {
   }, [portrait]);
 
   const showPortrait = withPortrait;
-  const data = useMemo(
-    () => ({
-      name: fields.name || placeholders.name,
-      role: fields.role || (fields.name || fields.quote ? "" : placeholders.role),
-      quote: fields.quote || placeholders.quote,
-      density,
-      portrait: showPortrait ? (portrait && crop ? { photo: portrait, crop } : { empty: true }) : null,
-      ghost: { name: !fields.name, role: !fields.role, quote: !fields.quote },
-    }),
-    [fields, density, showPortrait, portrait, crop],
-  );
+  const data = useMemo(() => quoteData(fields, density, showPortrait, portrait, crop), [fields, density, showPortrait, portrait, crop]);
+  const [limit, setLimit] = useState(null);
+  const fits = (nextFields, nextDensity) => {
+    if (fontState !== "ready") return true;
+    const ctx = document.createElement("canvas").getContext("2d");
+    return layoutQuote(ctx, quoteData(nextFields, nextDensity, showPortrait, portrait, crop)).issues.length === 0;
+  };
 
   // Раскладка считается на скрытом контексте, чтобы показать проблемы рядом с полями
   const layout = useMemo(() => {
@@ -103,10 +100,37 @@ export function QuoteEditor({ onBack }) {
   const issues = layout ? layout.issues : [];
   const issueFor = (field) => issues.find((issue) => issue.field === field);
 
+  // Жёсткий предел: лишний текст просто не вводится; удалять можно всегда, вставку в конец обрезаем
   const setField = (key) => (event) => {
-    setFields((current) => ({ ...current, [key]: event.target.value }));
+    const before = fields[key];
+    let after = event.target.value;
+    if (after.length > before.length && !fits({ ...fields, [key]: after }, density)) {
+      let fitted = before;
+      if (after.startsWith(before)) {
+        let low = before.length;
+        let high = after.length - 1;
+        while (low < high) {
+          const mid = Math.ceil((low + high) / 2);
+          if (fits({ ...fields, [key]: after.slice(0, mid) }, density)) low = mid;
+          else high = mid - 1;
+        }
+        fitted = after.slice(0, low);
+      }
+      setLimit(key);
+      if (fitted === before) return;
+      after = fitted;
+    } else {
+      setLimit(null);
+    }
+    setFields((current) => ({ ...current, [key]: after }));
     setDone(false);
   };
+  const limitNote = (key) =>
+    limit === key ? (
+      <span className="pp-note pp-limit" role="status">
+        {key === "name" ? "Больше не помещается — имя занимает не больше двух строк." : key === "role" ? "Больше не помещается — должность занимает не больше трёх строк." : density === "normal" ? "Больше не помещается. Попробуйте плотный вариант ниже или сократите цитату." : "Больше не помещается — сократите цитату или разделите её на карточки."}
+      </span>
+    ) : null;
 
   const openFile = async (file) => {
     if (!file) return;
@@ -167,6 +191,12 @@ export function QuoteEditor({ onBack }) {
 
   const missing = [!fields.name.trim() && "имя", !cleanText(fields.quote) && "цитату", showPortrait && !portrait && "портрет"].filter(Boolean);
   const blocked = fontState !== "ready" || issues.length > 0 || missing.length > 0;
+  const reasons = [
+    fontState === "loading" ? "Загружается фирменный шрифт — подождите пару секунд." : null,
+    fontState === "failed" ? "Не загрузился фирменный шрифт TT Norms Pro — обновите страницу." : null,
+    ...missing.map((field) => (field === "портрет" ? "Загрузите портрет или выберите «Без портрета»." : `Добавьте ${field}.`)),
+    ...issues.map((issue) => issue.text),
+  ].filter(Boolean);
 
   const download = async () => {
     if (blocked) return;
@@ -303,6 +333,7 @@ export function QuoteEditor({ onBack }) {
               {counter("name", 2)}
             </span>
             <input className="pp-input" value={fields.name} onChange={setField("name")} placeholder={placeholders.name} autoComplete="off" />
+            {limitNote("name")}
             {issueFor("name") ? <span className="pp-warning">{issueFor("name").text}</span> : null}
           </label>
 
@@ -313,6 +344,7 @@ export function QuoteEditor({ onBack }) {
             </span>
             <textarea className="pp-input" rows={2} value={fields.role} onChange={setField("role")} placeholder="Например: компания «Умбатревел», резидент АЗРФ" />
             <span className="pp-note">Необязательно. Можно оставить пустым.</span>
+            {limitNote("role")}
             {issueFor("role") ? <span className="pp-warning">{issueFor("role").text}</span> : null}
           </label>
 
@@ -322,6 +354,7 @@ export function QuoteEditor({ onBack }) {
               {counter("quote", 8)}
             </span>
             <textarea className="pp-input" rows={5} value={fields.quote} onChange={setField("quote")} placeholder="Вставьте текст без кавычек — кавычки добавит шаблон" />
+            {limitNote("quote")}
             {issueFor("quote") ? (
               <span className="pp-warning">
                 {issueFor("quote").text}
@@ -340,11 +373,17 @@ export function QuoteEditor({ onBack }) {
                 ["dense", "Плотный"],
               ]}
               onChange={(value) => {
+                if (!fits(fields, value)) {
+                  setLimit("density");
+                  return;
+                }
+                setLimit(null);
                 setDensity(value);
                 setDone(false);
               }}
             />
             <span className="pp-note">Плотный — для цитаты подлиннее: текст чуть мельче, отступы меньше.</span>
+            {limit === "density" ? <span className="pp-note pp-limit" role="status">Цитата не поместится в обычном варианте — сначала сократите её.</span> : null}
           </fieldset>
 
           <div className="pp-field">
@@ -354,15 +393,28 @@ export function QuoteEditor({ onBack }) {
           </div>
 
           <div className="pp-actions">
-            {missing.length && fontState === "ready" ? <p className="pp-note pp-missing">Чтобы скачать, добавьте {missing.join(", ")}.</p> : null}
-            <button type="button" className="pp-button is-primary" onClick={download} disabled={blocked || busy}>
-              {busy ? "Готовим файл…" : "Скачать"}
-            </button>
+            <DownloadReasons reasons={blocked ? reasons : []} />
+            <span className="pp-button-wrap" title={blocked && reasons.length ? `Скачать пока нельзя. ${reasons.join(" ")}` : undefined}>
+              <button type="button" className="pp-button is-primary" onClick={download} disabled={blocked || busy}>
+                {busy ? "Готовим файл…" : "Скачать"}
+              </button>
+            </span>
           </div>
         </section>
       </div>
     </main>
   );
+}
+
+function quoteData(fields, density, showPortrait, portrait, crop) {
+  return {
+    name: fields.name || placeholders.name,
+    role: fields.role || (fields.name || fields.quote ? "" : placeholders.role),
+    quote: fields.quote || placeholders.quote,
+    density,
+    portrait: showPortrait ? (portrait && crop ? { photo: portrait, crop } : { empty: true }) : null,
+    ghost: { name: !fields.name, role: !fields.role, quote: !fields.quote },
+  };
 }
 
 function cleanText(value) {
