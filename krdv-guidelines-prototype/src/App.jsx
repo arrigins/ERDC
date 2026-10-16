@@ -861,10 +861,24 @@ const socialPage = {
       id: "social-photo",
       title: "Логотип для соцсетей",
       paragraphs: [
-        "Используйте готовое PNG наложение поверх фотографии. Не меняйте пропорции, надпись и положение логотипа. В публикации с одной фотографией брендируется эта фотография; в альбоме — первая.",
+        "Используйте готовое PNG наложение поверх фотографии. Не меняйте пропорции, надпись и положение логотипа. В публикации с одной фотографией брендируется эта фотография; в посте с несколькими фотографиями — первая.",
         "Охранное поле со всех сторон — минимум половина диаметра круга, в том числе до края изображения. Размер и положение уже заданы в наложениях: вычислять их вручную не нужно.",
       ],
       socialPhoto: true,
+    },
+    {
+      id: "social-colors",
+      title: "Цвета и иллюстрации",
+      paragraphs: ["Основа постов — насыщенный синий и тёплый молочный фон. Белый — для текста и плашек, красный — для коротких меток: даты, условия, призыва к действию."],
+      socialPalette: {
+        colors: [
+          { name: "Синий", hex: "#1230F2" },
+          { name: "Красный", hex: "#FD3D37" },
+          { name: "Белый", hex: "#FFFFFF" },
+          { name: "Молочный", hex: "#FFFAF0" },
+        ],
+        placeholder: "Здесь будет анимация иллюстраций",
+      },
     },
     {
       id: "social-formats",
@@ -878,24 +892,6 @@ const socialPage = {
         { title: "Горизонтальный коллаж", purpose: "Несколько визуальных свидетельств в одной композиции.", rule: "Изображения дополняют одну историю. Коллаж сохраняет крупный главный акцент и читаемый заголовок.", work: socialWorks.r41, wide: true },
       ],
       socialNote: "Примеры оформления. Даты, суммы и условия в работах исторические и могли измениться.",
-    },
-    {
-      id: "social-anatomy",
-      title: "Устройство карточки",
-      paragraphs: [
-        "Одна карточка передаёт одну главную мысль. Заголовок задаёт иерархию, подзаголовок уточняет сообщение, иллюстрация поддерживает тему. Дополнительные метки выделяют дату, условие или действие.",
-      ],
-      socialAnatomy: {
-        work: socialWorks.r03,
-        parts: [
-          { at: 10, title: "Логотип", text: "Круглый логотип КРДВ в левом верхнем углу." },
-          { at: 31, title: "Заголовок", text: "Главная мысль карточки, самый крупный текст." },
-          { at: 41, title: "Подзаголовок", text: "Уточняет сообщение заголовка." },
-          { at: 48, title: "Дополнительная метка", text: "Дата, условие или действие на цветной плашке." },
-          { at: 74, title: "Иллюстрация", text: "Объёмный образ поддерживает тему." },
-          { at: 92, title: "Фон", text: "Фирменный синий градиент или светлый бежевый." },
-        ],
-      },
     },
     {
       id: "social-series",
@@ -2161,6 +2157,7 @@ function ContentSection({ section, navigate, activePageId }) {
     section.principles ? <PrincipleCards key="principles" items={section.principles} /> : null,
     section.directory ? <SectionDirectory key="directory" navigate={navigate} activePageId={activePageId} /> : null,
     section.socialMosaic ? <SocialMosaic key="social-mosaic" rows={section.socialMosaic} note={section.socialNote} /> : null,
+    section.socialPalette ? <SocialPalette key="social-palette" data={section.socialPalette} /> : null,
     section.socialFeed ? <SocialFeed key="social-feed" items={section.socialFeed} note={section.socialNote} /> : null,
     section.socialPhoto ? <SocialPhotoBlock key="social-photo" /> : null,
     section.socialFormats ? <SocialFormats key="social-formats" items={section.socialFormats} note={section.socialNote} /> : null,
@@ -3218,7 +3215,7 @@ function SocialFeed({ items, note }) {
 
 const socialOverlayVariants = [
   { id: "white", file: "white", title: "Белый", text: "Для фона, на котором логотип хорошо читается." },
-  { id: "translucent", file: "translucent", title: "Полупрозрачный", text: "Для спокойного контрастного фона, когда нужен более мягкий акцент." },
+  { id: "translucent", file: "translucent", title: "Полупрозрачный", text: "Для спокойного контрастного фона." },
   { id: "shade", file: "white-shade", title: "Белый с затемнением", text: "Для светлого или пёстрого фона в зоне логотипа." },
   { id: "translucent-shade", file: "translucent-shade", title: "Полупрозрачный с затемнением", text: "Мягкий акцент на светлом или пёстром фоне." },
 ];
@@ -3250,55 +3247,87 @@ function SocialOverlayDownloads({ file, title }) {
   );
 }
 
-// Охранное поле на квадратном посте: при появлении блока по очереди рисуются отступы ½ диаметра
-// от логотипа до краёв кадра и до зоны, куда нельзя ставить другие элементы (как схема охранного поля логотипа КРДВ).
-function SocialClearSpace() {
-  const d = 90;
+// Логотип для соцсетей на весь блок: синий экран с логотипом по центру превращается в квадратный пост,
+// логотип уезжает в левый верхний угол, затем дорисовывается охранное поле (½ диаметра круга). Сцена повторяется по кругу.
+function SocialLogoStage() {
+  const reduceMotion = useReducedMotion();
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+  const [phase, setPhase] = useState(0);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return undefined;
+    }
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold: 0.35 });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (reduceMotion) {
+      setPhase(2);
+      return undefined;
+    }
+    if (!inView) {
+      setPhase(0);
+      return undefined;
+    }
+    // 0 — синий экран, 1 — пост и логотип в углу, 2 — охранное поле
+    const steps = [
+      [0, 1600],
+      [1, 1400],
+      [2, 5200],
+    ];
+    let index = 0;
+    let timer;
+    const run = () => {
+      const [value, hold] = steps[index];
+      setPhase(value);
+      index = (index + 1) % steps.length;
+      timer = window.setTimeout(run, hold);
+    };
+    run();
+    return () => window.clearTimeout(timer);
+  }, [inView, reduceMotion]);
+
+  const d = 40;
   const x = d / 2;
   const c = x + d / 2;
   const zone = x + d + x;
   return (
-    <svg className="social-clearspace" viewBox="0 0 360 360" role="img" aria-label={t("Схема охранного поля на квадратном посте: от логотипа до краёв кадра и до других элементов — не меньше половины диаметра круга")}>
-      <rect x="0.5" y="0.5" width="359" height="359" rx="8" className="cs-post" />
-      <rect x="0.5" y="0.5" width={zone} height={zone} className="cs-zone-fill cs-fade" style={{ "--cs-delay": "1200ms" }} />
-      <rect x={x} y={x} width={d} height={d} pathLength={1} className="cs-draw cs-guide-box" style={{ "--cs-delay": "250ms" }} />
-      <circle cx={c} cy={c} r={d / 2} className="cs-badge cs-fade" />
-      <text x={c} y={c + 6} className="cs-badge-text cs-fade">КРДВ</text>
-      <line x1="1" y1={c} x2={x} y2={c} pathLength={1} className="cs-draw cs-measure" style={{ "--cs-delay": "500ms" }} />
-      <line x1={c} y1="1" x2={c} y2={x} pathLength={1} className="cs-draw cs-measure" style={{ "--cs-delay": "650ms" }} />
-      <line x1={x + d} y1={c} x2={zone} y2={c} pathLength={1} className="cs-draw cs-measure" style={{ "--cs-delay": "800ms" }} />
-      <line x1={c} y1={x + d} x2={c} y2={zone} pathLength={1} className="cs-draw cs-measure" style={{ "--cs-delay": "950ms" }} />
-      <rect x="0.5" y="0.5" width={zone} height={zone} pathLength={1} className="cs-draw cs-zone" style={{ "--cs-delay": "1100ms" }} />
-      <text x={x / 2} y={c - 8} className="cs-label cs-fade" style={{ "--cs-delay": "700ms" }}>½</text>
-      <text x={c + 8} y={x / 2 + 4} className="cs-label cs-fade" style={{ "--cs-delay": "800ms" }}>½</text>
-      <text x={x + d + x / 2} y={c - 8} className="cs-label cs-fade" style={{ "--cs-delay": "950ms" }}>½</text>
-      <text x={c + 8} y={x + d + x / 2 + 4} className="cs-label cs-fade" style={{ "--cs-delay": "1100ms" }}>½</text>
-      <text x={zone + 18} y={c - 6} className="cs-note-strong cs-fade" style={{ "--cs-delay": "1300ms" }}>Охранное поле</text>
-      <text x={zone + 18} y={c + 18} className="cs-note cs-fade" style={{ "--cs-delay": "1350ms" }}>½ диаметра круга</text>
-      <text x={zone + 18} y={c + 40} className="cs-note cs-fade" style={{ "--cs-delay": "1400ms" }}>до краёв кадра</text>
-      <text x={zone + 18} y={c + 62} className="cs-note cs-fade" style={{ "--cs-delay": "1450ms" }}>и других элементов</text>
-      <text x="180" y="330" className="cs-post-label cs-fade" style={{ "--cs-delay": "1500ms" }}>Пост 1:1</text>
-    </svg>
+    <figure className="social-logo-stage-card">
+      <div ref={ref} className="social-logo-stage" data-phase={phase} role="img" aria-label={t("Логотип для соцсетей КРДВ в левом верхнем углу квадратного поста. Охранное поле — половина диаметра круга до краёв кадра и других элементов")}>
+        <span className="sls-post" />
+        <svg className="sls-guides" viewBox="0 0 360 360" aria-hidden="true">
+          <rect x="0.5" y="0.5" width={zone} height={zone} className="sls-zone-fill sls-fade" style={{ "--d": "900ms" }} />
+          <line x1="0" y1={c} x2={x} y2={c} pathLength={1} className="sls-draw" style={{ "--d": "100ms" }} />
+          <line x1={c} y1="0" x2={c} y2={x} pathLength={1} className="sls-draw" style={{ "--d": "250ms" }} />
+          <line x1={x + d} y1={c} x2={zone} y2={c} pathLength={1} className="sls-draw" style={{ "--d": "400ms" }} />
+          <line x1={c} y1={x + d} x2={c} y2={zone} pathLength={1} className="sls-draw" style={{ "--d": "550ms" }} />
+          <rect x="0.5" y="0.5" width={zone - 0.5} height={zone - 0.5} pathLength={1} className="sls-draw sls-zone" style={{ "--d": "750ms" }} />
+          <text x={x / 2} y={c - 4} className="sls-label sls-fade" style={{ "--d": "300ms" }}>½</text>
+          <text x={c + 5} y={x / 2 + 3} className="sls-label sls-fade is-start" style={{ "--d": "400ms" }}>½</text>
+          <text x={x + d + x / 2} y={c - 4} className="sls-label sls-fade" style={{ "--d": "550ms" }}>½</text>
+          <text x={c + 5} y={x + d + x / 2 + 3} className="sls-label sls-fade is-start" style={{ "--d": "700ms" }}>½</text>
+        </svg>
+        <img className="sls-logo" src={socialAsset("badge-white.png")} alt="" />
+        <span className="sls-note">
+          <strong>{t("Охранное поле")}</strong>
+          <span>{t("½ диаметра круга до краёв кадра и других элементов")}</span>
+        </span>
+        <span className="sls-format">{t("Пост 1:1")}</span>
+      </div>
+    </figure>
   );
 }
 
 function SocialPhotoBlock() {
   return (
     <div className="social-photo-block">
-      <div className="social-photo-intro">
-        <figure className="social-card social-badge-card">
-          <div className="social-badge-stage">
-            <img src={socialAsset("badge-white.png")} alt={t("Логотип для соцсетей КРДВ")} loading="lazy" />
-          </div>
-          <figcaption>{t("Логотип для соцсетей КРДВ")}</figcaption>
-        </figure>
-        <figure className="social-card social-clearspace-card">
-          <div className="social-clearspace-stage">
-            <SocialClearSpace />
-          </div>
-          <figcaption>{t("Охранное поле на квадратном посте")}</figcaption>
-        </figure>
-      </div>
+      <SocialLogoStage />
       <div className="social-variants">
         {socialOverlayVariants.map((variant) => (
           <figure className="social-card social-variant" key={variant.id}>
@@ -3311,28 +3340,41 @@ function SocialPhotoBlock() {
           </figure>
         ))}
       </div>
-      <div className="social-large">
-        <div className="spec-columns is-notes">
-          <div className="spec-text">
-            <h3>{t("Укрупнённый логотип")}</h3>
-            <p>
-              <span>{t("Для альбома из нескольких фотографий есть укрупнённый логотип: в миниатюре альбома обычный теряется. Его ставят только на первую фотографию, остальные публикуются без логотипа. Раскладка альбома в соцсети может отличаться от схемы.")}</span>
-            </p>
+      <div className="social-card social-large">
+        <div className="social-large-copy">
+          <h3>{t("Укрупнённый логотип")}</h3>
+          <p>{t("Для поста с несколькими фотографиями: в превью обычный логотип теряется. Ставится только на первую фотографию.")}</p>
+          <SocialOverlayDownloads file="large" title="Укрупнённый" />
+        </div>
+        {[6, 9].map((count) => (
+          <figure className="social-album" key={count}>
+            <div className={`social-album-grid is-${count}`} role="img" aria-label={t(`Схема поста из ${count} фотографий: первая — с укрупнённым логотипом`)}>
+              {Array.from({ length: count }, (_, index) =>
+                index === 0 ? <SocialBrandedPhoto key={index} variant="large" className="is-tile" /> : <span key={index} className="social-album-tile" />,
+              )}
+            </div>
+            <figcaption>{t(`Пост из ${count} фотографий`)}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Палитра соцсетей: слева цвета кружками на тёмной плашке, справа место под анимацию иллюстраций.
+function SocialPalette({ data }) {
+  return (
+    <div className="social-palette">
+      <div className="social-palette-colors">
+        {data.colors.map((color) => (
+          <div className="social-palette-dot" key={color.hex} style={{ "--dot": color.hex }} data-light={/^#F{2}/i.test(color.hex) ? "true" : undefined}>
+            <strong>{t(color.name)}</strong>
+            <span>{color.hex}</span>
           </div>
-        </div>
-        <SocialOverlayDownloads file="large" title="Укрупнённый" />
-        <div className="social-albums">
-          {[6, 9].map((count) => (
-            <figure className="social-card social-album" key={count}>
-              <div className={`social-album-grid is-${count}`} role="img" aria-label={t(`Схема альбома из ${count} фотографий: первая — с укрупнённым логотипом`)}>
-                {Array.from({ length: count }, (_, index) =>
-                  index === 0 ? <SocialBrandedPhoto key={index} variant="large" className="is-tile" /> : <span key={index} className="social-album-tile" />,
-                )}
-              </div>
-              <figcaption>{t(`Альбом из ${count} фотографий`)}</figcaption>
-            </figure>
-          ))}
-        </div>
+        ))}
+      </div>
+      <div className="social-palette-illustration">
+        <span>{t(data.placeholder)}</span>
       </div>
     </div>
   );
