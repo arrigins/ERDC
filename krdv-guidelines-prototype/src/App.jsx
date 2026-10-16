@@ -904,17 +904,6 @@ const socialPage = {
       ],
     },
     {
-      id: "social-graphics",
-      title: "Иллюстрации и эмодзи",
-      paragraphs: [
-        "Иллюстрации помогают быстро передать тему. Используйте согласованные изображения с общим характером объёма, света и материалов. Линии, стрелки и плашки расставляют акценты и помогают читать карточку.",
-      ],
-      socialGraphics: [
-        { title: "Объёмные иллюстрации", text: "Передают тему карточки: транспорт, дом, кино. Один образ — одна мысль.", works: [socialWorks.r01, socialWorks.r03, socialWorks.r28] },
-        { title: "Линии, стрелки и плашки", text: "Рукописные штрихи, стрелки и цветные плашки выделяют даты, условия и действия.", works: [socialWorks.r22, socialWorks.r35] },
-      ],
-    },
-    {
       id: "social-downloads",
       title: "Материалы для работы",
       paragraphs: ["Посты можно оформить на новом портале. Фирменные эмодзи добавляются в Telegram одной кнопкой и используются в тексте публикаций."],
@@ -3180,13 +3169,19 @@ function SocialMosaic({ rows, note }) {
 
 // Лента постов как в соцсети: бесконечно уходит влево, под каждой работой — условные кнопки (рисунок как в Instagram).
 function SocialFeedActions() {
-  const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.6, strokeLinejoin: "round" };
+  // Иконки из присланного SVG (166×34, серый #757575, линия 2): три слева одним рисунком, закладка справа
+  const common = { fill: "none", stroke: "#757575", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" };
   return (
     <span className="social-feed-actions" aria-hidden="true">
-      <svg viewBox="0 0 24 24" {...common}><path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938Z" /></svg>
-      <svg viewBox="0 0 24 24" {...common}><path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" /></svg>
-      <svg viewBox="0 0 24 24" {...common}><path d="M22 3 9.218 10.083" /><path d="M11.698 20.334 22 3.001H2l7.218 7.083 2.48 10.25Z" /></svg>
-      <svg className="social-feed-save" viewBox="0 0 24 24" {...common}><path d="M20 21 12 13.44 4 21V3h16Z" /></svg>
+      <svg className="social-feed-icons" viewBox="4 4 113 27" {...common}>
+        <path d="M17.8682 27.8545L7.99276 18.2035C5.29946 15.5102 5.29946 11.0214 8.2172 8.55256C10.9105 6.0837 14.9504 6.75703 17.8682 9.67476C20.7859 6.75703 24.8259 6.0837 27.5192 8.55256C30.4369 11.0214 30.4369 15.5102 27.7436 18.2035L17.8682 27.8545Z" />
+        <path d="M70.286 24.3833C72.0213 22.1057 72.8398 19.2605 72.5803 16.4089C72.3208 13.5574 71.0019 10.9067 68.884 8.97983C66.7661 7.05293 64.0029 5.98976 61.1397 6.00007C58.2764 6.01039 55.5209 7.09346 53.417 9.03558C51.313 10.9777 50.0133 13.6378 49.7743 16.4911C49.5354 19.3444 50.3744 22.1837 52.126 24.4488C53.8776 26.7138 56.4145 28.2401 59.2362 28.7266C62.0578 29.2131 64.9594 28.6244 67.3683 27.0766L72.7549 27.9744L70.286 24.3833Z" />
+        <path d="M92.7578 7.23438H115.202L103.755 27.6585L101.062 15.9876L92.7578 7.23438Z" />
+        <path d="M101.062 15.9876L115.202 7.23438" />
+      </svg>
+      <svg className="social-feed-save" viewBox="134 4 25 27" {...common}>
+        <path d="M138 6.65332H154.567V27.7508L146.284 20.7931L138 27.7508V6.65332Z" />
+      </svg>
     </span>
   );
 }
@@ -3302,12 +3297,12 @@ function SocialLogoStage() {
       <div ref={ref} className="social-logo-stage" data-phase={phase} role="img" aria-label={t("Логотип для соцсетей КРДВ в левом верхнем углу квадратного поста. Охранное поле — половина диаметра круга до краёв кадра и других элементов")}>
         <span className="sls-post" />
         <svg className="sls-guides" viewBox="0 0 360 360" aria-hidden="true">
-          <rect x="0.5" y="0.5" width={zone} height={zone} className="sls-zone-fill sls-fade" style={{ "--d": "900ms" }} />
+          <path d={`M0 12A12 12 0 0 1 12 0H${zone}V${zone}H0Z`} className="sls-zone-fill sls-fade" style={{ "--d": "900ms" }} />
           <line x1="0" y1={c} x2={x} y2={c} pathLength={1} className="sls-draw" style={{ "--d": "100ms" }} />
           <line x1={c} y1="0" x2={c} y2={x} pathLength={1} className="sls-draw" style={{ "--d": "250ms" }} />
           <line x1={x + d} y1={c} x2={zone} y2={c} pathLength={1} className="sls-draw" style={{ "--d": "400ms" }} />
           <line x1={c} y1={x + d} x2={c} y2={zone} pathLength={1} className="sls-draw" style={{ "--d": "550ms" }} />
-          <rect x="0.5" y="0.5" width={zone - 0.5} height={zone - 0.5} pathLength={1} className="sls-draw sls-zone" style={{ "--d": "750ms" }} />
+          <path d={`M${zone} 0V${zone}H0`} pathLength={1} className="sls-draw sls-zone" style={{ "--d": "750ms" }} />
           <text x={x / 2} y={c - 4} className="sls-label sls-fade" style={{ "--d": "300ms" }}>½</text>
           <text x={c + 5} y={x / 2 + 3} className="sls-label sls-fade is-start" style={{ "--d": "400ms" }}>½</text>
           <text x={x + d + x / 2} y={c - 4} className="sls-label sls-fade" style={{ "--d": "550ms" }}>½</text>

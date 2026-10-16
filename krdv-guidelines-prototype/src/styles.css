@@ -7486,3 +7486,24 @@ a.slide-viewer-download:focus-visible {
   overflow: hidden;
   border-radius: var(--r-inner, 16px);
 }
+
+/* Скругление поста пропорционально стороне (12 ед. из 360), чтобы зона охранного поля точно повторяла угол */
+.social-logo-stage:not([data-phase="0"]) .sls-post,
+.sls-guides {
+  border-radius: calc(var(--s) / 30);
+}
+
+.social-feed-actions {
+  gap: 0;
+  padding: 12px 14px 13px;
+}
+
+.social-feed-actions .social-feed-icons {
+  width: auto;
+  height: 22px;
+}
+
+.social-feed-actions .social-feed-save {
+  width: auto;
+  height: 22px;
+}
