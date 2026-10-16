@@ -387,10 +387,8 @@ const fontFamilies = [
     // Десктоп-лицензия без веб-опции: на сайте только картинка-образец (файлы шрифта не подключаются)
     // Временно — картинка прежнего образца (до замены на набор в настоящем Norms Serif)
     imageOnly: true,
-    imageMeta: "Лицензионный пакет",
     sampleImage: { src: "font-sample-serif.webp", alt: "Территория будущего начинается с ясной коммуникации", width: 539, height: 160 },
     description: "Семейство используется как второй, преимущественно акцидентный элемент шрифтовой пары.",
-    unavailable: "Для Serif-семейства используется отдельный лицензионный пакет TypeType.",
     files: [],
   },
   {
@@ -399,7 +397,6 @@ const fontFamilies = [
     role: "Наградные документы",
     // Десктоп-лицензия без веб-опции: образец — картинка, файлы шрифта на сайт не подключаются
     imageOnly: true,
-    imageMeta: "Regular · 400",
     sampleImage: { src: "font-sample-tsars-v2.webp", alt: "Грамота за развитие территорий", width: 556, height: 94 },
     description: "Гарнитура для благодарностей, благодарственных писем, почетных грамот и других наградных документов.",
     files: [],
@@ -1520,8 +1517,12 @@ const pagesData = [
         contactCta: {
           title: "Нашли ошибку?",
           text: "Если заметили неточность в макете, ссылке, формулировке или составе файлов, напишите нам — поправим материалы и обновим веб-версию.",
-          label: "Связаться",
-          href: "https://max.ru/u/f9LHodD0cOLm8OTuC0vxJbEiD8IBADIo2D-cV3s7BjYmOVCFuycEt1v7OXg",
+          // Контакт по руководству: Арина. Ссылку на её профиль в MAX подставить в maxHref, когда она будет
+          // (не составлять адрес по номеру телефона); пока карточка ведёт на звонок.
+          person: "Арина",
+          phone: "+7 999 605-51-26",
+          phoneHref: "tel:+79996055126",
+          maxHref: "",
           image: "contact-support-icon.png",
         },
       },
@@ -2619,7 +2620,12 @@ function SubsidiaryRegionCards() {
             <h3>{t(region.title)}</h3>
             {region.enTitle ? <span>{region.enTitle}</span> : null}
           </header>
-          <div className={`subsidiary-row-cells ${region.cells.some(({ item }) => subsidiaryLogoUnits[item.preview.replace(/^subsidiary-|\.svg$/g, "")] > 1200) ? "is-wide" : ""}`}>
+          {/* Сахалин и Курилы — исключение: логотипы длиннее колонки, поэтому вся четвёрка уменьшается целиком
+              одним коэффициентом --s, чтобы карточка выглядела как остальные (один ряд) */}
+          <div
+            className="subsidiary-row-cells"
+            style={{ "--s": Math.min(1, 1150 / Math.max(...region.cells.map(({ item }) => subsidiaryLogoUnits[item.preview.replace(/^subsidiary-|\.svg$/g, "")] || 0))) }}
+          >
             {region.cells.map(({ item }) => (
               <div className="subsidiary-cell" key={item.preview}>
                 <div className={`subsidiary-cell-preview is-${item.orientation}`}>
@@ -3734,6 +3740,9 @@ function getDefaultFontIndex(family) {
 
 function FontWorkbench() {
   const [familyId, setFamilyId] = useState("norms");
+  // Высота блока задаётся состоянием с Norms Pro и сохраняется при переключении на другие шрифты
+  const workbenchRef = useRef(null);
+  const [lockedHeight, setLockedHeight] = useState(null);
   const selectedFamily = fontFamilies.find((family) => family.id === familyId) || fontFamilies[0];
   const [styleIndex, setStyleIndex] = useState(getDefaultFontIndex(selectedFamily));
   const [previewSize, setPreviewSize] = useState(64);
@@ -3749,13 +3758,21 @@ function FontWorkbench() {
     setSample((current) => (current === selectedFamily.sample ? family.sample : current));
   }
 
+  useEffect(() => {
+    const node = workbenchRef.current;
+    if (!node || familyId !== "norms" || typeof ResizeObserver === "undefined") return undefined;
+    const observer = new ResizeObserver(() => setLockedHeight(node.offsetHeight));
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [familyId]);
+
   return (
-    <div className="font-workbench">
+    <div className="font-workbench" ref={workbenchRef} style={familyId !== "norms" && lockedHeight ? { height: lockedHeight } : undefined}>
       <div className="font-preview-panel">
         <AuroraBackground className="font-preview-aurora" />
         <div className="font-preview-meta">
           <span>{t(selectedFamily.role)}</span>
-          <em>{selectedFamily.imageMeta || (selectedStyle ? `${selectedStyle.label} · ${selectedStyle.weight}` : t("Лицензионный пакет"))}</em>
+          {selectedFamily.imageOnly ? null : <em>{selectedStyle ? `${selectedStyle.label} · ${selectedStyle.weight}` : null}</em>}
         </div>
         <AnimatePresence mode="wait">
           {selectedFamily.imageOnly ? (
@@ -3926,13 +3943,15 @@ function ContactBlock({ items }) {
 }
 
 function ContactCta({ item }) {
+  const href = item.maxHref || item.phoneHref;
   return (
-    <a className="contact-cta" href={item.href} target="_blank" rel="noreferrer">
+    <a className="contact-cta" href={href} {...(item.maxHref ? { target: "_blank", rel: "noreferrer" } : {})}>
       <span className="contact-cta-copy">
         <span>{t(item.title)}</span>
         <p>{t(noDot(item.text))}</p>
+        <em className="contact-cta-person">{t(`${item.person}, ${item.phone}`)}</em>
         <strong>
-          {t(item.label)}
+          {t(item.maxHref ? "Написать в MAX" : "Позвонить")}
           <UiIcon icon={ICONS.arrowRight} className="contact-cta-icon" />
         </strong>
       </span>
@@ -3980,7 +3999,7 @@ function EndLinks({ activePageId, navigate }) {
   );
 }
 
-const footerContactHref = pagesById.contacts.sections[0].contactCta.href;
+const footerContact = pagesById.contacts.sections[0].contactCta;
 
 function SiteFooter() {
   return (
@@ -3990,9 +4009,14 @@ function SiteFooter() {
         <p className="is-muted">{t("Версия 1.0")}</p>
         <div>
           <p>{t("Вопросы по руководству:")}</p>
-          <a className="is-muted" href={footerContactHref} target="_blank" rel="noreferrer">
-            {t("написать в MAX")}
+          <a className="is-muted" href={footerContact.phoneHref}>
+            {t(`${footerContact.person}, ${footerContact.phone}`)}
           </a>
+          {footerContact.maxHref ? (
+            <a className="is-muted" href={footerContact.maxHref} target="_blank" rel="noreferrer">
+              {t("написать в MAX")}
+            </a>
+          ) : null}
         </div>
         <div className="site-footer-links">
           <a href="https://erdc.ru" target="_blank" rel="noreferrer">

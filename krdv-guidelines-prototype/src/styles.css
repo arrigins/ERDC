@@ -5854,7 +5854,7 @@ img {
 .subsidiary-row-cells .subsidiary-cell-preview.is-vertical img {
   position: static;
   inset: auto;
-  width: calc(var(--u, 1000) * var(--k));
+  width: calc(var(--u, 1000) * var(--k) * var(--s, 1));
   max-width: none;
   height: auto;
   object-fit: initial;
@@ -7525,4 +7525,18 @@ a.slide-viewer-download:focus-visible {
   background: rgba(255, 255, 255, 0.16);
   color: #ffffff;
   font-size: 14px;
+}
+
+/* Контакт по руководству: имя и телефон */
+.contact-cta .contact-cta-person {
+  display: block;
+  margin-top: 14px;
+  color: #050505;
+  font-size: clamp(18px, 1.4vw, 22px);
+  font-style: normal;
+  white-space: nowrap;
+}
+
+.site-footer-top div > a + a {
+  margin-left: 14px;
 }
