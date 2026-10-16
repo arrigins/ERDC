@@ -9,6 +9,13 @@ export default defineConfig({
   base,
   build: {
     outDir: "dist/client",
+    // Две страницы: брендбук и прототип внутренней платформы публикаций
+    rollupOptions: {
+      input: {
+        main: "index.html",
+        portal: "portal.html",
+      },
+    },
   },
   optimizeDeps: {
     include: ["react", "react-dom/client"],
