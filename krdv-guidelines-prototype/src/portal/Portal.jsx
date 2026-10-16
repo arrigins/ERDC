@@ -4,15 +4,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 // Работает целиком в браузере: без входа, сервера и сохранения проектов. Фотографии не покидают устройство.
 // Все координаты шаблона — в логических пикселях макета 1080 × 1080 (ТЗ, раздел 9).
 
-const asset = (pathname) => `${import.meta.env.BASE_URL}${pathname.replace(/^\/+/, "")}`;
-const FRAME = 1080;
-const MAX_BYTES = 20 * 1024 * 1024;
-const MAX_PIXELS = 40_000_000;
-const MAX_ZOOM = 4;
+import { FRAME, MAX_ZOOM, asset, clamp, coverCrop, decodePhoto, downloadCanvas, loadImage, moveCrop, zoomCrop } from "./photo.js";
+import { QuoteEditor } from "./QuoteEditor.jsx";
 
 const tasks = [
   { id: "photo", title: "Фото с логотипом", text: "Загрузите фотографию, выберите вариант логотипа и скачайте готовый пост.", image: "assets/social/demo-photo-branded.webp", status: "ready" },
-  { id: "quote", title: "Цитата", text: "Портрет, имя, должность и текст цитаты на фирменной карточке.", image: "assets/social/r14-sm.webp", status: "Следующий шаг пилота" },
+  { id: "quote", title: "Цитата", text: "Портрет, имя, должность и текст цитаты на фирменной карточке.", image: "assets/social/r14-sm.webp", status: "ready" },
   { id: "news", title: "Новость", text: "Заголовок, подзаголовок, метка и иллюстрация из библиотеки.", image: "assets/social/r01-sm.webp", status: "В полной версии" },
   { id: "series", title: "Серия карточек", text: "От 2 до 10 карточек: обложка, сообщения и завершение.", image: "assets/social/r35-sm.webp", status: "В полной версии" },
 ];
@@ -26,69 +23,6 @@ const overlays = {
 };
 const singleOverlays = ["white", "translucent", "white-shade", "translucent-shade"];
 const overlaySrc = (id, size) => asset(`assets/social/overlays/krdv-social-${id}-${size}.png`);
-
-const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-
-// Проверка реального формата по первым байтам, а не по расширению (ТЗ, раздел 11)
-async function sniffFormat(file) {
-  const bytes = new Uint8Array(await file.slice(0, 16).arrayBuffer());
-  const ascii = String.fromCharCode(...bytes);
-  if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return "jpeg";
-  if (bytes[0] === 0x89 && ascii.slice(1, 4) === "PNG") return "png";
-  if (ascii.slice(0, 4) === "RIFF" && ascii.slice(8, 12) === "WEBP") return "webp";
-  if (ascii.slice(4, 8) === "ftyp" && /heic|heix|hevc|mif1|msf1/.test(ascii.slice(8, 12))) return "heic";
-  return null;
-}
-
-async function decodePhoto(file) {
-  if (file.size > MAX_BYTES) {
-    throw new Error("Файл больше 20 МБ. Уменьшите его или сохраните в JPG с меньшим качеством.");
-  }
-  const format = await sniffFormat(file);
-  if (format === "heic") {
-    throw new Error("Формат HEIC пока не поддерживается. На iPhone откройте фото и сохраните как JPG (или выберите «Наиболее совместимый» в настройках камеры).");
-  }
-  if (!format) {
-    throw new Error("Этот файл не похож на фотографию. Подойдут JPG, PNG или WebP.");
-  }
-  let bitmap;
-  try {
-    // Ориентация по EXIF применяется при декодировании
-    bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
-  } catch {
-    throw new Error("Не удалось открыть фотографию — возможно, файл повреждён. Попробуйте другой файл.");
-  }
-  if (bitmap.width * bitmap.height > MAX_PIXELS) {
-    bitmap.close();
-    throw new Error("Фотография больше 40 мегапикселей. Уменьшите её и загрузите снова.");
-  }
-  return { bitmap, url: URL.createObjectURL(file), name: file.name.replace(/\.[^.]+$/, ""), format };
-}
-
-function loadImage(src) {
-  return new Promise((resolve, reject) => {
-    const image = new Image();
-    image.onload = () => resolve(image);
-    image.onerror = () => reject(new Error("Не удалось загрузить наложение логотипа. Проверьте интернет и попробуйте ещё раз."));
-    image.src = src;
-  });
-}
-
-// Кадр: масштаб и сдвиг фотографии в единицах макета. Фото всегда закрывает квадрат целиком и не растягивается.
-function coverCrop(width, height, zoom = 1, center) {
-  const base = FRAME / Math.min(width, height);
-  const w = width * base * zoom;
-  const h = height * base * zoom;
-  const cx = center ? center.x : 0.5;
-  const cy = center ? center.y : 0.5;
-  return {
-    zoom,
-    w,
-    h,
-    x: clamp(FRAME / 2 - cx * w, FRAME - w, 0),
-    y: clamp(FRAME / 2 - cy * h, FRAME - h, 0),
-  };
-}
 
 function Header({ onHome }) {
   return (
@@ -199,21 +133,14 @@ function PhotoEditor({ onBack }) {
   const setZoom = useCallback(
     (zoom) => {
       if (!photo) return;
-      setCrop((current) => {
-        const center = { x: (FRAME / 2 - current.x) / current.w, y: (FRAME / 2 - current.y) / current.h };
-        return coverCrop(photo.bitmap.width, photo.bitmap.height, clamp(zoom, 1, MAX_ZOOM), center);
-      });
+      setCrop((current) => zoomCrop(current, photo, zoom));
       setDone(false);
     },
     [photo],
   );
 
   const moveBy = useCallback((dx, dy) => {
-    setCrop((current) => ({
-      ...current,
-      x: clamp(current.x + dx, FRAME - current.w, 0),
-      y: clamp(current.y + dy, FRAME - current.h, 0),
-    }));
+    setCrop((current) => moveCrop(current, dx, dy));
     setDone(false);
   }, []);
 
@@ -280,16 +207,7 @@ function PhotoEditor({ onBack }) {
       context.drawImage(photo.bitmap, crop.x * f, crop.y * f, crop.w * f, crop.h * f);
       const mark = await loadImage(overlaySrc(activeOverlay, size));
       context.drawImage(mark, 0, 0, size, size);
-      const type = format === "jpg" ? "image/jpeg" : "image/png";
-      const blob = await new Promise((resolve) => canvas.toBlob(resolve, type, 0.92));
-      if (!blob) throw new Error("Не удалось подготовить файл. Попробуйте ещё раз или выберите размер 1080.");
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = `krdv-foto-${activeOverlay}-${size}.${format}`;
-      document.body.append(link);
-      link.click();
-      link.remove();
-      window.setTimeout(() => URL.revokeObjectURL(link.href), 4000);
+      await downloadCanvas(canvas, format, `krdv-foto-${activeOverlay}-${size}.${format}`);
       setDone(true);
     } catch (problem) {
       setError(problem.message || "Не удалось скачать файл. Попробуйте ещё раз.");
@@ -484,7 +402,11 @@ function PhotoEditor({ onBack }) {
   );
 }
 
-const readRoute = () => (window.location.hash.replace(/^#\/?/, "") === "photo" ? "photo" : "home");
+const routes = ["photo", "quote"];
+const readRoute = () => {
+  const value = window.location.hash.replace(/^#\/?/, "");
+  return routes.includes(value) ? value : "home";
+};
 
 export function Portal() {
   const [route, setRoute] = useState(readRoute);
@@ -505,7 +427,8 @@ export function Portal() {
   };
 
   const screen = useMemo(
-    () => (route === "photo" ? <PhotoEditor onBack={() => go("home")} /> : <Home onOpen={go} />),
+    () =>
+      route === "photo" ? <PhotoEditor onBack={() => go("home")} /> : route === "quote" ? <QuoteEditor onBack={() => go("home")} /> : <Home onOpen={go} />,
     [route],
   );
 
