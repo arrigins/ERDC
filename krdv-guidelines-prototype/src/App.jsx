@@ -2010,23 +2010,8 @@ function GuidelinePage({ page, activePageId, navigate }) {
   const hasSubsidiaryHero = page.heroAnimation === "subsidiaryRegions";
   const hasLibraryHero = Boolean(page.heroLibrary);
 
-  if (page.bento) {
-    return (
-      <article className="guideline-page is-soft is-bento">
-        <OverviewBento navigate={navigate} />
-        {page.sections
-          .filter((section) => !section.directory)
-          .map((section) => (
-            <ContentSection key={section.id} section={section} navigate={navigate} activePageId={activePageId} />
-          ))}
-        <EndLinks activePageId={activePageId} navigate={navigate} />
-        <SiteFooter />
-      </article>
-    );
-  }
-
   return (
-    <article className={`guideline-page ${page.softLayout === false ? "" : "is-soft"}`}>
+    <article className={`guideline-page ${page.softLayout === false ? "" : "is-soft"} ${page.bento ? "is-bento" : ""}`}>
       <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""} ${hasLibraryHero ? "is-library" : ""} ${page.heroTone === "light" ? "is-light" : ""} ${page.heroTone === "plain" ? "is-plain" : ""}`} aria-label={t(page.title)}>
         {page.heroVideo ? <video className="hero-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : null}
         {page.heroGlass ? <GlassHero data={page.heroGlass} /> : page.heroImage ? <img className="hero-video" src={heroAsset(page.heroImage)} alt="" aria-hidden="true" /> : null}
@@ -2054,9 +2039,13 @@ function GuidelinePage({ page, activePageId, navigate }) {
       </section>
       )}
 
-      {page.sections.map((section) => (
-        <ContentSection key={section.id} section={section} navigate={navigate} activePageId={activePageId} />
-      ))}
+      {/* «Обзор» плиткой: обложки разделов вместо карточек «Содержания» (откат — убрать bento у overview) */}
+      {page.bento ? <OverviewBento navigate={navigate} /> : null}
+      {page.sections
+        .filter((section) => !(page.bento && section.directory))
+        .map((section) => (
+          <ContentSection key={section.id} section={section} navigate={navigate} activePageId={activePageId} />
+        ))}
 
       <EndLinks activePageId={activePageId} navigate={navigate} />
       <SiteFooter />
@@ -2521,7 +2510,7 @@ function PrincipleCards({ items }) {
 function OverviewBento({ navigate }) {
   const tiles = pagesData.filter((page) => page.id !== "overview");
   return (
-    <section className="overview-bento" aria-label={t("Разделы руководства")}>
+    <section id="contents" className="overview-bento" aria-label={t("Разделы руководства")}>
       {tiles.map((page, index) => {
         const row = Math.floor(index / 2);
         const wide = row % 2 === 0 ? index % 2 === 1 : index % 2 === 0;

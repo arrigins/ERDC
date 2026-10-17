@@ -7605,8 +7605,10 @@ a.slide-viewer-download:focus-visible {
 }
 
 /* ── Эксперимент: «Обзор» плиткой обложек (по образцу DevRev). Откат — убрать bento у страницы overview ── */
-.guideline-page.is-bento {
-  padding-top: 8px;
+/* Поля по бокам — по краю текста страницы, как в референсе */
+.guideline-page.is-bento .overview-bento {
+  padding: 32px;
+  border-bottom: 1px solid var(--soft-line);
 }
 
 .overview-bento {
@@ -7716,6 +7718,7 @@ a.slide-viewer-download:focus-visible {
 @media (max-width: 900px) {
   .overview-bento {
     grid-template-columns: 1fr;
+    padding: 16px !important;
   }
 
   .bento-tile.is-wide {
