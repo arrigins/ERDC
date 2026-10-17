@@ -7780,20 +7780,6 @@ a.slide-viewer-download:focus-visible {
 /* ══ UX-ревизия 17.10 ══ Откат: удалить этот блок до конца файла (и ReadingProgress, useSectionReveal,
    bento-arrow, PICTOGRAM_FIELD в App.jsx) или вернуться к метке git ux-review-before */
 
-/* Прогресс чтения: тонкая линия у верхнего края страницы */
-.reading-progress {
-  position: sticky;
-  top: 0;
-  z-index: 30;
-  display: block;
-  height: 2px;
-  margin-bottom: -2px;
-  background: var(--ui-blue);
-  transform: scaleX(0);
-  transform-origin: left center;
-  pointer-events: none;
-}
-
 /* Секции проявляются при прокрутке */
 .guideline-page.can-reveal .content-section,
 .guideline-page.can-reveal .overview-bento {
@@ -7810,38 +7796,25 @@ a.slide-viewer-download:focus-visible {
   transform: none;
 }
 
-/* Плитка «Обзора»: стрелка-подсказка появляется при наведении */
-.bento-arrow {
-  position: absolute;
-  z-index: 1;
-  top: clamp(16px, 1.8vw, 26px);
-  right: clamp(16px, 1.8vw, 26px);
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.92);
-  color: #07143a;
-  opacity: 0;
-  transform: translate(-6px, 6px) scale(0.9);
-  transition: opacity 0.3s var(--ease), transform 0.4s var(--ease);
-}
-
-.bento-arrow svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.bento-tile:hover .bento-arrow,
-.bento-tile:focus-visible .bento-arrow {
-  opacity: 1;
+/* Плитки «Обзора»: без увеличения, при наведении — лёгкое затемнение */
+.bento-tile:hover .bento-visual {
   transform: none;
+}
+
+.bento-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(0, 10, 30, 0.16);
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+  pointer-events: none;
+}
+
+.bento-tile:hover::before,
+.bento-tile:focus-visible::before {
+  opacity: 1;
 }
 
 /* «Обзор»: материалы для скачивания — светлые карточки вместо десяти синих плашек; синий — при наведении */
@@ -7880,9 +7853,9 @@ a.slide-viewer-download:focus-visible {
   color: rgba(255, 255, 255, 0.72);
 }
 
-/* Футер компактнее: без пустого поля в половину экрана */
+/* Футер: компактнее прежнего, но с воздухом */
 .site-footer-top {
-  min-height: 0;
+  min-height: 160px;
   padding-bottom: 56px;
 }
 
@@ -7941,4 +7914,79 @@ a.slide-viewer-download:focus-visible {
   .pictogram-bubble {
     animation: none;
   }
+}
+
+/* «Дочерние общества»: одна кнопка «Скачать» с выбором формата */
+.download-menu {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.download-menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--soft-line, #dddce2);
+  border-radius: var(--r-control, 12px);
+  padding: 7px 14px 7px 11px;
+  background: #ffffff;
+  color: #07143a;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.download-menu-button:hover,
+.download-menu.is-open .download-menu-button {
+  border-color: var(--ui-blue);
+  background: var(--ui-blue);
+  color: #ffffff;
+}
+
+.download-menu-list {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  z-index: 20;
+  display: grid;
+  width: max-content;
+  min-width: 240px;
+  border-radius: 16px;
+  padding: 6px;
+  background: #ffffff;
+  box-shadow: 0 24px 48px -20px rgba(7, 20, 58, 0.35), 0 0 0 1px rgba(7, 20, 58, 0.06);
+  transform-origin: top center;
+}
+
+.download-menu-list a {
+  display: grid;
+  gap: 2px;
+  border-radius: 10px;
+  padding: 9px 12px;
+  color: #07143a;
+  text-align: left;
+  text-decoration: none;
+}
+
+.download-menu-list a:hover,
+.download-menu-list a:focus-visible {
+  background: #f1f3fb;
+}
+
+.download-menu-list strong {
+  font-size: 15px;
+  font-weight: 450;
+}
+
+.download-menu-list span {
+  color: #6b7080;
+  font-size: 13px;
+}
+
+.subsidiary-region-card:has(.download-menu.is-open) {
+  position: relative;
+  z-index: 6;
 }

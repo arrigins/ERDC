@@ -1690,7 +1690,6 @@ function App() {
           <Sidebar activePageId={activePageId} activeSectionId={activeSectionId} openGroup={openGroup} setOpenGroup={setOpenGroup} navigate={navigate} jumpTo={jumpTo} preloading={showPreloader} />
           <button className="nav-backdrop" type="button" aria-label={t("Закрыть меню")} onClick={() => setMenuOpen(false)} />
           <motion.main id="page" className="page-scroll" layoutScroll>
-            <ReadingProgress key={`progress-${activePageId}`} />
             <GuidelinePage key={activePageId} page={activePage} activePageId={activePageId} navigate={navigate} />
           </motion.main>
         </div>
@@ -2003,23 +2002,6 @@ function LibraryHeroBackground({ variant, miniature = false }) {
     default:
       return null;
   }
-}
-
-// UX-ревизия 17.10: тонкая полоса прогресса чтения над страницей
-function ReadingProgress() {
-  const bar = useRef(null);
-  useEffect(() => {
-    const scroller = document.getElementById("page");
-    if (!scroller || !bar.current) return undefined;
-    const update = () => {
-      const max = scroller.scrollHeight - scroller.clientHeight;
-      bar.current.style.transform = `scaleX(${max > 0 ? Math.min(1, scroller.scrollTop / max) : 0})`;
-    };
-    update();
-    scroller.addEventListener("scroll", update, { passive: true });
-    return () => scroller.removeEventListener("scroll", update);
-  }, []);
-  return <span ref={bar} className="reading-progress" aria-hidden="true" />;
 }
 
 // UX-ревизия 17.10: секции мягко проявляются при прокрутке (без «уменьшения движения»)
@@ -2581,9 +2563,6 @@ function OverviewBento({ navigate }) {
               {!hasCover && !isPositioning && !page.heroAnimation && !page.heroLibrary ? <span className="directory-fallback" /> : null}
             </span>
             <span className="bento-label">{t(page.cardTitle || page.title)}</span>
-            <span className="bento-arrow" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" /></svg>
-            </span>
           </motion.button>
         );
       })}
@@ -2783,19 +2762,7 @@ function SubsidiaryRegionCards() {
                     style={{ "--u": subsidiaryLogoUnits[item.preview.replace(/^subsidiary-|\.svg$/g, "")] }}
                   />
                 </div>
-                <div className="logo-downloads">
-                  <div>
-                    {subsidiaryFormats.map((format) => (
-                      <LogoDownloadLink
-                        key={format}
-                        file={item.files[format]}
-                        format={format}
-                        title={`${item.title}, ${item.versionLabel.toLowerCase()}`}
-                        asset={subsidiaryAsset}
-                      />
-                    ))}
-                  </div>
-                </div>
+                <DownloadMenu files={item.files} formats={subsidiaryFormats} title={`${item.title}, ${item.versionLabel.toLowerCase()}`} asset={subsidiaryAsset} />
               </div>
             ))}
           </div>
@@ -3188,6 +3155,64 @@ function BrandLogoVersions({ items }) {
           </div>
         </motion.article>
       ))}
+    </div>
+  );
+}
+
+// Одна кнопка «Скачать» вместо ряда форматов: по нажатию открывается список форматов с пояснением, зачем каждый.
+// Пока — на странице «Дочерние общества» (пример); закрывается кликом мимо и Escape.
+const formatHints = {
+  svg: "Вектор — для сайтов и вёрстки",
+  png: "Прозрачный фон — для презентаций и документов",
+  jpg: "Белый фон — для офисных программ",
+  pdf: "Вектор — для типографии и печати",
+  eps: "Вектор — для подрядчиков и производства",
+};
+
+function DownloadMenu({ files, formats, title, asset = logoAsset }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    if (!open) return undefined;
+    const onDown = (event) => {
+      if (!ref.current?.contains(event.target)) setOpen(false);
+    };
+    const onKey = (event) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+  const available = formats.filter((format) => files[format]);
+  return (
+    <div className={`download-menu ${open ? "is-open" : ""}`} ref={ref}>
+      <button type="button" className="download-menu-button" aria-expanded={open} aria-label={t(`Скачать ${title}`)} onClick={() => setOpen((value) => !value)}>
+        <UiIcon icon={ICONS.download} className="format-icon" />
+        <span>{t("Скачать")}</span>
+      </button>
+      <AnimatePresence>
+        {open ? (
+          <motion.div
+            className="download-menu-list"
+            role="menu"
+            initial={{ opacity: 0, x: "-50%", y: -4, scale: 0.98 }}
+            animate={{ opacity: 1, x: "-50%", y: 0, scale: 1 }}
+            exit={{ opacity: 0, x: "-50%", y: -4, scale: 0.98, transition: { duration: 0.12 } }}
+            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {available.map((format) => (
+              <a key={format} role="menuitem" href={asset(files[format])} download={files[format]} onClick={() => setOpen(false)}>
+                <strong>{format.toUpperCase()}</strong>
+                <span>{t(formatHints[format] || "")}</span>
+              </a>
+            ))}
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }
