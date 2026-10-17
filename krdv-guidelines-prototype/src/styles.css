@@ -6180,43 +6180,38 @@ a.slide-viewer-download:focus-visible {
   position: absolute;
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
-  margin: -20px 0 0 -20px;
-  border-radius: 11px;
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
   box-shadow: 0 12px 28px -14px rgba(7, 20, 58, 0.45);
 }
 
-.cursor-trail-icon svg {
-  width: 22px;
-  height: 22px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.cursor-trail-icon svg.is-lotus {
-  width: 28px;
-  height: 16px;
-  fill: currentColor;
-  stroke: none;
+.cursor-trail-icon img {
+  width: 62%;
+  height: 62%;
+  object-fit: contain;
 }
 
 .cursor-trail-icon.is-blue {
-  background: var(--ui-blue);
-  color: #ffffff;
+  background: #1230f2;
 }
 
-.cursor-trail-icon.is-light {
-  background: #d9e9f7;
-  color: var(--ui-blue);
+.cursor-trail-icon.is-red {
+  background: #fd3d37;
 }
 
-.cursor-trail-icon.is-white {
-  background: #ffffff;
-  color: var(--ui-blue);
+.cursor-trail-icon.is-sky {
+  background: #00a8ea;
+}
+
+.cursor-trail-icon.is-milk {
+  background: #fffaf0;
+}
+
+.cursor-trail-icon.is-pale {
+  background: #e3e9ff;
 }
 
 /* Карточки-носители в одном ряду — серое поле тянется на всю высоту, носитель по центру */
@@ -7622,7 +7617,7 @@ a.slide-viewer-download:focus-visible {
   position: relative;
   isolation: isolate;
   display: block;
-  min-height: clamp(300px, 34vw, 500px);
+  min-height: clamp(220px, 23vw, 340px);
   border: 0;
   border-radius: var(--soft-radius, 24px);
   padding: 0;
@@ -7745,4 +7740,39 @@ a.slide-viewer-download:focus-visible {
 
 .guideline-page.is-soft.is-bento .intro-panel {
   border-bottom: 1px solid var(--soft-line);
+}
+
+/* Плитка «Типографика»: название шрифта и крупный пример текста (по образцу DevRev) */
+.bento-tile.is-type {
+  container-type: inline-size;
+  background: #9ec6eb;
+}
+
+.bento-tile.is-type::after {
+  display: none;
+}
+
+.bento-type {
+  position: absolute;
+  inset: 40% 0 0;
+  display: grid;
+  grid-template-columns: 44% 1fr;
+  column-gap: 3.6cqi;
+  align-items: start;
+  overflow: hidden;
+  font-weight: 400;
+  font-size: 6.4cqi;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+}
+
+.bento-type-name {
+  justify-self: end;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.bento-type-sample {
+  width: 120%;
+  color: rgba(255, 255, 255, 0.42);
 }

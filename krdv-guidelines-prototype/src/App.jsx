@@ -2056,20 +2056,15 @@ function GuidelinePage({ page, activePageId, navigate }) {
 
 // «Контакты»: при движении курсора по странице появляются иконки на темы КРДВ —
 // всплывают с лёгким поворотом и через секунду растворяются. На тач-устройствах и при «уменьшении движения» выключено.
-const TRAIL_ICONS = [
-  { id: "globe", paths: ["M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z", "M3 12h18", "M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"] },
-  { id: "compass", paths: ["M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z", "M15.5 8.5l-2 5-5 2 2-5z"] },
-  { id: "pin", paths: ["M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z", "M12 7.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"] },
-  { id: "snowflake", paths: ["M12 3v18", "M4.2 7.5l15.6 9", "M4.2 16.5l15.6-9", "M9.5 4.5L12 6.5l2.5-2", "M9.5 19.5l2.5-2 2.5 2"] },
-  { id: "anchor", paths: ["M12 7.5V21", "M12 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4z", "M8 11h8", "M4.5 14.5c.8 3.6 3.8 6.5 7.5 6.5s6.7-2.9 7.5-6.5"] },
-  { id: "mountain", paths: ["M2.5 19.5l6.5-11 4 6.5", "M10.5 19.5l5-8 6 8z", "M2.5 19.5h19"] },
-  { id: "wave", paths: ["M3 9c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0 3 1.5 4.5 0", "M3 14c1.5-1.5 3-1.5 4.5 0s3 1.5 4.5 0 3-1.5 4.5 0 3 1.5 4.5 0"] },
-  { id: "mail", paths: ["M3.5 6h17v12h-17z", "M3.5 6.5l8.5 6.5 8.5-6.5"] },
-  { id: "chat", paths: ["M4 5h16v11H9l-5 4z", "M8 9.5h8", "M8 12.5h5"] },
-  { id: "sun", paths: ["M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z", "M12 2.5v2.5", "M12 19v2.5", "M2.5 12H5", "M19 12h2.5", "M5.3 5.3l1.8 1.8", "M16.9 16.9l1.8 1.8", "M5.3 18.7l1.8-1.8", "M16.9 7.1l1.8-1.8"] },
-  { id: "lotus", lotus: true },
+// Пиктограммы КРДВ (архив pictograms, edit 230925) в цветных кругах; белая версия — на насыщенных кругах
+const TRAIL_ICONS = ["whale", "deer", "snowflake", "icebreaker", "fish", "mountain", "tiger", "flower", "plane", "seal", "berry", "train", "pin", "ship", "calendar", "quote", "growth", "house"];
+const TRAIL_TONES = [
+  { tone: "is-blue", white: true },
+  { tone: "is-milk", white: false },
+  { tone: "is-red", white: true },
+  { tone: "is-pale", white: false },
+  { tone: "is-sky", white: true },
 ];
-const TRAIL_TONES = ["is-blue", "is-light", "is-white", "is-blue", "is-light"];
 
 function CursorIconTrail() {
   const [items, setItems] = useState([]);
@@ -2082,7 +2077,8 @@ function CursorIconTrail() {
     const timers = new Set();
 
     const onMove = (event) => {
-      if (!event.target.closest?.(".guideline-page") || event.target.closest(".site-footer")) return;
+      // Только над обложкой раздела — там иконки не мешают работе с материалами
+      if (!event.target.closest?.(".guideline-page .hero-band")) return;
       const { clientX: x, clientY: y } = event;
       const prev = last.current;
       if (prev && Math.hypot(x - prev.x, y - prev.y) < 34) return;
@@ -2118,26 +2114,14 @@ function CursorIconTrail() {
         {items.map((item) => (
           <motion.span
             key={item.id}
-            className={`cursor-trail-icon ${item.tone}`}
+            className={`cursor-trail-icon ${item.tone.tone}`}
             style={{ left: item.x, top: item.y }}
             initial={{ opacity: 0, scale: 0.3, rotate: item.rotate - 20 }}
             animate={{ opacity: 1, scale: 1, rotate: item.rotate }}
             exit={{ opacity: 0, scale: 0.6, transition: { duration: 0.35, ease: [0.4, 0, 1, 1] } }}
             transition={{ type: "spring", stiffness: 420, damping: 22 }}
           >
-            {item.icon.lotus ? (
-              <svg viewBox="0 0 125.09 68.99" className="is-lotus">
-                {LOTUS_MARK_PATHS.map((path) => (
-                  <path key={path} d={path} />
-                ))}
-              </svg>
-            ) : (
-              <svg viewBox="0 0 24 24">
-                {item.icon.paths.map((path) => (
-                  <path key={path} d={path} />
-                ))}
-              </svg>
-            )}
+            <img src={assetPath(`/assets/social/trail/${item.icon}${item.tone.white ? "-white" : ""}.webp`)} alt="" />
           </motion.span>
         ))}
       </AnimatePresence>
@@ -2518,17 +2502,25 @@ function OverviewBento({ navigate }) {
         const wide = bentoWide.has(page.id) || (pair && !bentoWide.has(pair.id) && index % 2 === 1);
         const hasCover = Boolean(page.heroVideo || page.heroImage || page.heroGlass);
         const isPositioning = page.id === "positioning";
+        const isTypography = page.id === "typography";
         return (
           <motion.button
             type="button"
             key={page.id}
-            className={`bento-tile ${wide ? "is-wide" : ""} ${isPositioning ? "is-light" : ""}`}
+            className={`bento-tile ${wide ? "is-wide" : ""} ${isPositioning ? "is-light" : ""} ${isTypography ? "is-type" : ""}`}
             onClick={() => navigate(page.id)}
             whileTap={{ scale: 0.995 }}
             aria-label={t(`Открыть раздел ${page.title}`)}
           >
             <span className="bento-visual" aria-hidden="true">
-              {page.heroVideo ? <video className="directory-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" /> : null}
+              {page.heroVideo && !isTypography ? <video className="directory-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" /> : null}
+              {isTypography ? (
+                // Обложка «Типографики» по образцу DevRev: название шрифта и крупный пример текста, уходящий за край
+                <span className="bento-type">
+                  <span className="bento-type-name">TT Norms Pro</span>
+                  <span className="bento-type-sample">{t("Ближе к будущему. Дальний Восток и Арктика — территории роста, знаний и новых возможностей")}</span>
+                </span>
+              ) : null}
               {page.heroGlass ? <GlassHero data={page.heroGlass} compact /> : page.heroImage ? <img className="directory-video" src={heroAsset(page.heroImage)} alt="" loading="lazy" /> : null}
               {page.heroAnimation === "colorTiles" ? <ColorHeroAnimation /> : null}
               {page.heroLibrary ? <LibraryHeroBackground variant={page.heroLibrary} miniature /> : null}
