@@ -2506,14 +2506,16 @@ function PrincipleCards({ items }) {
 }
 
 // «Обзор» плиткой: обложки разделов во всю плитку, название в левом верхнем углу.
-// Ряды чередуются: узкая + широкая, широкая + узкая (как в DevRev), углы скруглены.
+// В каждом ряду одна широкая и одна узкая плитка; широкая достаётся более важному разделу.
+const bentoWide = new Set(["logo", "subsidiaries", "typography", "corporate", "advertising", "photostyle", "social"]);
 function OverviewBento({ navigate }) {
   const tiles = pagesData.filter((page) => page.id !== "overview");
   return (
     <section id="contents" className="overview-bento" aria-label={t("Разделы руководства")}>
       {tiles.map((page, index) => {
-        const row = Math.floor(index / 2);
-        const wide = row % 2 === 0 ? index % 2 === 1 : index % 2 === 0;
+        // Широкая плитка — у более важного раздела в паре (порядок разделов сохраняется)
+        const pair = tiles[index % 2 === 0 ? index + 1 : index - 1];
+        const wide = bentoWide.has(page.id) || (pair && !bentoWide.has(pair.id) && index % 2 === 1);
         const hasCover = Boolean(page.heroVideo || page.heroImage || page.heroGlass);
         const isPositioning = page.id === "positioning";
         return (

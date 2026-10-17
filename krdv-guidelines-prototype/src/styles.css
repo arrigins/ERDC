@@ -7614,7 +7614,7 @@ a.slide-viewer-download:focus-visible {
 .overview-bento {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  gap: 16px;
   padding: 8px;
 }
 
