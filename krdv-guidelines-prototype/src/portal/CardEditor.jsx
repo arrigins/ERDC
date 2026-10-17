@@ -481,7 +481,7 @@ export function NewsEditor({ onBack }) {
           </div>
           <p className="pp-hint">Блеклый текст в предпросмотре — подсказка, он заменится вашим.</p>
         </section>
-        <section className="pp-panel" aria-label="Настройки">
+        <section className="pp-panel is-numbered" aria-label="Настройки">
           {base.fontState === "failed" ? <div className="pp-error" role="alert">Не загрузился фирменный шрифт TT Norms Pro, поэтому скачать карточку нельзя. Проверьте интернет и обновите страницу.</div> : null}
           {error || base.error ? <div className="pp-error" role="alert">{error || base.error}</div> : null}
           <CardFields

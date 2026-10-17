@@ -1196,3 +1196,36 @@ ul.pp-problems {
     grid-template-columns: 1fr;
   }
 }
+
+/* ══ UX-ревизия 17.10 ══ Откат: удалить блок или вернуться к метке git ux-review-before */
+
+/* Вход: фирменный градиент вместо пустого белого экрана */
+.pp-gate {
+  background:
+    radial-gradient(60% 70% at 85% 10%, rgba(77, 220, 241, 0.55), transparent 70%),
+    radial-gradient(70% 80% at 10% 100%, rgba(154, 166, 248, 0.5), transparent 70%),
+    linear-gradient(160deg, #0a24f2 0%, #0130f0 45%, #07143a 100%);
+}
+
+.pp-gate-card {
+  box-shadow: 0 40px 80px -40px rgba(7, 20, 58, 0.7);
+}
+
+/* Главная: обложка задачи слегка приближается при наведении */
+.pp-task-media img {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+button.pp-task:hover .pp-task-media img {
+  transform: scale(1.03);
+}
+
+/* «Новость»: шаги пронумерованы, как в «Фото с логотипом» и «Цитате» */
+.pp-panel.is-numbered {
+  counter-reset: step;
+}
+
+.pp-panel.is-numbered > .pp-field > .pp-label::before {
+  counter-increment: step;
+  content: counter(step) ". ";
+}

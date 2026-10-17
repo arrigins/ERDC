@@ -1690,6 +1690,7 @@ function App() {
           <Sidebar activePageId={activePageId} activeSectionId={activeSectionId} openGroup={openGroup} setOpenGroup={setOpenGroup} navigate={navigate} jumpTo={jumpTo} preloading={showPreloader} />
           <button className="nav-backdrop" type="button" aria-label={t("Закрыть меню")} onClick={() => setMenuOpen(false)} />
           <motion.main id="page" className="page-scroll" layoutScroll>
+            <ReadingProgress key={`progress-${activePageId}`} />
             <GuidelinePage key={activePageId} page={activePage} activePageId={activePageId} navigate={navigate} />
           </motion.main>
         </div>
@@ -2004,14 +2005,60 @@ function LibraryHeroBackground({ variant, miniature = false }) {
   }
 }
 
+// UX-ревизия 17.10: тонкая полоса прогресса чтения над страницей
+function ReadingProgress() {
+  const bar = useRef(null);
+  useEffect(() => {
+    const scroller = document.getElementById("page");
+    if (!scroller || !bar.current) return undefined;
+    const update = () => {
+      const max = scroller.scrollHeight - scroller.clientHeight;
+      bar.current.style.transform = `scaleX(${max > 0 ? Math.min(1, scroller.scrollTop / max) : 0})`;
+    };
+    update();
+    scroller.addEventListener("scroll", update, { passive: true });
+    return () => scroller.removeEventListener("scroll", update);
+  }, []);
+  return <span ref={bar} className="reading-progress" aria-hidden="true" />;
+}
+
+// UX-ревизия 17.10: секции мягко проявляются при прокрутке (без «уменьшения движения»)
+function useSectionReveal(ref) {
+  useEffect(() => {
+    const root = ref.current;
+    if (!root || !("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+    const targets = [...root.querySelectorAll(".content-section, .overview-bento")];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-revealed");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.04 },
+    );
+    targets.forEach((target) => {
+      const box = target.getBoundingClientRect();
+      if (box.top < window.innerHeight) target.classList.add("is-revealed");
+      else observer.observe(target);
+    });
+    root.classList.add("can-reveal");
+    return () => observer.disconnect();
+  }, [ref]);
+}
+
 function GuidelinePage({ page, activePageId, navigate }) {
+  const pageRef = useRef(null);
+  useSectionReveal(pageRef);
   const hasMediaHero = Boolean(page.heroVideo || page.heroImage);
   const hasAnimatedHero = Boolean(page.heroAnimation);
   const hasSubsidiaryHero = page.heroAnimation === "subsidiaryRegions";
   const hasLibraryHero = Boolean(page.heroLibrary);
 
   return (
-    <article className={`guideline-page ${page.softLayout === false ? "" : "is-soft"} ${page.bento ? "is-bento" : ""}`}>
+    <article ref={pageRef} className={`guideline-page ${page.softLayout === false ? "" : "is-soft"} ${page.bento ? "is-bento" : ""}`}>
       <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""} ${hasLibraryHero ? "is-library" : ""} ${page.heroTone === "light" ? "is-light" : ""} ${page.heroTone === "plain" ? "is-plain" : ""}`} aria-label={t(page.title)}>
         {page.heroVideo ? <video className="hero-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : null}
         {page.heroGlass ? <GlassHero data={page.heroGlass} /> : page.heroImage ? <img className="hero-video" src={heroAsset(page.heroImage)} alt="" aria-hidden="true" /> : null}
@@ -2534,6 +2581,9 @@ function OverviewBento({ navigate }) {
               {!hasCover && !isPositioning && !page.heroAnimation && !page.heroLibrary ? <span className="directory-fallback" /> : null}
             </span>
             <span className="bento-label">{t(page.cardTitle || page.title)}</span>
+            <span className="bento-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" /></svg>
+            </span>
           </motion.button>
         );
       })}
@@ -3459,6 +3509,19 @@ function SocialPhotoBlock() {
 }
 
 // Палитра соцсетей: слева цвета кружками на тёмной плашке, справа место под анимацию иллюстраций.
+// UX-ревизия 17.10: вместо заглушки — «парящие» фирменные пиктограммы в цветных кругах
+const PICTOGRAM_FIELD = [
+  { icon: "whale", tone: "is-blue", white: true },
+  { icon: "snowflake", tone: "is-pale" },
+  { icon: "deer", tone: "is-red", white: true },
+  { icon: "icebreaker", tone: "is-milk" },
+  { icon: "mountain", tone: "is-sky", white: true },
+  { icon: "flower", tone: "is-milk" },
+  { icon: "seal", tone: "is-blue", white: true },
+  { icon: "berry", tone: "is-pale" },
+  { icon: "plane", tone: "is-red", white: true },
+];
+
 function SocialPalette({ data }) {
   return (
     <div className="social-palette">
@@ -3470,8 +3533,13 @@ function SocialPalette({ data }) {
           </div>
         ))}
       </div>
-      <div className="social-palette-illustration">
-        <span>{t(data.placeholder)}</span>
+      <div className="social-palette-illustration is-pictograms" aria-label={t("Фирменные пиктограммы")}>
+        {PICTOGRAM_FIELD.map((item, index) => (
+          <span key={item.icon} className={`pictogram-bubble ${item.tone}`} style={{ "--i": index }}>
+            <img src={assetPath(`/assets/social/trail/${item.icon}${item.white ? "-white" : ""}.webp`)} alt="" />
+          </span>
+        ))}
+        <span className="pictogram-caption">{t("Фирменные пиктограммы")}</span>
       </div>
     </div>
   );
