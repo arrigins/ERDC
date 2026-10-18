@@ -1350,8 +1350,75 @@ const pagesData = [
     number: "09",
     title: "Рекламные материалы",
     navTitle: "Рекламные",
-    intro: "Рекламно-информационные материалы включают роллап.",
+    intro:
+      "Реклама КРДВ говорит с предпринимателем на языке выгоды: одно короткое сообщение, реальный бизнес и понятный следующий шаг. Каждая кампания окрашена в цвет своего преференциального режима — так макеты разных режимов складываются в одну систему, а режим узнаётся с первого взгляда.",
     sections: [
+      {
+        id: "spv-outdoor",
+        title: "Наружная реклама СПВ",
+        lead: "Кампания свободного порта Владивосток в Приморье: билборды вдоль дорог и экраны в бизнес-центрах.",
+        paragraphs: [
+          "Главный аргумент кампании — бизнес, который уже пользуется льготами. На экранах — настоящие резиденты СПВ: клиника, кафе, керлинг-центр, агротуристический и водный комплексы. На билбордах — сферы бизнеса и город, где действует предложение.",
+        ],
+        assetImages: [
+          { title: "Билборд у дороги", caption: "Находка: крупный заголовок и адрес сайта читаются на ходу.", file: "adv-spv-mockup-road.webp", cover: true },
+          { title: "Экран в бизнес-центре", caption: "Зритель стоит рядом — поэтому на экране есть QR-код и Telegram-канал.", file: "adv-spv-mockup-wall.webp", cover: true },
+        ],
+      },
+      {
+        id: "spv-anatomy",
+        title: "Из чего собран макет",
+        lead: "Шесть элементов, одинаковых для всех режимов. От кампании к кампании меняются только цвет режима и фотография.",
+        adAnatomy: true,
+      },
+      {
+        id: "spv-boards",
+        title: "Билборды",
+        lead: "Формат для дорог и городских магистралей: сообщение должно считываться за пару секунд.",
+        rules: [
+          { label: "Сообщение", text: "Заголовок из двух-трёх слов капсом и призыв на белой плашке." },
+          { label: "Город", text: "Название города в круге справа внизу привязывает предложение к месту." },
+          { label: "Контакт", text: "Только короткий адрес сайта: QR-код с дороги не считать." },
+        ],
+        slideDecks: [
+          {
+            id: "spv-boards",
+            title: "Билборды СПВ",
+            ratio: "2 / 1",
+            noDownload: true,
+            slides: [
+              { title: "Находка, промышленность", file: "adv-spv-board-nakhodka-1.webp" },
+              { title: "Находка, туризм", file: "adv-spv-board-nakhodka-2.webp" },
+              { title: "Спасск-Дальний, производство", file: "adv-spv-board-spassk.webp" },
+            ],
+          },
+        ],
+      },
+      {
+        id: "spv-screens",
+        title: "Экраны в бизнес-центрах",
+        lead: "Горизонтальные экраны в холлах и лифтовых зонах: здесь есть время прочитать подробнее и навести камеру на QR-код.",
+        rules: [
+          { label: "Резидент", text: "Фото настоящего резидента и подпись: название компании и статус «резидент СПВ»." },
+          { label: "Цвет", text: "Обводка арки и плашка статуса подбираются к фотографии." },
+          { label: "Знак", text: "«Сделано в ТОР СПВ» — в правом верхнем углу фотографии." },
+          { label: "Отклик", text: "QR-код и Telegram-канал — для тех, кто хочет узнать подробнее прямо у экрана." },
+        ],
+        slideDecks: [
+          {
+            id: "spv-screens",
+            title: "Экраны СПВ",
+            noDownload: true,
+            slides: [
+              { title: "Сеть клиник «Алёнка»", file: "adv-spv-screen-alenka.webp" },
+              { title: "Кафе «На Lava’ше»", file: "adv-spv-screen-lavash.webp" },
+              { title: "Керлинг-центр «Дом со льдом»", file: "adv-spv-screen-ice.webp" },
+              { title: "Агротуристический комплекс «Приморские альпаки»", file: "adv-spv-screen-alpaca.webp" },
+              { title: "Водный комплекс «Акватория»", file: "adv-spv-screen-akvatoria.webp" },
+            ],
+          },
+        ],
+      },
       {
         id: "rollup",
         title: "Роллап",
@@ -2197,6 +2264,7 @@ function ContentSection({ section, navigate, activePageId }) {
     section.regimePalette ? <RegimePalette key="regime-palette" items={section.regimePalette} /> : null,
     section.regimeSigns ? <RegimeSignLibrary key="regime-signs" /> : null,
     section.madeSigns ? <MadeSignLibrary key="made-signs" /> : null,
+    section.adAnatomy ? <AdAnatomyStage key="ad-anatomy" /> : null,
     section.slideDecks ? <SlideViewer key="slides" decks={section.slideDecks} /> : null,
     section.logoBackdrops ? <LogoBackdrops key="logo-backdrops" /> : null,
     section.clearSpace ? <ClearSpaceBoard key="clearspace" /> : null,
@@ -3027,9 +3095,114 @@ function ClearSpaceBoard() {
 }
 
 // Шаблоны презентаций: у каждого своя листалка (первый слайд — обложка) и кнопка скачивания.
+// «Из чего собран макет»: билборд СПВ собирается по шагам — цвет режима, логотип, заголовок, плашка, фото, контакт.
+// Шрифт — живой TT Norms Pro. Пока блок на экране, сборка повторяется; шаг можно выбрать вручную.
+const adAnatomySteps = [
+  { id: "color", title: "Цвет режима", text: "Фон — цвет свободного порта Владивосток #223E9A. У каждого режима свой цвет из раздела «Режимы и программы».", tag: "СПВ · #223E9A" },
+  { id: "logo", title: "Логотип", text: "Белая горизонтальная версия в левом верхнем углу, с охранным полем.", tag: "Логотип" },
+  { id: "head", title: "Заголовок", text: "Одно сообщение в две строки: TT Norms Pro ExtraBold, капс, белым.", tag: "TT Norms Pro ExtraBold" },
+  { id: "pill", title: "Призыв", text: "Белая скруглённая плашка, текст цветом режима — TT Norms Pro Bold, строчными.", tag: "TT Norms Pro Bold" },
+  { id: "photo", title: "Фотография", text: "Правая половина макета: бизнес или резидент, край фото — срез-стрелка.", tag: "Фото" },
+  { id: "contact", title: "Контакт", text: "Короткий адрес сайта на билборде, город — в круге справа внизу.", tag: "spv.erdc.ru" },
+];
+
+function AdAnatomyStage() {
+  const reduceMotion = useReducedMotion();
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+  const [phase, setPhase] = useState(0);
+  const [manual, setManual] = useState(false);
+  const total = adAnatomySteps.length;
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return undefined;
+    }
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold: 0.35 });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (manual) return undefined;
+    if (reduceMotion) {
+      setPhase(total + 1);
+      return undefined;
+    }
+    if (!inView) {
+      setPhase(0);
+      return undefined;
+    }
+    // 0 — пустая конструкция, 1…6 — шаги, 7 — готовый макет без подсказок
+    let value = 0;
+    let timer;
+    const run = () => {
+      setPhase(value);
+      const hold = value === 0 ? 900 : value <= total ? 1900 : 4200;
+      value = value > total ? 0 : value + 1;
+      timer = window.setTimeout(run, hold);
+    };
+    run();
+    return () => window.clearTimeout(timer);
+  }, [inView, reduceMotion, manual, total]);
+
+  const pick = (index) => {
+    setManual(true);
+    setPhase(index + 1);
+  };
+  const shown = (index) => phase >= index + 1;
+  const focus = (index) => phase === index + 1;
+  const cls = (index, extra = "") => `aa-el ${extra} ${shown(index) ? "is-on" : ""} ${focus(index) ? "is-focus" : ""}`;
+  const active = phase >= 1 && phase <= total ? phase - 1 : -1;
+
+  return (
+    <div className="ad-anatomy">
+      <div ref={ref} className="aa-stage" data-phase={phase} role="img" aria-label={t("Сборка билборда СПВ: цвет режима, логотип, заголовок, плашка с призывом, фотография и контакт")}>
+        <span className={cls(0, "aa-fill")} />
+        <span className={cls(4, "aa-photo")}>
+          <img src={rasterAsset("adv-spv-anatomy-photo.webp")} alt="" loading="lazy" />
+        </span>
+        <span className={cls(1, "aa-logo")}>
+          <img src={logoAsset("krdv-logo-ru-horizontal-white.svg")} alt="" />
+        </span>
+        <span className={cls(2, "aa-head")}>
+          <span className="aa-line is-big">ЛЬГОТЫ</span>
+          <span className="aa-line is-small">ДЛЯ БИЗНЕСА</span>
+        </span>
+        <span className={cls(3, "aa-pill")}>станьте резидентом СПВ</span>
+        <span className={cls(5, "aa-site")}>spv.erdc.ru</span>
+        {adAnatomySteps.map((step, index) => (
+          <span key={step.id} className={`aa-tag is-${step.id} ${focus(index) ? "is-on" : ""}`}>
+            {step.id === "color" ? <i /> : null}
+            {step.tag}
+          </span>
+        ))}
+      </div>
+      <ol className="aa-steps">
+        {adAnatomySteps.map((step, index) => (
+          <li key={step.id}>
+            <button type="button" data-active={active === index} data-done={shown(index)} onClick={() => pick(index)}>
+              <span className="aa-step-num">{String(index + 1).padStart(2, "0")}</span>
+              <strong>{t(step.title)}</strong>
+              <span>{t(step.text)}</span>
+            </button>
+          </li>
+        ))}
+      </ol>
+      {manual ? (
+        <button type="button" className="aa-replay" onClick={() => setManual(false)}>
+          {t("Смотреть сборку заново")}
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
 function SlideViewer({ decks }) {
   return (
-    <div className="slide-decks">
+    <div className={`slide-decks ${decks.length === 1 ? "is-single" : ""}`}>
       {decks.map((deck) => (
         <DeckViewer key={deck.id} deck={deck} />
       ))}
@@ -3045,7 +3218,7 @@ function DeckViewer({ deck }) {
 
   return (
     <div className="slide-viewer">
-      <div className="slide-viewer-stage">
+      <div className="slide-viewer-stage" style={deck.ratio ? { aspectRatio: deck.ratio } : undefined}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.img
             key={`${deck.id}-${index}`}
@@ -3059,7 +3232,7 @@ function DeckViewer({ deck }) {
         </AnimatePresence>
       </div>
       <div className="slide-viewer-bar">
-        <h3 className="slide-viewer-title">{t(deck.title)}</h3>
+        <h3 className="slide-viewer-title">{deck.noDownload ? t(slide.title) : t(deck.title)}</h3>
         <div className="slide-viewer-nav">
           <span>
             {index + 1} / {total}
@@ -3081,11 +3254,11 @@ function DeckViewer({ deck }) {
             onClick={() => setIndex(itemIndex)}
             aria-label={t(`Слайд ${itemIndex + 1}: ${item.title}`)}
           >
-            <img src={rasterAsset(item.file)} alt="" loading="lazy" />
+            <img src={rasterAsset(item.file)} alt="" loading="lazy" style={deck.ratio ? { aspectRatio: deck.ratio } : undefined} />
           </button>
         ))}
       </div>
-      {deck.download ? (
+      {deck.noDownload ? null : deck.download ? (
         <a className="slide-viewer-download" href={deck.download} target="_blank" rel="noreferrer">
           <UiIcon icon={ICONS.download} size={16} strokeWidth={1.5} />
           {t("Скачать шаблон")}
