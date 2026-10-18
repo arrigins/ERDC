@@ -36,6 +36,7 @@
 }
 
 .ms-label span { opacity: 0.55; }
+.ms-label-meta { margin-left: auto; font-style: normal; opacity: 0.55; }
 
 .ms-foot {
   position: relative;
@@ -139,46 +140,28 @@
 .ms-dots button[data-active="true"] { background: var(--ui-blue); transform: scale(1.25); }
 
 /* Крупные буквы */
-.ms-letters {
-  container-type: inline-size;
-  background: #1d4fd8;
-  color: #ffffff;
-}
+.ms-letters { background: #ffffff; }
 
-.ms-letters .ms-foot p,
-.ms-letters .ms-label {
-  justify-self: start;
-  border-radius: var(--r-control, 12px);
-  padding: 8px 12px;
-  background: #1d4fd8;
-  color: #ffffff;
-}
-
-.ms-letters .ms-label { padding: 6px 10px; width: max-content; }
-
-.ms-letters-field {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+.ms-letters-canvas {
+  align-self: center;
+  margin: 18px 0;
   overflow: hidden;
-  pointer-events: none;
+  border-radius: var(--r-inner, 16px);
 }
 
-.ms-letter {
-  display: grid;
-  place-items: center;
-  color: #d9dde6;
-  font-size: 58cqi;
-  font-weight: 700;
-  line-height: 0.7;
+.ms-letters-canvas svg { display: block; width: 100%; height: auto; }
+.msl-bg { fill: var(--bg); transition: fill 0.8s var(--ease); }
+.msl-quilt line { stroke: rgba(0, 0, 0, 0.08); stroke-width: 3; }
+.msl-big {
+  fill: var(--fg);
+  font-family: "TT Norms Pro", sans-serif;
+  font-size: 700px;
+  font-weight: 500;
+  transition: fill 0.8s var(--ease);
 }
-
-.ms-letter.is-0 { margin: 8% 0 0 -16%; }
-.ms-letter.is-1 { margin: 8% -24% 0 0; }
-.ms-letter.is-2 { margin: -8% 0 0 -8%; }
-.ms-letter.is-3 { margin: -8% -30% 0 0; }
+.msl-lock { fill: var(--fg); font-family: "TT Norms Pro", sans-serif; font-size: 34px; transition: fill 0.8s var(--ease); }
+.msl-lock-b { font-size: 44px; font-weight: 700; }
+.msl-patch { fill: var(--patch); transition: fill 0.8s var(--ease); }
 
 /* Цвета: полосы, активная раскрывается */
 .ms-strips {
@@ -222,67 +205,49 @@
   mix-blend-mode: normal;
 }
 
-.ms-strip[style*="#ECE2D7"] .ms-strip-info { color: #3a342e; }
+.ms-strip[data-light="true"] .ms-strip-info { color: #1a1a1a; }
+.ms-strip[data-light="true"] { box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1); }
 
 .ms-strip[data-active="true"] .ms-strip-info { opacity: 1; transform: none; transition-delay: 0.15s; }
 .ms-strip-info strong { font-size: 16px; font-weight: 400; }
 .ms-strip-info span { font-family: var(--mono); font-size: 12px; letter-spacing: var(--mono-tracking); }
 .ms-strip-info em { font-style: normal; opacity: 0.8; overflow: hidden; text-overflow: ellipsis; }
 
-/* ── 2. Стикеры ── */
+/* ── 2. Стикеры (картинки из набора) ── */
 .merch-stickers {
+  --k: 0.46;
   position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 18px 16px;
+  gap: 10px 14px;
+  overflow: hidden;
   border-radius: var(--soft-radius, 24px);
-  padding: clamp(28px, 4vw, 56px) clamp(16px, 3vw, 48px) 56px;
+  padding: clamp(28px, 4vw, 56px) clamp(16px, 3vw, 48px) 60px;
   background: #ffffff;
 }
 
 .mst {
-  --accent: #f6b8c1;
-  display: grid;
-  align-content: center;
-  gap: 2px;
-  min-height: 108px;
-  max-width: 240px;
-  padding: 20px 22px;
-  border-radius: 28px;
-  background: #1c4c9c;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.2;
+  position: relative;
+  width: calc(var(--w) * var(--k) * 1px);
+  height: auto;
   touch-action: none;
   cursor: grab;
   user-select: none;
-  box-shadow:
-    inset 0 -7px 12px rgba(0, 0, 0, 0.16),
-    inset 0 5px 10px rgba(255, 255, 255, 0.28),
-    0 10px 22px rgba(10, 20, 60, 0.12);
+  -webkit-user-drag: none;
+  transition: filter 0.2s;
 }
 
-.mst:active { cursor: grabbing; }
-.mst em { color: var(--accent); font-style: italic; font-weight: 700; }
-.mst-line { display: block; }
-.mst strong { font-weight: 700; }
-
-.mst.is-milk { --accent: #1c4c9c; background: #f3efe9; color: #141414; }
-.mst.is-pink { --accent: #1c4c9c; background: #f7cdd3; color: #141414; }
-.mst.is-red { background: #e5323a; }
-.mst.is-pill { border-radius: 999px; padding: 18px 30px; min-height: 0; max-width: 340px; }
-.mst.is-wide { max-width: 520px; font-style: italic; font-weight: 400; }
-.mst.is-circle { width: 150px; height: 150px; max-width: none; border-radius: 50%; padding: 18px; text-align: center; justify-items: center; }
-.mst.is-round { border-radius: 44% 56% 52% 48% / 58% 46% 54% 42%; padding: 26px 30px; }
-.mst.is-square { width: 150px; min-height: 150px; }
+.mst.is-dragging {
+  cursor: grabbing;
+  filter: drop-shadow(0 14px 18px rgba(10, 20, 60, 0.2));
+}
 
 .merch-stickers-hint {
   position: absolute;
   left: 50%;
-  bottom: 18px;
+  bottom: 20px;
   transform: translateX(-50%);
   color: var(--muted);
   font-family: var(--mono);
@@ -290,7 +255,11 @@
   letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
   white-space: nowrap;
+  pointer-events: none;
 }
+
+@media (max-width: 1100px) { .merch-stickers { --k: 0.4; } }
+@media (max-width: 680px) { .merch-stickers { --k: 0.3; gap: 6px 8px; } }
 
 /* ── 3. Одежда ── */
 .merch-apparel {
@@ -322,6 +291,8 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  padding: 4%;
+  box-sizing: border-box;
 }
 
 .mp-stage.is-zoom .mp-zoom { transform: scale(2.4); }
@@ -395,13 +366,11 @@
   place-items: center;
   min-height: 260px;
   padding: 24px;
-  background: #f4f3f6;
+  background: #ffffff;
 }
 
 .mb-shopper .mb-stage {
   min-height: 560px;
-  background: var(--tint);
-  transition: background 0.6s var(--ease);
 }
 
 .mb-shopper .mb-stage img {
@@ -410,8 +379,6 @@
   transform-origin: 50% 0;
 }
 
-.mb-quilted .mb-stage { background: #eef0f4; }
-.mb-knit .mb-stage { background: #e5ecfb; }
 
 .mb-quilted .mb-stage img,
 .mb-knit .mb-stage img {
@@ -523,6 +490,7 @@
 .mt-sun:hover { background: #ffe9c7; }
 .mt-sun[data-active="true"] { background: #f4a623; color: #ffffff; }
 .mt-sun[data-active="true"] svg { animation: mt-spin 6s linear infinite; }
+.mt-sun[data-active="true"]:hover { background: #d98d10; }
 
 @keyframes mt-spin { to { transform: rotate(360deg); } }
 
@@ -626,7 +594,7 @@
   .ms-letters { grid-column: span 1; }
   .merch-apparel,
   .merch-thermo { grid-template-columns: 1fr; }
-  .mp-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .mp-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .merch-bags { grid-template-columns: 1fr 1fr; }
   .mb-shopper { grid-column: 1 / -1; grid-row: auto; }
   .ma-card.span-7,
@@ -651,8 +619,4 @@
   .ma-card.span-7,
   .ma-card.span-5,
   .ma-card.span-6 { grid-column: 1 / -1; }
-  .mst { font-size: 14px; }
-  .mst.is-square,
-  .mst.is-circle { width: 128px; height: auto; min-height: 128px; }
-  .mst.is-circle { height: 128px; }
 }

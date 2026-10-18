@@ -53,15 +53,16 @@ const merchHearts = [
   { file: "merch-heart-blue.svg", title: "Сердце КРДВ, синее", text: "Нашивки и бирки на сумках и чехлах" },
 ];
 
+// Цвета графики: принты, нашивки, стикеры. Цвет самого предмета подбирается под задачу и в систему не входит.
 const merchColors = [
-  { name: "Ультрамарин", hex: "#1D4FD8", use: "Несессер, чехол, вязаный шоппер" },
-  { name: "Синий", hex: "#2A2A8C", use: "Шоппер" },
-  { name: "Голубой", hex: "#3D7EC1", use: "Шоппер" },
-  { name: "Тёмно-синий", hex: "#283246", use: "Зонт, аккумулятор" },
-  { name: "Красный", hex: "#EE3137", use: "Сердце" },
-  { name: "Оранжевый", hex: "#E57A35", use: "Аккумулятор, ремувка" },
-  { name: "Молочный", hex: "#ECE2D7", use: "Ветровка, термокружка" },
-  { name: "Чёрный", hex: "#141414", use: "Шоппер, ветровка, ремувки" },
+  { name: "Синий", hex: "#0055A2", use: "Сердце КРДВ, нашивки, стикеры" },
+  { name: "Ультрамарин", hex: "#1D4FD8", use: "Крупные буквы стёганой серии" },
+  { name: "Красный", hex: "#EE3137", use: "Сердце «Близко к сердцу», брелок" },
+  { name: "Розовый", hex: "#F8CAD0", use: "Принт «Солнце» на футболке, стикеры", light: true },
+  { name: "Светло-серый", hex: "#DCDFE6", use: "Буквы на синем, вязка", light: true },
+  { name: "Молочный", hex: "#F3EFE9", use: "Стикеры", light: true },
+  { name: "Белый", hex: "#FFFFFF", use: "Подписи на тёмных вещах", light: true },
+  { name: "Чёрный", hex: "#141414", use: "Подписи на светлых вещах" },
 ];
 
 function SignatureTile({ t }) {
@@ -139,36 +140,60 @@ function HeartTile({ t }) {
   );
 }
 
+// Крупные буквы — как на стёганом чехле и несессере: «КР» сверху уходит за правый и верхний край,
+// «ДВ» снизу — за левый и нижний; в свободных углах — маленькая подпись и нашивка с сердцем.
+// Два цветовых решения (светлый чехол / синий несессер) сменяют друг друга — композиция не меняется.
+const letterColorways = [
+  { id: "light", bg: "#dcdfe6", fg: "#1d4fd8", patch: "#ffffff", name: "Чехол для ноутбука" },
+  { id: "blue", bg: "#1d4fd8", fg: "#dcdfe6", patch: "#eef0f5", name: "Несессер" },
+];
+
 function LettersTile({ t }) {
   const ref = useRef(null);
   const inView = useInView(ref, 0.4);
   const reduceMotion = useReducedMotion();
-  const letters = [
-    { ch: "К", from: { x: "-30%", y: "-20%" } },
-    { ch: "Р", from: { x: "30%", y: "-25%" } },
-    { ch: "Д", from: { x: "-25%", y: "30%" } },
-    { ch: "В", from: { x: "35%", y: "25%" } },
-  ];
+  const [index] = useCycle(letterColorways.length, 3600, inView && !reduceMotion);
+  const way = letterColorways[index];
+  const shown = inView || reduceMotion;
+  const ease = [0.16, 1, 0.3, 1];
+  const row = (from) => ({
+    initial: reduceMotion ? false : { x: from, opacity: 0 },
+    animate: shown ? { x: 0, opacity: 1 } : { x: from, opacity: 0 },
+  });
   return (
     <article ref={ref} className="ms-tile ms-letters">
-      <div className="ms-letters-field" aria-hidden="true">
-        {letters.map((letter, index) => (
-          <motion.span
-            key={letter.ch}
-            className={`ms-letter is-${index}`}
-            initial={reduceMotion ? false : { ...letter.from, opacity: 0 }}
-            animate={inView || reduceMotion ? { x: 0, y: 0, opacity: 1 } : { ...letter.from, opacity: 0 }}
-            transition={{ duration: 1.1, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {letter.ch}
-          </motion.span>
-        ))}
-      </div>
       <header className="ms-label">
         <span>03</span> {t("Крупные буквы")}
+        <em className="ms-label-meta">{t(way.name)}</em>
       </header>
+      <div className="ms-letters-canvas">
+        <svg viewBox="0 0 1270 1000" role="img" aria-label={t("Композиция крупных букв КРДВ: две строки со сдвигом, буквы уходят за края предмета")} style={{ "--bg": way.bg, "--fg": way.fg, "--patch": way.patch }}>
+          <rect className="msl-bg" width="1270" height="1000" />
+          <g className="msl-quilt">
+            <line x1="635" y1="0" x2="635" y2="1000" />
+            <line x1="0" y1="500" x2="1270" y2="500" />
+          </g>
+          <motion.g {...row(160)} transition={{ duration: 1.1, ease }}>
+            <text className="msl-big" x="392" y="472">К</text>
+            <text className="msl-big" x="842" y="472">Р</text>
+          </motion.g>
+          <motion.g {...row(-160)} transition={{ duration: 1.1, delay: 0.1, ease }}>
+            <text className="msl-big" x="-46" y="1022">Д</text>
+            <text className="msl-big" x="436" y="1022">В</text>
+          </motion.g>
+          <motion.g initial={reduceMotion ? false : { opacity: 0 }} animate={{ opacity: shown ? 1 : 0 }} transition={{ duration: 0.6, delay: 0.7 }}>
+            <text className="msl-lock" x="96" y="176">
+              <tspan className="msl-lock-b">КРДВ</tspan>
+              <tspan x="96" dy="50">когда работа</tspan>
+              <tspan x="96" dy="42">дарит восторг</tspan>
+            </text>
+            <rect className="msl-patch" x="1062" y="812" width="128" height="128" rx="16" />
+            <image href={merchAsset("merch-heart-blue.svg")} x="1078" y="832" width="96" height="90" />
+          </motion.g>
+        </svg>
+      </div>
       <footer className="ms-foot">
-        <p>{t("Буквы крупнее предмета и уходят за край.")}</p>
+        <p>{t("Две строки со сдвигом: «КР» уходит за правый край, «ДВ» — за левый. В свободных углах — подпись и нашивка.")}</p>
       </footer>
     </article>
   );
@@ -188,6 +213,7 @@ function PaletteTile({ t }) {
             type="button"
             className="ms-strip"
             data-active={index === active}
+            data-light={color.light ? "true" : undefined}
             style={{ "--c": color.hex }}
             onMouseEnter={() => setActive(index)}
             onFocus={() => setActive(index)}
@@ -203,7 +229,7 @@ function PaletteTile({ t }) {
         ))}
       </div>
       <footer className="ms-foot">
-        <p>{t("Цвета самих вещей: ткань, металл, эмаль. Основной синий КРДВ здесь уступает яркому ультрамарину и тёплым оттенкам.")}</p>
+        <p>{t("Цвета принтов, нашивок и стикеров. Цвет самого предмета подбирается под задачу и в систему не входит.")}</p>
       </footer>
     </article>
   );
@@ -222,59 +248,90 @@ export function MerchSystem({ t }) {
 
 /* ───────── 2. Слоганы-стикеры ───────── */
 
-// *слово* — акцент (курсив, цвет акцента), как на наборе 3D-стикеров
+// Стикеры — вырезаны из макета набора 3D-стикеров (сохранены иллюстрации и объём). w — ширина в исходном масштабе.
 const merchStickers = [
-  { text: "**КРДВ**\nКогда решения *двигают вперёд*", tone: "blue", shape: "square" },
-  { text: "**КРДВ**\n(с) когда работа дарит восторг", tone: "milk", shape: "pill" },
-  { text: "Всё начинается\n*с развития*", tone: "blue", shape: "circle" },
-  { text: "Арктика закаляет.\n**Восток вдохновляет**", tone: "pink", shape: "pill" },
-  { text: "**КРДВ**\nЗаряжены на развитие", tone: "pink", shape: "round" },
-  { text: "Кофе — наш главный *инвестор*", tone: "blue", shape: "square" },
-  { text: "**Арктика**\n*не терпит слабых решений*", tone: "milk", shape: "square" },
-  { text: "**Дальний Восток**\n— близко к сердцу", tone: "red", shape: "circle" },
-  { text: "Большие проекты начинаются с небольшого блокнота", tone: "milk", shape: "pill wide" },
-  { text: "Несу добро и развиваю\n**Дальний Восток**", tone: "milk", shape: "square" },
-  { text: "Дальний Восток\n*настоящее будущее*", tone: "blue", shape: "square" },
-  { text: "Не край земли, а край *возможностей*", tone: "blue", shape: "circle" },
-  { text: "**Дальний Восток —**\nтам, где сердце", tone: "pink", shape: "square" },
+  { id: "s05", w: 445, alt: "Всё начинается с развития" },
+  { id: "s01", w: 316, alt: "КРДВ. Когда решения двигают вперёд" },
+  { id: "s03", w: 598, alt: "КРДВ. (с) когда работа дарит восторг" },
+  { id: "s12", w: 324, alt: "Сердце КРДВ, красное" },
+  { id: "s06", w: 395, alt: "Арктика закаляет. Восток вдохновляет" },
+  { id: "s09", w: 316, alt: "Кофе — наш главный инвестор" },
+  { id: "s02", w: 395, alt: "Логотип КРДВ" },
+  { id: "s17", w: 316, alt: "Дальний Восток — настоящее будущее" },
+  { id: "s10", w: 315, alt: "Арктика не терпит слабых решений" },
+  { id: "s19", w: 326, alt: "Сердце КРДВ, синее" },
+  { id: "s07", w: 395, alt: "КРДВ. Заряжены на развитие" },
+  { id: "s14", w: 317, alt: "Арктика закаляет, кофе согревает" },
+  { id: "s08", w: 806, alt: "Большие проекты начинаются с небольшого блокнота" },
+  { id: "s13", w: 314, alt: "Несу добро и развиваю Дальний Восток" },
+  { id: "s20", w: 315, alt: "Дальний Восток — близко к сердцу" },
+  { id: "s16", w: 315, alt: "Не край земли, а край возможностей" },
+  { id: "s18", w: 315, alt: "Дальний Восток — там, где сердце" },
+  { id: "s04", w: 395, alt: "Логотип КРДВ на синем" },
+  { id: "s11", w: 315, alt: "Минвостокразвития России" },
+  { id: "s15", w: 316, alt: "Герб Минвостокразвития на синем" },
 ];
 
-function StickerText({ text, t }) {
-  return text.split("\n").map((line, lineIndex) => (
-    <span key={lineIndex} className="mst-line">
-      {line.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/).map((part, index) => {
-        if (part.startsWith("**")) return <strong key={index}>{t(part.slice(2, -2))}</strong>;
-        if (part.startsWith("*")) return <em key={index}>{t(part.slice(1, -1))}</em>;
-        return <span key={index}>{t(part)}</span>;
-      })}
-    </span>
-  ));
-}
-
+// Перетаскивание — своё, на pointer-событиях: стикер едет строго за пальцем/курсором, не выходит за доску,
+// не подпрыгивает и не улетает по инерции; взятый стикер поднимается над остальными.
 export function MerchSlogans({ t }) {
   const boardRef = useRef(null);
   const reduceMotion = useReducedMotion();
+  const [pos, setPos] = useState({});
+  const [order, setOrder] = useState({});
+  const [dragging, setDragging] = useState(null);
+  const top = useRef(10);
+  const drag = useRef(null);
+
+  const onDown = (event, id) => {
+    if (reduceMotion || event.button > 0) return;
+    const el = event.currentTarget;
+    el.setPointerCapture(event.pointerId);
+    const board = boardRef.current.getBoundingClientRect();
+    const rect = el.getBoundingClientRect();
+    const start = pos[id] || { x: 0, y: 0 };
+    drag.current = {
+      id,
+      sx: event.clientX,
+      sy: event.clientY,
+      start,
+      min: { x: start.x + (board.left - rect.left), y: start.y + (board.top - rect.top) },
+      max: { x: start.x + (board.right - rect.right), y: start.y + (board.bottom - rect.bottom) },
+    };
+    top.current += 1;
+    setOrder((value) => ({ ...value, [id]: top.current }));
+    setDragging(id);
+  };
+  const onMove = (event) => {
+    const d = drag.current;
+    if (!d) return;
+    const x = Math.min(d.max.x, Math.max(d.min.x, d.start.x + event.clientX - d.sx));
+    const y = Math.min(d.max.y, Math.max(d.min.y, d.start.y + event.clientY - d.sy));
+    setPos((value) => ({ ...value, [d.id]: { x, y } }));
+  };
+  const onUp = () => {
+    drag.current = null;
+    setDragging(null);
+  };
+
   return (
     <div className="merch-stickers" ref={boardRef}>
       {merchStickers.map((sticker, index) => {
-        const tilt = ((index * 37) % 9) - 4;
+        const p = pos[sticker.id] || { x: 0, y: 0 };
+        const tilt = ((index * 37) % 7) - 3;
         return (
-          <motion.div
-            key={sticker.text}
-            className={`mst is-${sticker.tone} ${sticker.shape
-              .split(" ")
-              .map((s) => `is-${s}`)
-              .join(" ")}`}
-            style={{ rotate: tilt }}
-            drag={!reduceMotion}
-            dragConstraints={boardRef}
-            dragElastic={0.15}
-            dragMomentum={false}
-            whileHover={reduceMotion ? undefined : { y: -4, rotate: 0, scale: 1.03 }}
-            whileDrag={{ scale: 1.08, rotate: 0, zIndex: 5, boxShadow: "0 24px 40px rgba(10, 20, 60, 0.22)" }}
-          >
-            <StickerText text={sticker.text} t={t} />
-          </motion.div>
+          <img
+            key={sticker.id}
+            src={merchAsset(`stickers/${sticker.id}.webp`)}
+            alt={t(sticker.alt)}
+            className={`mst ${dragging === sticker.id ? "is-dragging" : ""}`}
+            style={{ "--w": sticker.w, transform: `translate(${p.x}px, ${p.y}px) rotate(${tilt}deg)`, zIndex: order[sticker.id] || 1 }}
+            draggable={false}
+            onPointerDown={(event) => onDown(event, sticker.id)}
+            onPointerMove={onMove}
+            onPointerUp={onUp}
+            onPointerCancel={onUp}
+          />
         );
       })}
       <span className="merch-stickers-hint">{t("Стикеры можно передвигать")}</span>
@@ -284,10 +341,12 @@ export function MerchSlogans({ t }) {
 
 /* ───────── 3. Одежда: переключатель + лупа на принт ───────── */
 
+// Фото приведены к одному кадру: вещь вписана в одинаковое поле 1160×960 на холсте 1600×1200, по центру.
 const apparelItems = [
-  { id: "tee", file: "merch-tee.webp", title: "Футболка", text: "Белая, тёплый тон. Сердце «Дальний Восток — близко к сердцу» на груди.", focus: [64, 30] },
-  { id: "anorak-beige", file: "merch-anorak-beige.webp", title: "Ветровка, молочная", text: "Анорак оверсайз, то же сердце с плашкой.", focus: [62, 38] },
-  { id: "anorak-black", file: "merch-anorak-black.webp", title: "Ветровка, чёрная", text: "Сердце КРДВ на груди, крупное — на спине.", focus: [62, 38] },
+  { id: "tee", file: "merch-ap-tee.webp", title: "Футболка, белая", text: "Тёплый белый. Сердце «Дальний Восток — близко к сердцу» на груди." },
+  { id: "tee-sky", file: "merch-ap-tee-sky.webp", title: "Футболка, нежно-голубая", text: "Розовое солнце и подпись «Встречаем день первыми на Дальнем Востоке»." },
+  { id: "anorak-beige", file: "merch-ap-anorak-beige.webp", title: "Ветровка, молочная", text: "Анорак оверсайз, сердце с плашкой на груди." },
+  { id: "anorak-black", file: "merch-ap-anorak-black.webp", title: "Ветровка, чёрная", text: "Сердце КРДВ на груди, крупное — на спине." },
 ];
 
 export function MerchApparel({ t }) {
@@ -338,9 +397,9 @@ export function MerchApparel({ t }) {
 /* ───────── 4. Сумки и чехлы ───────── */
 
 const shoppers = [
-  { id: "blue", file: "merch-shopper-blue.webp", name: "Синий", swatch: "#2a2a8c", tint: "#e7e7f3", slogan: "«Приносим радость»" },
-  { id: "sky", file: "merch-shopper-sky.webp", name: "Голубой", swatch: "#3d7ec1", tint: "#e4eef8", slogan: "«Когда работа дарит восторг»" },
-  { id: "black", file: "merch-shopper-black.webp", name: "Чёрный", swatch: "#141414", tint: "#ededee", slogan: "Только «КРДВ», без фразы" },
+  { id: "blue", file: "merch-shopper-blue-v2.webp", name: "Синий", swatch: "#2a2a8c", slogan: "«Приносим радость»" },
+  { id: "sky", file: "merch-shopper-sky-v2.webp", name: "Голубой", swatch: "#3d7ec1", slogan: "«Когда работа дарит восторг»" },
+  { id: "black", file: "merch-shopper-black-v2.webp", name: "Чёрный", swatch: "#141414", slogan: "«Несу добро и развиваю Дальний Восток»" },
 ];
 
 function ShopperSwitcher({ t }) {
@@ -351,7 +410,7 @@ function ShopperSwitcher({ t }) {
   const [index, setIndex] = useCycle(shoppers.length, 3200, inView && !manual && !reduceMotion);
   const bag = shoppers[index];
   return (
-    <article ref={ref} className="mb-card mb-shopper" style={{ "--tint": bag.tint }}>
+    <article ref={ref} className="mb-card mb-shopper">
       <div className="mb-stage">
         <AnimatePresence mode="wait" initial={false}>
           <motion.img
@@ -432,6 +491,7 @@ export function MerchThermo({ t }) {
   const colorRef = useRef(null);
   const rafRef = useRef(0);
   const sunRef = useRef(0); // 0 — нет, иначе время старта
+  const coolRef = useRef(false); // быстрое остывание после ручного выключения солнца
   const [sun, setSun] = useState(false);
   const [touched, setTouched] = useState(false);
   const reduceMotion = useReducedMotion();
@@ -456,20 +516,22 @@ export function MerchThermo({ t }) {
     if (sunRef.current) {
       const elapsed = (performance.now() - sunRef.current) / 1000;
       if (elapsed < 1.2) sunLevel = elapsed / 1.2;
-      else if (elapsed < 3.7) sunLevel = 1;
+      else if (elapsed < 6) sunLevel = 1;
       else {
         sunRef.current = 0;
         setSun(false);
       }
     }
     for (let i = 0; i < heat.length; i += 1) {
-      let value = heat[i] * 0.988; // остывание ~4 с
+      // остывание: полный цвет держится ~3 с, гаснет к ~6 с; после «убрать с солнца» — быстро
+      let value = Math.max(0, heat[i] - (coolRef.current ? 0.035 : 0.0028));
       if (sunLevel > value) value = sunLevel;
       heat[i] = value;
       if (value > 0.004) alive = true;
       const s = Math.min(1, Math.max(0, (value - 0.05) / 0.4));
       data.data[i * 4 + 3] = Math.round(s * s * (3 - 2 * s) * 255);
     }
+    if (!alive) coolRef.current = false;
     mctx.putImageData(data, 0, 0);
     const ctx = canvas.getContext("2d");
     ctx.globalCompositeOperation = "copy";
@@ -513,14 +575,14 @@ export function MerchThermo({ t }) {
     const rect = stageRef.current.getBoundingClientRect();
     const cx = ((event.clientX - rect.left) / rect.width) * THERMO_W;
     const cy = ((event.clientY - rect.top) / rect.height) * THERMO_H;
-    const radius = 15;
+    const radius = 16;
     const heat = heatRef.current;
     for (let y = Math.max(0, Math.floor(cy - radius)); y < Math.min(THERMO_H, cy + radius); y += 1) {
       for (let x = Math.max(0, Math.floor(cx - radius)); x < Math.min(THERMO_W, cx + radius); x += 1) {
         const d = Math.hypot(x - cx, y - cy) / radius;
         if (d < 1) {
           const i = y * THERMO_W + x;
-          heat[i] = Math.min(1, heat[i] + (1 - d) * 0.5);
+          heat[i] = Math.min(1, heat[i] + (1 - d) * 0.9);
         }
       }
     }
@@ -535,6 +597,15 @@ export function MerchThermo({ t }) {
       render();
       return;
     }
+    if (sun) {
+      // ручное выключение: солнце убрано, лента быстро остывает
+      sunRef.current = 0;
+      coolRef.current = true;
+      setSun(false);
+      kick();
+      return;
+    }
+    coolRef.current = false;
     sunRef.current = performance.now();
     setSun(true);
     kick();
@@ -546,7 +617,7 @@ export function MerchThermo({ t }) {
         <span className="mt-label">{t("Термоактивная печать")}</span>
         <h3>{t("Надпись проявляется от тепла")}</h3>
         <p>{t("В обычном состоянии надпись — тёмно-серая на чёрной ленте. В тёплой руке или на солнце краска становится яркой, а остывая, снова прячется.")}</p>
-        <button type="button" className="mt-sun" data-active={sun} onClick={toSun}>
+        <button type="button" className="mt-sun" data-active={sun} aria-pressed={sun} onClick={toSun}>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="12" r="4.2" />
             {Array.from({ length: 8 }, (_, i) => {
@@ -554,7 +625,7 @@ export function MerchThermo({ t }) {
               return <line key={i} x1={12 + Math.cos(a) * 7} y1={12 + Math.sin(a) * 7} x2={12 + Math.cos(a) * 9.6} y2={12 + Math.sin(a) * 9.6} />;
             })}
           </svg>
-          {sun ? t("Греется на солнце…") : t("Вынести на солнце")}
+          {sun ? t("Убрать с солнца") : t("Вынести на солнце")}
         </button>
       </div>
       <div
@@ -565,8 +636,8 @@ export function MerchThermo({ t }) {
         role="img"
         aria-label={t("Ремувки «Арктика» и «Дальний Восток»: надпись проявляется цветом там, где ленту согрели")}
       >
-        <img src={merchAsset("merch-thermo-grey.webp")} alt="" draggable="false" />
-        <img ref={colorRef} className="mt-color-src" src={merchAsset("merch-thermo-color.webp")} alt="" onLoad={() => render()} />
+        <img src={merchAsset("merch-thermo-grey-v2.webp")} alt="" draggable="false" />
+        <img ref={colorRef} className="mt-color-src" src={merchAsset("merch-thermo-color-v2.webp")} alt="" onLoad={() => render()} />
         <canvas ref={canvasRef} />
         <span className={`mt-hint ${touched ? "is-hidden" : ""}`}>{t("Проведите по лентам — согрейте их")}</span>
       </div>
@@ -580,9 +651,9 @@ const accessoryCards = [
   { id: "power", span: 7, stage: "#eef0f4", images: ["merch-powerbanks.webp"], title: "Аккумуляторы", text: "«Энергия Дальнего Востока» и «Арктика держит заряд» — фраза подсказывает, зачем вещь." },
   { id: "mug", span: 5, fit: "contain", images: ["merch-mug.webp"], title: "Термокружка", text: "«Арктика закаляет, кофе согревает». В коробке — QR-код на сайт." },
   { id: "weather", span: 7, images: ["merch-raincoat.webp", "merch-umbrella.webp"], title: "Зонт и дождевик", text: "Одна фраза на двух вещах: «Работаем в любую погоду»." },
-  { id: "stickers", span: 5, fit: "contain", images: ["merch-stickers.webp"], title: "3D-стикеры", text: "Набор объёмных наклеек со слоганами и сердцами." },
+  { id: "notebooks", span: 5, fit: "contain", images: ["merch-notebooks.webp"], title: "Блокноты", text: "«План развития: здесь», «Дальний Восток — территория идей» и «Большие проекты начинаются с небольшого блокнота»." },
   { id: "keychain", span: 6, fit: "contain", images: ["merch-keychain.webp"], title: "Брелоки", text: "Эмалевое сердце КРДВ, лотос и подвеска «Когда работа дарит восторг»." },
-  { id: "lanyard", span: 6, images: ["merch-lanyard.webp"], title: "Шнур для телефона", text: "Серый шнур с карабином, бирка с подписью и сердцем." },
+  { id: "lanyard", span: 6, fit: "contain", images: ["merch-lanyard.webp"], title: "Шнур для телефона", text: "Серый шнур с карабином, бирка с подписью и сердцем." },
 ];
 
 export function MerchAccessories({ t }) {

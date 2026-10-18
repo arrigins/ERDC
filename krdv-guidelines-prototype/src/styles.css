@@ -3056,7 +3056,7 @@ img {
 }
 
 .site-footer {
-  background: #000000;
+  background: #060a16; /* сине-чёрный (19.10, было #000) */
   color: #ffffff;
   font-size: 15px;
   line-height: 1.3;
@@ -8310,3 +8310,14 @@ a.slide-viewer-download:focus-visible {
   .aa-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .aa-tag { display: none; }
 }
+
+/* ── 19.10: примечание во вступлении (мерч) и графика в карточке «Есть идея» ── */
+.intro-panel p.intro-note {
+  margin-top: 18px;
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.contact-cta-visual.is-graphic { max-width: 150px; }

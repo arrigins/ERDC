@@ -1436,18 +1436,13 @@ const pagesData = [
     title: "Мерч",
     intro:
       "Мерч — самая неформальная часть фирменного стиля. Здесь КРДВ говорит проще и теплее: короткими фразами с юмором, сердцем вместо официального знака и буквами, которые не помещаются на предмет. Вещи должно хотеться носить, поэтому логотипа на них мало, а характера много.",
+    introNote: "На странице представлены примеры мерча. Дизайн-команда ежегодно обновляет коллекцию с учётом актуальных запросов.",
     sections: [
       {
         id: "merch-system",
         title: "Визуальная система",
         lead: "Три приёма и своя палитра. Вместе они узнаются на любом предмете — даже там, где нет полного логотипа.",
         merch: "system",
-      },
-      {
-        id: "merch-slogans",
-        title: "Слоганы",
-        lead: "Фразы короткие и с самоиронией — о работе, Дальнем Востоке и Арктике. Хорошая фраза подходит своему предмету: зонт «работает в любую погоду», аккумулятор «заряжен на развитие».",
-        merch: "slogans",
       },
       {
         id: "merch-apparel",
@@ -1474,12 +1469,22 @@ const pagesData = [
         merch: "accessories",
       },
       {
-        id: "package",
-        title: "Пакет",
-        lead: "Брендированный пакет с QR-кодом",
-        paragraphs: ["Пакет используется для деловых наборов, мероприятий и передачи материалов. Новый рисунок или иной формат проверяется до печати."],
-        specs: [{ title: "Производство", items: ["Материал: плотная бумага или картон.", "Вид нанесения: офсет или прямая печать."] }],
-        assetImages: [{ title: "Пакет с QR-кодом", caption: "Бумажный носитель соединяет фирменный знак и цифровой переход.", file: "package-layout.webp", wide: true }],
+        id: "merch-slogans",
+        title: "Слоганы",
+        lead: "Фразы короткие и с самоиронией — о работе, Дальнем Востоке и Арктике. Хорошая фраза подходит своему предмету: зонт «работает в любую погоду», аккумулятор «заряжен на развитие».",
+        merch: "slogans",
+      },
+      {
+        id: "merch-ideas",
+        title: "Идеи",
+        contactCta: {
+          title: "Есть идея для мерча?",
+          text: "Расскажите, какой мерч вам хотелось бы видеть. Будем рады вашим идеям и предложениям.",
+          action: "Поделиться идеей",
+          // контакт дизайн-команды — тот же, что в «Контактах» (MAX Арины)
+          maxHref: "https://max.ru/u/f9LHodD0cOIgbTuSE-E8sFHKs5tOnUoIi2ZK5C9JwQqQeFvc1ASaXZA2k0Q",
+          imageUrl: "/assets/merch/merch-heart-red.svg",
+        },
       },
     ],
   },
@@ -2142,6 +2147,7 @@ function GuidelinePage({ page, activePageId, navigate }) {
             </>
           ) : null}
         </p>
+        {page.introNote ? <p className="intro-note">{t(page.introNote)}</p> : null}
         {page.introAction && downloadResources[page.introAction.resource] ? (
           <a
             className="intro-action"
@@ -4412,13 +4418,13 @@ function ContactCta({ item }) {
         <span>{t(item.title)}</span>
         <p>{t(noDot(item.text))}</p>
         <strong>
-          {t(item.maxHref ? "Написать в MAX" : "Позвонить")}
+          {t(item.action || (item.maxHref ? "Написать в MAX" : "Позвонить"))}
           <UiIcon icon={ICONS.arrowRight} className="contact-cta-icon" />
         </strong>
       </span>
-      {item.image ? (
-        <span className="contact-cta-visual" aria-hidden="true">
-          <img src={rasterAsset(item.image)} alt="" loading="lazy" />
+      {item.image || item.imageUrl ? (
+        <span className={`contact-cta-visual ${item.imageUrl ? "is-graphic" : ""}`} aria-hidden="true">
+          <img src={item.imageUrl ? assetPath(item.imageUrl) : rasterAsset(item.image)} alt="" loading="lazy" />
         </span>
       ) : null}
     </a>
