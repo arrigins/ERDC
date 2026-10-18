@@ -7,11 +7,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FRAME, MAX_ZOOM, asset, clamp, coverCrop, decodePhoto, downloadCanvas, loadImage, moveCrop, zoomCrop } from "./photo.js";
 import { QuoteEditor } from "./QuoteEditor.jsx";
 import { NewsEditor } from "./CardEditor.jsx";
+import { CollageEditor } from "./CollageEditor.jsx";
 
 const tasks = [
   { id: "photo", title: "Фото с логотипом", text: "Загрузите фотографию, выберите вариант логотипа и скачайте готовый пост.", image: "assets/social/demo-photo-branded.webp", status: "ready" },
   { id: "quote", title: "Цитата", text: "Портрет, имя, должность и текст цитаты на фирменной карточке.", image: "assets/portal/examples/task-quote.webp", status: "ready" },
   { id: "news", title: "Новость", text: "Заголовок, подзаголовок, метка и иллюстрация из библиотеки.", image: "assets/social/r01-sm.webp", status: "ready" },
+  { id: "collage", title: "Горизонтальный коллаж", text: "Заголовок и четыре фотографии в горизонтальном посте 16:9.", image: "assets/portal/examples/task-collage.webp", status: "ready" },
 ];
 
 const overlays = {
@@ -19,9 +21,13 @@ const overlays = {
   translucent: { title: "Полупрозрачный", text: "Для спокойного контрастного фона." },
   "white-shade": { title: "Белый с затемнением", text: "Для светлого или пёстрого фона." },
   "translucent-shade": { title: "Полупрозрачный с затемнением", text: "Мягкий акцент на светлом фоне." },
+  "white-blue": { title: "Белый с синим затемнением", text: "Для светлого или пёстрого фона, в фирменном синем." },
+  "translucent-blue": { title: "Полупрозрачный с синим затемнением", text: "Мягкий акцент в фирменном синем." },
   large: { title: "Укрупнённый", text: "Для первой фотографии в посте из нескольких фото." },
+  "large-blue": { title: "Укрупнённый с синим затемнением", text: "Для светлого или пёстрого верха первой фотографии." },
 };
-const singleOverlays = ["white", "translucent", "white-shade", "translucent-shade"];
+const singleOverlays = ["white", "translucent", "white-shade", "translucent-shade", "white-blue", "translucent-blue"];
+const albumOverlays = ["large", "large-blue"];
 const overlaySrc = (id, size) => asset(`assets/social/overlays/krdv-social-${id}-${size}.png`);
 
 function Header({ onHome }) {
@@ -136,6 +142,7 @@ function PhotoEditor({ onBack }) {
   const [crop, setCrop] = useState(null);
   const [purpose, setPurpose] = useState("single");
   const [overlay, setOverlay] = useState("white");
+  const [albumOverlay, setAlbumOverlay] = useState("large");
   const [format, setFormat] = useState("png");
   const [size, setSize] = useState(1080);
   const [error, setError] = useState("");
@@ -147,7 +154,7 @@ function PhotoEditor({ onBack }) {
   const pointers = useRef(new Map());
   const gesture = useRef(null);
 
-  const activeOverlay = purpose === "album" ? "large" : overlay;
+  const activeOverlay = purpose === "album" ? albumOverlay : overlay;
 
   // Предупреждение перед уходом со страницы, пока результат не скачан (ТЗ, раздел 4)
   useEffect(() => {
@@ -376,13 +383,15 @@ function PhotoEditor({ onBack }) {
             </span>
           </fieldset>
 
-          {purpose === "single" ? (
-            <fieldset className="pp-field">
-              <legend className="pp-label">3. Вариант логотипа</legend>
-              <div className="pp-overlays">
-                {singleOverlays.map((id) => (
-                  <label key={id} className={`pp-overlay ${overlay === id ? "is-active" : ""}`}>
-                    <input type="radio" name="overlay" value={id} checked={overlay === id} onChange={() => { setOverlay(id); setDone(false); }} />
+          <fieldset className="pp-field">
+            <legend className="pp-label">3. Вариант логотипа</legend>
+            <div className="pp-overlays">
+              {(purpose === "single" ? singleOverlays : albumOverlays).map((id) => {
+                const current = purpose === "single" ? overlay : albumOverlay;
+                const choose = purpose === "single" ? setOverlay : setAlbumOverlay;
+                return (
+                  <label key={id} className={`pp-overlay ${current === id ? "is-active" : ""}`}>
+                    <input type="radio" name="overlay" value={id} checked={current === id} onChange={() => { choose(id); setDone(false); }} />
                     <span className="pp-overlay-thumb">
                       <img src={photo ? photo.url : asset("assets/social/demo-photo.webp")} alt="" style={photo ? imageStyle : undefined} />
                       <img src={overlaySrc(id, 1080)} alt="" />
@@ -390,13 +399,13 @@ function PhotoEditor({ onBack }) {
                     <strong>{overlays[id].title}</strong>
                     <span>{overlays[id].text}</span>
                   </label>
-                ))}
-              </div>
-            </fieldset>
-          ) : null}
+                );
+              })}
+            </div>
+          </fieldset>
 
           <div className="pp-field">
-            <span className="pp-label">{purpose === "single" ? "4." : "3."} Кадр</span>
+            <span className="pp-label">4. Кадр</span>
             <div className="pp-zoom">
               <button type="button" className="pp-icon-button" onClick={() => setZoom(crop.zoom / 1.15)} disabled={!photo || crop.zoom <= 1} aria-label="Уменьшить">−</button>
               <input
@@ -417,7 +426,7 @@ function PhotoEditor({ onBack }) {
           </div>
 
           <div className="pp-field">
-            <span className="pp-label">{purpose === "single" ? "5." : "4."} Файл</span>
+            <span className="pp-label">5. Файл</span>
             <div className="pp-segment">
               {[
                 ["png", "PNG"],
@@ -458,7 +467,7 @@ function PhotoEditor({ onBack }) {
   );
 }
 
-const routes = ["photo", "quote", "news"];
+const routes = ["photo", "quote", "news", "collage"];
 const readRoute = () => {
   const value = window.location.hash.replace(/^#\/?/, "");
   return routes.includes(value) ? value : "home";
@@ -560,6 +569,8 @@ export function Portal() {
         <QuoteEditor onBack={() => go("home")} />
       ) : route === "news" ? (
         <NewsEditor onBack={() => go("home")} />
+      ) : route === "collage" ? (
+        <CollageEditor onBack={() => go("home")} />
       ) : (
         <Home onOpen={go} />
       ),

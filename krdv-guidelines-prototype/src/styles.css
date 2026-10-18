@@ -7608,7 +7608,7 @@ a.slide-viewer-download:focus-visible {
 
 .overview-bento {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 16px;
   padding: 8px;
 }
@@ -7628,8 +7628,12 @@ a.slide-viewer-download:focus-visible {
   cursor: pointer;
 }
 
-.bento-tile.is-wide {
+.bento-tile {
   grid-column: span 2;
+}
+
+.bento-tile.is-wide {
+  grid-column: span 4;
 }
 
 .bento-visual {
@@ -7716,6 +7720,7 @@ a.slide-viewer-download:focus-visible {
     padding: 16px !important;
   }
 
+  .bento-tile,
   .bento-tile.is-wide {
     grid-column: auto;
   }
@@ -7989,4 +7994,28 @@ a.slide-viewer-download:focus-visible {
 .subsidiary-region-card:has(.download-menu.is-open) {
   position: relative;
   z-index: 6;
+}
+
+/* ── Соцсети: синее затемнение (готовое PNG-наложение поверх фото) ── */
+.social-branded-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 1101px) {
+  .social-variants {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.social-large-label {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: var(--mono-tracking);
+  text-transform: uppercase;
 }

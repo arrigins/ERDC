@@ -1348,19 +1348,8 @@ const pagesData = [
     number: "09",
     title: "Рекламные материалы",
     navTitle: "Рекламные",
-    intro: "Рекламно-информационные материалы включают лифлеты и роллап.",
+    intro: "Рекламно-информационные материалы включают роллап.",
     sections: [
-      {
-        id: "leaflets",
-        title: "Лифлеты",
-        paragraphs: ["В дизайне лифлетов используется цветовое кодирование — у каждого преференциального режима свой цвет. Формат А4: 297×210 мм, 2 бига. Печать 4+4, двухсторонние, офсет или цифра."],
-        keywords: ["САР", "КОРФ", "Гектар", "Работа", "ТОР", "Ипотека", "АЗРФ", "СПВ"],
-        assetImageMode: "stack",
-        assetImages: [
-          { title: "Лифлеты: общий вид", caption: "Набор обложек показывает цветовую навигацию по режимам.", file: "leaflets-layout-1.webp" },
-          { title: "Лифлеты: развороты", caption: "Внутренние блоки продолжают палитру выбранного направления.", file: "leaflets-layout-2.webp" },
-        ],
-      },
       {
         id: "rollup",
         title: "Роллап",
@@ -2519,16 +2508,15 @@ function PrincipleCards({ items }) {
 }
 
 // «Обзор» плиткой: обложки разделов во всю плитку, название в левом верхнем углу.
-// В каждом ряду одна широкая и одна узкая плитка; широкая достаётся более важному разделу.
-const bentoWide = new Set(["logo", "subsidiaries", "typography", "corporate", "advertising", "photostyle", "social"]);
+// Сетка 6 колонок: ряды чередуются «узкая + широкая» и «три равные» (по образцу DevRev).
+// Широкая плитка занимает 4 колонки, все остальные — 2.
+const bentoWide = new Set(["logo", "typography", "photostyle", "social"]);
 function OverviewBento({ navigate }) {
   const tiles = pagesData.filter((page) => page.id !== "overview");
   return (
     <section id="contents" className="overview-bento" aria-label={t("Разделы руководства")}>
       {tiles.map((page, index) => {
-        // Широкая плитка — у более важного раздела в паре (порядок разделов сохраняется)
-        const pair = tiles[index % 2 === 0 ? index + 1 : index - 1];
-        const wide = bentoWide.has(page.id) || (pair && !bentoWide.has(pair.id) && index % 2 === 1);
+        const wide = bentoWide.has(page.id);
         const hasCover = Boolean(page.heroVideo || page.heroImage || page.heroGlass);
         const isPositioning = page.id === "positioning";
         const isTypography = page.id === "typography";
@@ -2762,7 +2750,19 @@ function SubsidiaryRegionCards() {
                     style={{ "--u": subsidiaryLogoUnits[item.preview.replace(/^subsidiary-|\.svg$/g, "")] }}
                   />
                 </div>
-                <DownloadMenu files={item.files} formats={subsidiaryFormats} title={`${item.title}, ${item.versionLabel.toLowerCase()}`} asset={subsidiaryAsset} />
+                <div className="logo-downloads">
+                  <div>
+                    {subsidiaryFormats.map((format) => (
+                      <LogoDownloadLink
+                        key={format}
+                        file={item.files[format]}
+                        format={format}
+                        title={`${item.title}, ${item.versionLabel.toLowerCase()}`}
+                        asset={subsidiaryAsset}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -3385,21 +3385,30 @@ function SocialFeed({ items, note }) {
   );
 }
 
+// Варианты логотипа на фото. Фотографии подобраны под подпись: где логотип и так читается — спокойный фон,
+// где нужен «подклад» — светлый или пёстрый верх кадра. Синее затемнение — готовые PNG-наложения (рисуются целиком).
 const socialOverlayVariants = [
-  { id: "white", file: "white", title: "Белый", text: "Для фона, на котором логотип хорошо читается." },
-  { id: "translucent", file: "translucent", title: "Полупрозрачный", text: "Для спокойного контрастного фона." },
-  { id: "shade", file: "white-shade", title: "Белый с затемнением", text: "Для светлого или пёстрого фона в зоне логотипа." },
-  { id: "translucent-shade", file: "translucent-shade", title: "Полупрозрачный с затемнением", text: "Мягкий акцент на светлом или пёстром фоне." },
+  { id: "white", file: "white", photo: "demo-photo.webp", title: "Белый", text: "Для фона, на котором логотип хорошо читается." },
+  { id: "translucent", file: "translucent", photo: "photo-translucent.webp", title: "Полупрозрачный", text: "Для спокойного контрастного фона." },
+  { id: "shade", file: "white-shade", photo: "photo-white-shade.webp", title: "Белый с затемнением", text: "Для светлого или пёстрого фона в зоне логотипа." },
+  { id: "translucent-shade", file: "translucent-shade", photo: "photo-translucent-shade.webp", title: "Полупрозрачный с затемнением", text: "Мягкий акцент на светлом или пёстром фоне." },
+  { id: "white-blue", file: "white-blue", photo: "photo-white-blue.webp", title: "Белый с синим затемнением", text: "Для светлого или пёстрого фона — затемнение в фирменном синем." },
+  { id: "translucent-blue", file: "translucent-blue", photo: "photo-translucent-blue.webp", title: "Полупрозрачный с синим затемнением", text: "Мягкий акцент в фирменном синем на светлом фоне." },
 ];
 
-function SocialBrandedPhoto({ variant = "white", className = "", label }) {
+function SocialBrandedPhoto({ variant = "white", photo = "demo-photo.webp", className = "", label }) {
   const translucent = variant.startsWith("translucent");
   const shaded = variant.endsWith("shade");
+  const blue = variant.endsWith("-blue");
   return (
-    <div className={`social-branded is-${variant} ${className}`} role={label ? "img" : undefined} aria-label={label ? t(label) : undefined} aria-hidden={label ? undefined : true}>
-      <img src={socialAsset("demo-photo.webp")} alt="" loading="lazy" width={1080} height={1080} />
+    <div className={`social-branded is-${variant} ${blue ? "is-blue-shade" : ""} ${className}`} role={label ? "img" : undefined} aria-label={label ? t(label) : undefined} aria-hidden={label ? undefined : true}>
+      <img src={socialAsset(photo)} alt="" loading="lazy" width={1080} height={1080} />
       {shaded ? <span className="social-branded-shade" /> : null}
-      <img className="social-branded-badge" src={socialAsset(translucent ? "badge-translucent.png" : "badge-white.png")} alt="" loading="lazy" />
+      {blue ? (
+        <img className="social-branded-overlay" src={socialAsset(`overlays/krdv-social-${variant}-1080.png`)} alt="" loading="lazy" />
+      ) : (
+        <img className="social-branded-badge" src={socialAsset(translucent ? "badge-translucent.png" : "badge-white.png")} alt="" loading="lazy" />
+      )}
     </div>
   );
 }
@@ -3503,7 +3512,7 @@ function SocialPhotoBlock() {
       <div className="social-variants">
         {socialOverlayVariants.map((variant) => (
           <figure className="social-card social-variant" key={variant.id}>
-            <SocialBrandedPhoto variant={variant.id} label={`Фотография с логотипом КРДВ: ${variant.title.toLowerCase()}`} />
+            <SocialBrandedPhoto variant={variant.id} photo={variant.photo} label={`Фотография с логотипом КРДВ: ${variant.title.toLowerCase()}`} />
             <figcaption>
               <strong>{t(variant.title)}</strong>
               <span>{t(variant.text)}</span>
@@ -3516,16 +3525,22 @@ function SocialPhotoBlock() {
         <div className="social-large-copy">
           <h3>{t("Укрупнённый логотип")}</h3>
           <p>{t("Для поста с несколькими фотографиями: в превью обычный логотип теряется. Ставится только на первую фотографию.")}</p>
+          <span className="social-large-label">{t("Без затемнения")}</span>
           <SocialOverlayDownloads file="large" title="Укрупнённый" />
+          <span className="social-large-label">{t("С синим затемнением")}</span>
+          <SocialOverlayDownloads file="large-blue" title="Укрупнённый с синим затемнением" />
         </div>
-        {[6, 9].map((count) => (
+        {[
+          { count: 6, variant: "large", photo: "demo-photo.webp", caption: "Пост из 6 фотографий" },
+          { count: 9, variant: "large-blue", photo: "photo-large-blue.webp", caption: "Пост из 9 фотографий, синее затемнение" },
+        ].map(({ count, variant, photo, caption }) => (
           <figure className="social-album" key={count}>
             <div className={`social-album-grid is-${count}`} role="img" aria-label={t(`Схема поста из ${count} фотографий: первая — с укрупнённым логотипом`)}>
               {Array.from({ length: count }, (_, index) =>
-                index === 0 ? <SocialBrandedPhoto key={index} variant="large" className="is-tile" /> : <span key={index} className="social-album-tile" />,
+                index === 0 ? <SocialBrandedPhoto key={index} variant={variant} photo={photo} className="is-tile" /> : <span key={index} className="social-album-tile" />,
               )}
             </div>
-            <figcaption>{t(`Пост из ${count} фотографий`)}</figcaption>
+            <figcaption>{t(caption)}</figcaption>
           </figure>
         ))}
       </div>

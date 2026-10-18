@@ -33,7 +33,7 @@ const newCard = (kind, extra = {}) => ({
   ...extra,
 });
 
-function Segment({ name, value, options, onChange }) {
+export function Segment({ name, value, options, onChange }) {
   return (
     <div className="pp-segment">
       {options.map(([optionValue, label]) => (
@@ -47,7 +47,7 @@ function Segment({ name, value, options, onChange }) {
 }
 
 // Шрифт и логотипы должны загрузиться до вёрстки; без фирменного шрифта экспорт блокируется (ТЗ, раздел 9)
-function useTemplateBase() {
+export function useTemplateBase() {
   const [fontState, setFontState] = useState("loading");
   const [badges, setBadges] = useState(null);
   const [error, setError] = useState("");
@@ -192,7 +192,7 @@ function BackgroundSwatch({ bg, active, onClick, label }) {
 }
 
 // Выбор фирменного фона: готовые варианты и генератор новых из тех же оттенков
-function BackgroundPicker({ value, onChange }) {
+export function BackgroundPicker({ value, onChange }) {
   const [generated, setGenerated] = useState(() => (value?.seed ? [value.seed] : []));
   const generate = () => {
     const seed = randomSeed();
@@ -322,7 +322,7 @@ function CardFields({ card, layout, onChange, showTone, limit = null, compositio
   );
 }
 
-function useLeaveWarning(active) {
+export function useLeaveWarning(active) {
   useEffect(() => {
     if (!active) return undefined;
     const onLeave = (event) => {
@@ -334,7 +334,7 @@ function useLeaveWarning(active) {
   }, [active]);
 }
 
-function EditorBar({ title, status, onBack }) {
+export function EditorBar({ title, status, onBack }) {
   return (
     <div className="pp-editor-bar">
       <button type="button" className="pp-back" onClick={onBack}>
