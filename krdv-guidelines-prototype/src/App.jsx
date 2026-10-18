@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, Fragment } from "react";
 import { AnimatePresence, LayoutGroup, MotionConfig, motion, useReducedMotion } from "motion/react";
 import { MorphIcon } from "morphicons/react";
 import { ColorPanels, MeshGradient } from "@paper-design/shaders-react";
+import { MerchAccessories, MerchApparel, MerchBags, MerchSlogans, MerchSystem, MerchThermo } from "./merch/Merch.jsx";
 
 const assetPath = (pathname) => `${import.meta.env.BASE_URL}${pathname.replace(/^\/+/, "")}`;
 const heroAsset = (filename) => assetPath(`/assets/hero/${filename}`);
@@ -1433,28 +1434,44 @@ const pagesData = [
     heroVideo: "cover-merch.mp4",
     number: "10",
     title: "Мерч",
-    intro: "Раздел показывает ключевые носители бренда: одежду, аксессуары и фирменный пакет.",
+    intro:
+      "Мерч — самая неформальная часть фирменного стиля. Здесь КРДВ говорит проще и теплее: короткими фразами с юмором, сердцем вместо официального знака и буквами, которые не помещаются на предмет. Вещи должно хотеться носить, поэтому логотипа на них мало, а характера много.",
     sections: [
       {
-        id: "apparel",
-        title: "Одежда",
-        lead: "Фирменная графика на текстиле: знак-сердце «КРДВ» работает как главный акцент носителя.",
-        assetImages: [
-          { title: "Футболка", caption: "Белая футболка унисекс, крупное сердце на спине.", file: "merch-tshirt.webp" },
-          { title: "Ветровка", caption: "Бежевая ветровка оверсайз, небольшой знак на груди.", file: "merch-jacket.webp" },
-        ],
+        id: "merch-system",
+        title: "Визуальная система",
+        lead: "Три приёма и своя палитра. Вместе они узнаются на любом предмете — даже там, где нет полного логотипа.",
+        merch: "system",
       },
       {
-        id: "accessories",
+        id: "merch-slogans",
+        title: "Слоганы",
+        lead: "Фразы короткие и с самоиронией — о работе, Дальнем Востоке и Арктике. Хорошая фраза подходит своему предмету: зонт «работает в любую погоду», аккумулятор «заряжен на развитие».",
+        merch: "slogans",
+      },
+      {
+        id: "merch-apparel",
+        title: "Одежда",
+        lead: "Одно сердце на груди и никакой лишней графики. Вещь остаётся базовой, и её носят не только на мероприятиях.",
+        merch: "apparel",
+      },
+      {
+        id: "merch-bags",
+        title: "Сумки и чехлы",
+        lead: "Шопперы одного кроя в разных цветах, стёганая серия с крупными буквами и вязаный шоппер.",
+        merch: "bags",
+      },
+      {
+        id: "merch-thermo",
+        title: "Ремувки",
+        lead: "Чёрная лента с прорезиненной термоактивной надписью: «Арктика» и «Дальний Восток».",
+        merch: "thermo",
+      },
+      {
+        id: "merch-accessories",
         title: "Аксессуары",
-        lead: "Практичные носители с короткими слоганами и крупной графикой",
-        assetImages: [
-          { title: "Шоппер", caption: "Синий стёганый шоппер «Когда работа дарит восторг».", file: "merch-shopper.webp" },
-          { title: "Зонт", caption: "Складной синий зонт «Работаем в любую погоду».", file: "merch-umbrella.webp" },
-          { title: "Чехол для ноутбука", caption: "Крупная типографика КРДВ на светлом стёганом чехле.", file: "merch-laptop.webp" },
-          { title: "Термокружка", caption: "Бежевая вакуумная термокружка «Арктика закаляет, кофе согревает».", file: "merch-mug.webp" },
-          { title: "Ремувки", caption: "Красная и белая ремувки «Дальний Восток» и «Арктика».", file: "merch-lanyard.webp", wide: true },
-        ],
+        lead: "У каждого предмета своя фраза — она объясняет, зачем эта вещь.",
+        merch: "accessories",
       },
       {
         id: "package",
@@ -2265,6 +2282,12 @@ function ContentSection({ section, navigate, activePageId }) {
     section.regimeSigns ? <RegimeSignLibrary key="regime-signs" /> : null,
     section.madeSigns ? <MadeSignLibrary key="made-signs" /> : null,
     section.adAnatomy ? <AdAnatomyStage key="ad-anatomy" /> : null,
+    section.merch === "system" ? <MerchSystem key="merch" t={t} /> : null,
+    section.merch === "slogans" ? <MerchSlogans key="merch" t={t} /> : null,
+    section.merch === "apparel" ? <MerchApparel key="merch" t={t} /> : null,
+    section.merch === "bags" ? <MerchBags key="merch" t={t} /> : null,
+    section.merch === "thermo" ? <MerchThermo key="merch" t={t} /> : null,
+    section.merch === "accessories" ? <MerchAccessories key="merch" t={t} /> : null,
     section.slideDecks ? <SlideViewer key="slides" decks={section.slideDecks} /> : null,
     section.logoBackdrops ? <LogoBackdrops key="logo-backdrops" /> : null,
     section.clearSpace ? <ClearSpaceBoard key="clearspace" /> : null,
