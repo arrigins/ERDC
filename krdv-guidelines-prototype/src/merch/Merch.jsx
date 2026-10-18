@@ -249,135 +249,200 @@ export function MerchSystem({ t }) {
 /* ───────── 2. Слоганы-стикеры ───────── */
 
 // Стикеры — вырезаны из макета набора 3D-стикеров (сохранены иллюстрации и объём). w — ширина в исходном масштабе.
+// Стикерпак: позиции и размеры — как на исходном листе (в % листа: left, top, width).
 const merchStickers = [
-  { id: "s05", w: 445, alt: "Всё начинается с развития" },
-  { id: "s01", w: 316, alt: "КРДВ. Когда решения двигают вперёд" },
-  { id: "s03", w: 598, alt: "КРДВ. (с) когда работа дарит восторг" },
-  { id: "s12", w: 324, alt: "Сердце КРДВ, красное" },
-  { id: "s06", w: 395, alt: "Арктика закаляет. Восток вдохновляет" },
-  { id: "s09", w: 316, alt: "Кофе — наш главный инвестор" },
-  { id: "s02", w: 395, alt: "Логотип КРДВ" },
-  { id: "s17", w: 316, alt: "Дальний Восток — настоящее будущее" },
-  { id: "s10", w: 315, alt: "Арктика не терпит слабых решений" },
-  { id: "s19", w: 326, alt: "Сердце КРДВ, синее" },
-  { id: "s07", w: 395, alt: "КРДВ. Заряжены на развитие" },
-  { id: "s14", w: 317, alt: "Арктика закаляет, кофе согревает" },
-  { id: "s08", w: 806, alt: "Большие проекты начинаются с небольшого блокнота" },
-  { id: "s13", w: 314, alt: "Несу добро и развиваю Дальний Восток" },
-  { id: "s20", w: 315, alt: "Дальний Восток — близко к сердцу" },
-  { id: "s16", w: 315, alt: "Не край земли, а край возможностей" },
-  { id: "s18", w: 315, alt: "Дальний Восток — там, где сердце" },
-  { id: "s04", w: 395, alt: "Логотип КРДВ на синем" },
-  { id: "s11", w: 315, alt: "Минвостокразвития России" },
-  { id: "s15", w: 316, alt: "Герб Минвостокразвития на синем" },
+  { id: "s01", at: [2.72, 1.52, 22.67], alt: "КРДВ. Когда решения двигают вперёд" },
+  { id: "s02", at: [26.11, 1.74, 28.3], alt: "Логотип КРДВ" },
+  { id: "s03", at: [55.01, 4.6, 42.84], alt: "КРДВ. (с) когда работа дарит восторг" },
+  { id: "s04", at: [2.15, 17.84, 28.3], alt: "Логотип КРДВ на синем" },
+  { id: "s05", at: [35.39, 16.73, 31.88], alt: "Всё начинается с развития" },
+  { id: "s06", at: [69.56, 18.02, 28.3], alt: "Арктика закаляет. Восток вдохновляет" },
+  { id: "s07", at: [2.15, 34.02, 28.3], alt: "КРДВ. Заряжены на развитие" },
+  { id: "s08", at: [33.35, 35.0, 57.74], alt: "Большие проекты начинаются с небольшого блокнота" },
+  { id: "s09", at: [2.72, 50.14, 22.67], alt: "Кофе — наш главный инвестор" },
+  { id: "s10", at: [26.79, 50.21, 22.56], alt: "Арктика не терпит слабых решений" },
+  { id: "s11", at: [50.86, 50.21, 22.56], alt: "Минвостокразвития России" },
+  { id: "s12", at: [74.61, 50.37, 23.24], alt: "Сердце КРДВ, красное" },
+  { id: "s13", at: [2.76, 66.31, 22.53], alt: "Несу добро и развиваю Дальний Восток" },
+  { id: "s14", at: [26.9, 66.21, 22.71], alt: "Арктика закаляет, кофе согревает" },
+  { id: "s15", at: [51.11, 66.21, 22.67], alt: "Герб Минвостокразвития на синем" },
+  { id: "s16", at: [75.29, 66.21, 22.56], alt: "Не край земли, а край возможностей" },
+  { id: "s17", at: [2.72, 82.56, 22.67], alt: "Дальний Восток — настоящее будущее" },
+  { id: "s18", at: [26.9, 82.56, 22.6], alt: "Дальний Восток — там, где сердце" },
+  { id: "s19", at: [50.75, 82.74, 23.39], alt: "Сердце КРДВ, синее" },
+  { id: "s20", at: [75.29, 83.7, 22.56], alt: "Дальний Восток — близко к сердцу" },
 ];
 
-// Стикеры клеятся на крышку ноутбука. Перетаскивание — своё, на pointer-событиях: стикер едет строго за курсором/пальцем.
-// Отпустили над крышкой — стикер «приклеивается» (позиция в % крышки), мимо — возвращается на лист.
-const stickerStart = { s19: { x: 20, y: 30 }, s05: { x: 74, y: 64 }, s09: { x: 46, y: 70 } };
+// Ноутбук и лист лежат на столе (наклон в перспективе). Стикер отклеивается с листа — на его месте остаётся след,
+// остальные не двигаются. Отпустили над крышкой — приклеился; мимо — плавно вернулся на своё место на листе.
+const TILT = 24; // градусов
+const PERSPECTIVE = 1500;
+const stickerStart = { s19: { x: 22, y: 34 }, s05: { x: 72, y: 60 }, s09: { x: 44, y: 70 } };
+
+// Экранная точка (относительно центра неповёрнутой крышки) → координаты на крышке
+function screenToLid(sx, sy) {
+  const r = (TILT * Math.PI) / 180;
+  const y = (sy * PERSPECTIVE) / (PERSPECTIVE * Math.cos(r) + sy * Math.sin(r));
+  const x = (sx * (PERSPECTIVE - y * Math.sin(r))) / PERSPECTIVE;
+  return { x, y };
+}
 
 export function MerchSlogans({ t }) {
-  const lidRef = useRef(null);
-  const [stuck, setStuck] = useState(stickerStart);
-  const [order, setOrder] = useState(Object.keys(stickerStart));
-  const [drag, setDrag] = useState(null); // { id, dx, dy }
-  const dragRef = useRef(null);
   const reduceMotion = useReducedMotion();
+  const lidBoxRef = useRef(null);
+  const sheetRef = useRef(null);
+  const slotRefs = useRef({});
+  const [sheetW, setSheetW] = useState(0);
+  const [placed, setPlaced] = useState(stickerStart);
+  const [order, setOrder] = useState(Object.keys(stickerStart));
+  const [ghost, setGhost] = useState(null); // { id, x, y, w, back }
+  const dragRef = useRef(null);
 
-  const onDown = (event, id) => {
-    if (event.button > 0) return;
+  useEffect(() => {
+    const node = sheetRef.current;
+    if (!node) return undefined;
+    const update = () => setSheetW(node.clientWidth);
+    update();
+    const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(update) : null;
+    observer?.observe(node);
+    return () => observer?.disconnect();
+  }, []);
+
+  const size = (item) => (item.at[2] / 100) * sheetW;
+
+  const onDown = (event, item, from) => {
+    if (event.button > 0 || ghost) return;
     event.preventDefault();
+    const rect = event.currentTarget.getBoundingClientRect();
+    const w = size(item);
+    const ratio = event.currentTarget.naturalHeight / event.currentTarget.naturalWidth || 1;
+    dragRef.current = { id: item.id, from, ratio, offX: w / 2, offY: (w * ratio) / 2 };
     event.currentTarget.setPointerCapture(event.pointerId);
-    dragRef.current = { id, sx: event.clientX, sy: event.clientY, el: event.currentTarget };
-    setDrag({ id, dx: 0, dy: 0 });
+    // стикер «в руке» — по центру под пальцем, чуть крупнее (ближе к глазам)
+    setGhost({ id: item.id, x: event.clientX, y: event.clientY, w, lift: true, sx: rect.left + rect.width / 2, sy: rect.top + rect.height / 2 });
   };
   const onMove = (event) => {
-    const d = dragRef.current;
-    if (!d) return;
-    setDrag({ id: d.id, dx: event.clientX - d.sx, dy: event.clientY - d.sy });
+    if (!dragRef.current) return;
+    setGhost((g) => (g ? { ...g, x: event.clientX, y: event.clientY } : g));
   };
-  const onUp = () => {
+  const onUp = (event) => {
     const d = dragRef.current;
     dragRef.current = null;
     if (!d) return;
-    const lid = lidRef.current.getBoundingClientRect();
-    const r = d.el.getBoundingClientRect();
-    const cx = r.left + r.width / 2;
-    const cy = r.top + r.height / 2;
-    const inside = cx > lid.left && cx < lid.right && cy > lid.top && cy < lid.bottom;
-    setStuck((value) => {
-      const next = { ...value };
-      if (inside) {
-        // стикер целиком на крышке: центр не ближе половины стикера к краю
-        const hx = (r.width / 2 / lid.width) * 100;
-        const hy = (r.height / 2 / lid.height) * 100;
-        next[d.id] = {
-          x: Math.min(100 - hx, Math.max(hx, ((cx - lid.left) / lid.width) * 100)),
-          y: Math.min(100 - hy, Math.max(hy, ((cy - lid.top) / lid.height) * 100)),
-        };
-      } else delete next[d.id];
+    const box = lidBoxRef.current.getBoundingClientRect();
+    const local = screenToLid(event.clientX - (box.left + box.width / 2), event.clientY - (box.top + box.height / 2));
+    const item = merchStickers.find((s) => s.id === d.id);
+    const w = size(item);
+    const h = w * d.ratio;
+    const W = box.width;
+    const H = box.height;
+    const inside = Math.abs(local.x) < W / 2 && Math.abs(local.y) < H / 2;
+    if (inside) {
+      const x = Math.min(W / 2 - w / 2, Math.max(-W / 2 + w / 2, local.x));
+      const y = Math.min(H / 2 - h / 2, Math.max(-H / 2 + h / 2, local.y));
+      setPlaced((v) => ({ ...v, [d.id]: { x: ((x + W / 2) / W) * 100, y: ((y + H / 2) / H) * 100 } }));
+      setOrder((v) => [...v.filter((id) => id !== d.id), d.id]);
+      setGhost(null);
+      return;
+    }
+    // мимо крышки — вернуть на своё место на листе
+    setPlaced((v) => {
+      const next = { ...v };
+      delete next[d.id];
       return next;
     });
-    setOrder((value) => [...value.filter((id) => id !== d.id), ...(inside ? [d.id] : [])]);
-    setDrag(null);
+    setOrder((v) => v.filter((id) => id !== d.id));
+    const slot = slotRefs.current[d.id]?.getBoundingClientRect();
+    if (!slot || reduceMotion) {
+      setGhost(null);
+      return;
+    }
+    setGhost((g) => (g ? { ...g, x: slot.left + slot.width / 2, y: slot.top + slot.height / 2, back: true, lift: false } : g));
+    window.setTimeout(() => setGhost(null), 320);
   };
 
-  const sticker = (item, index, onLid) => {
-    const isDrag = drag?.id === item.id;
-    const tilt = ((index * 37) % 7) - 3;
-    const place = onLid ? stuck[item.id] : null;
-    const move = isDrag ? `translate(${drag.dx}px, ${drag.dy}px) ` : "";
-    return (
-      <img
-        key={item.id}
-        src={merchAsset(`stickers/${item.id}.webp`)}
-        alt={t(item.alt)}
-        className={`mst ${onLid ? "is-stuck" : ""} ${isDrag ? "is-dragging" : ""}`}
-        style={{
-          "--w": item.w,
-          ...(place ? { left: `${place.x}%`, top: `${place.y}%` } : null),
-          transform: `${onLid ? "translate(-50%, -50%) " : ""}${move}rotate(${tilt}deg)`,
-          zIndex: isDrag ? 50 : onLid ? 2 + order.indexOf(item.id) : 1,
-        }}
-        draggable={false}
-        onPointerDown={(event) => onDown(event, item.id)}
-        onPointerMove={onMove}
-        onPointerUp={onUp}
-        onPointerCancel={onUp}
-      />
-    );
-  };
+  const handlers = { onPointerMove: onMove, onPointerUp: onUp, onPointerCancel: onUp };
+  const ghostItem = ghost ? merchStickers.find((s) => s.id === ghost.id) : null;
 
-  const onLid = order.map((id) => merchStickers.findIndex((item) => item.id === id)).filter((i) => i >= 0 && stuck[merchStickers[i].id]);
   return (
-    <div className={`merch-laptop ${drag ? "is-dragging" : ""}`}>
-      <div className="ml-desk">
-        <div className="ml-lid" ref={lidRef} aria-label={t("Крышка ноутбука")}>
-          <span className="ml-shine" aria-hidden="true" />
-          {onLid.map((i) => sticker(merchStickers[i], i, true))}
+    <div className="merch-laptop">
+      <div className="ml-scene">
+        <div className="ml-lid-box" ref={lidBoxRef}>
+          <div className="ml-lid" style={{ transform: `perspective(${PERSPECTIVE}px) rotateX(${TILT}deg)` }}>
+            {order
+              .filter((id) => placed[id])
+              .map((id) => {
+                const item = merchStickers.find((s) => s.id === id);
+                return (
+                  <img
+                    key={id}
+                    className={`mst is-stuck ${ghost?.id === id ? "is-hidden" : ""}`}
+                    src={merchAsset(`stickers/${id}.webp`)}
+                    alt={t(item.alt)}
+                    draggable={false}
+                    style={{ left: `${placed[id].x}%`, top: `${placed[id].y}%`, width: size(item) }}
+                    onPointerDown={(event) => onDown(event, item, "lid")}
+                    {...handlers}
+                  />
+                );
+              })}
+          </div>
         </div>
-        <span className="ml-hint">{t(reduceMotion ? "Перетащите стикер на крышку" : "Перетащите стикеры с листа на крышку ноутбука")}</span>
       </div>
-      <div className="ml-sheet" aria-label={t("Лист со стикерами")}>
-        {merchStickers.map((item, index) => (stuck[item.id] ? null : sticker(item, index, false)))}
-        {Object.keys(stuck).length ? (
+
+      <div className="ml-scene is-sheet">
+        <div className="ml-sheet" style={{ transform: `perspective(${PERSPECTIVE}px) rotateX(${TILT}deg)` }}>
+          <div className="ml-sheet-inner" ref={sheetRef}>
+            {merchStickers.map((item) => {
+              const off = Boolean(placed[item.id]) || ghost?.id === item.id;
+              return (
+                <img
+                  key={item.id}
+                  ref={(node) => {
+                    slotRefs.current[item.id] = node;
+                  }}
+                  className={`mst is-slot ${off ? "is-peeled" : ""}`}
+                  src={merchAsset(`stickers/${item.id}.webp`)}
+                  alt={off ? "" : t(item.alt)}
+                  draggable={false}
+                  style={{ left: `${item.at[0]}%`, top: `${item.at[1]}%`, width: `${item.at[2]}%` }}
+                  onPointerDown={off ? undefined : (event) => onDown(event, item, "sheet")}
+                  {...handlers}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      <p className="ml-hint">
+        {t("Перетащите стикер с листа на крышку. Чтобы вернуть — унесите его с крышки обратно.")}
+        {Object.keys(placed).length ? (
           <button
             type="button"
-            className="ml-reset"
             onClick={() => {
-              setStuck({});
+              setPlaced({});
               setOrder([]);
             }}
           >
-            {t("Снять все с крышки")}
+            {t("Вернуть все на лист")}
           </button>
         ) : null}
-      </div>
+      </p>
+
+      {ghost && ghostItem ? (
+        <img
+          className={`ml-ghost ${ghost.back ? "is-back" : ""} ${ghost.lift ? "is-lift" : ""}`}
+          src={merchAsset(`stickers/${ghost.id}.webp`)}
+          alt=""
+          style={{ left: ghost.x, top: ghost.y, width: ghost.w }}
+        />
+      ) : null}
     </div>
   );
 }
 
-/* ───────── 3. Одежда: переключатель + лупа на принт ───────── */
+/* ───────── 3. Одежда: переключатель ───────── */
 
 // Фото приведены к одному кадру: вещь вписана в одинаковое поле 1160×960 на холсте 1600×1200, по центру.
 const apparelItems = [
@@ -389,35 +454,21 @@ const apparelItems = [
 
 export function MerchApparel({ t }) {
   const [index, setIndex] = useState(0);
-  const [zoom, setZoom] = useState(null);
   const item = apparelItems[index];
-  const onMove = (event) => {
-    if (event.pointerType !== "mouse") return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    setZoom([((event.clientX - rect.left) / rect.width) * 100, ((event.clientY - rect.top) / rect.height) * 100]);
-  };
   return (
     <div className="merch-apparel">
-      <div
-        className={`mp-stage ${zoom ? "is-zoom" : ""}`}
-        data-item={item.id}
-        onPointerMove={onMove}
-        onPointerLeave={() => setZoom(null)}
-      >
-        <div className="mp-zoom" style={zoom ? { transformOrigin: `${zoom[0]}% ${zoom[1]}%` } : undefined}>
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.img
-              key={item.file}
-              src={merchAsset(item.file)}
-              alt={t(item.title)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            />
-          </AnimatePresence>
-        </div>
-        <span className="mp-hint">{t("Наведите, чтобы рассмотреть принт")}</span>
+      <div className="mp-stage" data-item={item.id}>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.img
+            key={item.file}
+            src={merchAsset(item.file)}
+            alt={t(item.title)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          />
+        </AnimatePresence>
       </div>
       <div className="mp-list">
         {apparelItems.map((entry, entryIndex) => (
@@ -678,8 +729,8 @@ export function MerchThermo({ t }) {
         role="img"
         aria-label={t("Ремувки «Арктика» и «Дальний Восток»: надпись проявляется цветом там, где ленту согрели")}
       >
-        <img src={merchAsset("merch-thermo-grey-v3.webp")} alt="" draggable="false" />
-        <img ref={colorRef} className="mt-color-src" src={merchAsset("merch-thermo-color-v3.webp")} alt="" onLoad={() => render()} />
+        <img src={merchAsset("merch-thermo-grey-v4.webp")} alt="" draggable="false" />
+        <img ref={colorRef} className="mt-color-src" src={merchAsset("merch-thermo-color-v4.webp")} alt="" onLoad={() => render()} />
         <canvas ref={canvasRef} />
         <span className={`mt-hint ${touched ? "is-hidden" : ""}`}>{t("Проведите по лентам — согрейте их")}</span>
       </div>
