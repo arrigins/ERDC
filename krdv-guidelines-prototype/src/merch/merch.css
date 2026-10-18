@@ -213,20 +213,83 @@
 .ms-strip-info span { font-family: var(--mono); font-size: 12px; letter-spacing: var(--mono-tracking); }
 .ms-strip-info em { font-style: normal; opacity: 0.8; overflow: hidden; text-overflow: ellipsis; }
 
-/* ── 2. Стикеры (картинки из набора) ── */
-.merch-stickers {
-  --k: 0.46;
+/* ── 2. Стикеры на крышке ноутбука ── */
+.merch-laptop {
+  --k: 0.3;
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: clamp(16px, 2.4vw, 36px);
+  align-items: stretch;
+  border-radius: var(--soft-radius, 24px);
+  padding: clamp(20px, 3vw, 44px);
+  background: #ffffff;
+  user-select: none;
+}
+
+.ml-desk {
+  display: grid;
+  align-content: center;
+  gap: 14px;
+}
+
+.ml-lid {
+  position: relative;
+  aspect-ratio: 1.5;
+  border-radius: clamp(14px, 1.8vw, 26px);
+  background:
+    radial-gradient(120% 90% at 18% 10%, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0) 55%),
+    linear-gradient(160deg, #e3e5ea 0%, #cdd0d6 55%, #bfc3ca 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.06),
+    inset 0 2px 0 rgba(255, 255, 255, 0.7),
+    0 30px 50px -24px rgba(20, 30, 60, 0.35),
+    0 10px 18px -10px rgba(20, 30, 60, 0.18);
+}
+
+.ml-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.35) 48%, rgba(255, 255, 255, 0) 56%);
+  pointer-events: none;
+}
+
+.ml-hint,
+.ml-reset {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: var(--mono-tracking);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ml-hint { text-align: center; }
+
+.ml-sheet {
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-content: center;
   justify-content: center;
-  gap: 10px 14px;
-  overflow: hidden;
-  border-radius: var(--soft-radius, 24px);
-  padding: clamp(28px, 4vw, 56px) clamp(16px, 3vw, 48px) 60px;
-  background: #ffffff;
+  gap: 8px 10px;
+  border-radius: var(--r-inner, 16px);
+  padding: 22px 16px 44px;
+  background: #f6f5f8;
 }
+
+.ml-reset {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  border: 0;
+  padding: 4px 8px;
+  background: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ml-reset:hover { color: var(--ui-blue); }
 
 .mst {
   position: relative;
@@ -234,32 +297,29 @@
   height: auto;
   touch-action: none;
   cursor: grab;
-  user-select: none;
   -webkit-user-drag: none;
-  transition: filter 0.2s;
+}
+
+.mst.is-stuck {
+  position: absolute;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.12));
 }
 
 .mst.is-dragging {
   cursor: grabbing;
-  filter: drop-shadow(0 14px 18px rgba(10, 20, 60, 0.2));
+  filter: drop-shadow(0 16px 20px rgba(10, 20, 60, 0.25));
 }
 
-.merch-stickers-hint {
-  position: absolute;
-  left: 50%;
-  bottom: 20px;
-  transform: translateX(-50%);
-  color: var(--muted);
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: var(--mono-tracking);
-  text-transform: uppercase;
-  white-space: nowrap;
-  pointer-events: none;
+.merch-laptop.is-dragging .mst:not(.is-dragging) { pointer-events: none; }
+
+@media (max-width: 1100px) {
+  .merch-laptop { grid-template-columns: 1fr; --k: 0.32; }
 }
 
-@media (max-width: 1100px) { .merch-stickers { --k: 0.4; } }
-@media (max-width: 680px) { .merch-stickers { --k: 0.3; gap: 6px 8px; } }
+@media (max-width: 680px) {
+  .merch-laptop { --k: 0.22; padding: 16px; }
+  .ml-sheet { gap: 6px; }
+}
 
 /* ── 3. Одежда ── */
 .merch-apparel {
@@ -291,8 +351,6 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 4%;
-  box-sizing: border-box;
 }
 
 .mp-stage.is-zoom .mp-zoom { transform: scale(2.4); }
@@ -619,4 +677,17 @@
   .ma-card.span-7,
   .ma-card.span-5,
   .ma-card.span-6 { grid-column: 1 / -1; }
+}
+
+/* шарнир закрытого ноутбука — тонкая тёмная полоса внизу крышки */
+.ml-lid::after {
+  content: "";
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  bottom: -6px;
+  height: 7px;
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(180deg, #a9adb5, #8d9199);
+  z-index: -1;
 }
