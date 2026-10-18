@@ -845,6 +845,8 @@ const socialPage = {
   title: "Дизайн соцсетей",
   intro:
     "В соцсетях КРДВ фирменный стиль становится более эмоциональным. Фотографии, крупная типографика, градиенты и объёмные иллюстрации помогают рассказывать о проектах, людях и возможностях Дальнего Востока и Арктики.",
+  // Ненавязчивая ссылка на портал в конце вступления
+  introLink: { before: "Типовые посты — фото с логотипом, цитаты, новости — можно собрать на", label: "портале для оформления постов", after: ".", href: "/portal.html" },
   sections: [
     {
       id: "social-guide",
@@ -2043,7 +2045,19 @@ function GuidelinePage({ page, activePageId, navigate }) {
 
       {page.hideIntro ? null : (
       <section className="intro-panel">
-        <p>{t(page.intro)}</p>
+        <p>
+          {t(page.intro)}
+          {page.introLink ? (
+            <>
+              {" "}
+              {t(page.introLink.before)}{" "}
+              <a className="intro-link" href={assetPath(page.introLink.href)}>
+                {t(page.introLink.label)}
+              </a>
+              {page.introLink.after}
+            </>
+          ) : null}
+        </p>
         {page.introAction && downloadResources[page.introAction.resource] ? (
           <a
             className="intro-action"
@@ -3392,14 +3406,15 @@ const socialOverlayVariants = [
   { id: "translucent", file: "translucent", photo: "photo-translucent.webp", title: "Полупрозрачный", text: "Для спокойного контрастного фона." },
   { id: "shade", file: "white-shade", photo: "photo-white-shade.webp", title: "Белый с затемнением", text: "Для светлого или пёстрого фона в зоне логотипа." },
   { id: "translucent-shade", file: "translucent-shade", photo: "photo-translucent-shade.webp", title: "Полупрозрачный с затемнением", text: "Мягкий акцент на светлом или пёстром фоне." },
-  { id: "white-blue", file: "white-blue", photo: "photo-white-blue.webp", title: "Белый с синим затемнением", text: "Для светлого или пёстрого фона — затемнение в фирменном синем." },
-  { id: "translucent-blue", file: "translucent-blue", photo: "photo-translucent-blue.webp", title: "Полупрозрачный с синим затемнением", text: "Мягкий акцент в фирменном синем на светлом фоне." },
+  { id: "white-blue-top", file: "white-blue-top", photo: "photo-white-blue.webp", title: "Белый с синим затемнением", text: "Для светлого или пёстрого фона — затемнение в фирменном синем." },
+  { id: "translucent-blue-top", file: "translucent-blue-top", photo: "photo-translucent-blue.webp", title: "Полупрозрачный с синим затемнением", text: "Мягкий акцент в фирменном синем на светлом фоне." },
 ];
 
 function SocialBrandedPhoto({ variant = "white", photo = "demo-photo.webp", className = "", label }) {
   const translucent = variant.startsWith("translucent");
-  const shaded = variant.endsWith("shade");
-  const blue = variant.endsWith("-blue");
+  const shaded = variant.endsWith("shade") && !variant.startsWith("large");
+  // Готовое PNG-наложение (затемнение + знак): синие варианты и укрупнённый с затемнением
+  const blue = variant.includes("-blue") || variant === "large-shade";
   return (
     <div className={`social-branded is-${variant} ${blue ? "is-blue-shade" : ""} ${className}`} role={label ? "img" : undefined} aria-label={label ? t(label) : undefined} aria-hidden={label ? undefined : true}>
       <img src={socialAsset(photo)} alt="" loading="lazy" width={1080} height={1080} />
@@ -3410,6 +3425,57 @@ function SocialBrandedPhoto({ variant = "white", photo = "demo-photo.webp", clas
         <img className="social-branded-badge" src={socialAsset(translucent ? "badge-translucent.png" : "badge-white.png")} alt="" loading="lazy" />
       )}
     </div>
+  );
+}
+
+// Компактный показ: все варианты белого знака — одна листалка, полупрозрачного — другая
+const socialVariantGroups = [
+  { id: "white", title: "Белый логотип", items: ["white", "shade", "white-blue-top"] },
+  { id: "translucent", title: "Полупрозрачный логотип", items: ["translucent", "translucent-shade", "translucent-blue-top"] },
+];
+const socialVariantTabs = ["Без затемнения", "Затемнение", "Синее затемнение"];
+
+function SocialVariantSlider({ group }) {
+  const [index, setIndex] = useState(0);
+  const items = group.items.map((id) => socialOverlayVariants.find((item) => item.id === id));
+  const total = items.length;
+  const variant = items[index];
+  const go = (step) => setIndex((current) => (current + step + total) % total);
+  return (
+    <section className="social-card social-variant-slider" aria-label={t(group.title)}>
+      <div className="svs-stage">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div key={variant.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
+            <SocialBrandedPhoto variant={variant.id} photo={variant.photo} label={`Фотография с логотипом КРДВ: ${variant.title.toLowerCase()}`} />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      <div className="svs-bar">
+        <h3>{t(group.title)}</h3>
+        <div className="slide-viewer-nav">
+          <span>
+            {index + 1} / {total}
+          </span>
+          <button type="button" onClick={() => go(-1)} aria-label={t("Предыдущий вариант")}>
+            <UiIcon icon={ICONS.arrowLeft} size={16} strokeWidth={1.5} />
+          </button>
+          <button type="button" onClick={() => go(1)} aria-label={t("Следующий вариант")}>
+            <UiIcon icon={ICONS.arrowRight} size={16} strokeWidth={1.5} />
+          </button>
+        </div>
+      </div>
+      <div className="svs-tabs" role="tablist">
+        {items.map((item, itemIndex) => (
+          <button key={item.id} type="button" role="tab" aria-selected={itemIndex === index} data-active={itemIndex === index} onClick={() => setIndex(itemIndex)}>
+            {t(socialVariantTabs[itemIndex])}
+          </button>
+        ))}
+      </div>
+      <p className="svs-text">
+        <strong>{t(variant.title)}.</strong> {t(variant.text)}
+      </p>
+      <SocialOverlayDownloads file={variant.file} title={variant.title} />
+    </section>
   );
 }
 
@@ -3509,16 +3575,9 @@ function SocialPhotoBlock() {
   return (
     <div className="social-photo-block">
       <SocialLogoStage />
-      <div className="social-variants">
-        {socialOverlayVariants.map((variant) => (
-          <figure className="social-card social-variant" key={variant.id}>
-            <SocialBrandedPhoto variant={variant.id} photo={variant.photo} label={`Фотография с логотипом КРДВ: ${variant.title.toLowerCase()}`} />
-            <figcaption>
-              <strong>{t(variant.title)}</strong>
-              <span>{t(variant.text)}</span>
-            </figcaption>
-            <SocialOverlayDownloads file={variant.file} title={variant.title} />
-          </figure>
+      <div className="social-variant-sliders">
+        {socialVariantGroups.map((group) => (
+          <SocialVariantSlider key={group.id} group={group} />
         ))}
       </div>
       <div className="social-card social-large">
@@ -3527,6 +3586,8 @@ function SocialPhotoBlock() {
           <p>{t("Для поста с несколькими фотографиями: в превью обычный логотип теряется. Ставится только на первую фотографию.")}</p>
           <span className="social-large-label">{t("Без затемнения")}</span>
           <SocialOverlayDownloads file="large" title="Укрупнённый" />
+          <span className="social-large-label">{t("С затемнением")}</span>
+          <SocialOverlayDownloads file="large-shade" title="Укрупнённый с затемнением" />
           <span className="social-large-label">{t("С синим затемнением")}</span>
           <SocialOverlayDownloads file="large-blue" title="Укрупнённый с синим затемнением" />
         </div>

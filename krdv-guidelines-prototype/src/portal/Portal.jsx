@@ -21,13 +21,14 @@ const overlays = {
   translucent: { title: "Полупрозрачный", text: "Для спокойного контрастного фона." },
   "white-shade": { title: "Белый с затемнением", text: "Для светлого или пёстрого фона." },
   "translucent-shade": { title: "Полупрозрачный с затемнением", text: "Мягкий акцент на светлом фоне." },
-  "white-blue": { title: "Белый с синим затемнением", text: "Для светлого или пёстрого фона, в фирменном синем." },
-  "translucent-blue": { title: "Полупрозрачный с синим затемнением", text: "Мягкий акцент в фирменном синем." },
+  "white-blue-top": { title: "Белый с синим затемнением", text: "Для светлого или пёстрого фона, в фирменном синем." },
+  "translucent-blue-top": { title: "Полупрозрачный с синим затемнением", text: "Мягкий акцент в фирменном синем." },
   large: { title: "Укрупнённый", text: "Для первой фотографии в посте из нескольких фото." },
-  "large-blue": { title: "Укрупнённый с синим затемнением", text: "Для светлого или пёстрого верха первой фотографии." },
+  "large-shade": { title: "Укрупнённый с затемнением", text: "Для светлого или пёстрого угла первой фотографии." },
+  "large-blue": { title: "Укрупнённый с синим затемнением", text: "То же, затемнение в фирменном синем." },
 };
-const singleOverlays = ["white", "translucent", "white-shade", "translucent-shade", "white-blue", "translucent-blue"];
-const albumOverlays = ["large", "large-blue"];
+const singleOverlays = ["white", "translucent", "white-shade", "translucent-shade", "white-blue-top", "translucent-blue-top"];
+const albumOverlays = ["large", "large-shade", "large-blue"];
 const overlaySrc = (id, size) => asset(`assets/social/overlays/krdv-social-${id}-${size}.png`);
 
 function Header({ onHome }) {

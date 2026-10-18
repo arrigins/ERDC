@@ -8019,3 +8019,93 @@ a.slide-viewer-download:focus-visible {
   letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
 }
+
+/* ── Соцсети 18.10: варианты логотипа — две листалки (белый / полупрозрачный) ── */
+.social-variant-sliders {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.social-variant-slider {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding: 10px 10px 18px;
+}
+
+.svs-stage .social-branded {
+  border-radius: var(--r-inner, 16px);
+}
+
+.svs-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 8px;
+}
+
+.svs-bar h3 {
+  margin: 0;
+  font-size: clamp(19px, 1.5vw, 22px);
+  font-weight: 400;
+}
+
+.svs-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 8px;
+}
+
+.svs-tabs button {
+  border: 0;
+  border-radius: var(--r-control, 12px);
+  padding: 7px 12px;
+  background: var(--soft-bg, #f6f5f8);
+  color: var(--muted);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.svs-tabs button:hover { color: #050505; }
+
+.svs-tabs button[data-active="true"] {
+  background: var(--ui-blue, #1b3e92);
+  color: #ffffff;
+}
+
+.svs-text {
+  margin: 0;
+  padding: 0 8px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.svs-text strong {
+  color: #050505;
+  font-weight: 400;
+}
+
+.social-variant-slider .social-overlay-downloads { padding: 0 8px; }
+.social-variant-slider .social-overlay-downloads a { background: var(--soft-bg, #f6f5f8); }
+
+@media (max-width: 760px) {
+  .social-variant-sliders { grid-template-columns: 1fr; }
+}
+
+/* Ссылка на портал во вступлении — ненавязчиво: синий текст с тонким подчёркиванием */
+.intro-link {
+  color: var(--ui-blue, #1b3e92);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: color-mix(in srgb, var(--ui-blue, #1b3e92) 35%, transparent);
+  transition: text-decoration-color 0.2s;
+}
+
+.intro-link:hover { text-decoration-color: currentColor; }
