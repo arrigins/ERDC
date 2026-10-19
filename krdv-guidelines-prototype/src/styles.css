@@ -6237,9 +6237,7 @@ a.slide-viewer-download:focus-visible {
   box-shadow: none;
 }
 
-/* Наградные документы — без скругления углов */
-#awards .asset-image-card,
-#awards .asset-image-frame,
+/* Наградные документы — такие же карточки-носители, как визитки и таблички; у самого листа углы прямые */
 #awards .asset-image-frame img {
   border-radius: 0;
 }
@@ -8406,3 +8404,16 @@ a.slide-viewer-download:focus-visible,
 }
 .aa-replay { background: #ffffff; }
 .slide-viewer-download.is-pending { background: var(--btn-bg); color: #050505; }
+
+
+/* ══ 20.10: наградные документы — три карточки-носителя в ряд, с подписями ══ */
+.asset-image-grid.is-row3cap { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+#awards .asset-image-card.is-mockup .asset-image-frame { padding: clamp(20px, 3vw, 44px); }
+@media (max-width: 860px) { .asset-image-grid.is-row3cap { grid-template-columns: 1fr; } }
+
+/* Фото-мокапы (табличка, режимник) — кадр в пропорциях фотографии 3:2, чтобы табличка не упиралась в край */
+.asset-image-card.is-mockup.is-cover .asset-image-frame {
+  aspect-ratio: 3 / 2;
+  min-height: 0;
+  flex: 1 1 auto;
+}
