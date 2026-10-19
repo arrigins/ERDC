@@ -22,7 +22,7 @@ export const cobrandSchemes = {
 export const partners = {
   krdv: { title: "КРДВ", file: "assets/social/badge-white.png" },
   mvr: { title: "Герб МВР", file: "assets/portal/gdl/mvr-emblem-white.svg" },
-  "mvr-text": { title: "Герб МВР с надписью", file: "assets/portal/gdl/mvr-emblem-text-white.svg" },
+  "mvr-text": { title: "Лого МВР", file: "assets/portal/gdl/mvr-emblem-text-white.svg" },
 };
 
 // Геометрия по присланным SVG. photo — область фото, corner — какой угол скруглён у фото и у плашки
@@ -120,23 +120,32 @@ export function cobrandPhotoRect(photo, crop, box) {
 }
 
 // Ряд логотипов: ГДЛ | разделитель | логотип партнёра
+// Как ставится логотип партнёра: высота от высоты ГДЛ, центр по вертикали, пустое поле слева в файле.
+// «Лого МВР»: надпись выровнена по центру надписи ГДЛ (центр текста — 128/234 высоты файла), герб крупнее.
+const partnerFit = {
+  krdv: { k: 1.3, cy: 0.5, padL: 0 },
+  mvr: { k: 1.45, cy: 0.5, padL: 0 },
+  "mvr-text": { k: 1.85, cy: 128 / 234, padL: 18 / 687 },
+};
+
 function logoRow(f, partner, images) {
   const img = images[partner];
   const ratio = img ? img.width / img.height : 1;
-  // Высота логотипа партнёра — оптически к ГДЛ: круг КРДВ и гербы чуть крупнее
-  const k = partner === "mvr" ? 1.45 : 1.3;
+  const fit = partnerFit[partner] || partnerFit.krdv;
   const measure = (h) => {
     const gdlW = h * GDL_RATIO;
     const gap = Math.round(h * 0.5);
-    const ph = h * k;
-    return { h, gdlW, gap, ph, pw: ratio * ph, width: gdlW + gap * 2 + ratio * ph };
+    const ph = h * fit.k;
+    const pw = ratio * ph;
+    const shiftL = pw * fit.padL;
+    return { h, gdlW, gap, ph, pw, shiftL, cy: fit.cy, width: gdlW + gap * 2 + pw - shiftL };
   };
   let m = measure(f.logoH);
   const available = f.plate.w - f.pad * 2;
   // В узкой плашке (горизонтальный формат) ряд уменьшается целиком, чтобы поместиться
   if (m.width > available) m = measure((f.logoH * available) / m.width);
   const lineX = f.pad + m.gdlW + m.gap;
-  return { ...m, lineX, lineH: m.h * 1.35, px: lineX + m.gap };
+  return { ...m, lineX, lineH: m.h * 1.35, px: lineX + m.gap - m.shiftL };
 }
 
 export function layoutCobrand(ctx, data, images) {
@@ -217,7 +226,7 @@ export function renderCobrand(ctx, data, layout, images) {
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(row.lineX, rowMid - row.lineH / 2, Math.max(1.5, row.h / 31), row.lineH);
   const partnerImg = images[data.partner];
-  if (partnerImg) ctx.drawImage(partnerImg, row.px, rowMid - row.ph / 2, row.pw, row.ph);
+  if (partnerImg) ctx.drawImage(partnerImg, row.px, rowMid - row.ph * row.cy, row.pw, row.ph);
 
   // Текст
   ctx.textBaseline = "top";

@@ -178,14 +178,21 @@ export function GdlEditor({ onBack }) {
     setDone(false);
   };
   const onPointerDown = (event) => {
-    if (!photo) return;
     const point = toLogical(event);
     if (!insideBox(point)) return;
+    // Пустая область фото — клик открывает выбор фото, как кнопка «Выбрать фото»
+    if (!photo) {
+      inputRef.current?.click();
+      return;
+    }
     event.currentTarget.setPointerCapture(event.pointerId);
     drag.current = point;
   };
   const onPointerMove = (event) => {
-    if (!drag.current) return;
+    if (!drag.current) {
+      if (!photo) event.currentTarget.style.cursor = insideBox(toLogical(event)) ? "pointer" : "";
+      return;
+    }
     const point = toLogical(event);
     shift(point.x - drag.current.x, point.y - drag.current.y);
     drag.current = point;

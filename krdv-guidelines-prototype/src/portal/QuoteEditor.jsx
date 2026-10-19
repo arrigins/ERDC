@@ -155,16 +155,24 @@ export function QuoteEditor({ onBack }) {
     return { x: ((event.clientX - rect.left) * FRAME) / rect.width, y: ((event.clientY - rect.top) * FRAME) / rect.height };
   };
   const cropUnit = FRAME / (portraitCircle.r * 2);
+  const inCircle = (point) => Math.hypot(point.x - portraitCircle.cx, point.y - portraitCircle.cy) <= portraitCircle.r;
   const onPointerDown = (event) => {
-    if (!portrait || !showPortrait) return;
+    if (!showPortrait) return;
     const point = toLogical(event);
-    const inside = Math.hypot(point.x - portraitCircle.cx, point.y - portraitCircle.cy) <= portraitCircle.r;
-    if (!inside) return;
+    if (!inCircle(point)) return;
+    // Пустой круг — клик открывает выбор фото, как кнопка «Выбрать портрет»
+    if (!portrait) {
+      inputRef.current?.click();
+      return;
+    }
     event.currentTarget.setPointerCapture(event.pointerId);
     drag.current = point;
   };
   const onPointerMove = (event) => {
-    if (!drag.current) return;
+    if (!drag.current) {
+      if (showPortrait && !portrait) event.currentTarget.style.cursor = inCircle(toLogical(event)) ? "pointer" : "";
+      return;
+    }
     const point = toLogical(event);
     const dx = (point.x - drag.current.x) * cropUnit;
     const dy = (point.y - drag.current.y) * cropUnit;
