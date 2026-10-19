@@ -27,13 +27,15 @@ function Segment({ name, value, options, onChange }) {
 }
 
 const startCrop = { zoom: 1, cx: 0.5, cy: 0.5 };
+// У каждого формата свой кадр и масштаб фото — переключение формата их не сбрасывает и не синхронизирует
+const startCrops = { square: startCrop, vertical: startCrop, horizontal: startCrop };
 
 export function GdlCobrandEditor({ onBack, onReset }) {
   const [format, setFormat] = useState("square");
   const [scheme, setScheme] = useState("blue");
   const [partner, setPartner] = useState("krdv");
   const [photo, setPhoto] = useState(null);
-  const [crop, setCrop] = useState(startCrop);
+  const [crops, setCrops] = useState(startCrops);
   const [fields, setFields] = useState({ title: "", sub: "" });
   const [fileType, setFileType] = useState("png");
   const [scale, setScale] = useState(1);
@@ -47,6 +49,8 @@ export function GdlCobrandEditor({ onBack, onReset }) {
   const inputRef = useRef(null);
   const drag = useRef(null);
   const f = formats[format];
+  const crop = crops[format] || startCrop;
+  const setCrop = (next) => setCrops((all) => ({ ...all, [format]: typeof next === "function" ? next(all[format] || startCrop) : next }));
 
   useEffect(() => {
     let alive = true;
@@ -67,7 +71,7 @@ export function GdlCobrandEditor({ onBack, onReset }) {
   const dirty = Boolean(photo || fields.title || fields.sub);
 
   // Автосохранение черновика (вместе с фото)
-  const snapshot = useMemo(() => ({ format, scheme, partner, fields, crop, fileType, scale, photoFile: photo?.file || null }), [format, scheme, partner, fields, crop, fileType, scale, photo]);
+  const snapshot = useMemo(() => ({ format, scheme, partner, fields, crops, fileType, scale, photoFile: photo?.file || null }), [format, scheme, partner, fields, crops, fileType, scale, photo]);
   const draft = useDraft("gdl", snapshot, async (d) => {
     if (d.format) setFormat(d.format);
     if (d.scheme) setScheme(d.scheme);
@@ -77,7 +81,8 @@ export function GdlCobrandEditor({ onBack, onReset }) {
     if (d.scale) setScale(d.scale);
     if (d.photoFile) {
       setPhoto(await decodePhoto(d.photoFile));
-      if (d.crop) setCrop(d.crop);
+      if (d.crops) setCrops({ ...startCrops, ...d.crops });
+      else if (d.crop) setCrops({ square: d.crop, vertical: d.crop, horizontal: d.crop });
     }
   }, !dirty);
   const resetDraft = async () => {
@@ -154,7 +159,7 @@ export function GdlCobrandEditor({ onBack, onReset }) {
     try {
       const next = await decodePhoto(file);
       setPhoto(next);
-      setCrop(startCrop);
+      setCrops(startCrops);
       setDone(false);
     } catch (problem) {
       setError(problem.message);
