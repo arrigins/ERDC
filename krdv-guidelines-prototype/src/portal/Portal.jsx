@@ -9,13 +9,16 @@ import { QuoteEditor } from "./QuoteEditor.jsx";
 import { NewsEditor } from "./CardEditor.jsx";
 import { CollageEditor } from "./CollageEditor.jsx";
 import { GdlEditor } from "./GdlEditor.jsx";
+import { GdlCobrandEditor } from "./GdlCobrandEditor.jsx";
 
 const tasks = [
   { id: "photo", title: "Фото с логотипом", text: "Загрузите фотографию, выберите вариант логотипа и скачайте готовый пост.", image: "assets/social/demo-photo-branded.webp", status: "ready" },
   { id: "quote", title: "Цитата", text: "Портрет, имя, должность и текст цитаты на фирменной карточке.", image: "assets/portal/examples/task-quote.webp", status: "ready" },
   { id: "news", title: "Новость", text: "Заголовок, подзаголовок, метка и иллюстрация из библиотеки.", image: "assets/social/r01-sm.webp", status: "ready" },
   { id: "collage", title: "Горизонтальный коллаж", text: "Заголовок и четыре фотографии в горизонтальном посте 16:9.", image: "assets/portal/examples/task-collage.webp", status: "ready" },
-  { id: "gdl", title: "Пост «Государство для людей»", text: "Квадратный пост в фирменном стиле проекта: фото в круге или на плашке, текст и логотип проекта.", image: "assets/portal/examples/task-gdl.webp", status: "ready" },
+  { id: "gdl", title: "«Государство для людей»", text: "Пост проекта с логотипом КРДВ или Минвостокразвития: квадрат, вертикаль или горизонталь.", image: "assets/portal/examples/task-gdl-cobrand.webp", status: "ready" },
+  // Первый вариант по логобуку ГДЛ — оставлен по просьбе пользователя, пока не удалять
+  { id: "gdl-bb", title: "«Государство для людей» по логобуку", text: "Черновик: композиции «Круг» и «Плашки» из логобука проекта.", image: "assets/portal/examples/task-gdl.webp", status: "ready" },
 ];
 
 const overlays = {
@@ -470,7 +473,7 @@ function PhotoEditor({ onBack }) {
   );
 }
 
-const routes = ["photo", "quote", "news", "collage", "gdl"];
+const routes = ["photo", "quote", "news", "collage", "gdl", "gdl-bb"];
 const readRoute = () => {
   const value = window.location.hash.replace(/^#\/?/, "");
   return routes.includes(value) ? value : "home";
@@ -575,6 +578,8 @@ export function Portal() {
       ) : route === "collage" ? (
         <CollageEditor onBack={() => go("home")} />
       ) : route === "gdl" ? (
+        <GdlCobrandEditor onBack={() => go("home")} />
+      ) : route === "gdl-bb" ? (
         <GdlEditor onBack={() => go("home")} />
       ) : (
         <Home onOpen={go} />

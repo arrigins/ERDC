@@ -1346,3 +1346,9 @@ button.pp-task:hover .pp-task-media img {
     grid-template-columns: 1fr;
   }
 }
+
+/* «Государство для людей»: три формата */
+.pp-gdl-stage.is-square { aspect-ratio: 1; }
+.pp-gdl-stage.is-vertical { aspect-ratio: 720 / 1280; width: min(100%, 420px); margin-inline: auto; }
+.pp-gdl-stage.is-horizontal { aspect-ratio: 16 / 9; }
+.pp-gdl-stage { background: transparent; }
