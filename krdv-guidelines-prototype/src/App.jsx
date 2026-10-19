@@ -1116,7 +1116,7 @@ const pagesData = [
       {
         id: "intc",
         title: "ИНТЦ «Русский»",
-        paragraphs: ["ИНТЦ «Русский» — это территория с особым преференциальным режимом, созданная для развития высокотехнологичного бизнеса на Дальнем Востоке и продвижения наукоемких продуктов и технологий на рынки стран Азиатско-Тихоокеанского региона.", "У логотипа ИНТЦ «Русский» две версии: основная и горизонтальная."],
+        paragraphs: ["ИНТЦ «Русский» — это территория с особым преференциальным режимом, созданная для развития высокотехнологичного бизнеса на Дальнем Востоке и продвижения наукоемких продуктов и технологий на рынки стран Азиатско-Тихоокеанского региона. У программы свой фирменный стиль."],
         brandLogoVersions: [
           { title: "Основная версия", file: "intc-russky-logo-frame", alt: "Логотип ИНТЦ «Русский», основная версия", shape: "square" },
           { title: "Горизонтальная версия", file: "intc-russky-logo", alt: "Логотип ИНТЦ «Русский», горизонтальная версия", shape: "wide" },
@@ -1600,7 +1600,10 @@ const pagesData = [
   socialPage,
   {
     id: "contacts",
-    heroVideo: "cover-contacts.mp4",
+    // 19.10: фон как у «Позиционирования» (внутри — видео, в «Обзоре» — сияние) + объёмные пузыри
+    heroVideo: "logo-cover.mp4",
+    heroObject: "cover-contacts-bubbles.webp",
+    bentoAurora: true,
     number: "14",
     title: "Контакты",
     intro: "Реквизиты компании и обратная связь по руководству.",
@@ -2141,6 +2144,7 @@ function GuidelinePage({ page, activePageId, navigate }) {
         {hasSubsidiaryHero ? <SubsidiaryHeroAnimation /> : null}
         {page.heroLibrary ? <LibraryHeroBackground variant={page.heroLibrary} /> : null}
         {page.heroLogo ? <HeroLogoLockup source={page.heroLogo} /> : null}
+        {page.heroObject ? <img className="hero-object" src={heroAsset(page.heroObject)} alt="" aria-hidden="true" /> : null}
         <span className="hero-number">{page.number}</span>
         <h1 className="hero-title">{t(page.title)}</h1>
       </header>
@@ -2649,13 +2653,13 @@ function OverviewBento({ navigate }) {
           <motion.button
             type="button"
             key={page.id}
-            className={`bento-tile ${wide ? "is-wide" : ""} ${isPositioning ? "is-light" : ""} ${isTypography ? "is-type" : ""}`}
+            className={`bento-tile ${wide ? "is-wide" : ""} ${isPositioning || page.bentoAurora ? "is-light" : ""} ${isTypography ? "is-type" : ""}`}
             onClick={() => navigate(page.id)}
             whileTap={{ scale: 0.995 }}
             aria-label={t(`Открыть раздел ${page.title}`)}
           >
             <span className="bento-visual" aria-hidden="true">
-              {page.heroVideo && !isTypography && !isPositioning ? <video className="directory-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" /> : null}
+              {page.heroVideo && !isTypography && !isPositioning && !page.bentoAurora ? <video className="directory-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" /> : null}
               {isTypography ? (
                 // Обложка «Типографики» по образцу DevRev: название шрифта и крупный пример текста, уходящий за край
                 <span className="bento-type">
@@ -2674,6 +2678,8 @@ function OverviewBento({ navigate }) {
                   <span className="bento-slogan">{t("Ближе к будущему")}</span>
                 </>
               ) : null}
+              {page.bentoAurora ? <AuroraBackground className="bento-aurora" /> : null}
+              {page.heroObject ? <img className="bento-object" src={heroAsset(page.heroObject)} alt="" loading="lazy" /> : null}
               {!hasCover && !isPositioning && !page.heroAnimation && !page.heroLibrary ? <span className="directory-fallback" /> : null}
             </span>
             <span className="bento-label">{t(page.cardTitle || page.title)}</span>

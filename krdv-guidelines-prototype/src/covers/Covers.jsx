@@ -52,7 +52,7 @@ const tone = {
 function CurrentTile({ id }) {
   const video = {
     logo: "logo-cover.mp4", subsidiaries: "subsidiaries-cover.mp4", text: "cover-text.mp4", corporate: "cover-corporate.mp4",
-    advertising: "cover-advertising.mp4", merch: "cover-merch.mp4", photostyle: "photostyle-cover.mp4", contacts: "cover-contacts.mp4",
+    advertising: "cover-advertising.mp4", merch: "cover-merch.mp4", photostyle: "photostyle-cover.mp4", contacts: "logo-cover.mp4",
   }[id];
   const image = { regimes: "cover-regimes-glass-dark.webp", made: "cover-made-stickers-dark.webp", social: "cover-social-bubbles-v2.webp" }[id];
   if (video) {

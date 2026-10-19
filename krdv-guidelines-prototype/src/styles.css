@@ -8459,3 +8459,39 @@ a.slide-viewer-download:focus-visible,
   height: var(--sub-logo-height);
   object-fit: initial;
 }
+
+/* ── 19.10: объёмный предмет на обложке (поле heroObject) ── */
+.hero-object {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  right: clamp(24px, 7vw, 120px);
+  height: 92%;
+  width: auto;
+  max-width: 45%;
+  object-fit: contain;
+  pointer-events: none;
+  transform: translateY(-50%);
+  animation: hero-object-float 7s ease-in-out infinite alternate;
+}
+
+@keyframes hero-object-float {
+  from { transform: translateY(-52%) rotate(-1.5deg); }
+  to { transform: translateY(-47%) rotate(1.5deg); }
+}
+
+.bento-visual > .bento-object {
+  inset: 50% auto auto 50%;
+  width: auto;
+  height: 68%;
+  object-fit: contain;
+  transform: translate(-50%, -44%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-object { animation: none; }
+}
+
+@media (max-width: 760px) {
+  .hero-object { height: 64%; top: 40%; right: 16px; }
+}
