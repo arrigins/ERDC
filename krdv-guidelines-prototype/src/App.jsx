@@ -845,6 +845,7 @@ const socialPage = {
   number: "13",
   cursorIcons: true,
   heroImage: "cover-social-bubbles.webp",
+  heroPosition: "100% 50%",
   heroTone: "plain",
   title: "Дизайн соцсетей",
   intro:
@@ -949,6 +950,9 @@ const pagesData = [
     id: "positioning",
     number: "01",
     title: "Позиционирование",
+    // 19.10: обложка как у «Логотипа» (в «Обзоре» у плитки остаётся сияние со слоганом)
+    heroVideo: "logo-cover.mp4",
+    heroLogo: "krdv-logo-ru-horizontal.svg",
     intro: "Дальний Восток и Арктика в коммуникации КРДВ показываются как территории будущего, успеха, мечты, знаний, инфраструктуры, карьеры, льгот, масштаба и ипотеки 2%.",
     sections: [
       {
@@ -1069,7 +1073,7 @@ const pagesData = [
     heroImage: "cover-regimes-glass-dark.webp",
     // Живая обложка: те же лепестки поверх мягкого анимированного градиента (как в бренд-обещании).
     // Откат — удалить heroGlass, останется статичная heroImage.
-    heroGlass: { petals: "cover-regimes-petals.webp", colors: ["#041b38", "#0b2c6e", "#2a2472", "#05284a", "#0e4f7c", "#0a1f4c"] },
+    heroGlass: { petals: "cover-regimes-petals-v2.webp", colors: ["#041b38", "#0b2c6e", "#2a2472", "#05284a", "#0e4f7c", "#0a1f4c"] },
     heroTone: "plain",
     intro: "Для преференциальных режимов используется единая система сокращений, знаков и названий. Она помогает быстро различать программы поддержки в коммуникационных материалах.",
     sections: [
@@ -1430,7 +1434,9 @@ const pagesData = [
   },
   {
     id: "merch",
-    heroVideo: "cover-merch.mp4",
+    heroImage: "cover-merch-quilted.webp",
+    heroPosition: "78% 50%",
+    heroTone: "plain",
     number: "10",
     title: "Мерч",
     intro:
@@ -2130,7 +2136,7 @@ function GuidelinePage({ page, activePageId, navigate }) {
     <article ref={pageRef} className={`guideline-page ${page.softLayout === false ? "" : "is-soft"} ${page.bento ? "is-bento" : ""}`}>
       <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""} ${hasLibraryHero ? "is-library" : ""} ${page.heroTone === "light" ? "is-light" : ""} ${page.heroTone === "plain" ? "is-plain" : ""}`} aria-label={t(page.title)}>
         {page.heroVideo ? <video className="hero-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : null}
-        {page.heroGlass ? <GlassHero data={page.heroGlass} /> : page.heroImage ? <img className="hero-video" src={heroAsset(page.heroImage)} alt="" aria-hidden="true" /> : null}
+        {page.heroGlass ? <GlassHero data={page.heroGlass} /> : page.heroImage ? <img className="hero-video" src={heroAsset(page.heroImage)} alt="" aria-hidden="true" style={page.heroPosition ? { objectPosition: page.heroPosition } : undefined} /> : null}
         {page.heroAnimation === "colorTiles" ? <ColorHeroAnimation /> : null}
         {hasSubsidiaryHero ? <SubsidiaryHeroAnimation /> : null}
         {page.heroLibrary ? <LibraryHeroBackground variant={page.heroLibrary} /> : null}
@@ -2649,7 +2655,7 @@ function OverviewBento({ navigate }) {
             aria-label={t(`Открыть раздел ${page.title}`)}
           >
             <span className="bento-visual" aria-hidden="true">
-              {page.heroVideo && !isTypography ? <video className="directory-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" /> : null}
+              {page.heroVideo && !isTypography && !isPositioning ? <video className="directory-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" /> : null}
               {isTypography ? (
                 // Обложка «Типографики» по образцу DevRev: название шрифта и крупный пример текста, уходящий за край
                 <span className="bento-type">
@@ -2657,9 +2663,10 @@ function OverviewBento({ navigate }) {
                   <span className="bento-type-sample">{t("Ближе к будущему. Дальний Восток и Арктика — территории роста, знаний и новых возможностей")}</span>
                 </span>
               ) : null}
-              {page.heroGlass ? <GlassHero data={page.heroGlass} compact /> : page.heroImage ? <img className="directory-video" src={heroAsset(page.heroImage)} alt="" loading="lazy" /> : null}
+              {page.heroGlass ? <GlassHero data={page.heroGlass} compact /> : page.heroImage ? <img className="directory-video" src={heroAsset(page.heroImage)} alt="" loading="lazy" style={page.heroPosition ? { objectPosition: page.heroPosition } : undefined} /> : null}
               {page.heroAnimation === "colorTiles" ? <ColorHeroAnimation /> : null}
               {page.heroLibrary ? <LibraryHeroBackground variant={page.heroLibrary} miniature /> : null}
+              {page.heroAnimation === "subsidiaryRegions" ? <span className="bento-subsidiary"><SubsidiaryHeroAnimation /></span> : null}
               {page.id === "logo" ? <img className="bento-logo" src={logoAsset("krdv-logo-ru-horizontal-white.svg")} alt="" /> : null}
               {isPositioning ? (
                 <>
@@ -2702,7 +2709,7 @@ function SectionDirectory({ navigate, activePageId }) {
             >
               <div className={`directory-visual ${hasCover || hasMotionCover || hasLibraryCover ? "has-cover" : ""} ${hasMotionCover ? "has-motion-cover" : ""} ${hasLibraryCover ? "has-library-cover" : ""}`} aria-hidden="true">
                 {page.heroVideo ? <video className="directory-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" /> : null}
-                {page.heroGlass ? <GlassHero data={page.heroGlass} compact /> : page.heroImage ? <img className="directory-video" src={heroAsset(page.heroImage)} alt="" loading="lazy" /> : null}
+                {page.heroGlass ? <GlassHero data={page.heroGlass} compact /> : page.heroImage ? <img className="directory-video" src={heroAsset(page.heroImage)} alt="" loading="lazy" style={page.heroPosition ? { objectPosition: page.heroPosition } : undefined} /> : null}
                 {hasMotionCover ? <ColorHeroAnimation /> : null}
                 {hasLibraryCover ? <LibraryHeroBackground variant={page.heroLibrary} miniature /> : null}
                 {hasCover || hasMotionCover || hasLibraryCover ? null : <div className="directory-fallback" />}
