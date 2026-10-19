@@ -8510,3 +8510,78 @@ a.slide-viewer-download:focus-visible,
 @media (max-width: 640px) {
   .logo-pair-download-row { grid-template-columns: 1fr; gap: 6px; }
 }
+
+/* Белые логотипы — отдельная карточка-листалка (19.10) */
+.white-logo-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 40px);
+  margin-top: 16px;
+  border-radius: var(--soft-radius, 24px);
+  padding: 16px;
+  background: #ffffff;
+}
+
+.white-logo-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  border-radius: var(--r-inner, 16px);
+  padding: 32px 24px;
+  background: var(--ui-blue, #1b3e92);
+}
+
+.white-logo-stage.is-square img {
+  width: calc(clamp(110px, 12vw, 170px) * var(--logo-ratio, 1));
+  height: auto;
+}
+
+.white-logo-stage.is-horizontal .logo-pair-stack {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.white-logo-stage.is-horizontal img {
+  width: calc(clamp(220px, 24vw, 340px) * var(--logo-ratio, 1));
+  height: auto;
+}
+
+.white-logo-copy {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 12px 8px 8px 0;
+}
+
+.white-logo-copy > span {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: var(--mono-tracking);
+  text-transform: uppercase;
+}
+
+.white-logo-copy h3 {
+  margin: 0;
+  font-size: clamp(22px, 1.8vw, 28px);
+  font-weight: 400;
+}
+
+.white-logo-copy p {
+  margin: 0 0 6px;
+  color: var(--muted);
+}
+
+.white-logo-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+@media (max-width: 900px) {
+  .white-logo-card { grid-template-columns: 1fr; }
+}

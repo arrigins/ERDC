@@ -2300,6 +2300,7 @@ function ContentSection({ section, navigate, activePageId }) {
     cardsBeforeAssets ? <CardGrid key="cards-before" items={section.cards} /> : null,
     section.logos ? <LogoLibrary key="logos" items={section.logos} /> : null,
     section.logoPairs ? <LogoPairLibrary key="logo-pairs" /> : null,
+    section.logoPairs ? <WhiteLogoSlider key="logo-white" /> : null,
     section.subsidiaryLogos ? <SubsidiaryLogoLibrary key="subsidiary-logos" setId={section.subsidiaryLogos} /> : null,
     section.subsidiaryRegions ? <SubsidiaryRegionCards key="subsidiary-regions" /> : null,
     section.preAssetImages ? <AssetImageGrid key="pre-assets" items={section.preAssetImages} mode={section.preAssetImageMode} /> : null,
@@ -2648,9 +2649,9 @@ function PrincipleCards({ items }) {
 // «Обзор» плиткой: обложки разделов во всю плитку, название в левом верхнем углу.
 // Сетка 6 колонок: ряды чередуются «узкая + широкая» и «три равные» (по образцу DevRev).
 // Широкая плитка занимает 4 колонки, все остальные — 2.
-const bentoWide = new Set(["logo", "typography", "social"]);
-// 19.10: корп. материалы + рекламные и мерч + товарный знак — пополам, фотостиль — на всю строку
-const bentoHalf = new Set(["corporate", "advertising", "merch", "made"]);
+const bentoWide = new Set(["logo", "typography", "social", "made"]);
+// 19.10: корп. материалы + рекламные — пополам; мерч узкий + товарный знак широкий (как позиционирование + логотип); фотостиль — на всю строку
+const bentoHalf = new Set(["corporate", "advertising"]);
 const bentoFull = new Set(["photostyle"]);
 function OverviewBento({ navigate }) {
   const tiles = pagesData.filter((page) => page.id !== "overview");
@@ -2778,6 +2779,71 @@ const logoPairs = [
   },
 ];
 
+// Белые логотипы — отдельной карточкой-листалкой: вертикальная / горизонтальная, файлы только для выбранной версии
+function WhiteLogoSlider() {
+  const [index, setIndex] = useState(0);
+  const total = logoPairs.length;
+  const pair = logoPairs[index];
+  const go = (step) => setIndex((current) => (current + step + total) % total);
+  return (
+    <motion.article className="white-logo-card" whileHover={{ y: -2 }}>
+      <div className={`white-logo-stage is-${pair.id}`}>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div key={pair.id} className="logo-pair-stack" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
+            {Object.entries(pair.langs).map(([lang, id]) => (
+              <img key={lang} src={logoAsset(logoVariants[id].whiteFiles.svg)} alt={t(`${logoVariants[id].title}, белая`)} style={{ "--logo-ratio": pair.ratios[lang] }} />
+            ))}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      <div className="white-logo-copy">
+        <span>{t("Белая версия")}</span>
+        <h3>{t(`${pair.title}, белая`)}</h3>
+        <p>{t("Для тёмных и цветных фонов и фотографий, где цветной логотип теряется")}</p>
+        <div className="white-logo-nav">
+          <div className="svs-tabs" role="tablist">
+            {logoPairs.map((item, itemIndex) => (
+              <button key={item.id} type="button" role="tab" aria-selected={itemIndex === index} data-active={itemIndex === index} onClick={() => setIndex(itemIndex)}>
+                {t(item.id === "square" ? "Вертикальная" : "Горизонтальная")}
+              </button>
+            ))}
+          </div>
+          <div className="slide-viewer-nav">
+            <span>
+              {index + 1} / {total}
+            </span>
+            <button type="button" onClick={() => go(-1)} aria-label={t("Предыдущая версия")}>
+              <UiIcon icon={ICONS.arrowLeft} size={16} strokeWidth={1.5} />
+            </button>
+            <button type="button" onClick={() => go(1)} aria-label={t("Следующая версия")}>
+              <UiIcon icon={ICONS.arrowRight} size={16} strokeWidth={1.5} />
+            </button>
+          </div>
+        </div>
+        <div className="logo-pair-downloads">
+          {Object.entries(pair.langs).map(([lang, id]) => {
+            const variant = logoVariants[id];
+            return (
+              <div className="logo-pair-download-row" key={lang}>
+                <span>{t(lang === "ru" ? "Русская" : "Английская")}</span>
+                <div className="logo-downloads">
+                  <div>
+                    {logoFormats
+                      .filter((format) => variant.whiteFiles[format])
+                      .map((format) => (
+                        <LogoDownloadLink key={format} file={variant.whiteFiles[format]} format={format} title={`${variant.title}, белая`} />
+                      ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </motion.article>
+  );
+}
+
 function LogoPairLibrary() {
   return (
     <div className="logo-pair-library">
@@ -2801,7 +2867,7 @@ function LogoPairLibrary() {
             <h3>{t(pair.title)}</h3>
             <p>{t(noDot(pair.description))}</p>
             <div className="logo-pair-downloads">
-              {[false, true].flatMap((white) =>
+              {[false].flatMap((white) =>
                 Object.entries(pair.langs).map(([lang, id]) => {
                   const variant = logoVariants[id];
                   const files = white ? variant.whiteFiles : variant.files;
