@@ -513,27 +513,15 @@
 .mt-copy p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.45; }
 
 .mt-sun {
+  /* оформление — общая кнопка (styles.css, «единые кнопки») */
   justify-self: start;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
   margin-top: 6px;
-  border: 0;
-  border-radius: var(--r-control, 12px);
-  padding: 12px 18px;
-  background: #f4f3f6;
-  color: #050505;
-  font: inherit;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background 0.25s, color 0.25s;
 }
 
 .mt-sun svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
-.mt-sun:hover { background: #ffe9c7; }
 .mt-sun[data-active="true"] { background: #f4a623; color: #ffffff; }
 .mt-sun[data-active="true"] svg { animation: mt-spin 6s linear infinite; }
-.mt-sun[data-active="true"]:hover { background: #d98d10; }
+.mt-sun[data-active="true"]:hover { background: var(--ui-blue); }
 
 @keyframes mt-spin { to { transform: rotate(360deg); } }
 

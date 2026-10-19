@@ -3056,7 +3056,7 @@ img {
 }
 
 .site-footer {
-  background: #060a16; /* сине-чёрный (19.10, было #000) */
+  background: #0b1630; /* тёмно-синий с чернильным оттенком (19.10: #000 → #060a16 → #0b1630) */
   color: #ffffff;
   font-size: 15px;
   line-height: 1.3;
@@ -8321,3 +8321,88 @@ a.slide-viewer-download:focus-visible {
 }
 
 .contact-cta-visual.is-graphic { max-width: 150px; }
+
+/* ══ 19.10: единые кнопки — серые по умолчанию, синие при наведении, без тени и подъёма ══ */
+:root { --btn-bg: #eef0f4; --btn-bg-hover: var(--ui-blue); }
+
+.ui-button,
+.intro-action,
+.guideline-page.is-soft .intro-action,
+a.slide-viewer-download,
+.aa-replay,
+.mt-sun {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  border: 0;
+  border-radius: var(--r-control, 12px);
+  padding: 0 20px;
+  background: var(--btn-bg);
+  color: #050505;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: var(--mono-tracking);
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: none;
+  transform: none;
+  cursor: pointer;
+  transition: background var(--motion-fast, 0.18s) var(--ease-standard, ease), color var(--motion-fast, 0.18s) var(--ease-standard, ease);
+}
+
+.ui-button:hover,
+.ui-button:focus-visible,
+.guideline-page.is-soft .intro-action:hover,
+.guideline-page.is-soft .intro-action:focus-visible,
+.intro-action:hover,
+.intro-action:focus-visible,
+a.slide-viewer-download:hover,
+a.slide-viewer-download:focus-visible,
+.aa-replay:hover,
+.mt-sun:hover {
+  background: var(--btn-bg-hover);
+  color: #ffffff;
+  box-shadow: none;
+  transform: none;
+}
+
+.ui-button.is-small { min-height: 36px; padding: 0 14px; font-size: 12px; }
+.ui-button svg { flex: none; }
+
+.social-inline-link:hover { transform: none; }
+
+/* «Форматы публикаций»: три квадратных формата в ряд, коллаж — отдельной строкой */
+.social-formats.is-portal { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.social-format .ui-button { justify-self: start; margin-top: 10px; }
+
+/* «Эмодзи и пиктограммы» */
+.social-emoji {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.social-emoji-copy {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 22px;
+  border-radius: var(--soft-radius, 24px);
+  padding: clamp(24px, 4vw, 56px);
+  background: #ffffff;
+}
+
+.social-emoji-copy p { margin: 0; max-width: 460px; color: var(--muted); font-size: 17px; line-height: 1.45; }
+.social-emoji .social-palette-illustration.is-pictograms { aspect-ratio: auto; min-height: clamp(300px, 30vw, 440px); }
+
+@media (max-width: 900px) {
+  .social-formats.is-portal { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .social-emoji { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .social-formats.is-portal { grid-template-columns: 1fr; }
+}
+.aa-replay { background: #ffffff; }
+.slide-viewer-download.is-pending { background: var(--btn-bg); color: #050505; }

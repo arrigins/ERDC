@@ -829,6 +829,9 @@ const socialWorks = {
   r42: socialWork("r42", "Шаблон цитаты: портрет, имя, подпись и текст высказывания"),
 };
 
+// Примеры из портала (сложные иллюстрации), 640 px
+const portalWork = (id) => ({ id, sm: assetPath(`/assets/portal/examples/ex-${id}.webp`), lg: assetPath(`/assets/portal/examples/ex-${id}.webp`), alt: "Пост с собственной объёмной иллюстрацией", ratio: 1 });
+
 const socialPhotoBranded = {
   id: "photo",
   sm: socialAsset("demo-photo-branded.webp"),
@@ -846,14 +849,14 @@ const socialPage = {
   title: "Дизайн соцсетей",
   intro:
     "В соцсетях КРДВ фирменный стиль становится более эмоциональным. Фотографии, крупная типографика, градиенты и объёмные иллюстрации помогают рассказывать о проектах, людях и возможностях Дальнего Востока и Арктики.",
-  // Ненавязчивая ссылка на портал в конце вступления
-  introLink: { before: "Типовые посты — фото с логотипом, цитаты, новости — можно собрать на", label: "портале для оформления постов", after: ".", href: "/portal.html" },
+  // Кнопка на портал во вступлении (вместо ссылки в тексте)
+  introAction: { label: "Портал для оформления постов", resource: "socialPortal" },
   sections: [
     {
       id: "social-guide",
       title: "Визуальный язык соцсетей",
       paragraphs: ["Общий язык объединяет разные форматы: фотографию с логотипом, новостную карточку, цитату и пост из нескольких карточек."],
-      socialFeed: ["r01", "r03", "r14", "r20", "r28", "r35", "r08", "r17", "r22", "r38", "r10", "r16", "r39", "r12"].map((id) => socialWorks[id]),
+      socialFeed: ["r14", "r08", "r20", "r17", "r10", "r16", "r22", "r12", "r15", "r09", "r18", "r11"].map((id) => socialWorks[id]),
       socialNote: "Примеры оформления. Даты, суммы и условия в работах исторические и могли измениться.",
     },
     {
@@ -876,37 +879,44 @@ const socialPage = {
           { name: "Белый", hex: "#FFFFFF" },
           { name: "Молочный", hex: "#FFFAF0" },
         ],
-        placeholder: "Здесь будет анимация иллюстраций",
+        placeholder: "Здесь будет пример иллюстраций",
       },
     },
     {
       id: "social-formats",
       title: "Форматы публикаций",
-      paragraphs: ["Для каждого формата — назначение и короткое правило. Нажмите на пример, чтобы открыть его целиком."],
+      lead: "Четыре типовых формата собираются на портале по готовым шаблонам — размеры, отступы и логотип уже выставлены.",
+      paragraphs: ["Нажмите на пример, чтобы открыть его целиком."],
+      socialPortalFormats: true,
       socialFormats: [
-        { title: "Фото с логотипом", purpose: "Документальные и репортажные публикации.", rule: "Фотография остаётся главной, логотип не перекрывает важные детали кадра.", work: socialPhotoBranded },
-        { title: "Новостная карточка", purpose: "Одна главная мысль: заголовок и при необходимости иллюстрация.", rule: "Цифра или главный факт читаются первыми.", work: socialWorks.r01 },
-        { title: "Цитата", purpose: "Портрет, имя, должность и высказывание.", rule: "Имя и высказывание должны читаться в ленте. Длинную цитату сокращают редакционно с согласованием смысла или делят на несколько карточек.", work: socialWorks.r14, group: [socialWorks.r14, socialWorks.r15, socialWorks.r16, socialWorks.r17, socialWorks.r18, socialWorks.r42] },
-        { title: "Пост из нескольких карточек", purpose: "Последовательное раскрытие темы в одном посте.", rule: "Обложка, основные сообщения и завершающее действие.", work: socialWorks.r35, group: [socialWorks.r35, socialWorks.r36, socialWorks.r37, socialWorks.r38, socialWorks.r39, socialWorks.r40], count: 6 },
-        { title: "Горизонтальный коллаж", purpose: "Несколько визуальных свидетельств в одной композиции.", rule: "Изображения дополняют одну историю. Коллаж сохраняет крупный главный акцент и читаемый заголовок.", work: socialWorks.r41, wide: true },
+        { title: "Фото с логотипом", purpose: "Документальные и репортажные публикации.", rule: "Фотография остаётся главной, логотип не перекрывает важные детали кадра.", work: socialPhotoBranded, portal: "photo" },
+        { title: "Новостная карточка", purpose: "Одна главная мысль: заголовок и при необходимости иллюстрация.", rule: "Цифра или главный факт читаются первыми.", work: socialWorks.r01, portal: "news" },
+        { title: "Цитата", purpose: "Портрет, имя, должность и высказывание.", rule: "Имя и высказывание читаются в ленте. Длинную цитату сокращают с согласованием смысла или делят на несколько карточек.", work: socialWorks.r42, group: [socialWorks.r42, socialWorks.r14, socialWorks.r15, socialWorks.r16, socialWorks.r17, socialWorks.r18], portal: "quote" },
+        { title: "Горизонтальный коллаж", purpose: "Несколько фотографий об одном событии в одной композиции.", rule: "Изображения дополняют одну историю. Заголовок крупный и читаемый, фото — в сетке 2×2.", work: socialWorks.r41, wide: true, portal: "collage" },
       ],
       socialNote: "Примеры оформления. Даты, суммы и условия в работах исторические и могли измениться.",
     },
     {
-      id: "social-series",
-      title: "Пост из нескольких карточек",
-      paragraphs: [
-        "Карточки в одном посте раскрывают тему последовательно: обложка, основные сообщения и завершающее действие. Синие и бежевые карточки создают ритм. Композиция и акценты меняются по содержанию, а сетка и типографика связывают карточки между собой.",
-      ],
+      id: "social-designers",
+      title: "Работы дизайн-команды",
+      lead: "Посты из нескольких карточек, собственные иллюстрации и спецпроекты не собираются по шаблону — их готовит дизайн-команда.",
+      paragraphs: ["Карточки в одном посте раскрывают тему последовательно: обложка, основные сообщения и завершающее действие. Синие и молочные карточки задают ритм, сетка и типографика связывают их между собой."],
       socialSeries: [
-        { title: "Пост о программе «Управление креативными пространствами»", alt: "Шесть карточек одного поста о программе профпереподготовки с чередованием синего и светлого фона", items: [socialWorks.r35, socialWorks.r36, socialWorks.r37, socialWorks.r38, socialWorks.r39, socialWorks.r40] },
+        { title: "Пост из нескольких карточек", alt: "Шесть карточек одного поста о программе профпереподготовки с чередованием синего и светлого фона", items: [socialWorks.r35, socialWorks.r36, socialWorks.r37, socialWorks.r38, socialWorks.r39, socialWorks.r40] },
+        { title: "Собственные иллюстрации", alt: "Посты с объёмными иллюстрациями, сделанными под конкретную новость", items: [socialWorks.r03, socialWorks.r28, portalWork("r02"), portalWork("r24"), portalWork("r25"), portalWork("r26")] },
       ],
+      contactCta: {
+        title: "Нужен пост из нескольких карточек или своя иллюстрация?",
+        text: "Напишите дизайн-команде — подготовим макет под задачу.",
+        action: "Написать дизайн-команде",
+        maxHref: "https://max.ru/u/f9LHodD0cOIgbTuSE-E8sFHKs5tOnUoIi2ZK5C9JwQqQeFvc1ASaXZA2k0Q",
+      },
     },
     {
-      id: "social-downloads",
-      title: "Материалы для работы",
-      paragraphs: ["Посты можно оформить на новом портале. Фирменные эмодзи добавляются в Telegram одной кнопкой и используются в тексте публикаций."],
-      resourceLinks: ["socialPortal", "socialEmoji"],
+      id: "social-emoji",
+      title: "Эмодзи и пиктограммы",
+      lead: "Фирменные пиктограммы и эмодзи делают текст публикаций живее.",
+      socialEmoji: true,
     },
   ],
 };
@@ -2273,6 +2283,7 @@ function ContentSection({ section, navigate, activePageId }) {
     section.socialFeed ? <SocialFeed key="social-feed" items={section.socialFeed} note={section.socialNote} /> : null,
     section.socialPhoto ? <SocialPhotoBlock key="social-photo" /> : null,
     section.socialFormats ? <SocialFormats key="social-formats" items={section.socialFormats} note={section.socialNote} /> : null,
+    section.socialEmoji ? <SocialEmoji key="social-emoji" /> : null,
     section.socialAnatomy ? <SocialAnatomy key="social-anatomy" data={section.socialAnatomy} /> : null,
     section.socialSeries ? <SocialSeries key="social-series" series={section.socialSeries} link={section.socialSeriesLink} navigate={navigate} /> : null,
     section.socialGraphics ? <SocialGraphics key="social-graphics" groups={section.socialGraphics} /> : null,
@@ -3844,6 +3855,24 @@ function SocialPalette({ data }) {
           </div>
         ))}
       </div>
+      <div className="social-palette-illustration is-placeholder">
+        <span>{t(data.placeholder || "Здесь будет пример иллюстраций")}</span>
+      </div>
+    </div>
+  );
+}
+
+// Эмодзи и пиктограммы: слева текст и кнопка набора в Telegram, справа «парящие» пиктограммы
+function SocialEmoji() {
+  const emoji = downloadResources.socialEmoji;
+  return (
+    <div className="social-emoji">
+      <div className="social-emoji-copy">
+        <p>{t("Набор эмодзи КРДВ добавляется в Telegram одной кнопкой. Используйте эмодзи в тексте публикаций — они в том же стиле, что и фирменные пиктограммы.")}</p>
+        <a className="ui-button" href={emoji.url} target="_blank" rel="noreferrer">
+          {t(emoji.action || "Добавить набор в Telegram")}
+        </a>
+      </div>
       <div className="social-palette-illustration is-pictograms" aria-label={t("Фирменные пиктограммы")}>
         {PICTOGRAM_FIELD.map((item, index) => (
           <span key={item.icon} className={`pictogram-bubble ${item.tone}`} style={{ "--i": index }}>
@@ -3858,9 +3887,10 @@ function SocialPalette({ data }) {
 
 function SocialFormats({ items, note }) {
   const [open, lightbox] = useSocialLightbox();
+  const portal = items.some((item) => item.portal);
   return (
     <div className="social-formats-wrap">
-      <div className="social-formats">
+      <div className={`social-formats ${portal ? "is-portal" : ""}`}>
         {items.map((item) => (
           <article className={`social-card social-format ${item.wide ? "is-wide" : ""}`} key={item.title}>
             <div className="social-format-media">
@@ -3871,6 +3901,12 @@ function SocialFormats({ items, note }) {
               <h3>{t(item.title)}</h3>
               <p className="is-purpose">{t(item.purpose)}</p>
               <p>{t(item.rule)}</p>
+              {item.portal ? (
+                <a className="ui-button is-small" href={assetPath(`/portal.html#/${item.portal}`)} target="_blank" rel="noreferrer">
+                  {t("Собрать на портале")}
+                  <UiIcon icon={ICONS.arrowRight} size={14} strokeWidth={1.5} />
+                </a>
+              ) : null}
             </div>
           </article>
         ))}
