@@ -340,10 +340,11 @@ const allDownloadResourceKeys = [
   "socialGuide",
 ];
 
-const logoFormats = ["svg", "png", "jpg", "pdf", "eps"];
+// 19.10: единый набор форматов для всех логотипов — SVG (экран), PNG (офис, презентации), PDF (печать, CMYK)
+const logoFormats = ["svg", "png", "pdf"];
 const regimeSignFormats = ["svg", "png", "pdf"];
 const subsidiaryFormats = ["svg", "png", "pdf"];
-const madeSignFormats = ["svg", "png"];
+const madeSignFormats = ["svg", "png", "pdf"];
 
 const ttNormsFontFiles = [
   { label: "Thin", weight: 100, style: "normal", file: "TT-Norms-Pro-Thin.ttf" },
@@ -414,12 +415,10 @@ const logoVariants = {
     files: {
       svg: "krdv-logo-ru-horizontal.svg",
       png: "krdv-logo-ru-horizontal.png",
-      jpg: "krdv-logo-ru-horizontal.jpg",
       pdf: "krdv-logo-ru-horizontal.pdf",
-      eps: "krdv-logo-ru-horizontal.eps",
     },
-    // Белая версия: SVG/PNG для экранов, PDF/EPS — CMYK для печати
-    whiteFiles: { svg: "krdv-logo-ru-horizontal-white.svg", png: "krdv-logo-ru-horizontal-white.png", pdf: "krdv-logo-ru-horizontal-white.pdf", eps: "krdv-logo-ru-horizontal-white.eps" },
+    // Белая версия: SVG/PNG для экранов, PDF — CMYK для печати
+    whiteFiles: { svg: "krdv-logo-ru-horizontal-white.svg", png: "krdv-logo-ru-horizontal-white.png", pdf: "krdv-logo-ru-horizontal-white.pdf" },
   },
   "ru-square": {
     title: "Русская вертикальная версия",
@@ -430,12 +429,10 @@ const logoVariants = {
     files: {
       svg: "krdv-logo-ru-square.svg",
       png: "krdv-logo-ru-square.png",
-      jpg: "krdv-logo-ru-square.jpg",
       pdf: "krdv-logo-ru-square.pdf",
-      eps: "krdv-logo-ru-square.eps",
     },
-    // Белая версия: SVG/PNG для экранов, PDF/EPS — CMYK для печати
-    whiteFiles: { svg: "krdv-logo-ru-square-white.svg", png: "krdv-logo-ru-square-white.png", pdf: "krdv-logo-ru-square-white.pdf", eps: "krdv-logo-ru-square-white.eps" },
+    // Белая версия: SVG/PNG для экранов, PDF — CMYK для печати
+    whiteFiles: { svg: "krdv-logo-ru-square-white.svg", png: "krdv-logo-ru-square-white.png", pdf: "krdv-logo-ru-square-white.pdf" },
   },
   "en-horizontal": {
     title: "Английская горизонтальная версия",
@@ -446,12 +443,10 @@ const logoVariants = {
     files: {
       svg: "krdv-logo-en-horizontal.svg",
       png: "krdv-logo-en-horizontal.png",
-      jpg: "krdv-logo-en-horizontal.jpg",
       pdf: "krdv-logo-en-horizontal.pdf",
-      eps: "krdv-logo-en-horizontal.eps",
     },
-    // Белая версия: SVG/PNG для экранов, PDF/EPS — CMYK для печати
-    whiteFiles: { svg: "krdv-logo-en-horizontal-white.svg", png: "krdv-logo-en-horizontal-white.png", pdf: "krdv-logo-en-horizontal-white.pdf", eps: "krdv-logo-en-horizontal-white.eps" },
+    // Белая версия: SVG/PNG для экранов, PDF — CMYK для печати
+    whiteFiles: { svg: "krdv-logo-en-horizontal-white.svg", png: "krdv-logo-en-horizontal-white.png", pdf: "krdv-logo-en-horizontal-white.pdf" },
   },
   "en-square": {
     title: "Английская вертикальная версия",
@@ -462,12 +457,10 @@ const logoVariants = {
     files: {
       svg: "krdv-logo-en-square.svg",
       png: "krdv-logo-en-square.png",
-      jpg: "krdv-logo-en-square.jpg",
       pdf: "krdv-logo-en-square.pdf",
-      eps: "krdv-logo-en-square.eps",
     },
-    // Белая версия: SVG/PNG для экранов, PDF/EPS — CMYK для печати
-    whiteFiles: { svg: "krdv-logo-en-square-white.svg", png: "krdv-logo-en-square-white.png", pdf: "krdv-logo-en-square-white.pdf", eps: "krdv-logo-en-square-white.eps" },
+    // Белая версия: SVG/PNG для экранов, PDF — CMYK для печати
+    whiteFiles: { svg: "krdv-logo-en-square-white.svg", png: "krdv-logo-en-square-white.png", pdf: "krdv-logo-en-square-white.pdf" },
   },
   mark: {
     title: "Фирменный знак лотоса",
@@ -1004,7 +997,7 @@ const pagesData = [
           "Вертикальная и горизонтальная версии равноправны. Русский вариант — для русскоязычной аудитории, английский — для международной.",
         ],
         logoPairs: true,
-        footnote: ["SVG и PNG — для экранов и сайтов. Для печати берите PDF или EPS: они в CMYK, чёрный текст — строго 0/0/0/100."],
+        footnote: ["SVG и PNG — для экранов и сайтов. Для печати берите PDF: он в CMYK, чёрный текст — строго 0/0/0/100."],
       },
       {
         id: "usage",
@@ -3453,7 +3446,7 @@ function MadeSignLibrary() {
   );
 }
 
-// Версии логотипа программы/проекта: превью и скачивание каждой версии в SVG и PNG.
+// Версии логотипа программы/проекта: превью и скачивание каждой версии в SVG, PNG и PDF.
 function BrandLogoVersions({ items }) {
   return (
     <div className="brand-logo-versions">
@@ -3466,7 +3459,7 @@ function BrandLogoVersions({ items }) {
             <h3>{t(item.title)}</h3>
             <div className="logo-downloads">
               <div>
-                {["svg", "png"].map((format) => (
+                {logoFormats.map((format) => (
                   <LogoDownloadLink key={format} file={`${item.file}.${format}`} format={format} title={item.alt} />
                 ))}
               </div>

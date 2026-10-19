@@ -8,7 +8,7 @@ SVG — экранный формат (только RGB), поэтому для 
 Запуск: python3 scripts/print-vectors.py public/assets/logos/krdv-logo-ru-horizontal.svg [...]
 Рядом с каждым SVG появятся .pdf и .eps с тем же именем (--no-eps — только PDF). Нужен пакет svgelements.
 """
-import sys, zlib
+import re, sys, zlib
 from pathlib import Path
 from svgelements import SVG, Shape, Path as SPath, Move, Line, CubicBezier, QuadraticBezier, Arc, Close, Color
 
@@ -52,13 +52,47 @@ def segments(shape):
             out.append(("h",))
     return out
 
+def parse_gradients(raw):
+    """Линейные градиенты (userSpaceOnUse) из исходного текста SVG: координаты, transform, остановки."""
+    grads = {}
+    for m in re.finditer(r"<linearGradient([^>]*)>(.*?)</linearGradient>", raw, re.S):
+        attrs, inner = m.group(1), m.group(2)
+        get = lambda name: (re.search(name + r'="([^"]*)"', attrs) or [None, None])[1]
+        x1, y1, x2, y2 = (float(get(n) or 0) for n in ("x1", "y1", "x2", "y2"))
+        tf = get("gradientTransform") or ""
+        t = re.search(r"translate\(([-\d.]+)[ ,]+([-\d.]+)\)", tf)
+        sc = re.search(r"scale\(([-\d.]+)[ ,]+([-\d.]+)\)", tf)
+        def apply(x, y):
+            if sc:
+                x, y = x * float(sc.group(1)), y * float(sc.group(2))
+            if t:
+                x, y = x + float(t.group(1)), y + float(t.group(2))
+            return x, y
+        (x1, y1), (x2, y2) = apply(x1, y1), apply(x2, y2)
+        stops = [(float(o), Color(c)) for o, c in re.findall(r'<stop[^>]*offset="([\d.]+)"[^>]*stop-color="([^"]+)"', inner)]
+        if stops[0][0] > 0:
+            stops.insert(0, (0.0, stops[0][1]))
+        if stops[-1][0] < 1:
+            stops.append((1.0, stops[-1][1]))
+        grads[get("id")] = {"coords": (x1, y1, x2, y2), "stops": [(o, to_cmyk(c)) for o, c in stops]}
+    return grads
+
 def collect(svg_path):
+    raw = Path(svg_path).read_text(encoding="utf-8")
+    grads = parse_gradients(raw)
     svg = SVG.parse(str(svg_path), reify=True)
     vb = svg.viewbox
     w, h = (vb.width, vb.height) if vb else (svg.width, svg.height)
     items = []
     for el in svg.elements():
         if not isinstance(el, Shape):
+            continue
+        fill_value = str(el.values.get("fill", ""))
+        ref = re.match(r"url\(#([^)]+)\)", fill_value)
+        if ref:
+            # заливка градиентом: в PDF — осевая заливка (shading) в CMYK по форме
+            evenodd = str(el.values.get("fill-rule", "nonzero")) == "evenodd"
+            items.append(({"grad": grads[ref.group(1)]}, evenodd, segments(el)))
             continue
         if el.fill is None or el.fill.value is None or getattr(el.fill, "alpha", 255) == 0:
             continue
@@ -73,8 +107,17 @@ def fmt(v):
 
 def body(items, h, ps=False):
     lines = []
-    for (c, m, y, k), evenodd, segs in items:
-        lines.append(f"{fmt(c)} {fmt(m)} {fmt(y)} {fmt(k)} {'setcmykcolor' if ps else 'k'}")
+    shade_index = 0
+    for color, evenodd, segs in items:
+        grad = color.get("grad") if isinstance(color, dict) else None
+        if grad:
+            if ps:
+                raise SystemExit("градиенты поддержаны только в PDF (запускайте с --no-eps)")
+            shade_index += 1
+            lines.append("q")
+        else:
+            c, m, y, k = color
+            lines.append(f"{fmt(c)} {fmt(m)} {fmt(y)} {fmt(k)} {'setcmykcolor' if ps else 'k'}")
         if ps:
             lines.append("newpath")
         for s in segs:
@@ -87,17 +130,43 @@ def body(items, h, ps=False):
                 lines.append(f"{pts} {'curveto' if ps else 'c'}")
             else:
                 lines.append("closepath" if ps else "h")
-        lines.append(("eofill" if evenodd else "fill") if ps else ("f*" if evenodd else "f"))
+        if grad:
+            lines.append(("W* n" if evenodd else "W n") + f" /Sh{shade_index} sh Q")
+        else:
+            lines.append(("eofill" if evenodd else "fill") if ps else ("f*" if evenodd else "f"))
     return "\n".join(lines)
+
+def shading_objects(items, h, first_id):
+    """PDF-объекты осевых заливок: ShadingType 2 в DeviceCMYK, функция-сшивка из отрезков между остановками."""
+    objs, names = [], []
+    for color, _, _ in items:
+        grad = color.get("grad") if isinstance(color, dict) else None
+        if not grad:
+            continue
+        x1, y1, x2, y2 = grad["coords"]
+        stops = grad["stops"]
+        funcs = []
+        for (o0, c0), (o1, c1) in zip(stops, stops[1:]):
+            funcs.append("<< /FunctionType 2 /Domain [0 1] /C0 [%s] /C1 [%s] /N 1 >>" % (" ".join(fmt(v) for v in c0), " ".join(fmt(v) for v in c1)))
+        bounds = " ".join(fmt(o) for o, _ in stops[1:-1])
+        encode = " ".join("0 1" for _ in funcs)
+        fn = "<< /FunctionType 3 /Domain [0 1] /Functions [%s] /Bounds [%s] /Encode [%s] >>" % (" ".join(funcs), bounds, encode)
+        obj_id = first_id + len(objs)
+        names.append(f"/Sh{len(names) + 1} {obj_id} 0 R")
+        objs.append(f"<< /ShadingType 2 /ColorSpace /DeviceCMYK /Coords [{fmt(x1)} {fmt(h - y1)} {fmt(x2)} {fmt(h - y2)}] /Function {fn} /Extend [true true] >>".encode())
+    return objs, names
 
 def write_pdf(out, w, h, items, title):
     content = zlib.compress(body(items, h).encode())
+    shades, names = shading_objects(items, h, 6)
+    resources = f"<< /Shading << {' '.join(names)} >> >>" if names else "<< >>"
     objs = [
         b"<< /Type /Catalog /Pages 2 0 R >>",
         b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
-        f"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 {fmt(w)} {fmt(h)}] /Contents 4 0 R /Resources << >> >>".encode(),
+        f"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 {fmt(w)} {fmt(h)}] /Contents 4 0 R /Resources {resources} >>".encode(),
         b"<< /Length %d /Filter /FlateDecode >>\nstream\n" % len(content) + content + b"\nendstream",
         f"<< /Title ({title}) /Producer (KRDV brandbook print-vectors) >>".encode(),
+        *shades,
     ]
     data = b"%PDF-1.4\n%\xe2\xe3\xcf\xd3\n"
     offsets = []
@@ -127,5 +196,5 @@ for arg in args:
     write_pdf(src.with_suffix(".pdf"), w, h, items, src.stem)
     if with_eps:
         write_eps(src.with_suffix(".eps"), w, h, items, src.stem)
-    used = sorted({c for c, _, _ in items})
+    used = sorted({str(c) if isinstance(c, tuple) else "градиент" for c, _, _ in items})
     print(src.name, f"{fmt(w)}x{fmt(h)}", len(items), "shapes; CMYK:", used)
