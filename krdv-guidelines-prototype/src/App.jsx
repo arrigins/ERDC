@@ -418,6 +418,8 @@ const logoVariants = {
       pdf: "krdv-logo-ru-horizontal.pdf",
       eps: "krdv-logo-ru-horizontal.eps",
     },
+    // Белая версия: SVG/PNG для экранов, PDF/EPS — CMYK для печати
+    whiteFiles: { svg: "krdv-logo-ru-horizontal-white.svg", png: "krdv-logo-ru-horizontal-white.png", pdf: "krdv-logo-ru-horizontal-white.pdf", eps: "krdv-logo-ru-horizontal-white.eps" },
   },
   "ru-square": {
     title: "Русская вертикальная версия",
@@ -432,6 +434,8 @@ const logoVariants = {
       pdf: "krdv-logo-ru-square.pdf",
       eps: "krdv-logo-ru-square.eps",
     },
+    // Белая версия: SVG/PNG для экранов, PDF/EPS — CMYK для печати
+    whiteFiles: { svg: "krdv-logo-ru-square-white.svg", png: "krdv-logo-ru-square-white.png", pdf: "krdv-logo-ru-square-white.pdf", eps: "krdv-logo-ru-square-white.eps" },
   },
   "en-horizontal": {
     title: "Английская горизонтальная версия",
@@ -446,6 +450,8 @@ const logoVariants = {
       pdf: "krdv-logo-en-horizontal.pdf",
       eps: "krdv-logo-en-horizontal.eps",
     },
+    // Белая версия: SVG/PNG для экранов, PDF/EPS — CMYK для печати
+    whiteFiles: { svg: "krdv-logo-en-horizontal-white.svg", png: "krdv-logo-en-horizontal-white.png", pdf: "krdv-logo-en-horizontal-white.pdf", eps: "krdv-logo-en-horizontal-white.eps" },
   },
   "en-square": {
     title: "Английская вертикальная версия",
@@ -460,6 +466,8 @@ const logoVariants = {
       pdf: "krdv-logo-en-square.pdf",
       eps: "krdv-logo-en-square.eps",
     },
+    // Белая версия: SVG/PNG для экранов, PDF/EPS — CMYK для печати
+    whiteFiles: { svg: "krdv-logo-en-square-white.svg", png: "krdv-logo-en-square-white.png", pdf: "krdv-logo-en-square-white.pdf", eps: "krdv-logo-en-square-white.eps" },
   },
   mark: {
     title: "Фирменный знак лотоса",
@@ -996,6 +1004,7 @@ const pagesData = [
           "Вертикальная и горизонтальная версии равноправны. Русский вариант — для русскоязычной аудитории, английский — для международной.",
         ],
         logoPairs: true,
+        footnote: ["SVG и PNG — для экранов и сайтов. Для печати берите PDF или EPS: они в CMYK, чёрный текст — строго 0/0/0/100."],
       },
       {
         id: "usage",
@@ -2789,23 +2798,27 @@ function LogoPairLibrary() {
             <h3>{t(pair.title)}</h3>
             <p>{t(noDot(pair.description))}</p>
             <div className="logo-pair-downloads">
-              {Object.entries(pair.langs).map(([lang, id]) => {
-                const variant = logoVariants[id];
-                return (
-                  <div className="logo-pair-download-row" key={lang}>
-                    <span>{t(lang === "ru" ? "Русская" : "Английская")}</span>
-                    <div className="logo-downloads">
-                      <div>
-                        {logoFormats
-                          .filter((format) => variant.files[format])
-                          .map((format) => (
-                            <LogoDownloadLink key={format} file={variant.files[format]} format={format} title={variant.title} />
-                          ))}
+              {[false, true].flatMap((white) =>
+                Object.entries(pair.langs).map(([lang, id]) => {
+                  const variant = logoVariants[id];
+                  const files = white ? variant.whiteFiles : variant.files;
+                  if (!files) return null;
+                  return (
+                    <div className="logo-pair-download-row" key={`${lang}-${white}`}>
+                      <span>{t(`${lang === "ru" ? "Русская" : "Английская"}${white ? " белая" : ""}`)}</span>
+                      <div className="logo-downloads">
+                        <div>
+                          {logoFormats
+                            .filter((format) => files[format])
+                            .map((format) => (
+                              <LogoDownloadLink key={format} file={files[format]} format={format} title={`${variant.title}${white ? ", белая" : ""}`} />
+                            ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                }),
+              )}
             </div>
           </div>
         </motion.article>

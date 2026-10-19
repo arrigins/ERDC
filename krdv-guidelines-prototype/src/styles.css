@@ -5444,7 +5444,7 @@ img {
 
 .logo-pair-download-row {
   display: grid;
-  grid-template-columns: 86px minmax(0, 1fr);
+  grid-template-columns: 132px minmax(0, 1fr);
   align-items: center;
   gap: 8px;
 }
@@ -8494,4 +8494,9 @@ a.slide-viewer-download:focus-visible,
 
 @media (max-width: 760px) {
   .hero-object { height: 64%; top: 40%; right: 16px; }
+}
+
+/* Строки скачивания логотипа: на телефоне подпись над кнопками */
+@media (max-width: 640px) {
+  .logo-pair-download-row { grid-template-columns: 1fr; gap: 6px; }
 }

@@ -21,6 +21,7 @@ export const cobrandSchemes = {
 
 export const partners = {
   krdv: { title: "КРДВ", file: "assets/social/badge-white.png" },
+  "krdv-logo": { title: "Лого КРДВ", file: "assets/logos/krdv-logo-ru-horizontal-white.svg" },
   mvr: { title: "Герб МВР", file: "assets/portal/gdl/mvr-emblem-white.svg" },
   "mvr-text": { title: "Лого МВР", file: "assets/portal/gdl/mvr-emblem-text-white.svg" },
 };
@@ -125,7 +126,9 @@ export function cobrandPhotoRect(photo, crop, box) {
 const partnerFit = {
   krdv: { k: 1.3, cy: 0.5, padL: 0 },
   mvr: { k: 1.45, cy: 0.5, padL: 0 },
-  "mvr-text": { k: 1.85, cy: 128 / 234, padL: 18 / 687 },
+  "mvr-text": { k: 1.65, cy: 128 / 234, padL: 18 / 687 },
+  // Белый горизонтальный логотип КРДВ: две строки надписи по высоте ГДЛ
+  "krdv-logo": { k: 1.0, cy: 0.5, padL: 0 },
 };
 
 function logoRow(f, partner, images) {
