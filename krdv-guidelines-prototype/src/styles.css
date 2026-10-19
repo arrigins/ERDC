@@ -8444,7 +8444,14 @@ a.slide-viewer-download:focus-visible,
   top: 50%;
   left: 50%;
   --sub-logo-height: clamp(40px, 4.4vw, 58px);
+  /* центрируем по типичной ширине логотипа (≈3.3 высоты), длинные названия выходят вправо */
+  width: calc(var(--sub-logo-height) * 3.3);
+  overflow: visible;
   transform: translate(-50%, -50%);
+}
+
+.bento-subsidiary .subsidiary-hero-region-window {
+  right: calc(var(--sub-logo-height) * -1.1);
 }
 
 .bento-visual .bento-subsidiary .subsidiary-hero-lockup img {

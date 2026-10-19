@@ -388,7 +388,7 @@ const fontFamilies = [
     // Десктоп-лицензия без веб-опции: на сайте только картинка-образец (файлы шрифта не подключаются)
     // Временно — картинка прежнего образца (до замены на набор в настоящем Norms Serif)
     imageOnly: true,
-    sampleImage: { src: "font-sample-serif.webp", alt: "Территория будущего начинается с ясной коммуникации", width: 539, height: 160 },
+    sampleImage: { src: "font-sample-serif.webp", alt: "Территория будущего начинается с ясной коммуникации", width: 860, height: 255 },
     description: "Семейство используется как второй, преимущественно акцидентный элемент шрифтовой пары.",
     files: [],
   },
@@ -398,7 +398,7 @@ const fontFamilies = [
     role: "Наградные документы",
     // Десктоп-лицензия без веб-опции: образец — картинка, файлы шрифта на сайт не подключаются
     imageOnly: true,
-    sampleImage: { src: "font-sample-tsars-v2.webp", alt: "Грамота за развитие территорий", width: 556, height: 94 },
+    sampleImage: { src: "font-sample-tsars-v2.webp", alt: "Грамота за развитие территорий", width: 900, height: 152 },
     description: "Гарнитура для благодарностей, благодарственных писем, почетных грамот и других наградных документов.",
     files: [],
   },
@@ -844,7 +844,7 @@ const socialPage = {
   id: "social",
   number: "13",
   cursorIcons: true,
-  heroImage: "cover-social-bubbles.webp",
+  heroImage: "cover-social-bubbles-v2.webp",
   heroPosition: "100% 50%",
   heroTone: "plain",
   title: "Дизайн соцсетей",
@@ -1094,7 +1094,7 @@ const pagesData = [
       {
         id: "hectare",
         title: "Программа «Дальневосточный и арктический гектар»",
-        navTitle: "Программа Гектар",
+        navTitle: "Программа «Гектар»",
         paragraphs: ["Программа «Дальневосточный и арктический гектар» реализуется Минвостокразвития России совместно с корпорацией, КРДВ выступает оператором программы и помогает гражданам на всех этапах: от подачи заявления и выбора земли до сопровождения проектов. У программы свой фирменный стиль. Правила его использования — в брендбуке ниже."],
         brandLogoVersions: [
           { title: "Основная версия", file: "hectare-logo-main", alt: "Логотип «Гектар», основная версия", shape: "square" },
@@ -4253,7 +4253,7 @@ function FontWorkbench() {
   const [lockedHeight, setLockedHeight] = useState(null);
   const selectedFamily = fontFamilies.find((family) => family.id === familyId) || fontFamilies[0];
   const [styleIndex, setStyleIndex] = useState(getDefaultFontIndex(selectedFamily));
-  const [previewSize, setPreviewSize] = useState(64);
+  const [previewSize, setPreviewSize] = useState(80);
   const [sample, setSample] = useState(selectedFamily.sample);
   const selectedStyle = selectedFamily.files[styleIndex] || selectedFamily.files[0];
   const fallback = selectedFamily.id === "tsars" || selectedFamily.id === "serif" ? "Georgia, serif" : "Arial, sans-serif";

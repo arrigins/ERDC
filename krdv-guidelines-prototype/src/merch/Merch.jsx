@@ -1,6 +1,7 @@
 // Раздел «Мерч» (18.10): визуальная система, слоганы-стикеры, носители и «термо»-ремувки.
 // Анимации — только там, где показывают устройство системы или свойство предмета.
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import "./merch.css";
 
@@ -273,19 +274,9 @@ const merchStickers = [
   { id: "s20", at: [75.29, 83.7, 22.56], alt: "Дальний Восток — близко к сердцу" },
 ];
 
-// Ноутбук и лист лежат на столе (наклон в перспективе). Стикер отклеивается с листа — на его месте остаётся след,
+// Ноутбук и лист лежат на столе — вид сверху, без перспективы. Стикер отклеивается с листа — на его месте остаётся след,
 // остальные не двигаются. Отпустили над крышкой — приклеился; мимо — плавно вернулся на своё место на листе.
-const TILT = 24; // градусов
-const PERSPECTIVE = 1500;
 const stickerStart = { s19: { x: 22, y: 34 }, s05: { x: 72, y: 60 }, s09: { x: 44, y: 70 } };
-
-// Экранная точка (относительно центра неповёрнутой крышки) → координаты на крышке
-function screenToLid(sx, sy) {
-  const r = (TILT * Math.PI) / 180;
-  const y = (sy * PERSPECTIVE) / (PERSPECTIVE * Math.cos(r) + sy * Math.sin(r));
-  const x = (sx * (PERSPECTIVE - y * Math.sin(r))) / PERSPECTIVE;
-  return { x, y };
-}
 
 export function MerchSlogans({ t }) {
   const reduceMotion = useReducedMotion();
@@ -314,12 +305,14 @@ export function MerchSlogans({ t }) {
     if (event.button > 0 || ghost) return;
     event.preventDefault();
     const rect = event.currentTarget.getBoundingClientRect();
-    const w = size(item);
+    const w = rect.width;
     const ratio = event.currentTarget.naturalHeight / event.currentTarget.naturalWidth || 1;
-    dragRef.current = { id: item.id, from, ratio, offX: w / 2, offY: (w * ratio) / 2 };
+    // стикер держится за ту точку, за которую его взяли
+    const offX = event.clientX - rect.left;
+    const offY = event.clientY - rect.top;
+    dragRef.current = { id: item.id, from, ratio, offX, offY };
     event.currentTarget.setPointerCapture(event.pointerId);
-    // стикер «в руке» — по центру под пальцем, чуть крупнее (ближе к глазам)
-    setGhost({ id: item.id, x: event.clientX, y: event.clientY, w, lift: true, sx: rect.left + rect.width / 2, sy: rect.top + rect.height / 2 });
+    setGhost({ id: item.id, x: event.clientX, y: event.clientY, w, offX, offY, lift: true });
   };
   const onMove = (event) => {
     if (!dragRef.current) return;
@@ -330,10 +323,14 @@ export function MerchSlogans({ t }) {
     dragRef.current = null;
     if (!d) return;
     const box = lidBoxRef.current.getBoundingClientRect();
-    const local = screenToLid(event.clientX - (box.left + box.width / 2), event.clientY - (box.top + box.height / 2));
     const item = merchStickers.find((s) => s.id === d.id);
     const w = size(item);
     const h = w * d.ratio;
+    // центр стикера в координатах крышки (от её центра)
+    const local = {
+      x: event.clientX - d.offX + w / 2 - (box.left + box.width / 2),
+      y: event.clientY - d.offY + h / 2 - (box.top + box.height / 2),
+    };
     const W = box.width;
     const H = box.height;
     const inside = Math.abs(local.x) < W / 2 && Math.abs(local.y) < H / 2;
@@ -357,7 +354,7 @@ export function MerchSlogans({ t }) {
       setGhost(null);
       return;
     }
-    setGhost((g) => (g ? { ...g, x: slot.left + slot.width / 2, y: slot.top + slot.height / 2, back: true, lift: false } : g));
+    setGhost((g) => (g ? { ...g, x: slot.left + g.offX, y: slot.top + g.offY, w: slot.width, back: true, lift: false } : g));
     window.setTimeout(() => setGhost(null), 320);
   };
 
@@ -368,7 +365,8 @@ export function MerchSlogans({ t }) {
     <div className="merch-laptop">
       <div className="ml-scene">
         <div className="ml-lid-box" ref={lidBoxRef}>
-          <div className="ml-lid" style={{ transform: `perspective(${PERSPECTIVE}px) rotateX(${TILT}deg)` }}>
+          <div className="ml-lid">
+            <img className="ml-lid-img" src={merchAsset("merch-laptop-top.webp")} alt="" draggable={false} />
             {order
               .filter((id) => placed[id])
               .map((id) => {
@@ -391,7 +389,7 @@ export function MerchSlogans({ t }) {
       </div>
 
       <div className="ml-scene is-sheet">
-        <div className="ml-sheet" style={{ transform: `perspective(${PERSPECTIVE}px) rotateX(${TILT}deg)` }}>
+        <div className="ml-sheet">
           <div className="ml-sheet-inner" ref={sheetRef}>
             {merchStickers.map((item) => {
               const off = Boolean(placed[item.id]) || ghost?.id === item.id;
@@ -430,14 +428,18 @@ export function MerchSlogans({ t }) {
         ) : null}
       </p>
 
-      {ghost && ghostItem ? (
-        <img
-          className={`ml-ghost ${ghost.back ? "is-back" : ""} ${ghost.lift ? "is-lift" : ""}`}
-          src={merchAsset(`stickers/${ghost.id}.webp`)}
-          alt=""
-          style={{ left: ghost.x, top: ghost.y, width: ghost.w }}
-        />
-      ) : null}
+      {/* «в руке» — в портале на body: у предков раздела есть transform, из-за него fixed смещался */}
+      {ghost && ghostItem
+        ? createPortal(
+            <img
+              className={`ml-ghost ${ghost.back ? "is-back" : ""} ${ghost.lift ? "is-lift" : ""}`}
+              src={merchAsset(`stickers/${ghost.id}.webp`)}
+              alt=""
+              style={{ left: ghost.x - ghost.offX, top: ghost.y - ghost.offY, width: ghost.w, transformOrigin: `${ghost.offX}px ${ghost.offY}px` }}
+            />,
+            document.body,
+          )
+        : null}
     </div>
   );
 }
@@ -743,8 +745,12 @@ export function MerchThermo({ t }) {
 const accessoryCards = [
   { id: "power", span: 7, stage: "#eef0f4", images: ["merch-powerbanks.webp"], title: "Аккумуляторы", text: "«Энергия Дальнего Востока» и «Арктика держит заряд» — фраза подсказывает, зачем вещь." },
   { id: "mug", span: 5, fit: "contain", images: ["merch-mug.webp"], title: "Термокружка", text: "«Арктика закаляет, кофе согревает». В коробке — QR-код на сайт." },
-  { id: "weather", span: 7, images: ["merch-raincoat.webp", "merch-umbrella.webp"], title: "Зонт и дождевик", text: "Одна фраза на двух вещах: «Работаем в любую погоду»." },
-  { id: "notebooks", span: 5, fit: "contain", images: ["merch-notebooks.webp"], title: "Блокноты", text: "«План развития: здесь», «Дальний Восток — территория идей» и «Большие проекты начинаются с небольшого блокнота»." },
+  { id: "weather", span: 7, images: [
+    // дождевик крупнее: низ уходит за кадр; зонт — по нижнему краю, чтобы ручка не обрезалась
+    { file: "merch-raincoat.webp", style: { objectPosition: "50% 0%", transform: "scale(1.26)", transformOrigin: "40% 6%" } },
+    { file: "merch-umbrella.webp", style: { objectPosition: "35% 100%" } },
+  ], title: "Зонт и дождевик", text: "Одна фраза на двух вещах: «Работаем в любую погоду»." },
+  { id: "notebooks", span: 5, fit: "contain", images: ["merch-notebooks-v2.webp"], title: "Блокноты", text: "«План развития: здесь», «Дальний Восток — территория идей» и «Большие проекты начинаются с небольшого блокнота»." },
   { id: "keychain", span: 6, fit: "contain", images: ["merch-keychain.webp"], title: "Брелоки", text: "Эмалевое сердце КРДВ, лотос и подвеска «Когда работа дарит восторг»." },
   { id: "lanyard", span: 6, fit: "contain", images: ["merch-lanyard.webp"], title: "Шнур для телефона", text: "Серый шнур с карабином, бирка с подписью и сердцем." },
 ];
@@ -755,9 +761,10 @@ export function MerchAccessories({ t }) {
       {accessoryCards.map((card) => (
         <motion.article key={card.id} className={`ma-card span-${card.span}`} whileHover={{ y: -2 }}>
           <div className={`ma-stage ${card.images.length > 1 ? "is-pair" : ""} ${card.fit === "contain" ? "is-contain" : ""}`} style={card.stage ? { background: card.stage } : undefined}>
-            {card.images.map((file) => (
-              <img key={file} src={merchAsset(file)} alt="" loading="lazy" />
-            ))}
+            {card.images.map((image) => {
+              const file = typeof image === "string" ? image : image.file;
+              return <img key={file} src={merchAsset(file)} alt="" loading="lazy" style={image.style} />;
+            })}
           </div>
           <div className="ma-copy">
             <h3>{t(card.title)}</h3>

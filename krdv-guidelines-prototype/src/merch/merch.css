@@ -229,37 +229,29 @@
 
 .ml-scene { position: relative; }
 
-.ml-lid-box { position: relative; aspect-ratio: 1.5; }
+.ml-lid-box { position: relative; aspect-ratio: 2400 / 1690; }
 
+/* закрытый ноутбук, вид сверху: алюминиевая крышка + мягкая тень на столе */
 .ml-lid {
   position: absolute;
   inset: 0;
-  transform-origin: 50% 50%;
-  border-radius: 4.2% / 6.3%;
-  background: url("/assets/merch/merch-laptop-lid.webp") center / 100% 100% no-repeat;
-  /* мягкая контактная тень, как у вещи на столе */
-  filter: drop-shadow(0 2px 2px rgba(20, 24, 40, 0.10)) drop-shadow(0 14px 20px rgba(20, 24, 40, 0.10));
+  filter: drop-shadow(0 1px 1px rgba(20, 24, 40, 0.10)) drop-shadow(0 10px 14px rgba(20, 24, 40, 0.07)) drop-shadow(0 28px 40px rgba(20, 24, 40, 0.07));
 }
 
-/* торец крышки — тонкая полоса толщины ноутбука снизу */
-.ml-lid::after {
-  content: "";
+.ml-lid-img {
   position: absolute;
-  left: 1.2%;
-  right: 1.2%;
-  top: 100%;
-  height: 1.6%;
-  border-radius: 0 0 14px 14px;
-  background: linear-gradient(180deg, #b9bcc2, #9fa3aa);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
 .ml-sheet {
   position: relative;
-  transform-origin: 50% 50%;
   border-radius: 10px;
   padding: 7% 6%;
-  background: linear-gradient(170deg, #ffffff, #f6f6f8);
-  box-shadow: 0 0 0 1px rgba(20, 24, 40, 0.06), 0 2px 3px rgba(20, 24, 40, 0.06), 0 12px 18px -8px rgba(20, 24, 40, 0.12);
+  background: linear-gradient(170deg, #ffffff, #f7f7f9);
+  box-shadow: 0 0 0 1px rgba(20, 24, 40, 0.05), 0 1px 2px rgba(20, 24, 40, 0.06), 0 14px 28px -12px rgba(20, 24, 40, 0.14);
 }
 
 .ml-sheet-inner { position: relative; aspect-ratio: 0.7056; }
@@ -272,7 +264,11 @@
   -webkit-user-drag: none;
 }
 
-.mst.is-stuck { transform: translate(-50%, -50%); }
+/* на крышке — тонкая тень: стикер лежит на металле */
+.mst.is-stuck {
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 1px 1px rgba(20, 24, 40, 0.14));
+}
 .mst.is-hidden { visibility: hidden; }
 
 /* след от отклеенного стикера — едва заметная вырубка на подложке */
@@ -288,14 +284,15 @@
   z-index: 1000;
   height: auto;
   pointer-events: none;
-  transform: translate(-50%, -50%) scale(1.06) rotate(-2deg);
-  filter: drop-shadow(0 14px 16px rgba(10, 20, 60, 0.22));
+  cursor: grabbing;
+  transform: scale(1.05) rotate(-2deg);
+  filter: drop-shadow(0 12px 14px rgba(10, 20, 60, 0.2));
 }
 
 .ml-ghost.is-back {
-  transform: translate(-50%, -50%) scale(0.92);
+  transform: none;
   filter: none;
-  transition: left 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.3s, filter 0.3s;
+  transition: left 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), width 0.3s, transform 0.3s, filter 0.3s;
 }
 
 .ml-hint {
@@ -652,15 +649,4 @@
   .ma-card.span-6 { grid-column: 1 / -1; }
 }
 
-/* шарнир закрытого ноутбука — тонкая тёмная полоса внизу крышки */
-.ml-lid::after {
-  content: "";
-  position: absolute;
-  left: 3%;
-  right: 3%;
-  bottom: -6px;
-  height: 7px;
-  border-radius: 0 0 10px 10px;
-  background: linear-gradient(180deg, #a9adb5, #8d9199);
-  z-index: -1;
-}
+
