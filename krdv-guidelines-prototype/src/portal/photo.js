@@ -4,7 +4,8 @@ export const asset = (pathname) => `${import.meta.env.BASE_URL}${pathname.replac
 export const FRAME = 1080;
 export const MAX_ZOOM = 4;
 const MAX_BYTES = 20 * 1024 * 1024;
-const MAX_PIXELS = 40_000_000;
+// Очень большие снимки не отклоняем, а уменьшаем при открытии: для поста 2160 px хватает с запасом
+const MAX_SIDE = 6000;
 
 export const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
@@ -37,11 +38,37 @@ export async function decodePhoto(file) {
   } catch {
     throw new Error("Не удалось открыть фотографию — возможно, файл повреждён. Попробуйте другой файл.");
   }
-  if (bitmap.width * bitmap.height > MAX_PIXELS) {
-    bitmap.close();
-    throw new Error("Фотография больше 40 мегапикселей. Уменьшите её и загрузите снова.");
+  const longest = Math.max(bitmap.width, bitmap.height);
+  if (longest > MAX_SIDE) {
+    const k = MAX_SIDE / longest;
+    try {
+      const smaller = await createImageBitmap(bitmap, { resizeWidth: Math.round(bitmap.width * k), resizeHeight: Math.round(bitmap.height * k), resizeQuality: "high" });
+      bitmap.close();
+      bitmap = smaller;
+    } catch {
+      // если браузер не умеет уменьшать — работаем с исходником
+    }
   }
-  return { bitmap, url: URL.createObjectURL(file), name: file.name.replace(/\.[^.]+$/, ""), format };
+  // file сохраняем для черновика: фото восстанавливается после перезапуска
+  return { bitmap, url: URL.createObjectURL(file), name: (file.name || "photo").replace(/\.[^.]+$/, ""), format, file };
+}
+
+// Отличаем нажатие от перетаскивания: короткое нажатие без сдвига — «заменить фото»
+export function createTap() {
+  let start = null;
+  return {
+    down(event) {
+      start = { x: event.clientX, y: event.clientY, t: Date.now(), moved: 0 };
+    },
+    move(event) {
+      if (start) start.moved = Math.max(start.moved, Math.hypot(event.clientX - start.x, event.clientY - start.y));
+    },
+    up() {
+      const tap = Boolean(start) && start.moved < 6 && Date.now() - start.t < 500;
+      start = null;
+      return tap;
+    },
+  };
 }
 
 export function loadImage(src) {

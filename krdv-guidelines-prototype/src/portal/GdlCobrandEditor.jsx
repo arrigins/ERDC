@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "@fontsource/montserrat/400.css";
 import "@fontsource/montserrat/700.css";
-import { MAX_ZOOM, asset, clamp, decodePhoto, downloadCanvas, loadImage } from "./photo.js";
+import { MAX_ZOOM, asset, clamp, createTap, decodePhoto, downloadCanvas, loadImage } from "./photo.js";
+import { DraftBar, clearDraft, useDraft } from "./drafts.jsx";
 import { cobrandFontRequests, cobrandPhotoRect, cobrandSchemes, formats, layoutCobrand, partners, renderCobrand } from "./gdlCobrandTemplate.js";
 import { DownloadReasons } from "./CardEditor.jsx";
 
@@ -27,7 +28,7 @@ function Segment({ name, value, options, onChange }) {
 
 const startCrop = { zoom: 1, cx: 0.5, cy: 0.5 };
 
-export function GdlCobrandEditor({ onBack }) {
+export function GdlCobrandEditor({ onBack, onReset }) {
   const [format, setFormat] = useState("square");
   const [scheme, setScheme] = useState("blue");
   const [partner, setPartner] = useState("krdv");
@@ -64,15 +65,26 @@ export function GdlCobrandEditor({ onBack }) {
   }, []);
 
   const dirty = Boolean(photo || fields.title || fields.sub);
-  useEffect(() => {
-    if (!dirty || done) return undefined;
-    const onLeave = (event) => {
-      event.preventDefault();
-      event.returnValue = "";
-    };
-    window.addEventListener("beforeunload", onLeave);
-    return () => window.removeEventListener("beforeunload", onLeave);
-  }, [dirty, done]);
+
+  // Автосохранение черновика (вместе с фото)
+  const snapshot = useMemo(() => ({ format, scheme, partner, fields, crop, fileType, scale, photoFile: photo?.file || null }), [format, scheme, partner, fields, crop, fileType, scale, photo]);
+  const draft = useDraft("gdl", snapshot, async (d) => {
+    if (d.format) setFormat(d.format);
+    if (d.scheme) setScheme(d.scheme);
+    if (d.partner) setPartner(d.partner);
+    if (d.fields) setFields(d.fields);
+    if (d.fileType) setFileType(d.fileType);
+    if (d.scale) setScale(d.scale);
+    if (d.photoFile) {
+      setPhoto(await decodePhoto(d.photoFile));
+      if (d.crop) setCrop(d.crop);
+    }
+  }, !dirty);
+  const resetDraft = async () => {
+    await clearDraft("gdl");
+    onReset?.();
+  };
+  const tap = useRef(createTap());
 
   useEffect(() => () => {
     if (photo) {
@@ -175,10 +187,12 @@ export function GdlCobrandEditor({ onBack }) {
     }
     event.currentTarget.setPointerCapture(event.pointerId);
     drag.current = point;
+    tap.current.down(event);
   };
   const onPointerMove = (event) => {
+    tap.current.move(event);
     if (!drag.current) {
-      if (!photo) event.currentTarget.style.cursor = inside(toLogical(event)) ? "pointer" : "";
+      event.currentTarget.style.cursor = !photo && inside(toLogical(event)) ? "pointer" : "";
       return;
     }
     const point = toLogical(event);
@@ -186,6 +200,8 @@ export function GdlCobrandEditor({ onBack }) {
     drag.current = point;
   };
   const onPointerUp = () => {
+    // короткое нажатие по фото без сдвига — заменить фото
+    if (drag.current && tap.current.up()) inputRef.current?.click();
     drag.current = null;
   };
   const onKeyDown = (event) => {
@@ -243,7 +259,6 @@ export function GdlCobrandEditor({ onBack }) {
   };
 
   const goBack = () => {
-    if (dirty && !done && !window.confirm("Результат ещё не скачан. Выйти без сохранения?")) return;
     onBack();
   };
 
@@ -255,9 +270,10 @@ export function GdlCobrandEditor({ onBack }) {
         </button>
         <h1>«Государство для людей»</h1>
         <span className={`pp-status ${done ? "is-done" : ""}`} role="status">
-          {busy ? "Готовим…" : done ? "Скачано" : dirty ? "Не скачано" : ""}
+          {busy ? "Готовим…" : done ? "Скачано" : ""}
         </span>
       </div>
+      <DraftBar draft={draft} onReset={resetDraft} />
 
       <div className="pp-editor-grid">
         <section className="pp-preview-col" aria-label="Предпросмотр">
@@ -279,7 +295,7 @@ export function GdlCobrandEditor({ onBack }) {
             />
             {fontState === "loading" ? <span className="pp-stage-msg">Загружаем шрифт…</span> : null}
           </div>
-          <p className="pp-hint">{photo ? "Перетащите фото, чтобы поправить кадр." : "Фото встанет в светлую область. Бледный текст — подсказка, он заменится вашим."}</p>
+          <p className="pp-hint">{photo ? "Перетащите фото, чтобы поправить кадр. Нажмите на фото, чтобы заменить его." : "Фото встанет в светлую область. Бледный текст — подсказка, он заменится вашим."}</p>
         </section>
 
         <section className="pp-panel is-numbered" aria-label="Настройки">

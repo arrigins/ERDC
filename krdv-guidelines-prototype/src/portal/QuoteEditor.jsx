@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { FRAME, MAX_ZOOM, coverCrop, decodePhoto, downloadCanvas, moveCrop, zoomCrop } from "./photo.js";
+import { FRAME, MAX_ZOOM, coverCrop, createTap, decodePhoto, downloadCanvas, moveCrop, zoomCrop } from "./photo.js";
+import { DraftBar, clearDraft, useDraft } from "./drafts.jsx";
 import { fontRequests, layoutQuote, portraitCircle, renderQuote } from "./quoteTemplate.js";
 import { DownloadReasons } from "./CardEditor.jsx";
 
@@ -25,7 +26,7 @@ function Segment({ name, value, options, onChange }) {
   );
 }
 
-export function QuoteEditor({ onBack }) {
+export function QuoteEditor({ onBack, onReset }) {
   const [portrait, setPortrait] = useState(null);
   const [crop, setCrop] = useState(null);
   const [withPortrait, setWithPortrait] = useState(true);
@@ -55,15 +56,24 @@ export function QuoteEditor({ onBack }) {
   }, []);
 
   const dirty = Boolean(portrait || fields.name || fields.role || fields.quote);
-  useEffect(() => {
-    if (!dirty || done) return undefined;
-    const onLeave = (event) => {
-      event.preventDefault();
-      event.returnValue = "";
-    };
-    window.addEventListener("beforeunload", onLeave);
-    return () => window.removeEventListener("beforeunload", onLeave);
-  }, [dirty, done]);
+
+  const snapshot = useMemo(() => ({ withPortrait, fields, density, format, size, crop, photoFile: portrait?.file || null }), [withPortrait, fields, density, format, size, crop, portrait]);
+  const draft = useDraft("quote", snapshot, async (d) => {
+    if (typeof d.withPortrait === "boolean") setWithPortrait(d.withPortrait);
+    if (d.fields) setFields(d.fields);
+    if (d.density) setDensity(d.density);
+    if (d.format) setFormat(d.format);
+    if (d.size) setSize(d.size);
+    if (d.photoFile) {
+      setPortrait(await decodePhoto(d.photoFile));
+      if (d.crop) setCrop(d.crop);
+    }
+  }, !dirty);
+  const resetDraft = async () => {
+    await clearDraft("quote");
+    onReset?.();
+  };
+  const tap = useRef(createTap());
 
   useEffect(() => () => {
     if (portrait) {
@@ -167,10 +177,12 @@ export function QuoteEditor({ onBack }) {
     }
     event.currentTarget.setPointerCapture(event.pointerId);
     drag.current = point;
+    tap.current.down(event);
   };
   const onPointerMove = (event) => {
+    tap.current.move(event);
     if (!drag.current) {
-      if (showPortrait && !portrait) event.currentTarget.style.cursor = inCircle(toLogical(event)) ? "pointer" : "";
+      event.currentTarget.style.cursor = showPortrait && !portrait && inCircle(toLogical(event)) ? "pointer" : "";
       return;
     }
     const point = toLogical(event);
@@ -181,6 +193,8 @@ export function QuoteEditor({ onBack }) {
     setDone(false);
   };
   const onPointerUp = () => {
+    // короткое нажатие по портрету без сдвига — заменить фото
+    if (drag.current && tap.current.up()) inputRef.current?.click();
     drag.current = null;
   };
   const onKeyDown = (event) => {
@@ -229,7 +243,6 @@ export function QuoteEditor({ onBack }) {
   };
 
   const goBack = () => {
-    if (dirty && !done && !window.confirm("Результат ещё не скачан. Выйти без сохранения?")) return;
     onBack();
   };
 
@@ -249,9 +262,10 @@ export function QuoteEditor({ onBack }) {
         </button>
         <h1>Цитата</h1>
         <span className={`pp-status ${done ? "is-done" : ""}`} role="status">
-          {busy ? "Готовим…" : done ? "Скачано" : dirty ? "Не скачано" : ""}
+          {busy ? "Готовим…" : done ? "Скачано" : ""}
         </span>
       </div>
+      <DraftBar draft={draft} onReset={resetDraft} />
 
       <div className="pp-editor-grid">
         <section className="pp-preview-col" aria-label="Предпросмотр">
@@ -273,7 +287,7 @@ export function QuoteEditor({ onBack }) {
             {fontState === "loading" ? <span className="pp-stage-msg">Загружаем фирменный шрифт…</span> : null}
           </div>
           <p className="pp-hint">
-            {portrait && showPortrait ? "Перетащите портрет внутри круга, чтобы поправить кадр. " : ""}
+            {portrait && showPortrait ? "Перетащите портрет внутри круга, чтобы поправить кадр, или нажмите на него, чтобы заменить. " : ""}
             Блеклый текст в предпросмотре — подсказка, он заменится вашим.
           </p>
         </section>

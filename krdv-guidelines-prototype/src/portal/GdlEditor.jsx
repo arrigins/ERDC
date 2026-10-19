@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "@fontsource/montserrat/400.css";
 import "@fontsource/montserrat/700.css";
-import { FRAME, MAX_ZOOM, asset, clamp, decodePhoto, downloadCanvas, loadImage } from "./photo.js";
+import { FRAME, MAX_ZOOM, asset, clamp, createTap, decodePhoto, downloadCanvas, loadImage } from "./photo.js";
+import { DraftBar, clearDraft, useDraft } from "./drafts.jsx";
 import { circleSchemes, gdlFontRequests, layoutGdl, photoBox, photoRect, plateSchemes, renderGdl } from "./gdlTemplate.js";
 import { DownloadReasons } from "./CardEditor.jsx";
 
@@ -28,7 +29,7 @@ function Segment({ name, value, options, onChange }) {
 
 const startCrop = { zoom: 1, cx: 0.5, cy: 0.42 };
 
-export function GdlEditor({ onBack }) {
+export function GdlEditor({ onBack, onReset }) {
   const [layoutId, setLayoutId] = useState("circle");
   const [split, setSplit] = useState("photo");
   const [scheme, setScheme] = useState({ circle: "blue", plates: "aqua" });
@@ -65,15 +66,27 @@ export function GdlEditor({ onBack }) {
   }, []);
 
   const dirty = Boolean(photo || fields.title || fields.tag || fields.step);
-  useEffect(() => {
-    if (!dirty || done) return undefined;
-    const onLeave = (event) => {
-      event.preventDefault();
-      event.returnValue = "";
-    };
-    window.addEventListener("beforeunload", onLeave);
-    return () => window.removeEventListener("beforeunload", onLeave);
-  }, [dirty, done]);
+
+  const snapshot = useMemo(() => ({ layoutId, split, scheme, logo, fields, withStep, format, size, crop, photoFile: photo?.file || null }), [layoutId, split, scheme, logo, fields, withStep, format, size, crop, photo]);
+  const draft = useDraft("gdl-bb", snapshot, async (d) => {
+    if (d.layoutId) setLayoutId(d.layoutId);
+    if (d.split) setSplit(d.split);
+    if (d.scheme) setScheme(d.scheme);
+    if (d.logo) setLogo(d.logo);
+    if (d.fields) setFields(d.fields);
+    if (typeof d.withStep === "boolean") setWithStep(d.withStep);
+    if (d.format) setFormat(d.format);
+    if (d.size) setSize(d.size);
+    if (d.photoFile) {
+      setPhoto(await decodePhoto(d.photoFile));
+      if (d.crop) setCrop(d.crop);
+    }
+  }, !dirty);
+  const resetDraft = async () => {
+    await clearDraft("gdl-bb");
+    onReset?.();
+  };
+  const tap = useRef(createTap());
 
   useEffect(() => () => {
     if (photo) {
@@ -187,10 +200,12 @@ export function GdlEditor({ onBack }) {
     }
     event.currentTarget.setPointerCapture(event.pointerId);
     drag.current = point;
+    tap.current.down(event);
   };
   const onPointerMove = (event) => {
+    tap.current.move(event);
     if (!drag.current) {
-      if (!photo) event.currentTarget.style.cursor = insideBox(toLogical(event)) ? "pointer" : "";
+      event.currentTarget.style.cursor = !photo && insideBox(toLogical(event)) ? "pointer" : "";
       return;
     }
     const point = toLogical(event);
@@ -198,6 +213,7 @@ export function GdlEditor({ onBack }) {
     drag.current = point;
   };
   const onPointerUp = () => {
+    if (drag.current && tap.current.up()) inputRef.current?.click();
     drag.current = null;
   };
   const onKeyDown = (event) => {
@@ -265,7 +281,6 @@ export function GdlEditor({ onBack }) {
   };
 
   const goBack = () => {
-    if (dirty && !done && !window.confirm("Результат ещё не скачан. Выйти без сохранения?")) return;
     onBack();
   };
 
@@ -281,9 +296,10 @@ export function GdlEditor({ onBack }) {
         </button>
         <h1>«Государство для людей»</h1>
         <span className={`pp-status ${done ? "is-done" : ""}`} role="status">
-          {busy ? "Готовим…" : done ? "Скачано" : dirty ? "Не скачано" : ""}
+          {busy ? "Готовим…" : done ? "Скачано" : ""}
         </span>
       </div>
+      <DraftBar draft={draft} onReset={resetDraft} />
 
       <div className="pp-editor-grid">
         <section className="pp-preview-col" aria-label="Предпросмотр">

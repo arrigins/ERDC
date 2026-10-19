@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FRAME, downloadCanvas } from "./photo.js";
+import { DraftBar, clearDraft, useDraft } from "./drafts.jsx";
 import { badgeSources, cardKinds, compositions, layoutCard, loadCached, renderCard } from "./cardTemplate.js";
 import { groupOf, illustrationGroups, illustrationSrc } from "./illustrations.js";
 import { makeZip } from "./zip.js";
@@ -378,7 +379,7 @@ export function DownloadReasons({ reasons }) {
   );
 }
 
-export function NewsEditor({ onBack }) {
+export function NewsEditor({ onBack, onReset }) {
   const base = useTemplateBase();
   const [card, setCard] = useState(() => newCard("news"));
   const direction = "none";
@@ -390,7 +391,17 @@ export function NewsEditor({ onBack }) {
   const artOf = useArtImages([card]);
 
   const dirty = Boolean(card.title || card.subtitle || card.tag || card.art);
-  useLeaveWarning(dirty && !done);
+  // Автосохранение черновика
+  const snapshot = useMemo(() => ({ card, format, size }), [card, format, size]);
+  const draft = useDraft("news", snapshot, async (d) => {
+    if (d.card) setCard(d.card);
+    if (d.format) setFormat(d.format);
+    if (d.size) setSize(d.size);
+  }, !dirty);
+  const resetDraft = async () => {
+    await clearDraft("news");
+    onReset?.();
+  };
 
   const data = useMemo(() => ({ ...withPlaceholders(card), direction }), [card, direction]);
   const layout = useMemo(() => (base.fontState === "ready" ? layoutCard(measureCtx(), data) : null), [data, base.fontState]);
@@ -466,13 +477,13 @@ export function NewsEditor({ onBack }) {
   };
 
   const goBack = () => {
-    if (dirty && !done && !window.confirm("Результат ещё не скачан. Выйти без сохранения?")) return;
     onBack();
   };
 
   return (
     <main className="pp-editor">
-      <EditorBar title="Новость" status={busy ? "Готовим…" : done ? "Скачано" : dirty ? "Не скачано" : ""} onBack={goBack} />
+      <EditorBar title="Новость" status={busy ? "Готовим…" : done ? "Скачано" : ""} onBack={goBack} />
+      <DraftBar draft={draft} onReset={resetDraft} />
       <div className="pp-editor-grid">
         <section className="pp-preview-col" aria-label="Предпросмотр">
           <div className="pp-stage pp-quote-stage">

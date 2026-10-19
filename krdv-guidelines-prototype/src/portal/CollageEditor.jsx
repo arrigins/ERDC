@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { clamp, decodePhoto, downloadCanvas } from "./photo.js";
+import { clamp, createTap, decodePhoto, downloadCanvas } from "./photo.js";
+import { DraftBar, clearDraft, useDraft } from "./drafts.jsx";
 import { FONT, wrap } from "./text.js";
 import { drawBrandBackground } from "./backgrounds.js";
-import { BackgroundPicker, DownloadReasons, EditorBar, Segment, useLeaveWarning, useTemplateBase } from "./CardEditor.jsx";
+import { BackgroundPicker, DownloadReasons, EditorBar, Segment, useTemplateBase } from "./CardEditor.jsx";
 
 // «Горизонтальный коллаж» по образцу поста R41: слева фирменный градиент с логотипом, заголовком и подзаголовком,
 // справа сетка 2 × 2 из фотографий. Все размеры — в логических пикселях 1920 × 1080; предпросмотр и экспорт
@@ -136,7 +137,7 @@ function cellAt(x, y) {
   return CELLS.findIndex((cell) => x >= cell.x && x <= cell.x + cell.w && y >= cell.y && y <= cell.y + cell.h);
 }
 
-export function CollageEditor({ onBack }) {
+export function CollageEditor({ onBack, onReset }) {
   const base = useTemplateBase();
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
@@ -155,7 +156,27 @@ export function CollageEditor({ onBack }) {
   const drag = useRef(null);
 
   const dirty = Boolean(title || subtitle || photos.some(Boolean));
-  useLeaveWarning(dirty && !done);
+  // Автосохранение черновика (вместе с фото)
+  const snapshot = useMemo(
+    () => ({ title, subtitle, bg, format, size, photos: photos.map((item) => (item ? { file: item.file, crop: item.crop } : null)) }),
+    [title, subtitle, bg, format, size, photos],
+  );
+  const draft = useDraft("collage", snapshot, async (d) => {
+    if (typeof d.title === "string") setTitle(d.title);
+    if (typeof d.subtitle === "string") setSubtitle(d.subtitle);
+    if (d.bg) setBg(d.bg);
+    if (d.format) setFormat(d.format);
+    if (d.size) setSize(d.size);
+    if (Array.isArray(d.photos)) {
+      const restored = await Promise.all(d.photos.map(async (item) => (item?.file ? { ...(await decodePhoto(item.file)), crop: item.crop || { zoom: 1, cx: 0.5, cy: 0.5 } } : null)));
+      setPhotos(restored);
+    }
+  }, !dirty);
+  const resetDraft = async () => {
+    await clearDraft("collage");
+    onReset?.();
+  };
+  const tap = useRef(createTap());
 
   const real = useMemo(() => ({ title, subtitle, bg, photos }), [title, subtitle, bg, photos]);
   const preview = useMemo(() => withPlaceholders(real), [real]);
@@ -210,9 +231,11 @@ export function CollageEditor({ onBack }) {
       return;
     }
     drag.current = { index, x: event.clientX, y: event.clientY, k: point.k };
+    tap.current.down(event);
     event.currentTarget.setPointerCapture(event.pointerId);
   };
   const onPointerMove = (event) => {
+    tap.current.move(event);
     const state = drag.current;
     if (!state) return;
     const photo = photos[state.index];
@@ -224,6 +247,8 @@ export function CollageEditor({ onBack }) {
     updateCrop(state.index, { cx: clamp(photo.crop.cx - dx / box.w, 0, 1), cy: clamp(photo.crop.cy - dy / box.h, 0, 1) });
   };
   const onPointerUp = () => {
+    // короткое нажатие по фото без сдвига — заменить фото в этой ячейке
+    if (drag.current && tap.current.up()) openPicker(drag.current.index);
     drag.current = null;
   };
   const onDrop = (event) => {
@@ -267,7 +292,6 @@ export function CollageEditor({ onBack }) {
   };
 
   const goBack = () => {
-    if (dirty && !done && !window.confirm("Результат ещё не скачан. Выйти без сохранения?")) return;
     onBack();
   };
 
@@ -276,7 +300,8 @@ export function CollageEditor({ onBack }) {
 
   return (
     <main className="pp-editor pp-collage">
-      <EditorBar title="Горизонтальный коллаж" status={busy ? "Готовим…" : done ? "Скачано" : dirty ? "Не скачано" : ""} onBack={goBack} />
+      <EditorBar title="Горизонтальный коллаж" status={busy ? "Готовим…" : done ? "Скачано" : ""} onBack={goBack} />
+      <DraftBar draft={draft} onReset={resetDraft} />
       <div className="pp-editor-grid">
         <section className="pp-preview-col" aria-label="Предпросмотр">
           <div
@@ -302,7 +327,7 @@ export function CollageEditor({ onBack }) {
             />
             {base.fontState === "loading" ? <span className="pp-stage-msg">Загружаем фирменный шрифт…</span> : null}
           </div>
-          <p className="pp-hint">Нажмите на пустую ячейку, чтобы загрузить фото. Фото можно перетаскивать внутри ячейки. Блеклый текст — подсказка.</p>
+          <p className="pp-hint">Нажмите на ячейку, чтобы загрузить или заменить фото. Фото можно перетаскивать внутри ячейки. Блеклый текст — подсказка.</p>
         </section>
 
         <section className="pp-panel is-numbered" aria-label="Настройки">

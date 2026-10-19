@@ -1352,3 +1352,38 @@ button.pp-task:hover .pp-task-media img {
 .pp-gdl-stage.is-vertical { aspect-ratio: 720 / 1280; width: min(100%, 420px); margin-inline: auto; }
 .pp-gdl-stage.is-horizontal { aspect-ratio: 16 / 9; }
 .pp-gdl-stage { background: transparent; }
+
+/* Черновик: сохраняется автоматически */
+.pp-draft {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  margin: 0 0 16px;
+  border-radius: var(--r-inner, 16px);
+  padding: 10px 16px;
+  background: #eef3ff;
+  color: #1b3e92;
+  font-size: 14px;
+}
+
+.pp-draft em {
+  color: #6b7280;
+  font-style: normal;
+}
+
+.pp-draft-reset {
+  margin-left: auto;
+  border: 0;
+  border-radius: 10px;
+  padding: 6px 12px;
+  background: #ffffff;
+  color: #1b3e92;
+  font: inherit;
+  cursor: pointer;
+}
+
+.pp-draft-reset:hover {
+  background: #1b3e92;
+  color: #ffffff;
+}

@@ -4,7 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 // Работает целиком в браузере: без входа, сервера и сохранения проектов. Фотографии не покидают устройство.
 // Все координаты шаблона — в логических пикселях макета 1080 × 1080 (ТЗ, раздел 9).
 
-import { FRAME, MAX_ZOOM, asset, clamp, coverCrop, decodePhoto, downloadCanvas, loadImage, moveCrop, zoomCrop } from "./photo.js";
+import { FRAME, MAX_ZOOM, asset, clamp, coverCrop, createTap, decodePhoto, downloadCanvas, loadImage, moveCrop, zoomCrop } from "./photo.js";
+import { DraftBar, clearDraft, useDraft } from "./drafts.jsx";
 import { QuoteEditor } from "./QuoteEditor.jsx";
 import { NewsEditor } from "./CardEditor.jsx";
 import { CollageEditor } from "./CollageEditor.jsx";
@@ -143,7 +144,7 @@ function Home({ onOpen }) {
   );
 }
 
-function PhotoEditor({ onBack }) {
+function PhotoEditor({ onBack, onReset }) {
   const [photo, setPhoto] = useState(null);
   const [crop, setCrop] = useState(null);
   const [purpose, setPurpose] = useState("single");
@@ -162,16 +163,27 @@ function PhotoEditor({ onBack }) {
 
   const activeOverlay = purpose === "album" ? albumOverlay : overlay;
 
+  // Автосохранение черновика (вместе с фото)
+  const snapshot = useMemo(() => ({ purpose, overlay, albumOverlay, format, size, crop, photoFile: photo?.file || null }), [purpose, overlay, albumOverlay, format, size, crop, photo]);
+  const draft = useDraft("photo", snapshot, async (d) => {
+    if (d.purpose) setPurpose(d.purpose);
+    if (d.overlay) setOverlay(d.overlay);
+    if (d.albumOverlay) setAlbumOverlay(d.albumOverlay);
+    if (d.format) setFormat(d.format);
+    if (d.size) setSize(d.size);
+    if (d.photoFile) {
+      const next = await decodePhoto(d.photoFile);
+      setPhoto(next);
+      setCrop(d.crop || coverCrop(next.bitmap.width, next.bitmap.height));
+    }
+  }, !photo);
+  const resetDraft = async () => {
+    await clearDraft("photo");
+    onReset?.();
+  };
+  const tap = useRef(createTap());
+
   // Предупреждение перед уходом со страницы, пока результат не скачан (ТЗ, раздел 4)
-  useEffect(() => {
-    if (!photo || done) return undefined;
-    const onLeave = (event) => {
-      event.preventDefault();
-      event.returnValue = "";
-    };
-    window.addEventListener("beforeunload", onLeave);
-    return () => window.removeEventListener("beforeunload", onLeave);
-  }, [photo, done]);
 
   useEffect(() => () => {
     if (photo) {
@@ -214,11 +226,13 @@ function PhotoEditor({ onBack }) {
   const stageScale = () => (stageRef.current ? stageRef.current.clientWidth / FRAME : 1);
   const onPointerDown = (event) => {
     if (!photo) return;
+    tap.current.down(event);
     event.currentTarget.setPointerCapture(event.pointerId);
     pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
     gesture.current = null;
   };
   const onPointerMove = (event) => {
+    tap.current.move(event);
     const previous = pointers.current.get(event.pointerId);
     if (!previous || !crop) return;
     const next = { x: event.clientX, y: event.clientY };
@@ -234,6 +248,8 @@ function PhotoEditor({ onBack }) {
     }
   };
   const onPointerUp = (event) => {
+    // короткое нажатие по фото без сдвига — заменить фото
+    if (pointers.current.size === 1 && pointers.current.has(event.pointerId) && tap.current.up()) inputRef.current?.click();
     pointers.current.delete(event.pointerId);
     if (pointers.current.size < 2) gesture.current = null;
   };
@@ -283,7 +299,6 @@ function PhotoEditor({ onBack }) {
   };
 
   const goBack = () => {
-    if (photo && !done && !window.confirm("Результат ещё не скачан. Выйти без сохранения?")) return;
     onBack();
   };
 
@@ -300,9 +315,10 @@ function PhotoEditor({ onBack }) {
         </button>
         <h1>Фото с логотипом</h1>
         <span className={`pp-status ${done ? "is-done" : ""}`} role="status">
-          {busy ? "Готовим…" : done ? "Скачано" : photo ? "Не скачано" : ""}
+          {busy ? "Готовим…" : done ? "Скачано" : ""}
         </span>
       </div>
+      <DraftBar draft={draft} onReset={resetDraft} />
 
       <div className="pp-editor-grid">
         <section className="pp-preview-col" aria-label="Предпросмотр">
@@ -340,7 +356,7 @@ function PhotoEditor({ onBack }) {
               </button>
             )}
           </div>
-          {photo ? <p className="pp-hint">Перетащите фото пальцем или мышью, чтобы выбрать кадр. Логотип стоит на своём месте и не двигается.</p> : null}
+          {photo ? <p className="pp-hint">Перетащите фото пальцем или мышью, чтобы выбрать кадр, или нажмите на него, чтобы заменить. Логотип стоит на своём месте и не двигается.</p> : null}
         </section>
 
         <section className="pp-panel" aria-label="Настройки">
@@ -553,6 +569,8 @@ function PasswordGate({ onUnlock }) {
 export function Portal() {
   const [unlocked, setUnlocked] = useState(readUnlocked);
   const [route, setRoute] = useState(readRoute);
+  // «Начать заново» в редакторе: черновик стёрт — пересоздаём редактор с чистого листа
+  const [resetKey, setResetKey] = useState(0);
 
   useEffect(() => {
     const onHash = () => setRoute(readRoute());
@@ -569,22 +587,23 @@ export function Portal() {
     setRoute(next);
   };
 
+  const reset = () => setResetKey((value) => value + 1);
   const screen = useMemo(
     () =>
-      route === "photo" ? <PhotoEditor onBack={() => go("home")} /> : route === "quote" ? (
-        <QuoteEditor onBack={() => go("home")} />
+      route === "photo" ? <PhotoEditor key={resetKey} onBack={() => go("home")} onReset={reset} /> : route === "quote" ? (
+        <QuoteEditor key={resetKey} onBack={() => go("home")} onReset={reset} />
       ) : route === "news" ? (
-        <NewsEditor onBack={() => go("home")} />
+        <NewsEditor key={resetKey} onBack={() => go("home")} onReset={reset} />
       ) : route === "collage" ? (
-        <CollageEditor onBack={() => go("home")} />
+        <CollageEditor key={resetKey} onBack={() => go("home")} onReset={reset} />
       ) : route === "gdl" ? (
-        <GdlCobrandEditor onBack={() => go("home")} />
+        <GdlCobrandEditor key={resetKey} onBack={() => go("home")} onReset={reset} />
       ) : route === "gdl-bb" ? (
-        <GdlEditor onBack={() => go("home")} />
+        <GdlEditor key={resetKey} onBack={() => go("home")} onReset={reset} />
       ) : (
         <Home onOpen={go} />
       ),
-    [route],
+    [route, resetKey],
   );
 
   if (!unlocked) return <PasswordGate onUnlock={() => setUnlocked(true)} />;
