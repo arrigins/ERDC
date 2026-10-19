@@ -847,6 +847,8 @@ const socialPage = {
   cursorIcons: true,
   heroImage: "cover-social-bubbles-v2.webp",
   heroPosition: "100% 50%",
+  // на телефоне — сдвиг влево, чтобы номер и название легли на чистый синий, а не на белые пузыри
+  heroPositionMobile: "60% 50%",
   heroTone: "plain",
   title: "Дизайн соцсетей",
   intro:
@@ -2141,7 +2143,7 @@ function GuidelinePage({ page, activePageId, navigate }) {
     <article ref={pageRef} className={`guideline-page ${page.softLayout === false ? "" : "is-soft"} ${page.bento ? "is-bento" : ""}`}>
       <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""} ${hasLibraryHero ? "is-library" : ""} ${page.heroTone === "light" ? "is-light" : ""} ${page.heroTone === "plain" ? "is-plain" : ""}`} aria-label={t(page.title)}>
         {page.heroVideo ? <video className="hero-video" src={heroAsset(page.heroVideo)} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" /> : null}
-        {page.heroGlass ? <GlassHero data={page.heroGlass} /> : page.heroImage ? <img className="hero-video" src={heroAsset(page.heroImage)} alt="" aria-hidden="true" style={page.heroPosition ? { objectPosition: page.heroPosition } : undefined} /> : null}
+        {page.heroGlass ? <GlassHero data={page.heroGlass} /> : page.heroImage ? <img className={`hero-video ${page.heroPositionMobile ? "has-mobile-pos" : ""}`} src={heroAsset(page.heroImage)} alt="" aria-hidden="true" style={page.heroPosition ? { objectPosition: page.heroPosition, "--hero-pos-m": page.heroPositionMobile } : undefined} /> : null}
         {page.heroAnimation === "colorTiles" ? <ColorHeroAnimation /> : null}
         {hasSubsidiaryHero ? <SubsidiaryHeroAnimation /> : null}
         {page.heroLibrary ? <LibraryHeroBackground variant={page.heroLibrary} /> : null}
@@ -2405,7 +2407,7 @@ function TextExampleGrid({ items }) {
   return (
     <div className="text-example-grid">
       {items.map((item) => (
-        <motion.article className="text-example" key={item.label} whileHover={{ y: -2 }}>
+        <motion.article className="text-example" key={item.label}>
           <span className="text-example-label">{t(item.label)}</span>
           <div className="text-example-row is-yes">
             <VerdictBadge verdict="yes" />
@@ -2430,7 +2432,7 @@ function LineBreakExamples({ items }) {
   return (
     <div className="line-break-examples">
       {items.map((item) => (
-        <motion.article className="line-break-example" key={item.label} whileHover={{ y: -2 }}>
+        <motion.article className="line-break-example" key={item.label}>
           <span className="text-example-label">{t(item.label)}</span>
           <div className="line-break-pair">
             {[
@@ -2472,7 +2474,8 @@ function CardGrid({ items }) {
 }
 
 // Нежно-голубое «северное сияние» на фоне блока (позиционирование, типографика).
-function AuroraBackground({ className }) {
+// 19.10 (И7): внутри страниц сияние статичное, живое — только на обложках (плитки «Обзора»: animated)
+function AuroraBackground({ className, animated = false }) {
   const reduceMotion = useReducedMotion();
   return (
     <div className={`aurora-bg ${className || ""}`} aria-hidden="true">
@@ -2482,7 +2485,7 @@ function AuroraBackground({ className }) {
         swirl={0.35}
         grainMixer={0}
         grainOverlay={0}
-        speed={reduceMotion ? 0 : 0.4}
+        speed={reduceMotion || !animated ? 0 : 0.4}
         frame={42000}
         scale={1.15}
         maxPixelCount={1600000}
@@ -2585,7 +2588,7 @@ function PrincipleGradient({ colors, seed }) {
         swirl={0.35}
         grainMixer={0}
         grainOverlay={0}
-        speed={reduceMotion ? 0 : 0.4}
+        speed={0}
         frame={42000 + seed * 9000}
         scale={1.15}
         maxPixelCount={900000}
@@ -2680,11 +2683,11 @@ function OverviewBento({ navigate }) {
               {page.id === "logo" ? <img className="bento-logo" src={logoAsset("krdv-logo-ru-horizontal-white.svg")} alt="" /> : null}
               {isPositioning ? (
                 <>
-                  <AuroraBackground className="bento-aurora" />
+                  <AuroraBackground className="bento-aurora" animated />
                   <span className="bento-slogan">{t("Ближе к будущему")}</span>
                 </>
               ) : null}
-              {page.bentoAurora ? <AuroraBackground className="bento-aurora" /> : null}
+              {page.bentoAurora ? <AuroraBackground className="bento-aurora" animated /> : null}
               {page.heroObject ? <img className="bento-object" src={heroAsset(page.heroObject)} alt="" loading="lazy" /> : null}
               {!hasCover && !isPositioning && !page.heroAnimation && !page.heroLibrary ? <span className="directory-fallback" /> : null}
             </span>
@@ -2779,7 +2782,7 @@ function WhiteLogoSlider() {
   const pair = logoPairs[index];
   const go = (step) => setIndex((current) => (current + step + total) % total);
   return (
-    <motion.article className="white-logo-card" whileHover={{ y: -2 }}>
+    <motion.article className="white-logo-card">
       <div className={`white-logo-stage is-${pair.id}`}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div key={pair.id} className="logo-pair-stack" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
@@ -2841,7 +2844,7 @@ function LogoPairLibrary() {
   return (
     <div className="logo-pair-library">
       {logoPairs.map((pair) => (
-        <motion.article className={`logo-pair-card is-${pair.id}`} key={pair.id} whileHover={{ y: -2 }}>
+        <motion.article className={`logo-pair-card is-${pair.id}`} key={pair.id}>
           <div className="logo-pair-preview">
             <div className="logo-pair-stack">
               {Object.entries(pair.langs).map(([lang, id]) => (
@@ -2899,7 +2902,7 @@ function LogoLibrary({ items }) {
           const downloads = <LogoDownloads variant={variant} />;
 
           return (
-            <motion.article className={`logo-card is-${variant.kind}`} key={variant.preview} layout whileHover={{ y: -2 }}>
+            <motion.article className={`logo-card is-${variant.kind}`} key={variant.preview} layout>
               <div className="logo-preview">
                 <img src={logoAsset(variant.preview)} alt={t(variant.title)} loading="lazy" />
               </div>
@@ -2936,7 +2939,7 @@ function SubsidiaryRegionCards() {
   return (
     <div className="subsidiary-region-grid">
       {subsidiaryRegions.map((region) => (
-        <motion.article className="subsidiary-region-card" key={region.slug} whileHover={{ y: -2 }}>
+        <motion.article className="subsidiary-region-card" key={region.slug}>
           <header>
             <h3>{t(region.title)}</h3>
             {region.enTitle ? <span>{region.enTitle}</span> : null}
@@ -2986,7 +2989,7 @@ function SubsidiaryLogoLibrary({ setId }) {
     <LayoutGroup>
       <motion.div className={`subsidiary-logo-grid is-${setId}`} layout data-count={items.length}>
         {items.map((item) => (
-          <motion.article className={`subsidiary-logo-card is-${item.orientation}`} key={item.preview} layout whileHover={{ y: -2 }}>
+          <motion.article className={`subsidiary-logo-card is-${item.orientation}`} key={item.preview} layout>
             <div className="subsidiary-logo-preview">
               <img src={subsidiaryAsset(item.preview)} alt={t(item.title)} loading="lazy" />
             </div>
@@ -3040,7 +3043,6 @@ function RegimeSignLibrary() {
             key={item.slug}
             style={{ "--sign-color": item.color }}
             layout
-            whileHover={{ y: -2 }}
             onMouseEnter={item.iconVideo ? playCardVideo : undefined}
             onMouseLeave={item.iconVideo ? resetCardVideo : undefined}
           >
@@ -3129,7 +3131,7 @@ function LogoExampleGrid({ items, columns = 3 }) {
         const { preview } = item;
         const background = preview.photo ? `center / cover no-repeat url(${rasterAsset(preview.photo)})` : preview.bg;
         return (
-          <motion.article className={`logo-example is-${item.verdict}`} key={`${item.text}-${index}`} whileHover={{ y: -2 }}>
+          <motion.article className={`logo-example is-${item.verdict}`} key={`${item.text}-${index}`}>
             <div className="logo-example-preview" style={background ? { background } : undefined}>
               <LogoExamplePreview preview={preview} />
             </div>
@@ -3151,7 +3153,7 @@ function LogoBackdrops() {
   const versions = ["ru-square", "en-square"];
   return (
     <div className="logo-backdrops">
-      <motion.figure className="logo-backdrop is-light" whileHover={{ y: -2 }}>
+      <motion.figure className="logo-backdrop is-light">
         <div>
           {versions.map((id) => (
             <img key={id} className={`is-${id.split("-")[1]}`} src={logoAsset(`krdv-logo-${id}.svg`)} alt="" loading="lazy" style={{ "--logo-ratio": id.startsWith("en") ? 183.59 / 209.8 : 1 }} />
@@ -3159,7 +3161,7 @@ function LogoBackdrops() {
         </div>
         <figcaption>{t("Для светлых фонов — написание черного цвета")}</figcaption>
       </motion.figure>
-      <motion.figure className="logo-backdrop is-dark" whileHover={{ y: -2 }}>
+      <motion.figure className="logo-backdrop is-dark">
         <div>
           {versions.map((id) => (
             <img key={id} className={`is-${id.split("-")[1]}`} src={logoAsset(`krdv-logo-${id}-ondark.svg`)} alt="" loading="lazy" style={{ "--logo-ratio": id.startsWith("en") ? 183.59 / 209.8 : 1 }} />
@@ -3189,7 +3191,7 @@ function ClearSpaceDiagram({ file, width, height, label }) {
   );
 
   return (
-    <motion.figure className="clearspace-card" whileHover={{ y: -2 }}>
+    <motion.figure className="clearspace-card">
       <svg className="clearspace-diagram" viewBox={vb.join(" ")} role="img" aria-label={t(`Охранное поле: ${label}`)}>
         <rect className="cs-fade cs-zone" x={-x} y={-x} width={width + 2 * x} height={height + 2 * x} style={{ "--cs-delay": "200ms" }} />
         <image className="cs-fade cs-logo" href={logoAsset(file)} x={0} y={0} width={width} height={height} style={{ "--cs-delay": "0ms" }} />
@@ -3406,7 +3408,7 @@ function MadeSignLibrary() {
           <h3 className="made-sign-group-title">{t(group.title)}</h3>
           <div className="made-sign-library">
             {group.variants.map((item) => (
-              <motion.article className="made-sign-card" data-tone={item.tone} key={item.key} whileHover={{ y: -2 }}>
+              <motion.article className="made-sign-card" data-tone={item.tone} key={item.key}>
                 <div className="made-sign-preview">
                   {item.signs.map((sign) => (
                     <figure key={sign.lang}>
@@ -3451,7 +3453,7 @@ function BrandLogoVersions({ items }) {
   return (
     <div className="brand-logo-versions">
       {items.map((item) => (
-        <motion.article className="brand-logo-version" key={item.file} whileHover={{ y: -2 }}>
+        <motion.article className="brand-logo-version" key={item.file}>
           <div className={`brand-logo-version-preview is-${item.shape}`}>
             <img src={logoAsset(`${item.file}.svg`)} alt={t(item.alt)} loading="lazy" />
           </div>
@@ -4130,7 +4132,7 @@ function AssetImageGrid({ items, mode = "grid" }) {
     <LayoutGroup>
       <motion.div className={`asset-image-grid is-${mode}`} layout>
         {items.map((item) => (
-          <motion.article className={`asset-image-card ${item.wide ? "is-wide" : ""} ${item.contained ? "is-contained" : ""} ${item.embeddedText ? "has-embedded-text" : ""} ${item.mockup ? "is-mockup" : ""} ${item.cover ? "is-cover" : ""}`} key={item.file} layout whileHover={{ y: -2 }}>
+          <motion.article className={`asset-image-card ${item.wide ? "is-wide" : ""} ${item.contained ? "is-contained" : ""} ${item.embeddedText ? "has-embedded-text" : ""} ${item.mockup ? "is-mockup" : ""} ${item.cover ? "is-cover" : ""}`} key={item.file} layout>
             <div className="asset-image-frame">
               {item.placeholder ? (
                 <div className="asset-image-placeholder" role="img" aria-label={t(item.title)} style={item.ratio ? { aspectRatio: item.ratio } : undefined}>

@@ -547,7 +547,7 @@ export function MerchBags({ t }) {
   return (
     <div className="merch-bags">
       <ShopperSwitcher t={t} />
-      <motion.article className="mb-card mb-quilted" whileHover={{ y: -2 }}>
+      <motion.article className="mb-card mb-quilted">
         <div className="mb-stage">
           <img src={merchAsset("merch-quilted.webp")} alt={t("Стёганый чехол для ноутбука и несессер с крупными буквами КРДВ")} loading="lazy" />
         </div>
@@ -556,7 +556,7 @@ export function MerchBags({ t }) {
           <p>{t("Стёганая серия: буквы КРДВ во весь предмет, сердце — на нашивке.")}</p>
         </div>
       </motion.article>
-      <motion.article className="mb-card mb-knit" whileHover={{ y: -2 }}>
+      <motion.article className="mb-card mb-knit">
         <div className="mb-stage">
           <img src={merchAsset("merch-shopper-knit.webp")} alt={t("Вязаный шоппер с буквами КРДВ")} loading="lazy" />
         </div>
@@ -759,7 +759,7 @@ export function MerchAccessories({ t }) {
   return (
     <div className="merch-acc">
       {accessoryCards.map((card) => (
-        <motion.article key={card.id} className={`ma-card span-${card.span}`} whileHover={{ y: -2 }}>
+        <motion.article key={card.id} className={`ma-card span-${card.span}`}>
           <div className={`ma-stage ${card.images.length > 1 ? "is-pair" : ""} ${card.fit === "contain" ? "is-contain" : ""}`} style={card.stage ? { background: card.stage } : undefined}>
             {card.images.map((image) => {
               const file = typeof image === "string" ? image : image.file;

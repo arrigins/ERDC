@@ -1071,7 +1071,6 @@ img {
 .keyword-wall span:hover {
   border-color: var(--line-active);
   background: var(--surface-hover);
-  transform: translateY(-1px);
 }
 
 .example-grid,
@@ -2313,7 +2312,6 @@ img {
 .type-specimen:hover {
   border-color: var(--line-hover);
   background: #ffffff;
-  transform: translateY(-2px);
 }
 
 .type-specimen span,
@@ -8584,4 +8582,46 @@ a.slide-viewer-download:focus-visible,
 
 @media (max-width: 900px) {
   .white-logo-card { grid-template-columns: 1fr; }
+}
+
+
+/* ── Мобильная проверка 19.10 (И9): зоны нажатия и кадр обложки на узком экране ── */
+@media (max-width: 640px) {
+  .hero-video.has-mobile-pos {
+    object-position: var(--hero-pos-m) !important;
+  }
+
+  /* Ссылки в футере: зона нажатия ≥ 36px без изменения вёрстки */
+  .site-footer a,
+  .site-footer button {
+    display: inline-block;
+    padding-block: 8px;
+    margin-block: -8px;
+  }
+
+  /* Кнопки форматов: выше, чтобы попадать пальцем */
+  .logo-downloads a,
+  .subsidiary-cell .logo-downloads a,
+  .svs-tabs button,
+  .logo-pair-download-row a,
+  .made-sign-download-row a,
+  .brand-logo-version a {
+    min-height: 38px;
+  }
+}
+
+@media (pointer: coarse) {
+  /* Точки переключения в «Мерче»: видимый размер прежний, зона нажатия 32px */
+  .ms-dots { gap: 2px; }
+  .ms-dots button {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    margin: 0 4px;
+  }
+  .ms-dots button::after {
+    content: "";
+    position: absolute;
+    inset: -12px -8px;
+  }
 }

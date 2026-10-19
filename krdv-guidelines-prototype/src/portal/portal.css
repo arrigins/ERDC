@@ -1387,3 +1387,36 @@ button.pp-task:hover .pp-task-media img {
   background: #1b3e92;
   color: #ffffff;
 }
+
+/* ── Мобильная проверка 19.10 (И9) ── */
+@media (max-width: 640px) {
+  /* Переключатели из 4+ вариантов (цвет ГДЛ, логотип партнёра) — в два столбца, подписи не наезжают */
+  .pp-segment:has(> label:nth-child(4)) {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pp-segment label {
+    padding: 6px 4px;
+    line-height: 1.2;
+    font-size: 14px;
+    hyphens: auto;
+  }
+
+  /* «Чтобы скачать» в нижней панели — компактнее, чтобы панель не закрывала форму */
+  .pp-actions .pp-problems {
+    gap: 2px;
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    font-size: 13.5px;
+    line-height: 1.3;
+  }
+
+  .pp-actions .pp-problems ul {
+    gap: 1px;
+  }
+
+  .pp-brand {
+    min-height: 36px;
+  }
+}
