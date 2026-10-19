@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<!--! TT Norms Pro © TypeType (ООО «ТайпТайп»), https://typetype.org. Используется по веб-лицензии АО «КРДВ» (счёт-договор № КРДВ-001 от 20.11.2023). Копирование и распространение файлов шрифта запрещено. -->
+<title>Графика КРДВ — направление</title>
+<style>
+/*! TT Norms Pro © TypeType (ООО «ТайпТайп»), https://typetype.org. Используется по веб-лицензии АО «КРДВ» (счёт-договор № КРДВ-001 от 20.11.2023). Копирование и распространение файлов шрифта запрещено. */
+@font-face { font-family: "TT Norms Pro"; src: local("TT Norms Pro Regular"), local("TTNormsPro-Regular"), url("fonts/TT-Norms-Pro-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "TT Norms Pro"; src: local("TT Norms Pro Normal"), local("TTNormsPro-Normal"), url("fonts/TT-Norms-Pro-Normal.woff2") format("woff2"); font-weight: 450; font-display: swap; }
+@font-face { font-family: "TT Norms Pro"; src: local("TT Norms Pro Medium"), local("TTNormsPro-Medium"), url("fonts/TT-Norms-Pro-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "TT Norms Pro"; src: local("TT Norms Pro Bold"), local("TTNormsPro-Bold"), url("fonts/TT-Norms-Pro-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+
+:root {
+  color-scheme: light;
+  --ink: #0b1220;
+  --text: #2c3240;
+  --muted: #6b7180;
+  --faint: #a4a8b3;
+  --line: #e4e4ea;
+  --bg: #ffffff;
+  --soft: #f4f4f7;
+  --blue: #1230f2;
+  --blue-deep: #0a1fb8;
+  --coral: #fd3d37;
+  --milk: #fffaf0;
+  --navy: #07143a;
+  --gutter: clamp(16px, 5vw, 72px);
+  --max: 1280px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 18px/1.55 "TT Norms Pro", "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; }
+h1, h2, h3, h4 { margin: 0; font-weight: 450; letter-spacing: -0.015em; }
+p { margin: 0; }
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+
+/* шапка */
+.hero { background: var(--blue); color: #fff; overflow: hidden; position: relative; }
+.hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 90% at 100% 100%, rgba(40, 170, 255, .55), transparent 70%); pointer-events: none; }
+.hero .wrap { position: relative; padding-top: 32px; padding-bottom: 56px; }
+.hero-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,.72); }
+.hero-badge { width: 56px; height: 56px; border-radius: 50%; background: #fff; color: var(--blue); display: grid; place-items: center; font-weight: 700; font-size: 14px; letter-spacing: 0; text-transform: none; }
+.hero h1 { font-size: clamp(44px, 8vw, 112px); line-height: .98; font-weight: 700; letter-spacing: -0.03em; margin-top: clamp(40px, 7vw, 96px); }
+.hero h1 span { font-weight: 400; display: block; }
+.hero-lead { margin-top: 32px; max-width: 760px; font-size: clamp(19px, 1.9vw, 24px); line-height: 1.4; color: rgba(255,255,255,.92); }
+.chip { display: inline-flex; align-items: center; border-radius: 99px; padding: 6px 14px; font-size: 15px; font-weight: 500; line-height: 1.2; }
+.chip.coral { background: var(--coral); color: #fff; }
+.chip.glass { background: rgba(255,255,255,.16); color: #fff; }
+.chip.white { background: #fff; color: var(--blue); }
+.hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+.hero-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 56px; }
+.hero-strip img { border-radius: 12px; aspect-ratio: 1; object-fit: cover; width: 100%; box-shadow: 0 20px 40px -20px rgba(0, 10, 80, .6); }
+
+/* разделы */
+section.wrap { padding-top: clamp(64px, 9vw, 120px); }
+.sec-head { display: grid; grid-template-columns: 220px 1fr; gap: 24px 48px; align-items: start; }
+.sec-num { font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding-top: 10px; }
+.sec-head h2 { font-size: clamp(32px, 4.4vw, 56px); line-height: 1.04; }
+.sec-head .lead { margin-top: 18px; font-size: clamp(19px, 1.7vw, 22px); line-height: 1.45; color: var(--text); max-width: 820px; }
+.body { margin-top: 40px; }
+.cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 48px; }
+.note { font-size: 15px; color: var(--muted); margin-top: 14px; }
+
+/* анатомия */
+.anatomy { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
+.anat-img { position: relative; border-radius: 18px; overflow: hidden; }
+.anat-img img { width: 100%; }
+.pin { position: absolute; transform: translate(-50%, -50%); width: 30px; height: 30px; border-radius: 50%; background: #fff; color: var(--ink); font-size: 14px; font-weight: 700; display: grid; place-items: center; box-shadow: 0 0 0 4px rgba(255,255,255,.35), 0 6px 16px rgba(0,0,0,.25); }
+.legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.legend li { display: grid; grid-template-columns: 36px 1fr; gap: 12px; padding: 14px 0; border-top: 1px solid var(--line); }
+.legend li:last-child { border-bottom: 1px solid var(--line); }
+.legend .n { width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 13px; font-weight: 700; display: grid; place-items: center; margin-top: 1px; }
+.legend b { font-weight: 500; display: block; }
+.legend span { color: var(--muted); font-size: 16px; }
+
+/* элементы */
+.el-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.el { border-radius: 20px; background: var(--soft); overflow: hidden; display: grid; grid-template-rows: auto 1fr; }
+.el-vis { aspect-ratio: 16 / 9; position: relative; overflow: hidden; display: grid; place-items: center; }
+.el-body { padding: 22px 24px 26px; }
+.el-tag { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.el h3 { font-size: 26px; margin-top: 6px; }
+.el p { color: var(--text); font-size: 16.5px; margin-top: 8px; }
+.el ul { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: 15.5px; color: var(--text); }
+.el li { padding-left: 18px; position: relative; }
+.el li::before { content: ""; position: absolute; left: 0; top: .62em; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+.el .ok { display: inline-block; margin-top: 14px; font-size: 13px; font-weight: 500; color: #1b6b41; background: #e2f4e9; border-radius: 99px; padding: 3px 10px; }
+.el.wide { grid-column: 1 / -1; grid-template-columns: 1.1fr 1fr; grid-template-rows: none; }
+.el.wide .el-vis { aspect-ratio: auto; min-height: 340px; }
+
+.v-field { background: var(--blue); }
+.v-field::after { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 80% at 100% 100%, rgba(40, 170, 255, .55), transparent 70%); }
+.v-field .milk { position: absolute; right: 0; top: 0; bottom: 0; width: 38%; background: var(--milk); z-index: 1; }
+.v-field .lbl { position: absolute; z-index: 2; bottom: 16px; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+.v-msg { background: var(--blue); color: #fff; padding: 28px; align-content: center; justify-items: start; text-align: left; }
+.v-msg .t1 { font-weight: 700; font-size: clamp(24px, 3vw, 40px); line-height: 1.02; letter-spacing: -0.02em; }
+.v-msg .t2 { font-size: clamp(16px, 1.7vw, 22px); margin-top: 6px; opacity: .92; }
+.v-chips { background: var(--blue); align-content: center; gap: 10px; justify-items: start; padding: 28px; }
+.v-obj { background: linear-gradient(180deg, #eef0ff, #f7f8ff); }
+.obj-row { display: flex; gap: 12px; align-items: flex-end; justify-content: center; padding: 20px; }
+.obj-row img { height: auto; max-height: 120px; max-width: 22%; object-fit: contain; }
+.v-crop { background: #000; }
+.v-crop img { width: 100%; height: 100%; object-fit: cover; }
+.v-sign { background: var(--navy); color: #fff; padding: 28px; align-content: end; justify-items: start; }
+.v-sign strong { font-size: clamp(26px, 3.2vw, 44px); font-weight: 700; line-height: 1.04; letter-spacing: -0.02em; }
+.v-sign strong em { font-style: normal; font-weight: 400; display: block; }
+.v-picto { background: var(--milk); }
+.picto-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; padding: 24px; }
+.picto { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; border: 3px solid #fff; box-shadow: 0 6px 16px rgba(10, 20, 60, .12); }
+.picto img { width: 58%; }
+
+/* знаки */
+.signs { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+.signs figure { margin: 0; }
+.signs img { border-radius: 14px; aspect-ratio: 1; object-fit: cover; width: 100%; }
+.signs figcaption { font-size: 14px; font-weight: 500; margin-top: 8px; }
+.spec { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 28px; }
+.spec div { border-top: 2px solid var(--ink); padding-top: 14px; }
+.spec b { font-weight: 500; display: block; font-size: 17px; }
+.spec p { color: var(--text); font-size: 16px; margin-top: 6px; }
+
+/* сетка */
+.grids { display: grid; grid-template-columns: 1fr 1.6fr .62fr; gap: 24px; align-items: center; }
+.grids figure { margin: 0; }
+.grids svg { width: 100%; height: auto; display: block; }
+.grids figcaption { font-size: 14px; color: var(--muted); margin-top: 10px; }
+.rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 36px; }
+.rules div { background: var(--soft); border-radius: 16px; padding: 18px 20px; }
+.rules b { font-weight: 500; display: block; }
+.rules p { font-size: 15.5px; color: var(--text); margin-top: 4px; }
+
+/* цвет */
+.palettes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.pal { min-width: 0; border-radius: 20px; background: var(--soft); padding: 20px; }
+.pal h4 { font-size: 15px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 450; }
+.pal-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+.sw { min-width: 0; overflow-wrap: anywhere; border-radius: 12px; aspect-ratio: 4 / 3; padding: 12px; display: flex; flex-direction: column; justify-content: flex-end; font-size: 13px; }
+.sw b { font-weight: 500; font-size: 15px; }
+
+/* перенос */
+.matrix { width: 100%; border-collapse: collapse; font-size: 16px; }
+.matrix th, .matrix td { padding: 14px 10px; border-bottom: 1px solid var(--line); text-align: center; }
+.matrix th { font-weight: 450; color: var(--muted); font-size: 14px; letter-spacing: .02em; }
+.matrix th:first-child, .matrix td:first-child { text-align: left; }
+.matrix td:first-child { font-weight: 500; }
+.dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--blue); }
+.dot.half { background: transparent; box-shadow: inset 0 0 0 2px var(--blue); }
+.dot.none { width: 12px; height: 2px; border-radius: 0; background: var(--faint); vertical-align: middle; }
+.matrix-wrap { overflow-x: auto; }
+.matrix-legend { display: flex; gap: 20px; flex-wrap: wrap; font-size: 14px; color: var(--muted); margin-top: 14px; }
+.matrix-legend span { display: inline-flex; gap: 8px; align-items: center; }
+
+/* эталоны */
+.refs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 12px; align-items: start; }
+.refs figure { margin: 0; min-width: 0; }
+.refs img { border-radius: 14px; width: 100%; }
+.refs img.sq { aspect-ratio: 1; object-fit: cover; }
+.refs .span2 { grid-column: span 2; }
+.refs figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+/* нельзя */
+.dont { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 48px; }
+.dont > div { display: grid; grid-template-columns: 28px 1fr; gap: 12px; padding: 16px 0; border-top: 1px solid var(--line); }
+.dont i { width: 22px; height: 22px; border-radius: 50%; border: 1.8px solid var(--coral); position: relative; margin-top: 2px; }
+.dont i::after { content: ""; position: absolute; left: 50%; top: 50%; width: 13px; height: 1.8px; background: var(--coral); transform: translate(-50%, -50%) rotate(-45deg); }
+.dont b { font-weight: 500; display: block; }
+.dont span { color: var(--muted); font-size: 16px; }
+
+/* задачи */
+.tasks { width: 100%; border-collapse: collapse; }
+.tasks td, .tasks th { padding: 16px 12px 16px 0; border-bottom: 1px solid var(--line); vertical-align: top; text-align: left; }
+.tasks th { font-size: 14px; font-weight: 450; color: var(--muted); }
+.tasks td:first-child { width: 64px; }
+.prio { display: inline-block; font-size: 13px; font-weight: 700; border-radius: 8px; padding: 3px 8px; }
+.p1 { background: var(--coral); color: #fff; }
+.p2 { background: var(--blue); color: #fff; }
+.p3 { background: var(--soft); color: var(--text); }
+.tasks b { font-weight: 500; display: block; }
+.tasks span:not(.prio) { color: var(--muted); font-size: 15.5px; }
+.tasks td:last-child { color: var(--text); font-size: 15.5px; width: 26%; }
+
+.toc { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.toc > div { background: var(--soft); border-radius: 16px; padding: 18px; min-height: 130px; display: flex; flex-direction: column; justify-content: space-between; }
+.toc span { font-size: 13px; color: var(--faint); letter-spacing: .06em; }
+.toc b { font-weight: 500; font-size: 18px; line-height: 1.2; }
+.toc p { font-size: 14px; color: var(--muted); margin-top: 6px; }
+
+.qs { counter-reset: q; display: grid; gap: 0; }
+.qs p { counter-increment: q; padding: 16px 0 16px 48px; border-top: 1px solid var(--line); position: relative; color: var(--text); }
+.qs p::before { content: counter(q); position: absolute; left: 0; top: 16px; width: 28px; height: 28px; border-radius: 50%; background: var(--soft); display: grid; place-items: center; font-size: 13px; font-weight: 700; color: var(--ink); }
+
+.foot { margin-top: clamp(80px, 10vw, 140px); background: var(--navy); color: rgba(255,255,255,.8); }
+.foot .wrap { padding-top: 48px; padding-bottom: 56px; display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; font-size: 15px; }
+.foot b { color: #fff; font-weight: 500; }
+
+@media (max-width: 980px) {
+  .sec-head { grid-template-columns: 1fr; gap: 8px; }
+  .anatomy, .el.wide, .palettes { grid-template-columns: 1fr; }
+  .el-grid { grid-template-columns: 1fr; }
+  .signs { grid-template-columns: repeat(3, 1fr); }
+  .spec, .rules { grid-template-columns: 1fr; }
+  .grids { grid-template-columns: 1fr 1fr; }
+  .grids figure:nth-child(2) { grid-column: 1 / -1; order: -1; }
+  .refs { grid-template-columns: 1fr 1fr; }
+  .refs .span2 { grid-column: 1 / -1; }
+  .toc { grid-template-columns: 1fr 1fr; }
+  .dont { grid-template-columns: 1fr; }
+  .cols { grid-template-columns: 1fr; }
+  .hero-strip { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 560px) {
+  .tasks td:last-child { display: none; }
+  .tasks th:last-child { display: none; }
+  .picto-row { grid-template-columns: repeat(3, 1fr); }
+  .pal-row { gap: 6px; }
+  .sw { padding: 8px; font-size: 11.5px; }
+  .sw b { font-size: 13px; }
+}
+@media print {
+  .hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  section { break-inside: avoid-page; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top"><span class="hero-badge">КРДВ</span><span>Бриф для дизайн-команды · октябрь 2026</span></div>
+    <h1>Графика КРДВ<span>направление развития</span></h1>
+    <p class="hero-lead">Новую графику придумывать не нужно. В соцсетях КРДВ уже сложился сильный язык: синее поле, белое сообщение, метки и объёмный объект. Задача — назвать его элементы, закрепить правила и перенести на все носители: от презентации до стенда.</p>
+    <div class="hero-chips"><span class="chip coral">черновик для обсуждения</span><span class="chip glass">раздел «Графика» в брендбуке — после «Цвета»</span></div>
+    <div class="hero-strip">
+      <img src="assets/social/r35-lg.webp" alt="">
+      <img src="assets/social/r03-lg.webp" alt="">
+      <img src="assets/social/r28-lg.webp" alt="">
+      <img src="assets/social/r12-lg.webp" alt="">
+      <img src="assets/portal/examples/ex-r24.webp" alt="">
+      <img src="assets/portal/examples/ex-r25.webp" alt="">
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- 01 -->
+  <section class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">01 — Отправная точка</div>
+      <div>
+        <h2>Язык уже есть. Он просто не назван</h2>
+        <p class="lead">Возьмём типовой пост. В нём восемь повторяющихся элементов — они же встречаются на билбордах СПВ, в мерче и на обложках брендбука. Это и есть графическая система, которую нужно закрепить.</p>
+      </div>
+    </div>
+    <div class="body anatomy">
+      <div class="anat-img">
+        <img src="assets/social/r35-lg.webp" alt="Пост «Управление креативными пространствами»">
+        <span class="pin" style="left:18%;top:5%">1</span>
+        <span class="pin" style="left:38.5%;top:21.5%">2</span>
+        <span class="pin" style="left:66%;top:36.5%">3</span>
+        <span class="pin" style="left:78.5%;top:43%">4</span>
+        <span class="pin" style="left:70%;top:60%">5</span>
+        <span class="pin" style="left:92%;top:62%">6</span>
+        <span class="pin" style="left:88%;top:12%">7</span>
+        <span class="pin" style="left:6%;top:89.5%">8</span>
+      </div>
+      <ol class="legend">
+        <li><span class="n">1</span><div><b>Знак</b><span>Логотип в белом круге — 1/9 стороны, отступ 1/18. Уже описан в «Дизайне соцсетей».</span></div></li>
+        <li><span class="n">2</span><div><b>Метка-статус</b><span>Коралловая плашка: срок, старт, новость. Одна на макет.</span></div></li>
+        <li><span class="n">3</span><div><b>Сообщение</b><span>Крупный заголовок Bold, белым, по левому краю.</span></div></li>
+        <li><span class="n">4</span><div><b>Уточнение</b><span>Подзаголовок Regular, тем же цветом — без смены гарнитуры.</span></div></li>
+        <li><span class="n">5</span><div><b>Метки-уточнения</b><span>Полупрозрачные или белые плашки: аудитория, место, условие.</span></div></li>
+        <li><span class="n">6</span><div><b>Объект</b><span>Объёмный предмет — смысл сообщения. Справа снизу, по диагонали к тексту.</span></div></li>
+        <li><span class="n">7</span><div><b>Поле</b><span>Насыщенный синий с мягким световым перепадом внутри одного цвета.</span></div></li>
+        <li><span class="n">8</span><div><b>Служебная строка</b><span>Организаторы, источник, условия — мелко, внизу, на всю ширину.</span></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">02 — Элементы</div>
+      <div>
+        <h2>Восемь элементов системы</h2>
+        <p class="lead">Каждый элемент описывается одинаково: что это, где уже работает, правила. Зелёная отметка — пункт уже согласован для брендбука.</p>
+      </div>
+    </div>
+    <div class="body el-grid">
+
+      <article class="el">
+        <div class="el-vis v-field"><div class="milk"></div><span class="lbl" style="left:16px;color:#fff">Синее поле</span><span class="lbl" style="right:16px;color:#7a6a4a">Молочное</span></div>
+        <div class="el-body">
+          <div class="el-tag">Поле</div>
+          <h3>Два фона, а не десять</h3>
+          <p>Основной — насыщенный синий, дополнительный — молочный. Цвет режима — поле для материалов этого режима.</p>
+          <ul><li>Внутри поля — только световой перепад того же цвета, без разноцветных пятен</li><li>Готовые фоны — файлами, а не «на глаз» каждый раз</li><li>Фото — отдельным окном на поле, а не подложкой под весь текст</li></ul>
+        </div>
+      </article>
+
+      <article class="el">
+        <div class="el-vis v-msg"><div class="t1">Грантовый конкурс<br>на съёмку фильмов</div><div class="t2">о Дальнем Востоке</div></div>
+        <div class="el-body">
+          <div class="el-tag">Сообщение</div>
+          <h3>Одна мысль крупно</h3>
+          <p>Заголовок — главное на макете. Всё остальное ему подчиняется.</p>
+          <ul><li>TT Norms Pro: Bold для заголовка, Regular для уточнения</li><li>По левому краю, без центровки и капса в длинных фразах</li><li>Шкала кеглей от стороны макета — задаётся сеткой (раздел 04)</li></ul>
+        </div>
+      </article>
+
+      <article class="el">
+        <div class="el-vis v-chips"><span class="chip coral">приём заявок до 28 июля</span><span class="chip glass">для управленческих команд</span><span class="chip white">станьте резидентом СПВ</span></div>
+        <div class="el-body">
+          <div class="el-tag">Метки</div>
+          <h3>Плашка — общий элемент соцсетей и наружки</h3>
+          <p>Скруглённая плашка уже работает в постах и на билбордах СПВ. Её стоит закрепить как систему из трёх видов.</p>
+          <ul><li>Коралловая — статус и срок, одна на макет</li><li>Полупрозрачная — уточнение на синем поле</li><li>Белая — призыв к действию, текст цветом поля</li></ul>
+        </div>
+      </article>
+
+      <article class="el">
+        <div class="el-vis v-obj"><div class="obj-row"><img src="assets/portal/illustrations/il-01.webp" alt=""><img src="assets/portal/illustrations/il-08.webp" alt=""><img src="assets/regime-signs/regime-spv-wide.webp" alt="" style="max-width:26%;border-radius:14px"><img src="assets/portal/illustrations/il-16.webp" alt=""></div></div>
+        <div class="el-body">
+          <div class="el-tag">Объект</div>
+          <h3>Один объёмный предмет — смысл сообщения</h3>
+          <p>Два материала: глянец — для коммуникации (иконки портала, пузыри соцсетей), стекло — для режимов и программ.</p>
+          <ul><li>Свет сверху слева, мягкая контактная тень, ракурс ¾</li><li>Один объект на макет, можно обрезать краем</li><li>Фирменные цвета, без обводок и нефирменных оттенков</li></ul>
+          <span class="ok">✓ согласовано (Б5)</span>
+        </div>
+      </article>
+
+      <article class="el">
+        <div class="el-vis v-crop"><img src="assets/merch/merch-quilted.webp" alt="Чехол с крупными буквами КРДВ"></div>
+        <div class="el-body">
+          <div class="el-tag">Крупный кроп</div>
+          <h3>Буквы, которые не помещаются</h3>
+          <p>Приём из мерча: «КР» и «ДВ» уходят за край предмета. Работает как суперграфика без логотипа.</p>
+          <ul><li>Для мерча, стендов, сцены, обложек отчётов</li><li>Буквы — только КРДВ, без других слов</li><li>Не на одном макете с объектом: кроп — сам по себе главный герой</li></ul>
+        </div>
+      </article>
+
+      <article class="el">
+        <div class="el-vis v-sign"><strong>КРДВ.<em>Заряжены на развитие</em></strong></div>
+        <div class="el-body">
+          <div class="el-tag">Подпись</div>
+          <h3>«КРДВ. + фраза»</h3>
+          <p>Сейчас живёт только на предметах. Становится фирменным завершением: последняя карточка поста, финальный слайд, подпись под билбордом.</p>
+          <ul><li>«КРДВ.» — Bold, фраза — Regular, всегда две строки</li><li>Фраза короткая и с характером, по правилам «Как мы говорим»</li><li>Банк одобренных фраз — в брендбуке</li></ul>
+          <span class="ok">✓ согласовано (Б6)</span>
+        </div>
+      </article>
+
+      <article class="el">
+        <div class="el-vis v-picto"><div class="picto-row">
+          <span class="picto" style="background:#1230F2"><img src="assets/social/trail/deer-white.webp" alt=""></span>
+          <span class="picto" style="background:#FD3D37"><img src="assets/social/trail/fish-white.webp" alt=""></span>
+          <span class="picto" style="background:#00a8ea"><img src="assets/social/trail/icebreaker-white.webp" alt=""></span>
+          <span class="picto" style="background:#fff"><img src="assets/social/trail/whale.webp" alt=""></span>
+          <span class="picto" style="background:#dff1fb"><img src="assets/social/trail/train.webp" alt=""></span>
+        </div></div>
+        <div class="el-body">
+          <div class="el-tag">Пиктограммы</div>
+          <h3>Плоский слой для навигации</h3>
+          <p>Пиктограммы КРДВ в круге. Это плоская пара к объёмным объектам: навигация, списки, инфографика.</p>
+          <ul><li>Одна сетка и толщина линии, круглая подложка</li><li>Пиктограмма и 3D-объект не смешиваются в одном блоке</li><li>Набор эмодзи для Telegram — из той же библиотеки</li></ul>
+          <span class="ok">✓ согласовано (Б5)</span>
+        </div>
+      </article>
+
+      <article class="el">
+        <div class="el-vis" style="background:#223e9a"><img src="assets/brandbook/raster/adv-spv-board-nakhodka-1.webp" alt="Билборд СПВ" style="width:100%;height:100%;object-fit:contain"></div>
+        <div class="el-body">
+          <div class="el-tag">Окно</div>
+          <h3>Фото — в окне с направлением</h3>
+          <p>На билбордах СПВ фото обрезано стрелкой вперёд, город — в круге. Стоит проверить, может ли это окно стать общим правилом для фото на синем поле.</p>
+          <ul><li>Одна форма окна на кампанию</li><li>Фото по правилам «Фотостиля»</li><li>Вопрос к команде: закрепляем или оставляем приёмом СПВ</li></ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">03 — Знаки режимов</div>
+      <div>
+        <h2>Из 3D — в вектор</h2>
+        <p class="lead">Старые линейные знаки выводятся из обращения. Единственная актуальная версия — объёмная. Из неё нужно собрать плоский вектор для документов, печати, мелких размеров и навигации.</p>
+      </div>
+    </div>
+    <div class="body">
+      <div class="signs">
+        <figure><img src="assets/regime-signs/regime-tor-wide.webp" alt=""><figcaption>ТОР</figcaption></figure>
+        <figure><img src="assets/regime-signs/regime-spv-wide.webp" alt=""><figcaption>СПВ</figcaption></figure>
+        <figure><img src="assets/regime-signs/regime-azrf-wide.webp" alt=""><figcaption>АЗРФ</figcaption></figure>
+        <figure><img src="assets/regime-signs/regime-intc-wide.webp" alt=""><figcaption>ИНТЦ</figcaption></figure>
+        <figure><img src="assets/regime-signs/regime-korf-wide.webp" alt=""><figcaption>КОРФ</figcaption></figure>
+        <figure><img src="assets/regime-signs/regime-sar-wide.webp" alt=""><figcaption>САР</figcaption></figure>
+      </div>
+      <div class="spec">
+        <div><b>Что собрать</b><p>Плоский знак по силуэту 3D: форма, пропорции и скругления — как у объёмного, внутренний объём — одним-двумя тонами цвета режима.</p></div>
+        <div><b>Версии</b><p>Цветная (на светлом) и белая (на цвете режима и фото). Минимальный размер — проверить на 16 и 24 px.</p></div>
+        <div><b>Форматы</b><p>SVG и PNG для экранов, PDF в CMYK для печати. Цвета — из утверждённой палитры направлений.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">04 — Сетка</div>
+      <div>
+        <h2>Один модуль на все форматы</h2>
+        <p class="lead">В соцсетях модуль уже есть: отступ — 1/18 стороны, знак — 1/9. Предлагаю считать его от короткой стороны любого носителя. Тогда пост, сторис, слайд и роллап собираются по одному правилу.</p>
+      </div>
+    </div>
+    <div class="body">
+      <div class="grids">
+        <figure>
+          <svg viewBox="0 0 180 180" aria-label="Сетка поста 1:1">
+            <defs><pattern id="m1" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M10 0H0V10" fill="none" stroke="#cfd5ff" stroke-width=".5"/></pattern></defs>
+            <rect width="180" height="180" rx="6" fill="#f4f5ff"/><rect width="180" height="180" fill="url(#m1)"/>
+            <rect x="10" y="10" width="160" height="160" fill="none" stroke="#1230f2" stroke-width="1" stroke-dasharray="3 2"/>
+            <circle cx="20" cy="20" r="10" fill="#1230f2"/>
+            <rect x="10" y="40" width="110" height="34" fill="#1230f2" opacity=".18"/>
+            <text x="14" y="60" font-size="7" fill="#1230f2" font-family="sans-serif">сообщение</text>
+            <rect x="100" y="100" width="70" height="60" rx="4" fill="#fd3d37" opacity=".22"/>
+            <text x="108" y="133" font-size="7" fill="#c92a25" font-family="sans-serif">объект</text>
+            <rect x="10" y="162" width="160" height="6" fill="#0b1220" opacity=".12"/>
+          </svg>
+          <figcaption>Пост 1:1 — модуль = 1/18 стороны</figcaption>
+        </figure>
+        <figure>
+          <svg viewBox="0 0 320 180" aria-label="Сетка слайда 16:9">
+            <defs><pattern id="m2" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M10 0H0V10" fill="none" stroke="#cfd5ff" stroke-width=".5"/></pattern></defs>
+            <rect width="320" height="180" rx="6" fill="#f4f5ff"/><rect width="320" height="180" fill="url(#m2)"/>
+            <rect x="10" y="10" width="300" height="160" fill="none" stroke="#1230f2" stroke-width="1" stroke-dasharray="3 2"/>
+            <rect x="10" y="10" width="46" height="12" fill="#1230f2" opacity=".85"/>
+            <rect x="10" y="90" width="150" height="40" fill="#1230f2" opacity=".18"/>
+            <text x="14" y="113" font-size="7" fill="#1230f2" font-family="sans-serif">сообщение — левая половина</text>
+            <rect x="190" y="40" width="120" height="120" rx="4" fill="#fd3d37" opacity=".22"/>
+            <text x="198" y="104" font-size="7" fill="#c92a25" font-family="sans-serif">объект или окно с фото</text>
+            <rect x="10" y="162" width="300" height="6" fill="#0b1220" opacity=".12"/>
+          </svg>
+          <figcaption>Слайд 16:9 — тот же модуль от высоты</figcaption>
+        </figure>
+        <figure>
+          <svg viewBox="0 0 100 225" aria-label="Сетка роллапа">
+            <defs><pattern id="m3" width="5.56" height="5.56" patternUnits="userSpaceOnUse"><path d="M5.56 0H0V5.56" fill="none" stroke="#cfd5ff" stroke-width=".4"/></pattern></defs>
+            <rect width="100" height="225" rx="5" fill="#f4f5ff"/><rect width="100" height="225" fill="url(#m3)"/>
+            <rect x="5.56" y="5.56" width="88.9" height="213.9" fill="none" stroke="#1230f2" stroke-width=".8" stroke-dasharray="2.5 1.5"/>
+            <rect x="5.56" y="11" width="40" height="10" fill="#1230f2" opacity=".85"/>
+            <rect x="5.56" y="40" width="80" height="42" fill="#1230f2" opacity=".18"/>
+            <rect x="30" y="120" width="64" height="64" rx="4" fill="#fd3d37" opacity=".22"/>
+            <rect x="5.56" y="200" width="70" height="8" fill="#0b1220" opacity=".12"/>
+          </svg>
+          <figcaption>Роллап — сообщение на уровне глаз</figcaption>
+        </figure>
+      </div>
+      <div class="rules">
+        <div><b>Модуль</b><p>1/18 короткой стороны. Поля — один модуль, знак — два модуля.</p></div>
+        <div><b>Диагональ</b><p>Сообщение — слева сверху, объект или фото — справа снизу. Это даёт ритм и не даёт им спорить.</p></div>
+        <div><b>Кегли от модуля</b><p>Заголовок, уточнение и служебная строка — фиксированные доли модуля для каждого формата.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">05 — Цвет</div>
+      <div>
+        <h2>Палитра практики и палитра брендбука расходятся</h2>
+        <p class="lead">Соцсети работают на ярком синем, коралловом и молочном — их нет в разделе «Цвет». Основной синий брендбука темнее и спокойнее. Нужно решение: утвердить «цифровую» пару официально или привести соцсети к основной палитре.</p>
+      </div>
+    </div>
+    <div class="body palettes">
+      <div class="pal">
+        <h4>Брендбук, раздел «Цвет»</h4>
+        <div class="pal-row">
+          <div class="sw" style="background:#0056A2;color:#fff"><b>Синий</b>#0056A2</div>
+          <div class="sw" style="background:#22A8E0;color:#fff"><b>Голубой</b>#22A8E0</div>
+          <div class="sw" style="background:#DE2327;color:#fff"><b>Красный</b>#DE2327</div>
+        </div>
+      </div>
+      <div class="pal">
+        <h4>Соцсети — снято с постов</h4>
+        <div class="pal-row">
+          <div class="sw" style="background:#1230F2;color:#fff"><b>Синий</b>#1230F2</div>
+          <div class="sw" style="background:#FD3D37;color:#fff"><b>Коралловый</b>#FD3D37</div>
+          <div class="sw" style="background:#FFFAF0;color:#5b4a2c"><b>Молочный</b>#FFFAF0</div>
+        </div>
+      </div>
+    </div>
+    <p class="wrap note" style="padding:0">Значения соцсетей сняты пипеткой — их нужно сверить с исходниками дизайн-команды.</p>
+  </section>
+
+  <!-- 06 -->
+  <section class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">06 — Перенос</div>
+      <div>
+        <h2>Где какой элемент работает</h2>
+        <p class="lead">Система не значит «везде одинаково». Документы остаются спокойными, а мерч и сцена — самые выразительные.</p>
+      </div>
+    </div>
+    <div class="body">
+      <div class="matrix-wrap">
+        <table class="matrix">
+          <tr><th></th><th>Соцсети</th><th>Презентации</th><th>Наружка</th><th>Стенды и сцена</th><th>Мерч</th><th>Документы</th></tr>
+          <tr><td>Поле</td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot half"></i></td><td><i class="dot none"></i></td></tr>
+          <tr><td>Сообщение</td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot half"></i></td><td><i class="dot half"></i></td></tr>
+          <tr><td>Метки</td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot half"></i></td><td><i class="dot none"></i></td><td><i class="dot none"></i></td></tr>
+          <tr><td>Объект</td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot half"></i></td><td><i class="dot"></i></td><td><i class="dot half"></i></td><td><i class="dot none"></i></td></tr>
+          <tr><td>Крупный кроп</td><td><i class="dot half"></i></td><td><i class="dot half"></i></td><td><i class="dot none"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot none"></i></td></tr>
+          <tr><td>Подпись</td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot none"></i></td></tr>
+          <tr><td>Пиктограммы</td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot none"></i></td><td><i class="dot half"></i></td><td><i class="dot half"></i></td><td><i class="dot"></i></td></tr>
+          <tr><td>Знаки режимов (вектор)</td><td><i class="dot half"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot none"></i></td><td><i class="dot"></i></td></tr>
+        </table>
+      </div>
+      <div class="matrix-legend"><span><i class="dot"></i>основной приём</span><span><i class="dot half"></i>по ситуации</span><span><i class="dot none"></i>не используем</span></div>
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">07 — Эталоны</div>
+      <div>
+        <h2>На что равняемся</h2>
+        <p class="lead">Лучшие уже сделанные работы — они станут примерами в разделе. Новых макетов для брендбука рисовать не нужно, пока не утверждены правила.</p>
+      </div>
+    </div>
+    <div class="body refs">
+      <figure class="span2"><img src="assets/brandbook/raster/adv-spv-screen-alenka.webp" alt=""><figcaption>Экран СПВ: поле режима, окно с фото, белая плашка, метка «Сделано в»</figcaption></figure>
+      <figure><img class="sq" src="assets/social/r03-lg.webp" alt=""><figcaption>Пост: сообщение, метка, объект</figcaption></figure>
+      <figure><img class="sq" src="assets/social/r20-lg.webp" alt=""><figcaption>Молочное поле, фото в кругах</figcaption></figure>
+      <figure><img class="sq" src="assets/portal/examples/ex-r02.webp" alt=""><figcaption>Объект в глянце</figcaption></figure>
+      <figure><img class="sq" src="assets/hero/cover-made-stickers-dark.webp" alt=""><figcaption>Знак «Сделано в» в объёме</figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 08 -->
+  <section class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">08 — Ограничения</div>
+      <div>
+        <h2>Чего в системе нет</h2>
+      </div>
+    </div>
+    <div class="body dont">
+      <div><i></i><div><b>Разноцветные размытые пятна</b><span>Фон — один цвет со световым перепадом, а не смесь оттенков.</span></div></div>
+      <div><i></i><div><b>Декоративные формы без смысла</b><span>Волны, лепестки, абстрактные фигуры «для красоты».</span></div></div>
+      <div><i></i><div><b>Старые линейные знаки режимов</b><span>Только объёмная версия и собранный из неё вектор.</span></div></div>
+      <div><i></i><div><b>Несколько объектов на макете</b><span>Один герой. Остальное — метки и текст.</span></div></div>
+      <div><i></i><div><b>3D и пиктограммы в одном блоке</b><span>Объём и плоскость — разные слои, не смешиваются.</span></div></div>
+      <div><i></i><div><b>Цвета вне палитры</b><span>Включая «почти фирменные» оттенки синего.</span></div></div>
+    </div>
+  </section>
+
+  <!-- 09 -->
+  <section class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">09 — Задачи</div>
+      <div>
+        <h2>Что нужно от дизайн-команды</h2>
+        <p class="lead">Порядок — по влиянию: сначала то, без чего нельзя выпустить раздел.</p>
+      </div>
+    </div>
+    <div class="body">
+      <table class="tasks">
+        <tr><th>Приоритет</th><th>Задача</th><th>Результат</th></tr>
+        <tr><td><span class="prio p1">1</span></td><td><b>Вектор знаков режимов из 3D</b><span>6 знаков, цветная и белая версии, проверка на мелком размере.</span></td><td>SVG, PNG, PDF (CMYK)</td></tr>
+        <tr><td><span class="prio p1">1</span></td><td><b>Решение по цвету</b><span>Утвердить «цифровую» пару (#1230F2, #FD3D37, #FFFAF0) или привести соцсети к основной палитре.</span></td><td>Значения RGB/CMYK, роли цветов</td></tr>
+        <tr><td><span class="prio p1">1</span></td><td><b>Правила 3D-объектов</b><span>Материалы (глянец и стекло), свет, ракурс, тень. Исходники сцены, чтобы новые объекты делались одинаково.</span></td><td>Описание + исходник + PNG с прозрачностью</td></tr>
+        <tr><td><span class="prio p2">2</span></td><td><b>Сетка для пяти форматов</b><span>Пост 1:1, сторис 9:16, слайд 16:9, А4, роллап. Модуль, поля, зоны, кегли.</span></td><td>Схемы + шаблоны</td></tr>
+        <tr><td><span class="prio p2">2</span></td><td><b>Метки</b><span>Три вида плашек: размеры от модуля, скругление, отступы, цвета.</span></td><td>Компоненты</td></tr>
+        <tr><td><span class="prio p2">2</span></td><td><b>Пиктограммы</b><span>Сетка, толщина линии, подложки, полный набор и эмодзи для Telegram.</span></td><td>SVG-библиотека</td></tr>
+        <tr><td><span class="prio p3">3</span></td><td><b>Подпись «КРДВ. + фраза»</b><span>Построение и банк фраз (по 5–10 на тему: бизнес, люди, территории).</span></td><td>Правило + список</td></tr>
+        <tr><td><span class="prio p3">3</span></td><td><b>Крупный кроп</b><span>Сколько обрезать, где ставить, с чем не сочетать.</span></td><td>Правило + 2 примера</td></tr>
+        <tr><td><span class="prio p3">3</span></td><td><b>Примеры сборки</b><span>4–6 носителей по системе — после утверждения правил.</span></td><td>Макеты для брендбука</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">10 — В брендбуке</div>
+      <div>
+        <h2>Как ляжет раздел «Графика»</h2>
+        <p class="lead">Раздел встаёт после «Цвета». Каждый подраздел — правило, эталонный пример и файлы для скачивания.</p>
+      </div>
+    </div>
+    <div class="body toc">
+      <div><span>01</span><div><b>Принцип</b><p>Объём и плоскость, диагональ</p></div></div>
+      <div><span>02</span><div><b>Поле и цвет</b><p>Синее, молочное, цвет режима</p></div></div>
+      <div><span>03</span><div><b>Сообщение и метки</b><p>Заголовок, уточнение, три плашки</p></div></div>
+      <div><span>04</span><div><b>Объекты</b><p>Глянец и стекло, библиотека</p></div></div>
+      <div><span>05</span><div><b>Знаки режимов</b><p>3D и вектор</p></div></div>
+      <div><span>06</span><div><b>Пиктограммы</b><p>Набор и эмодзи</p></div></div>
+      <div><span>07</span><div><b>Подпись и кроп</b><p>«КРДВ. + фраза», крупные буквы</p></div></div>
+      <div><span>08</span><div><b>Сетка</b><p>Модуль и пять форматов</p></div></div>
+    </div>
+  </section>
+
+  <!-- 11 -->
+  <section class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">11 — Вопросы</div>
+      <div><h2>Что решить вместе</h2></div>
+    </div>
+    <div class="body qs">
+      <p>«Цифровая» синяя и коралловая — официальные цвета бренда или только соцсетей?</p>
+      <p>Окно-стрелка с билбордов СПВ — общий приём или особенность кампании СПВ?</p>
+      <p>Рукописная линия (посты про вакансии и креативные индустрии) — элемент системы или разовая находка?</p>
+      <p>Где у дизайн-команды лежат исходники 3D-сцен и можно ли их передать для единых правил?</p>
+      <p>Нужны ли объёмные версии логотипов ДО и программ (Гектар, МА 2030), или объём — только у режимов?</p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span><b>Графика КРДВ — направление развития</b><br>Черновик для обсуждения с дизайн-командой</span>
+    <span>Подготовлено для веб-брендбука АО «КРДВ»<br>19 октября 2026</span>
+  </div>
+</footer>
+</body>
+</html>
