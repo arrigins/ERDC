@@ -422,6 +422,52 @@ p { margin: 0; }
 .end h2 { font-size: clamp(24px, 3vw, 34px); }
 .end p { color: #b9c3da; margin-top: 10px; max-width: 760px; }
 
+
+/* ── v2: карточка файла ── */
+.tag.new2 { background: #e6ecfb; color: var(--ui); }
+.removed { display: flex; flex-wrap: wrap; gap: 8px; }
+.removed span { background: #fff; border-radius: 99px; padding: 6px 12px; font-size: 14px; color: #7a2a2a; text-decoration: line-through; text-decoration-color: rgba(201,60,60,.45); }
+.ac-grid { display: grid; grid-template-columns: 1fr 1.4fr 1fr 1fr; gap: 12px; }
+.ac-grid.is-3 { grid-template-columns: repeat(3, 1fr); }
+.ac { background: #fff; border-radius: 16px; padding: 8px; display: flex; flex-direction: column; min-width: 0; }
+.ac-prev { position: relative; aspect-ratio: 4 / 3; border-radius: 12px; background: #f3f3f6; display: grid; place-items: center; overflow: hidden; }
+.ac.is-wide .ac-prev { aspect-ratio: auto; height: 100%; min-height: 0; }
+.ac-prev.blue { background: #0056a2; }
+.ac-prev.tor-bg { background: #f5f0f5; }
+.ac-prev img { max-width: 58%; max-height: 52%; }
+.ac.is-wide .ac-prev img { max-width: 70%; }
+.ac-meta { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 12px 8px 8px; }
+.ac-title { font-size: 16px; font-weight: 450; line-height: 1.25; }
+.ac-lang { display: inline-flex; gap: 10px; font-size: 14px; flex: none; }
+.ac-lang button { border: 0; background: none; padding: 0; cursor: pointer; color: var(--faint); font: inherit; }
+.ac-lang button[aria-pressed="true"] { color: var(--ink); }
+.ac-lang button:hover { color: var(--ui); }
+/* А: форматы при наведении */
+.ac-pills { position: absolute; left: 8px; right: 8px; bottom: 8px; display: flex; gap: 6px; opacity: 0; transform: translateY(6px); transition: opacity .2s, transform .2s; }
+.ac-prev:hover .ac-pills, .ac-prev:focus-within .ac-pills { opacity: 1; transform: none; }
+.ac-pills a { flex: 1; text-align: center; background: rgba(255,255,255,.9); backdrop-filter: blur(8px); border-radius: 10px; padding: 9px 0; font-size: 13px; font-weight: 500; letter-spacing: .03em; color: var(--ink); text-decoration: none; box-shadow: 0 1px 2px rgba(10,20,40,.08); transition: background .15s, color .15s; }
+.ac-pills a:hover { background: var(--ui); color: #fff; }
+@media (hover: none) { .ac-pills { opacity: 1; transform: none; left: 6px; right: 6px; bottom: 6px; gap: 4px; } .ac-pills a { padding: 7px 0; font-size: 12px; } .ac-prev:has(.ac-pills) { aspect-ratio: auto; height: auto; padding: 14px 0 50px; } .ac-prev:has(.ac-pills) img { max-height: 90px; } }
+/* Б: кнопка в углу */
+.ac-ic { position: absolute; top: 8px; right: 8px; display: flex; align-items: center; background: #fff; border-radius: 99px; box-shadow: 0 2px 10px rgba(10,20,40,.12); }
+.ac-ic button { width: 36px; height: 36px; border: 0; border-radius: 50%; background: none; cursor: pointer; display: grid; place-items: center; color: var(--ink); }
+.ac-ic button:hover { color: var(--ui); }
+.ac-ic svg { width: 16px; height: 16px; }
+.ac-fmts { display: flex; max-width: 0; overflow: hidden; transition: max-width .3s ease; }
+.ac-ic.open .ac-fmts { max-width: 180px; padding-left: 6px; }
+.ac-fmts a { padding: 8px 8px; font-size: 13px; font-weight: 500; letter-spacing: .03em; color: var(--ink); text-decoration: none; border-radius: 99px; white-space: nowrap; }
+.ac-fmts a:hover { background: var(--ui); color: #fff; }
+/* В: текстом */
+.ac-txt { display: flex; gap: 16px; padding: 0 8px 8px; }
+.ac-txt a { color: var(--muted); text-decoration: none; font-size: 13.5px; font-weight: 500; letter-spacing: .03em; padding: 4px 0; border-bottom: 1px solid transparent; }
+.ac-txt a:hover { color: var(--ui); border-bottom-color: currentColor; }
+.variants { display: grid; gap: 16px; margin-top: 24px; }
+.fmt-line { font-size: 14px; color: var(--muted); }
+.menu-new hr { border: 0; border-top: 1px solid var(--line); margin: 12px 0 6px; }
+.menu-new .maybe::after { content: "если Б2"; }
+@media (max-width: 900px) { .ac-grid { grid-template-columns: 1fr 1fr; } .ac-grid.is-3 { grid-template-columns: 1fr 1fr 1fr; } .ac.is-wide .ac-prev { aspect-ratio: 4 / 3; height: auto; } }
+@media (max-width: 560px) { .ac-grid.is-3 { grid-template-columns: 1fr 1fr; } .ac-meta { flex-direction: column; gap: 4px; } }
+
 @media (max-width: 900px) {
   .ba, .struct { grid-template-columns: 1fr; }
   .pane { height: auto; }
@@ -482,133 +528,66 @@ p { margin: 0; }
 
   <h3 class="group-title">Файлы и скачивание</h3>
 
-  <article class="item" data-id="И1" data-title="Единая карточка файла">
+  <article class="item" data-id="И1" data-title="Единая карточка файла (версия 2)">
     <div class="item-head">
       <span class="item-id">И1</span>
       <div>
-        <h2>Единая карточка файла</h2>
-        <p class="item-what">Логотипы КРДВ, логотипы ДО, знаки режимов, «Сделано в…», Гектар, МА 2030, ИНТЦ — всё показываем одной карточкой. В превью переключатель фона, под ним язык и одна кнопка «Скачать».</p>
-        <div class="tags"><span class="tag mid">Объём: средний</span><span class="tag">Затрагивает 6 разделов</span><span class="tag">Белые логотипы перестают быть отдельным блоком</span></div>
+        <h2>Единая карточка файла — вторая версия</h2>
+        <p class="item-what">Переделала по вашим замечаниям. В карточке только превью и название. Язык «Рус / Eng» — рядом с названием и только там, где есть английская версия. Белый логотип — отдельной карточкой, один раз, на фирменном синем.</p>
+        <div class="tags"><span class="tag new2">Новая версия по вашим комментариям</span><span class="tag mid">Объём: средний</span></div>
       </div>
     </div>
     <div class="ba stack">
       <div>
-        <div class="ba-label">Сейчас: 5 разных устройств</div>
+        <div class="ba-label">Что убрала из первой версии</div>
         <div class="pane">
-          <div class="shots shots-4">
-            <img src="review/now-logo-pair.webp" alt="Карточка пары логотипов">
-            <img src="review/now-made-card.webp" alt="Карточка знака «Сделано в»">
-            <img src="review/now-regime-card.webp" alt="Карточка знака режима">
-            <img class="wl" src="review/now-white-logo.webp" alt="Листалка белых логотипов">
-            <img class="full" src="review/now-brand-versions.webp" alt="Версии логотипа Гектара">
+          <div class="removed">
+            <span>Кружки выбора фона в превью</span><span>«только RU»</span><span>Пояснения «На тёмном фоне скачается белая»</span><span>Белый логотип на двух фонах</span><span>Имена файлов</span><span>Выпадающее меню</span>
           </div>
-          <p class="pane-note">Где-то подпись «Русская», где-то «RU»; описание то над кнопками, то сбоку; у белых логотипов отдельная листалка. Человеку каждый раз нужно разбираться заново.</p>
         </div>
       </div>
       <div class="ba-after">
-        <div class="ba-label">Предлагаю: одна карточка на всё (можно нажимать)</div>
+        <div class="ba-label">Предлагаю (наведите на превью — появятся форматы; можно скачать)</div>
         <div class="pane">
-          <div class="fc-row">
-            <div class="fc" data-card="krdv">
-              <div class="fc-prev" data-bg="light">
-                <img alt="Логотип КРДВ" data-src-light="assets/logos/krdv-logo-{lang}-square.svg" data-src-dark="assets/logos/krdv-logo-{lang}-square-white.svg" data-src-blue="assets/logos/krdv-logo-{lang}-square-white.svg" src="assets/logos/krdv-logo-ru-square.svg">
-                <div class="fc-bg" aria-label="Фон превью">
-                  <button aria-pressed="true" data-bg="light" style="background:#f3f3f6" aria-label="Светлый фон"></button>
-                  <button aria-pressed="false" data-bg="dark" style="background:#10141c" aria-label="Тёмный фон"></button>
-                  <button aria-pressed="false" data-bg="blue" style="background:#1b3e92" aria-label="Синий фон"></button>
-                </div>
-              </div>
-              <div class="fc-body">
-                <div class="fc-title">Логотип КРДВ, вертикальный</div>
-                <div class="fc-text">Основная версия. На тёмном и синем фоне скачается белая.</div>
-                <div class="fc-foot">
-                  <div class="seg" data-lang><button aria-pressed="true" data-lang="ru">RU</button><button aria-pressed="false" data-lang="en">EN</button></div>
-                  <div class="dl" data-files="krdv"><button type="button">Скачать ▾</button><div class="dl-menu"></div></div>
-                </div>
-              </div>
-            </div>
-            <div class="fc" data-card="made">
-              <div class="fc-prev" data-bg="light">
-                <img alt="Знак «Сделано в ТОР СПВ»" data-src-light="assets/made-signs/made-tor-spv-{lang}-purple.svg" data-src-dark="assets/made-signs/made-tor-spv-{lang}-white.svg" data-src-blue="assets/made-signs/made-tor-spv-{lang}-white.svg" src="assets/made-signs/made-tor-spv-ru-purple.svg">
-                <div class="fc-bg">
-                  <button aria-pressed="true" data-bg="light" style="background:#f3f3f6" aria-label="Светлый фон"></button>
-                  <button aria-pressed="false" data-bg="dark" style="background:#10141c" aria-label="Тёмный фон"></button>
-                  <button aria-pressed="false" data-bg="blue" style="background:#1b3e92" aria-label="Синий фон"></button>
-                </div>
-              </div>
-              <div class="fc-body">
-                <div class="fc-title">Сделано в ТОР СПВ</div>
-                <div class="fc-text">Фиолетовая версия. На тёмном фоне — белая.</div>
-                <div class="fc-foot">
-                  <div class="seg" data-lang><button aria-pressed="true" data-lang="ru">RU</button><button aria-pressed="false" data-lang="en">EN</button></div>
-                  <div class="dl" data-files="made"><button type="button">Скачать ▾</button><div class="dl-menu"></div></div>
-                </div>
-              </div>
-            </div>
-            <div class="fc" data-card="tor">
-              <div class="fc-prev" data-bg="light">
-                <img alt="Знак ТОР" data-src-light="assets/regime-signs/regime-tor.svg" data-src-dark="assets/regime-signs/regime-tor.svg" data-src-blue="assets/regime-signs/regime-tor.svg" data-white-on="dark blue" src="assets/regime-signs/regime-tor.svg">
-                <div class="fc-bg">
-                  <button aria-pressed="true" data-bg="light" style="background:#f3f3f6" aria-label="Светлый фон"></button>
-                  <button aria-pressed="false" data-bg="dark" style="background:#10141c" aria-label="Тёмный фон"></button>
-                  <button aria-pressed="false" data-bg="blue" style="background:#1b3e92" aria-label="Синий фон"></button>
-                </div>
-              </div>
-              <div class="fc-body">
-                <div class="fc-title">ТОР</div>
-                <div class="fc-text">Территории опережающего развития.</div>
-                <div class="fc-foot">
-                  <span class="fc-text">только RU</span>
-                  <div class="dl" data-files="tor"><button type="button">Скачать ▾</button><div class="dl-menu"></div></div>
-                </div>
-              </div>
-            </div>
+          <div class="ac-grid">
+            <div class="ac" data-base="assets/logos/krdv-logo-{lang}-square"><div class="ac-prev "><img src="assets/logos/krdv-logo-ru-square.svg" alt="Вертикальная"><div class="ac-pills"><a href="assets/logos/krdv-logo-ru-square.svg" download title="SVG — для сайтов и вёрстки" data-fmt="svg">SVG</a><a href="assets/logos/krdv-logo-ru-square.png" download title="PNG — прозрачный фон, для документов и соцсетей" data-fmt="png">PNG</a><a href="assets/logos/krdv-logo-ru-square.pdf" download title="PDF — для печати, CMYK" data-fmt="pdf">PDF</a></div></div><div class="ac-meta"><span class="ac-title">Вертикальная</span><span class="ac-lang"><button type="button" aria-pressed="true" data-lang="ru">Рус</button><button type="button" aria-pressed="false" data-lang="en">Eng</button></span></div></div>
+            <div class="ac is-wide" data-base="assets/logos/krdv-logo-{lang}-horizontal"><div class="ac-prev "><img src="assets/logos/krdv-logo-ru-horizontal.svg" alt="Горизонтальная"><div class="ac-pills"><a href="assets/logos/krdv-logo-ru-horizontal.svg" download title="SVG — для сайтов и вёрстки" data-fmt="svg">SVG</a><a href="assets/logos/krdv-logo-ru-horizontal.png" download title="PNG — прозрачный фон, для документов и соцсетей" data-fmt="png">PNG</a><a href="assets/logos/krdv-logo-ru-horizontal.pdf" download title="PDF — для печати, CMYK" data-fmt="pdf">PDF</a></div></div><div class="ac-meta"><span class="ac-title">Горизонтальная</span><span class="ac-lang"><button type="button" aria-pressed="true" data-lang="ru">Рус</button><button type="button" aria-pressed="false" data-lang="en">Eng</button></span></div></div>
+            <div class="ac" data-base="assets/logos/krdv-logo-{lang}-square-white"><div class="ac-prev blue"><img src="assets/logos/krdv-logo-ru-square-white.svg" alt="Вертикальная, белая"><div class="ac-pills"><a href="assets/logos/krdv-logo-ru-square-white.svg" download title="SVG — для сайтов и вёрстки" data-fmt="svg">SVG</a><a href="assets/logos/krdv-logo-ru-square-white.png" download title="PNG — прозрачный фон, для документов и соцсетей" data-fmt="png">PNG</a><a href="assets/logos/krdv-logo-ru-square-white.pdf" download title="PDF — для печати, CMYK" data-fmt="pdf">PDF</a></div></div><div class="ac-meta"><span class="ac-title">Вертикальная, белая</span><span class="ac-lang"><button type="button" aria-pressed="true" data-lang="ru">Рус</button><button type="button" aria-pressed="false" data-lang="en">Eng</button></span></div></div>
+            <div class="ac" data-base="assets/regime-signs/regime-tor"><div class="ac-prev tor-bg"><img src="assets/regime-signs/regime-tor.svg" alt="ТОР"><div class="ac-pills"><a href="assets/regime-signs/regime-tor.svg" download title="SVG — для сайтов и вёрстки" data-fmt="svg">SVG</a><a href="assets/regime-signs/regime-tor.png" download title="PNG — прозрачный фон, для документов и соцсетей" data-fmt="png">PNG</a><a href="assets/regime-signs/regime-tor.pdf" download title="PDF — для печати, CMYK" data-fmt="pdf">PDF</a></div></div><div class="ac-meta"><span class="ac-title">ТОР</span></div></div>
           </div>
-          <p class="pane-note">Кнопки скачивания настоящие — файлы скачиваются с сайта. Белой версии знаков режимов пока нет: здесь она сделана программно, файлы нужно будет подготовить.</p>
+          <p class="pane-note">Одинаково для логотипов КРДВ, ДО, знаков режимов, «Сделано в…», Гектара, МА 2030 и ИНТЦ. Как именно скачивать — три варианта в И2.</p>
         </div>
       </div>
-    </div>
-    <div class="why">
-      <p><b>Зачем.</b> Так устроены бренд-центры Uber, Spotify, Mastercard: выучил одну карточку — понимаешь весь сайт.</p>
-      <p><b>Что уйдёт.</b> Отдельная листалка белых логотипов и строки «Русская белая» — их заменяет переключатель фона.</p>
     </div>
     <div class="decide"></div>
   </article>
 
-  <article class="item" data-id="И2" data-title="Одна кнопка «Скачать» с выбором формата">
+  <article class="item" data-id="И2" data-title="Скачивание без меню и имён файлов (версия 2)">
     <div class="item-head">
       <span class="item-id">И2</span>
       <div>
-        <h2>Одна кнопка «Скачать» вместо ряда кнопок</h2>
-        <p class="item-what">Вместо шести кнопок SVG / PNG / PDF под каждым логотипом — одна «Скачать». По нажатию выпадает список форматов с подсказкой, какой формат для чего.</p>
-        <div class="tags"><span class="tag small">Объём: небольшой</span><span class="tag">Можно отдельно от И1</span></div>
+        <h2>Как скачивать — три варианта на выбор</h2>
+        <p class="item-what">Без выпадающего меню и без имён файлов. Подсказка, какой формат для чего, появляется при наведении на формат и одной строкой под блоком — не в каждой карточке.</p>
+        <div class="tags"><span class="tag new2">Новая версия по вашим комментариям</span><span class="tag small">Объём: небольшой</span><span class="tag">Напишите в комментарии: А, Б или В</span></div>
       </div>
     </div>
-    <div class="ba">
-      <div>
-        <div class="ba-label">Сейчас</div>
-        <div class="pane">
-          <div style="display:grid;gap:8px">
-            <div class="btnrow"><span class="lbl">Русская</span><span class="fakebtn">↓ SVG</span><span class="fakebtn">↓ PNG</span><span class="fakebtn">↓ PDF</span></div>
-            <div class="btnrow"><span class="lbl">Английская</span><span class="fakebtn">↓ SVG</span><span class="fakebtn">↓ PNG</span><span class="fakebtn">↓ PDF</span></div>
-          </div>
-          <div style="display:flex;gap:28px;margin-top:22px;flex-wrap:wrap">
-            <div><div class="counter">≈ 200</div><div class="cap">кнопок скачивания на сайте</div></div>
-            <div><div class="counter">0</div><div class="cap">подсказок, какой формат выбрать</div></div>
-          </div>
-          <p class="pane-note">Только в «ДО» — 40 логотипов × 3 кнопки = 120 кнопок на одной странице.</p>
-        </div>
+    <div class="variants">
+      <div class="variant">
+        <div class="ba-label">А. Форматы при наведении</div>
+        <div class="pane"><div class="ac-grid is-3"><div class="ac" data-base="assets/logos/krdv-logo-{lang}-square"><div class="ac-prev "><img src="assets/logos/krdv-logo-ru-square.svg" alt="Вертикальная"><div class="ac-pills"><a href="assets/logos/krdv-logo-ru-square.svg" download title="SVG — для сайтов и вёрстки" data-fmt="svg">SVG</a><a href="assets/logos/krdv-logo-ru-square.png" download title="PNG — прозрачный фон, для документов и соцсетей" data-fmt="png">PNG</a><a href="assets/logos/krdv-logo-ru-square.pdf" download title="PDF — для печати, CMYK" data-fmt="pdf">PDF</a></div></div><div class="ac-meta"><span class="ac-title">Вертикальная</span><span class="ac-lang"><button type="button" aria-pressed="true" data-lang="ru">Рус</button><button type="button" aria-pressed="false" data-lang="en">Eng</button></span></div></div><div class="ac" data-base="assets/logos/krdv-logo-{lang}-square-white"><div class="ac-prev blue"><img src="assets/logos/krdv-logo-ru-square-white.svg" alt="Вертикальная, белая"><div class="ac-pills"><a href="assets/logos/krdv-logo-ru-square-white.svg" download title="SVG — для сайтов и вёрстки" data-fmt="svg">SVG</a><a href="assets/logos/krdv-logo-ru-square-white.png" download title="PNG — прозрачный фон, для документов и соцсетей" data-fmt="png">PNG</a><a href="assets/logos/krdv-logo-ru-square-white.pdf" download title="PDF — для печати, CMYK" data-fmt="pdf">PDF</a></div></div><div class="ac-meta"><span class="ac-title">Вертикальная, белая</span><span class="ac-lang"><button type="button" aria-pressed="true" data-lang="ru">Рус</button><button type="button" aria-pressed="false" data-lang="en">Eng</button></span></div></div><div class="ac" data-base="assets/regime-signs/regime-tor"><div class="ac-prev tor-bg"><img src="assets/regime-signs/regime-tor.svg" alt="ТОР"><div class="ac-pills"><a href="assets/regime-signs/regime-tor.svg" download title="SVG — для сайтов и вёрстки" data-fmt="svg">SVG</a><a href="assets/regime-signs/regime-tor.png" download title="PNG — прозрачный фон, для документов и соцсетей" data-fmt="png">PNG</a><a href="assets/regime-signs/regime-tor.pdf" download title="PDF — для печати, CMYK" data-fmt="pdf">PDF</a></div></div><div class="ac-meta"><span class="ac-title">ТОР</span></div></div></div>
+        <p class="pane-note">Карточка спокойная, пока на неё не навели. На телефоне форматы видны всегда.</p></div>
       </div>
-      <div class="ba-after">
-        <div class="ba-label">Предлагаю (нажмите)</div>
-        <div class="pane" style="min-height:240px;display:flex;flex-direction:column;justify-content:flex-end">
-          <div style="display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:12px;padding:12px 14px">
-            <span style="font-size:15px">Логотип КРДВ, горизонтальный</span>
-            <div class="dl" data-files="krdv-h"><button type="button">Скачать ▾</button><div class="dl-menu"></div></div>
-          </div>
-          <p class="pane-note">Подсказки: SVG — для сайтов и вёрстки, PNG — прозрачный фон, для документов и соцсетей, PDF — для печати, в CMYK. Так уже было сделано в «ДО» 17.10, потом вернули ряды — сейчас предлагаю сделать так везде.</p>
-        </div>
+      <div class="variant">
+        <div class="ba-label">Б. Кнопка в углу</div>
+        <div class="pane"><div class="ac-grid is-3"><div class="ac" data-base="assets/logos/krdv-logo-{lang}-square"><div class="ac-prev "><img src="assets/logos/krdv-logo-ru-square.svg" alt="Вертикальная"><div class="ac-ic"><span class="ac-fmts"><a href="assets/logos/krdv-logo-ru-square.svg" download title="SVG — для сайтов и вёрстки" data-fmt="svg">SVG</a><a href="assets/logos/krdv-logo-ru-square.png" download title="PNG — прозрачный фон, для документов и соцсетей" data-fmt="png">PNG</a><a href="assets/logos/krdv-logo-ru-square.pdf" download title="PDF — для печати, CMYK" data-fmt="pdf">PDF</a></span><button type="button" aria-label="Скачать" aria-expanded="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8m0 0L4.5 6.5M8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div><div class="ac-meta"><span class="ac-title">Вертикальная</span><span class="ac-lang"><button type="button" aria-pressed="true" data-lang="ru">Рус</button><button type="button" aria-pressed="false" data-lang="en">Eng</button></span></div></div><div class="ac" data-base="assets/logos/krdv-logo-{lang}-square-white"><div class="ac-prev blue"><img src="assets/logos/krdv-logo-ru-square-white.svg" alt="Вертикальная, белая"><div class="ac-ic"><span class="ac-fmts"><a href="assets/logos/krdv-logo-ru-square-white.svg" download title="SVG — для сайтов и вёрстки" data-fmt="svg">SVG</a><a href="assets/logos/krdv-logo-ru-square-white.png" download title="PNG — прозрачный фон, для документов и соцсетей" data-fmt="png">PNG</a><a href="assets/logos/krdv-logo-ru-square-white.pdf" download title="PDF — для печати, CMYK" data-fmt="pdf">PDF</a></span><button type="button" aria-label="Скачать" aria-expanded="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8m0 0L4.5 6.5M8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div><div class="ac-meta"><span class="ac-title">Вертикальная, белая</span><span class="ac-lang"><button type="button" aria-pressed="true" data-lang="ru">Рус</button><button type="button" aria-pressed="false" data-lang="en">Eng</button></span></div></div><div class="ac" data-base="assets/regime-signs/regime-tor"><div class="ac-prev tor-bg"><img src="assets/regime-signs/regime-tor.svg" alt="ТОР"><div class="ac-ic"><span class="ac-fmts"><a href="assets/regime-signs/regime-tor.svg" download title="SVG — для сайтов и вёрстки" data-fmt="svg">SVG</a><a href="assets/regime-signs/regime-tor.png" download title="PNG — прозрачный фон, для документов и соцсетей" data-fmt="png">PNG</a><a href="assets/regime-signs/regime-tor.pdf" download title="PDF — для печати, CMYK" data-fmt="pdf">PDF</a></span><button type="button" aria-label="Скачать" aria-expanded="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8m0 0L4.5 6.5M8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div><div class="ac-meta"><span class="ac-title">ТОР</span></div></div></div>
+        <p class="pane-note">Одна круглая кнопка. Нажали — рядом раскрываются три формата.</p></div>
       </div>
+      <div class="variant">
+        <div class="ba-label">В. Форматы текстом</div>
+        <div class="pane"><div class="ac-grid is-3"><div class="ac" data-base="assets/logos/krdv-logo-{lang}-square"><div class="ac-prev "><img src="assets/logos/krdv-logo-ru-square.svg" alt="Вертикальная"></div><div class="ac-meta"><span class="ac-title">Вертикальная</span><span class="ac-lang"><button type="button" aria-pressed="true" data-lang="ru">Рус</button><button type="button" aria-pressed="false" data-lang="en">Eng</button></span></div><div class="ac-txt"><a href="assets/logos/krdv-logo-ru-square.svg" download title="SVG — для сайтов и вёрстки" data-fmt="svg">SVG</a><a href="assets/logos/krdv-logo-ru-square.png" download title="PNG — прозрачный фон, для документов и соцсетей" data-fmt="png">PNG</a><a href="assets/logos/krdv-logo-ru-square.pdf" download title="PDF — для печати, CMYK" data-fmt="pdf">PDF</a></div></div><div class="ac" data-base="assets/logos/krdv-logo-{lang}-square-white"><div class="ac-prev blue"><img src="assets/logos/krdv-logo-ru-square-white.svg" alt="Вертикальная, белая"></div><div class="ac-meta"><span class="ac-title">Вертикальная, белая</span><span class="ac-lang"><button type="button" aria-pressed="true" data-lang="ru">Рус</button><button type="button" aria-pressed="false" data-lang="en">Eng</button></span></div><div class="ac-txt"><a href="assets/logos/krdv-logo-ru-square-white.svg" download title="SVG — для сайтов и вёрстки" data-fmt="svg">SVG</a><a href="assets/logos/krdv-logo-ru-square-white.png" download title="PNG — прозрачный фон, для документов и соцсетей" data-fmt="png">PNG</a><a href="assets/logos/krdv-logo-ru-square-white.pdf" download title="PDF — для печати, CMYK" data-fmt="pdf">PDF</a></div></div><div class="ac" data-base="assets/regime-signs/regime-tor"><div class="ac-prev tor-bg"><img src="assets/regime-signs/regime-tor.svg" alt="ТОР"></div><div class="ac-meta"><span class="ac-title">ТОР</span></div><div class="ac-txt"><a href="assets/regime-signs/regime-tor.svg" download title="SVG — для сайтов и вёрстки" data-fmt="svg">SVG</a><a href="assets/regime-signs/regime-tor.png" download title="PNG — прозрачный фон, для документов и соцсетей" data-fmt="png">PNG</a><a href="assets/regime-signs/regime-tor.pdf" download title="PDF — для печати, CMYK" data-fmt="pdf">PDF</a></div></div></div>
+        <p class="pane-note">Самый тихий вариант: форматы — короткие ссылки под названием, как на сайтах Linear и Vercel.</p></div>
+      </div>
+      <p class="fmt-line">SVG — для сайтов и вёрстки · PNG — прозрачный фон, для документов и соцсетей · PDF — для печати, в CMYK</p>
     </div>
     <div class="decide"></div>
   </article>
@@ -742,13 +721,13 @@ p { margin: 0; }
     <div class="decide"></div>
   </article>
 
-  <article class="item" data-id="И6" data-title="Меню группами с подписями">
+  <article class="item" data-id="И6" data-title="Меню группами с подписями (версия 2)">
     <div class="item-head">
       <span class="item-id">И6</span>
       <div>
-        <h2>Меню группами с подписями</h2>
+        <h2>Меню группами с подписями — вторая версия</h2>
         <p class="item-what">Разделители в меню уже есть, но стоят через каждые три пункта, без смысла. Предлагаю пять подписанных групп: Основа, Элементы, Семейство брендов, Носители, Ресурсы.</p>
-        <div class="tags"><span class="tag small">Объём: небольшой</span><span class="tag">Делается вместе с Б1 (новая структура)</span></div>
+        <div class="tags"><span class="tag new2">Новая версия по вашим комментариям</span><span class="tag small">Объём: небольшой</span><span class="tag">Адреса страниц не меняются, старые ссылки работают</span></div>
       </div>
     </div>
     <div class="ba">
@@ -765,28 +744,26 @@ p { margin: 0; }
             <h5>Основа</h5>
             <div><span>00</span><span>Обзор</span></div>
             <div><span>01</span><span>Позиционирование</span></div>
-            <div><span>02</span><span class="new">Голос и текст</span></div>
             <h5>Элементы</h5>
-            <div><span>03</span><span>Логотип</span></div>
-            <div><span>04</span><span>Цвет</span></div>
-            <div><span>05</span><span class="new">Графика</span></div>
-            <div><span>06</span><span>Типографика</span></div>
-            <div><span>07</span><span class="moved">Фотостиль</span></div>
+            <div><span>02</span><span>Логотип</span></div>
+            <div><span>03</span><span>Цвет</span></div>
+            <div><span>—</span><span class="new maybe">Графика</span></div>
+            <div><span>04</span><span>Типографика</span></div>
+            <div><span>05</span><span>Оформление текста</span></div>
+            <div><span>06</span><span class="moved">Фотостиль</span></div>
             <h5>Семейство брендов</h5>
-            <div><span>08</span><span>Дочерние общества</span></div>
-            <div><span>09</span><span class="moved">Режимы и программы</span></div>
-            <div><span>10</span><span class="moved">Товарный знак</span></div>
-            <div><span>11</span><span class="new">Кобрендинг</span></div>
+            <div><span>07</span><span>Дочерние общества</span></div>
+            <div><span>08</span><span class="moved">Режимы и программы</span></div>
+            <div><span>09</span><span class="moved">Товарный знак</span></div>
             <h5>Носители</h5>
-            <div><span>12</span><span>Корп. материалы</span></div>
-            <div><span>13</span><span>Рекламные</span></div>
-            <div><span>14</span><span>Дизайн соцсетей</span></div>
-            <div><span>15</span><span>Мерч</span></div>
-            <h5>Ресурсы</h5>
-            <div><span>16</span><span class="new">Все файлы</span></div>
-            <div><span>17</span><span>Контакты</span></div>
+            <div><span>10</span><span>Корп. материалы</span></div>
+            <div><span>11</span><span>Рекламные</span></div>
+            <div><span>12</span><span>Дизайн соцсетей</span></div>
+            <div><span>13</span><span>Мерч</span></div>
+            <hr>
+            <div><span>14</span><span>Контакты</span></div>
           </div>
-          <p class="pane-note">Подробнее о перестановке — во вкладке «Бренд», пункт Б1.</p>
+          <p class="pane-note">По вашим комментариям: без «Голоса и текста», «Кобрендинг» остаётся в «Логотипе», без «Всех файлов». «Оформление текста» — в «Элементах» после «Типографики». «Графика» появится, только если согласуете Б2. «Контакты» — отдельно в конце, без подписи группы.</p>
         </div>
       </div>
     </div>
@@ -964,7 +941,7 @@ p { margin: 0; }
       <div>
         <h2>Порядок разделов: от смысла к носителям</h2>
         <p class="item-what">Сейчас разделы идут в порядке появления. Предлагаю классическую логику сильных гайдов: основа → элементы → семейство брендов → носители → ресурсы.</p>
-        <div class="tags"><span class="tag mid">Объём: средний</span><span class="tag">Адреса страниц сохраняются, старые ссылки работают</span></div>
+        <div class="tags"><span class="tag new2">Обновлено по решению И6</span><span class="tag mid">Объём: средний</span><span class="tag">Адреса страниц сохраняются, старые ссылки работают</span></div>
       </div>
     </div>
     <div class="ba">
@@ -974,12 +951,12 @@ p { margin: 0; }
           <div class="struct-list">
             <div class="sitem g1"><span>00</span><span>Обзор</span></div>
             <div class="sitem g1"><span>01</span><span>Позиционирование</span></div>
-            <div class="sitem g2"><span>02</span><span>Логотип</span><small>кобрендинг уйдёт</small></div>
+            <div class="sitem g2"><span>02</span><span>Логотип</span></div>
             <div class="sitem g3"><span>03</span><span>Дочерние общества</span></div>
             <div class="sitem g3"><span>04</span><span>Режимы и программы</span><small>посреди базовых</small></div>
             <div class="sitem g2"><span>05</span><span>Цвет</span></div>
             <div class="sitem g2"><span>06</span><span>Типографика</span></div>
-            <div class="sitem g1"><span>07</span><span>Оформление текста</span></div>
+            <div class="sitem g2"><span>07</span><span>Оформление текста</span></div>
             <div class="sitem g4"><span>08</span><span>Корп. материалы</span></div>
             <div class="sitem g4"><span>09</span><span>Рекламные</span></div>
             <div class="sitem g4"><span>10</span><span>Мерч</span></div>
@@ -997,33 +974,31 @@ p { margin: 0; }
             <div class="sgroup g1"><i></i>Основа — кто мы и как говорим</div>
             <div class="sitem g1"><span>00</span><span>Обзор</span></div>
             <div class="sitem g1"><span>01</span><span>Позиционирование</span></div>
-            <div class="sitem g1"><span>02</span><span>Голос и текст</span><span class="badge-new">новый · Б9</span></div>
-            <div class="sgroup g2"><i></i>Элементы — из чего собираем</div>
-            <div class="sitem g2"><span>03</span><span>Логотип</span></div>
-            <div class="sitem g2"><span>04</span><span>Цвет</span></div>
-            <div class="sitem g2"><span>05</span><span>Графика</span><span class="badge-new">новый · Б2</span></div>
-            <div class="sitem g2"><span>06</span><span>Типографика</span></div>
-            <div class="sitem g2"><span>07</span><span>Фотостиль</span><span class="badge-move">выше</span></div>
+                        <div class="sgroup g2"><i></i>Элементы — из чего собираем</div>
+            <div class="sitem g2"><span>02</span><span>Логотип</span><small>с кобрендингом</small></div>
+            <div class="sitem g2"><span>03</span><span>Цвет</span></div>
+            <div class="sitem g2"><span>—</span><span>Графика</span><span class="badge-new">новый · Б2</span></div>
+            <div class="sitem g2"><span>04</span><span>Типографика</span></div>
+            <div class="sitem g2"><span>05</span><span>Оформление текста</span></div>
+            <div class="sitem g2"><span>06</span><span>Фотостиль</span><span class="badge-move">выше</span></div>
             <div class="sgroup g3"><i></i>Семейство брендов</div>
-            <div class="sitem g3"><span>08</span><span>Дочерние общества</span></div>
-            <div class="sitem g3"><span>09</span><span>Режимы и программы</span><span class="badge-move">ниже</span></div>
-            <div class="sitem g3"><span>10</span><span>Товарный знак</span><span class="badge-move">выше</span></div>
-            <div class="sitem g3"><span>11</span><span>Кобрендинг</span><span class="badge-new">из «Логотипа» · Б10</span></div>
+            <div class="sitem g3"><span>07</span><span>Дочерние общества</span></div>
+            <div class="sitem g3"><span>08</span><span>Режимы и программы</span><span class="badge-move">ниже</span></div>
+            <div class="sitem g3"><span>09</span><span>Товарный знак</span><span class="badge-move">выше</span></div>
             <div class="sgroup g4"><i></i>Носители — как применяем</div>
-            <div class="sitem g4"><span>12</span><span>Корп. материалы</span></div>
-            <div class="sitem g4"><span>13</span><span>Рекламные</span></div>
-            <div class="sitem g4"><span>14</span><span>Дизайн соцсетей</span></div>
-            <div class="sitem g4"><span>15</span><span>Мерч</span></div>
-            <div class="sgroup g5"><i></i>Ресурсы</div>
-            <div class="sitem g5"><span>16</span><span>Все файлы</span><span class="badge-new">новый · И3</span></div>
-            <div class="sitem g5"><span>17</span><span>Контакты</span></div>
+            <div class="sitem g4"><span>10</span><span>Корп. материалы</span></div>
+            <div class="sitem g4"><span>11</span><span>Рекламные</span></div>
+            <div class="sitem g4"><span>12</span><span>Дизайн соцсетей</span></div>
+            <div class="sitem g4"><span>13</span><span>Мерч</span></div>
+            <div class="sgroup g5"><i></i>В конце</div>
+            <div class="sitem g5"><span>14</span><span>Контакты</span></div>
           </div>
         </div>
       </div>
     </div>
     <div class="why">
       <p><b>Почему так.</b> Человек сначала понимает, что за бренд, потом получает «кубики», потом видит, как из них собраны носители. Так устроены гайды Airbnb, Spotify, Google.</p>
-      <p><b>Если новые разделы не согласуете</b>, перестановка всё равно работает — просто без них.</p>
+      <p><b>Уже учтено ваше решение по И6:</b> без «Голоса и текста» и отдельного «Кобрендинга». Если «Графику» (Б2) не согласуете — порядок тот же, просто без неё.</p>
     </div>
     <div class="decide"></div>
   </article>
@@ -1196,7 +1171,7 @@ p { margin: 0; }
             <div><b>Пиктограммы</b>Одна сетка и толщина линии, круглая подложка. Цвета — из палитры «Цвета», плюс отдельное правило для соцсетей.</div>
             <div><b>3D-иллюстрации</b>Материал (стекло или глянец), свет сверху слева, мягкая тень, ракурс ¾. Фон — тёмный или «Сияние».</div>
             <div><b>Когда что</b>Пиктограмма — навигация и списки. 3D — обложки и главные карточки. Не смешивать в одном блоке.</div>
-            <div><b>Библиотека</b>Все иконки доступны в «Все файлы» (И3) с поиском по смыслу.</div>
+            <div><b>Библиотека</b>Все иконки — в «Графике», сгруппированы по смыслу, со скачиванием.</div>
           </div>
         </div>
       </div>
@@ -1360,13 +1335,13 @@ p { margin: 0; }
 
   <h3 class="group-title">Голос и семейство брендов</h3>
 
-  <article class="item" data-id="Б9" data-title="Раздел «Голос и текст»: тон и примеры «так / не так»">
+  <article class="item" data-id="Б9" data-title="Блок «Как мы говорим» в «Позиционировании»">
     <div class="item-head">
       <span class="item-id">Б9</span>
       <div>
-        <h2>Голос бренда: как КРДВ говорит</h2>
-        <p class="item-what">Есть бренд-обещание и правила типографики, а между ними пусто: нет тона. При этом портал и соцсети — как раз про тексты. Предлагаю раздел «Голос и текст»: принципы тона, примеры «так / не так», а ниже — нынешние правила «Оформления текста».</p>
-        <div class="tags"><span class="tag mid">Объём: средний</span><span class="tag">Примеры ниже придуманы для иллюстрации</span><span class="tag">Можно оставить «Оформление текста» отдельным разделом</span></div>
+        <h2>Блок «Как мы говорим» в «Позиционировании»</h2>
+        <p class="item-what">По вашему решению по И6 отдельного раздела не будет. Предлагаю короткий блок в конце «Позиционирования»: четыре принципа тона и три примера «так / не так». Портал и соцсети — как раз про тексты.</p>
+        <div class="tags"><span class="tag mid">Объём: средний</span><span class="tag">Примеры ниже придуманы для иллюстрации</span><span class="tag new2">Обновлено по решению И6</span></div>
       </div>
     </div>
     <div class="ba stack">
@@ -1390,13 +1365,13 @@ p { margin: 0; }
     <div class="decide"></div>
   </article>
 
-  <article class="item" data-id="Б10" data-title="Кобрендинг — отдельный раздел в «Семействе брендов»">
+  <article class="item" data-id="Б10" data-title="Кобрендинг: больше случаев в «Логотипе»">
     <div class="item-head">
       <span class="item-id">Б10</span>
       <div>
-        <h2>Кобрендинг — отдельный раздел</h2>
-        <p class="item-what">Сейчас это шестой подраздел «Логотипа», хотя вопрос частый: министерство, партнёры, проекты («Государство для людей», Гектар, МА 2030). Предлагаю отдельный раздел в «Семействе брендов» с примерами для каждого случая.</p>
-        <div class="tags"><span class="tag small">Объём: небольшой</span><span class="tag">Примеры ГДЛ — из шаблона портала</span></div>
+        <h2>Кобрендинг: больше случаев — там же, в «Логотипе»</h2>
+        <p class="item-what">Подраздел остаётся в «Логотипе». Сейчас в нём только пример с министерством, а вопрос частый: партнёры, проекты («Государство для людей», Гектар, МА 2030). Предлагаю добавить примеры для каждого случая.</p>
+        <div class="tags"><span class="tag small">Объём: небольшой</span><span class="tag new2">Обновлено по решению И6</span><span class="tag">Примеры ГДЛ — из шаблона портала</span></div>
       </div>
     </div>
     <div class="ba">
@@ -1585,8 +1560,8 @@ p { margin: 0; }
         <div class="ba-label">Предлагаю</div>
         <div class="pane">
           <div class="steps">
-            <div><b>Возьмите шаблон</b>Из «Всех файлов» или с портала.</div>
-            <div><b>Проверьте по «Коротко»</b>Логотип, поле, цвета, текст.</div>
+            <div><b>Возьмите шаблон</b>Из брендбука или с портала.</div>
+            <div><b>Проверьте сами</b>Логотип, охранное поле, цвета, текст.</div>
             <div><b>Отправьте на согласование</b>Департамент визуальных коммуникаций — контакт уточнить.</div>
             <div><b>Получите ответ</b>Срок — уточнить, например 2 рабочих дня.</div>
           </div>
@@ -1767,6 +1742,30 @@ p { margin: 0; }
       update();
     }));
   });
+
+
+  /* v2: карточки файлов — язык и кнопка в углу */
+  document.querySelectorAll(".ac").forEach((card) => {
+    const base = card.dataset.base;
+    const set = (lang) => {
+      const b = base.replace("{lang}", lang);
+      card.querySelector(".ac-prev img").src = b + ".svg";
+      card.querySelectorAll("a[data-fmt]").forEach((a) => (a.href = b + "." + a.dataset.fmt));
+    };
+    card.querySelectorAll(".ac-lang button").forEach((btn) => btn.addEventListener("click", () => {
+      card.querySelectorAll(".ac-lang button").forEach((x) => x.setAttribute("aria-pressed", String(x === btn)));
+      set(btn.dataset.lang);
+    }));
+    const ic = card.querySelector(".ac-ic");
+    if (ic) ic.querySelector("button").addEventListener("click", (e) => {
+      e.stopPropagation();
+      const open = !ic.classList.contains("open");
+      document.querySelectorAll(".ac-ic.open").forEach((x) => { x.classList.remove("open"); x.querySelector("button").setAttribute("aria-expanded", "false"); });
+      ic.classList.toggle("open", open);
+      ic.querySelector("button").setAttribute("aria-expanded", String(open));
+    });
+  });
+  document.addEventListener("click", (e) => { if (!e.target.closest(".ac-ic")) document.querySelectorAll(".ac-ic.open").forEach((x) => x.classList.remove("open")); });
 
   /* И3: фильтры */
   const rcCount = document.querySelector("[data-rc-count]");
