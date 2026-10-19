@@ -7634,6 +7634,14 @@ a.slide-viewer-download:focus-visible {
   grid-column: span 4;
 }
 
+.bento-tile.is-half {
+  grid-column: span 3;
+}
+
+.bento-tile.is-full {
+  grid-column: 1 / -1;
+}
+
 .bento-visual {
   position: absolute;
   inset: 0;
@@ -7719,7 +7727,9 @@ a.slide-viewer-download:focus-visible {
   }
 
   .bento-tile,
-  .bento-tile.is-wide {
+  .bento-tile.is-wide,
+  .bento-tile.is-half,
+  .bento-tile.is-full {
     grid-column: auto;
   }
 

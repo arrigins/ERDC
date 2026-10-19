@@ -2648,7 +2648,10 @@ function PrincipleCards({ items }) {
 // «Обзор» плиткой: обложки разделов во всю плитку, название в левом верхнем углу.
 // Сетка 6 колонок: ряды чередуются «узкая + широкая» и «три равные» (по образцу DevRev).
 // Широкая плитка занимает 4 колонки, все остальные — 2.
-const bentoWide = new Set(["logo", "typography", "photostyle", "social"]);
+const bentoWide = new Set(["logo", "typography", "social"]);
+// 19.10: корп. материалы + рекламные и мерч + товарный знак — пополам, фотостиль — на всю строку
+const bentoHalf = new Set(["corporate", "advertising", "merch", "made"]);
+const bentoFull = new Set(["photostyle"]);
 function OverviewBento({ navigate }) {
   const tiles = pagesData.filter((page) => page.id !== "overview");
   return (
@@ -2662,7 +2665,7 @@ function OverviewBento({ navigate }) {
           <motion.button
             type="button"
             key={page.id}
-            className={`bento-tile ${wide ? "is-wide" : ""} ${isPositioning || page.bentoAurora ? "is-light" : ""} ${isTypography ? "is-type" : ""}`}
+            className={`bento-tile ${wide ? "is-wide" : ""} ${bentoHalf.has(page.id) ? "is-half" : ""} ${bentoFull.has(page.id) ? "is-full" : ""} ${isPositioning || page.bentoAurora ? "is-light" : ""} ${isTypography ? "is-type" : ""}`}
             onClick={() => navigate(page.id)}
             whileTap={{ scale: 0.995 }}
             aria-label={t(`Открыть раздел ${page.title}`)}
