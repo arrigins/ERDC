@@ -2324,8 +2324,7 @@ function ContentSection({ section, navigate, activePageId }) {
     section.lineBreakExamples ? <LineBreakExamples key="line-breaks" items={section.lineBreakExamples} /> : null,
     cardsBeforeAssets ? <CardGrid key="cards-before" items={section.cards} /> : null,
     section.logos ? <LogoLibrary key="logos" items={section.logos} /> : null,
-    section.logoPairs ? <LogoPairLibrary key="logo-pairs" /> : null,
-    section.logoPairs ? <WhiteLogoSlider key="logo-white" /> : null,
+    section.logoPairs ? <LogoAssetCards key="logo-assets" /> : null,
     section.subsidiaryLogos ? <SubsidiaryLogoLibrary key="subsidiary-logos" setId={section.subsidiaryLogos} /> : null,
     section.subsidiaryRegions ? <SubsidiaryRegionCards key="subsidiary-regions" /> : null,
     section.preAssetImages ? <AssetImageGrid key="pre-assets" items={section.preAssetImages} mode={section.preAssetImageMode} /> : null,
@@ -2334,12 +2333,12 @@ function ContentSection({ section, navigate, activePageId }) {
         <img src={logoAsset(section.brandLogo.file)} alt={t(section.brandLogo.alt)} loading="lazy" />
       </div>
     ) : null,
-    section.brandLogoVersions ? <BrandLogoVersions key="brand-logo-versions" items={section.brandLogoVersions} /> : null,
+    section.brandLogoVersions ? <BrandAssetCards key="brand-logo-versions" items={section.brandLogoVersions} /> : null,
     section.typeSamples ? <TypeSpecimens key="type-samples" items={section.typeSamples} /> : null,
     section.fontWorkbench ? <FontWorkbench key="font-workbench" /> : null,
     section.regimePalette ? <RegimePalette key="regime-palette" items={section.regimePalette} /> : null,
     section.regimeSigns ? <RegimeSignLibrary key="regime-signs" /> : null,
-    section.madeSigns ? <MadeSignLibrary key="made-signs" /> : null,
+    section.madeSigns ? <MadeSignCards key="made-signs" /> : null,
     section.adAnatomy ? <AdAnatomyStage key="ad-anatomy" /> : null,
     section.merch === "system" ? <MerchSystem key="merch" t={t} /> : null,
     section.merch === "slogans" ? <MerchSlogans key="merch" t={t} /> : null,
@@ -2989,19 +2988,7 @@ function SubsidiaryRegionCards() {
                     loading="lazy"
                     style={{ "--u": subsidiaryLogoUnits[item.preview.replace(/^subsidiary-|\.svg$/g, "")] }}
                   />
-                </div>
-                <div className="logo-downloads">
-                  <div>
-                    {subsidiaryFormats.map((format) => (
-                      <LogoDownloadLink
-                        key={format}
-                        file={item.files[format]}
-                        format={format}
-                        title={`${item.title}, ${item.versionLabel.toLowerCase()}`}
-                        asset={subsidiaryAsset}
-                      />
-                    ))}
-                  </div>
+                  <CornerDownload files={item.files} title={`${item.title}, ${item.versionLabel.toLowerCase()}`} asset={subsidiaryAsset} />
                 </div>
               </div>
             ))}
@@ -3579,6 +3566,153 @@ function LogoDownloadLink({ file, format, title, asset = logoAsset }) {
       <UiIcon icon={active ? ICONS.arrowDown : ICONS.download} className="format-icon" />
       <span>{format.toUpperCase()}</span>
     </a>
+  );
+}
+
+// ── 20.10 (И1 + И2, вариант Б): единая карточка файла ──
+// В карточке только превью и название; язык «Рус / Eng» — рядом с названием, если есть английская версия.
+// Скачивание — круглая кнопка в углу превью: по нажатию рядом раскрываются форматы. Имена файлов не показываем.
+const cornerFormatHints = {
+  svg: "SVG — для сайтов и вёрстки",
+  png: "PNG — прозрачный фон, для документов и соцсетей",
+  pdf: "PDF — для печати, CMYK",
+};
+
+function CornerDownload({ files, title, asset = logoAsset }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    if (!open) return undefined;
+    const onDown = (event) => {
+      if (!ref.current?.contains(event.target)) setOpen(false);
+    };
+    const onKey = (event) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+  const formats = ["svg", "png", "pdf"].filter((format) => files?.[format]);
+  if (!formats.length) return null;
+  return (
+    <div className={`corner-download ${open ? "is-open" : ""}`} ref={ref}>
+      <span className="corner-download-formats" aria-hidden={!open}>
+        {formats.map((format) => (
+          <a
+            key={format}
+            href={asset(files[format])}
+            download={files[format]}
+            title={t(cornerFormatHints[format])}
+            aria-label={t(`Скачать ${title} в формате ${format.toUpperCase()}`)}
+            tabIndex={open ? 0 : -1}
+          >
+            {format.toUpperCase()}
+          </a>
+        ))}
+      </span>
+      <button type="button" aria-expanded={open} aria-label={t(`Скачать: ${title}`)} onClick={() => setOpen((value) => !value)}>
+        <UiIcon icon={ICONS.download} size={16} strokeWidth={1.6} />
+      </button>
+    </div>
+  );
+}
+
+// variants: { ru: { preview, files }, en: {...} } — если вариант один, переключатель языка не показывается
+function AssetCard({ title, variants, asset = logoAsset, shape = "square", tone = "light", alt }) {
+  const langs = Object.keys(variants);
+  const [lang, setLang] = useState(langs[0]);
+  const current = variants[lang] || variants[langs[0]];
+  return (
+    <article className={`asset-card is-${shape}`} data-tone={tone}>
+      <div className="asset-card-preview">
+        <img src={asset(current.preview)} alt={t(alt ? `${alt}${langs.length > 1 ? (lang === "ru" ? ", русская" : ", английская") : ""}` : title)} loading="lazy" />
+        <CornerDownload files={current.files} title={`${title}${langs.length > 1 ? (lang === "ru" ? ", русская" : ", английская") : ""}`} asset={asset} />
+      </div>
+      <div className="asset-card-meta">
+        <h3>{t(title)}</h3>
+        {langs.length > 1 ? (
+          <span className="asset-card-lang" role="group" aria-label={t("Язык версии")}>
+            {langs.map((code) => (
+              <button key={code} type="button" aria-pressed={code === lang} onClick={() => setLang(code)}>
+                {code === "ru" ? "Рус" : "Eng"}
+              </button>
+            ))}
+          </span>
+        ) : null}
+      </div>
+    </article>
+  );
+}
+
+// Логотип КРДВ: вертикальная и горизонтальная, ниже — белые версии на фирменном синем
+function LogoAssetCards() {
+  const cards = [
+    { id: "square", title: "Вертикальная", white: false },
+    { id: "horizontal", title: "Горизонтальная", white: false },
+    { id: "square", title: "Вертикальная, белая", white: true },
+    { id: "horizontal", title: "Горизонтальная, белая", white: true },
+  ];
+  return (
+    <div className="asset-card-grid is-logos">
+      {cards.map((card) => {
+        const pair = logoPairs.find((item) => item.id === card.id);
+        const variants = Object.fromEntries(
+          Object.entries(pair.langs).map(([lang, id]) => {
+            const variant = logoVariants[id];
+            const files = card.white ? variant.whiteFiles : variant.files;
+            return [lang, { preview: card.white ? files.svg : variant.preview, files }];
+          }),
+        );
+        return <AssetCard key={`${card.id}-${card.white}`} title={card.title} alt={`Логотип КРДВ, ${card.title.toLowerCase()}`} variants={variants} shape={card.id === "square" ? "square" : "wide"} tone={card.white ? "blue" : "light"} />;
+      })}
+    </div>
+  );
+}
+
+function MadeSignCards() {
+  return (
+    <div className="made-sign-groups">
+      {madeSignGroups.map((group) => (
+        <div className="made-sign-group" key={group.id}>
+          <h3 className="made-sign-group-title">{t(group.title)}</h3>
+          <div className="asset-card-grid is-3">
+            {group.variants.map((item) => (
+              <AssetCard
+                key={item.key}
+                title={item.title}
+                alt={`${group.title}, ${item.title.toLowerCase()}`}
+                asset={madeSignAsset}
+                shape="sign"
+                tone={item.tone === "white" ? "blue" : item.tone === "purple" ? "purple" : "light"}
+                variants={Object.fromEntries(
+                  item.signs.map((sign) => [sign.lang, { preview: `${sign.file}.svg`, files: Object.fromEntries(madeSignFormats.map((format) => [format, `${sign.file}.${format}`])) }]),
+                )}
+              />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function BrandAssetCards({ items }) {
+  return (
+    <div className="asset-card-grid is-brand">
+      {items.map((item) => (
+        <AssetCard
+          key={item.file}
+          title={item.title}
+          alt={item.alt}
+          shape={item.shape === "wide" ? "wide" : "square"}
+          variants={{ ru: { preview: `${item.file}.svg`, files: Object.fromEntries(logoFormats.map((format) => [format, `${item.file}.${format}`])) } }}
+        />
+      ))}
+    </div>
   );
 }
 

@@ -8625,3 +8625,179 @@ a.slide-viewer-download:focus-visible,
     inset: -12px -8px;
   }
 }
+
+/* ── 20.10 (И1 + И2, вариант Б): единая карточка файла и кнопка скачивания в углу превью ── */
+.asset-card-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.asset-card-grid.is-logos {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr);
+}
+
+.asset-card-grid.is-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.asset-card-grid.is-brand {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr);
+}
+
+.asset-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--soft-radius, 24px);
+  padding: 10px;
+  background: #ffffff;
+}
+
+.asset-card-preview {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 1;
+  min-height: clamp(220px, 22vw, 320px);
+  overflow: hidden;
+  border-radius: var(--r-inner, 16px);
+  background: var(--soft-bg, #f6f5f8);
+}
+
+.asset-card[data-tone="blue"] .asset-card-preview { background: #0056a2; }
+.asset-card[data-tone="purple"] .asset-card-preview { background: #f2ecff; }
+
+.asset-card-preview img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 62%;
+  max-height: 58%;
+}
+
+.asset-card.is-square .asset-card-preview img { width: 44%; max-height: 64%; }
+.asset-card.is-wide .asset-card-preview img { width: 64%; }
+.asset-card.is-sign .asset-card-preview img { height: 64%; width: auto; max-width: 70%; }
+
+.asset-card-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 8px 8px;
+}
+
+.asset-card-meta h3 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.asset-card-lang {
+  display: inline-flex;
+  flex: none;
+  gap: 12px;
+}
+
+.asset-card-lang button {
+  border: 0;
+  padding: 4px 0;
+  background: none;
+  color: #a3a6ae;
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+  transition: color var(--motion-fast) var(--ease-standard);
+}
+
+.asset-card-lang button[aria-pressed="true"] { color: #050505; }
+.asset-card-lang button:hover { color: var(--ui-blue); }
+
+/* Кнопка скачивания в углу превью */
+.corner-download {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(10, 20, 40, 0.12);
+}
+
+.corner-download > button {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: none;
+  color: #050505;
+  cursor: pointer;
+  transition: color var(--motion-fast) var(--ease-standard);
+}
+
+.corner-download > button:hover,
+.corner-download > button:focus-visible,
+.corner-download.is-open > button {
+  color: var(--ui-blue);
+}
+
+.corner-download-formats {
+  display: flex;
+  max-width: 0;
+  overflow: hidden;
+  transition: max-width 0.3s var(--ease-standard), padding 0.3s var(--ease-standard);
+}
+
+.corner-download.is-open .corner-download-formats {
+  max-width: 200px;
+  padding-left: 6px;
+}
+
+.corner-download-formats a {
+  border-radius: 999px;
+  padding: 8px 9px;
+  color: #050505;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: var(--mono-tracking);
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard);
+}
+
+.corner-download-formats a:hover,
+.corner-download-formats a:focus-visible {
+  background: var(--ui-blue);
+  color: #ffffff;
+}
+
+/* ДО: кнопка в углу ячейки логотипа */
+.subsidiary-cell-preview {
+  position: relative;
+}
+
+.subsidiary-row-cells .corner-download {
+  top: 4px;
+  right: 8px;
+}
+
+@media (max-width: 900px) {
+  .asset-card-grid.is-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+  .asset-card-grid.is-logos,
+  .asset-card-grid.is-brand,
+  .asset-card-grid.is-3 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .asset-card-preview { min-height: 210px; }
+}
