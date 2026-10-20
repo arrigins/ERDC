@@ -434,13 +434,28 @@ img {
   border-bottom: 1px solid transparent;
 }
 
-.nav-group:nth-child(2),
-.nav-group:nth-child(6),
-.nav-group:nth-child(9),
-.nav-group:nth-child(11) {
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 14px;
-  margin-bottom: 10px;
+/* 20.10 (И6): группы меню — подпись над первым разделом группы */
+.nav-section-label {
+  margin: 18px 0 4px;
+  border-top: 1px solid var(--line);
+  padding: 14px var(--sb-pad) 2px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: var(--mono-tracking);
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.nav-section-label:first-child {
+  margin-top: 0;
+  border-top: 0;
+  padding-top: 4px;
+}
+
+.nav-section-label.is-divider {
+  padding: 0;
+  margin: 14px 0 8px;
 }
 
 .nav-parent,

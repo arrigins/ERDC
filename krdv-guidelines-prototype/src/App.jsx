@@ -925,7 +925,7 @@ const socialPage = {
   ],
 };
 
-const pagesData = [
+const pagesDataRaw = [
   {
     id: "overview",
     number: "00",
@@ -1665,6 +1665,16 @@ const pagesData = [
   },
 ];
 
+// 20.10 (И6): порядок разделов и группы меню. Номера разделов считаются по порядку, адреса страниц прежние.
+const pageOrder = ["overview", "positioning", "logo", "color", "typography", "text", "photostyle", "subsidiaries", "regimes", "made", "corporate", "advertising", "social", "merch", "contacts"];
+// Подпись группы перед первым разделом группы; пустая строка — только разделитель
+const navGroupStarts = { overview: "Основа", logo: "Элементы", subsidiaries: "Семейство брендов", corporate: "Носители", contacts: "" };
+const pagesData = pageOrder.map((id, index) => {
+  const page = pagesDataRaw.find((item) => item.id === id);
+  return { ...page, number: String(index).padStart(2, "0"), navGroup: navGroupStarts[id] };
+});
+if (pagesData.length !== pagesDataRaw.length || pagesData.some((page) => !page.id)) throw new Error("pageOrder не совпадает с разделами");
+
 const pagesById = Object.fromEntries(pagesData.map((page) => [page.id, page]));
 const routeAliases = {
   strategy: "positioning",
@@ -1847,7 +1857,9 @@ function Sidebar({ activePageId, activeSectionId, openGroup, setOpenGroup, navig
           const isActive = activePageId === group.id;
 
           return (
-            <div className={`nav-group ${isActive ? "is-active" : ""} ${isOpen ? "is-open" : ""}`} key={group.id}>
+            <Fragment key={group.id}>
+            {group.navGroup !== undefined ? <div className={`nav-section-label ${group.navGroup ? "" : "is-divider"}`}>{group.navGroup ? t(group.navGroup) : null}</div> : null}
+            <div className={`nav-group ${isActive ? "is-active" : ""} ${isOpen ? "is-open" : ""}`}>
               <button
                 className="nav-parent"
                 type="button"
@@ -1867,6 +1879,7 @@ function Sidebar({ activePageId, activeSectionId, openGroup, setOpenGroup, navig
               </button>
               <NavChildren group={group} isOpen={isOpen} activePageId={activePageId} activeSectionId={isActive ? activeSectionId : ""} navigate={navigate} jumpTo={jumpTo} />
             </div>
+            </Fragment>
           );
         })}
       </nav>
@@ -2674,10 +2687,11 @@ function PrincipleCards({ items }) {
 // «Обзор» плиткой: обложки разделов во всю плитку, название в левом верхнем углу.
 // Сетка 6 колонок: ряды чередуются «узкая + широкая» и «три равные» (по образцу DevRev).
 // Широкая плитка занимает 4 колонки, все остальные — 2.
-const bentoWide = new Set(["logo", "typography", "social", "made"]);
+// 20.10: раскладка под новый порядок разделов
+const bentoWide = new Set(["logo", "typography", "photostyle", "made"]);
 // 19.10: корп. материалы + рекламные — пополам; мерч узкий + товарный знак широкий (как позиционирование + логотип); фотостиль — на всю строку
-const bentoHalf = new Set(["corporate", "advertising"]);
-const bentoFull = new Set(["photostyle"]);
+const bentoHalf = new Set(["subsidiaries", "regimes", "advertising", "social", "merch", "contacts"]);
+const bentoFull = new Set([]);
 function OverviewBento({ navigate }) {
   const tiles = pagesData.filter((page) => page.id !== "overview");
   return (
