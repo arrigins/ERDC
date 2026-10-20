@@ -1702,6 +1702,21 @@ function App() {
   const [activePageId, setActivePageId] = useState(getInitialPage);
   const [openGroup, setOpenGroup] = useState(getInitialPage);
   const [menuOpen, setMenuOpen] = useState(false);
+  // Телефон: кнопка «Меню» прячется, когда листают вниз, и возвращается при прокрутке вверх
+  const [menuHidden, setMenuHidden] = useState(false);
+  useEffect(() => {
+    const scroller = document.getElementById("page");
+    if (!scroller) return undefined;
+    let last = scroller.scrollTop;
+    const onScroll = () => {
+      const y = scroller.scrollTop;
+      if (Math.abs(y - last) < 6) return;
+      setMenuHidden(y > last && y > 80);
+      last = y;
+    };
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    return () => scroller.removeEventListener("scroll", onScroll);
+  }, []);
   const [showPreloader, setShowPreloader] = useState(true);
   const [activeSectionId, setActiveSectionId] = useState("");
   const activePage = pagesById[activePageId] || pagesById.overview;
@@ -1823,7 +1838,7 @@ function App() {
       <LayoutGroup id="brandbook-shell">
         <AnimatePresence>{showPreloader ? <BrandPreloader /> : null}</AnimatePresence>
         <div className={`guideline-shell ${menuOpen ? "nav-open" : ""}`}>
-          <button className="mobile-menu-button" type="button" aria-expanded={menuOpen} onClick={() => setMenuOpen((value) => !value)}>
+          <button className={`mobile-menu-button ${menuHidden && !menuOpen ? "is-hidden" : ""}`} type="button" aria-expanded={menuOpen} onClick={() => setMenuOpen((value) => !value)}>
             <span>{t(menuOpen ? "Закрыть" : "Меню")}</span>
             <UiIcon icon={menuOpen ? ICONS.close : ICONS.menu} className="menu-icon" />
           </button>
@@ -3588,7 +3603,8 @@ const cornerFormatHints = {
   pdf: "PDF — для печати, CMYK",
 };
 
-function CornerDownload({ files, title, asset = logoAsset }) {
+// options: [{ label, href, file, hint }] — свои варианты вместо SVG/PNG/PDF (например, PNG 1080 / 2160 в соцсетях)
+function CornerDownload({ files, title, asset = logoAsset, options }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   useEffect(() => {
@@ -3606,21 +3622,21 @@ function CornerDownload({ files, title, asset = logoAsset }) {
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);
-  const formats = ["svg", "png", "pdf"].filter((format) => files?.[format]);
-  if (!formats.length) return null;
+  const list = options || ["svg", "png", "pdf"].filter((format) => files?.[format]).map((format) => ({ label: format.toUpperCase(), href: asset(files[format]), file: files[format], hint: cornerFormatHints[format] }));
+  if (!list.length) return null;
   return (
     <div className={`corner-download ${open ? "is-open" : ""}`} ref={ref}>
       <span className="corner-download-formats" aria-hidden={!open}>
-        {formats.map((format) => (
+        {list.map((option) => (
           <a
-            key={format}
-            href={asset(files[format])}
-            download={files[format]}
-            title={t(cornerFormatHints[format])}
-            aria-label={t(`Скачать ${title} в формате ${format.toUpperCase()}`)}
+            key={option.label}
+            href={option.href}
+            download={option.file}
+            title={option.hint ? t(option.hint) : undefined}
+            aria-label={t(`Скачать ${title}: ${option.label}`)}
             tabIndex={open ? 0 : -1}
           >
-            {format.toUpperCase()}
+            {option.label}
           </a>
         ))}
       </span>
@@ -3952,6 +3968,7 @@ function SocialVariantSlider({ group }) {
             <SocialBrandedPhoto variant={variant.id} photo={variant.photo} label={`Фотография с логотипом КРДВ: ${variant.title.toLowerCase()}`} />
           </motion.div>
         </AnimatePresence>
+        <CornerDownload options={socialPngOptions(variant.file)} title={`наложение «${variant.title}»`} />
       </div>
       <div className="svs-bar">
         <h3>{t(group.title)}</h3>
@@ -3977,10 +3994,12 @@ function SocialVariantSlider({ group }) {
       <p className="svs-text">
         <strong>{t(variant.title)}.</strong> {t(variant.text)}
       </p>
-      <SocialOverlayDownloads file={variant.file} title={variant.title} />
     </section>
   );
 }
+
+const socialPngOptions = (file) =>
+  [1080, 2160].map((size) => ({ label: `PNG ${size}`, href: socialAsset(`overlays/krdv-social-${file}-${size}.png`), file: `krdv-social-${file}-${size}.png`, hint: `${size} × ${size} пикселей` }));
 
 function SocialOverlayDownloads({ file, title }) {
   return (
@@ -4087,12 +4106,6 @@ function SocialPhotoBlock() {
         <div className="social-large-copy">
           <h3>{t("Укрупнённый логотип")}</h3>
           <p>{t("Для поста с несколькими фотографиями: в превью обычный логотип теряется. Ставится только на первую фотографию.")}</p>
-          <span className="social-large-label">{t("Без затемнения")}</span>
-          <SocialOverlayDownloads file="large" title="Укрупнённый" />
-          <span className="social-large-label">{t("С затемнением")}</span>
-          <SocialOverlayDownloads file="large-shade" title="Укрупнённый с затемнением" />
-          <span className="social-large-label">{t("С синим затемнением")}</span>
-          <SocialOverlayDownloads file="large-blue" title="Укрупнённый с синим затемнением" />
         </div>
         {[
           { count: 6, variant: "large", photo: "demo-photo.webp", caption: "Пост из 6 фотографий" },
@@ -4107,6 +4120,21 @@ function SocialPhotoBlock() {
             <figcaption>{t(caption)}</figcaption>
           </figure>
         ))}
+        <div className="social-large-variants">
+          {[
+            { file: "large", title: "Без затемнения" },
+            { file: "large-shade", title: "С затемнением" },
+            { file: "large-blue", title: "С синим затемнением" },
+          ].map((item) => (
+            <figure className="social-large-variant" key={item.file}>
+              <div className="social-large-variant-preview">
+                <SocialBrandedPhoto variant={item.file} photo={item.file === "large-blue" ? "photo-large-blue.webp" : "demo-photo.webp"} />
+                <CornerDownload options={socialPngOptions(item.file)} title={`укрупнённый логотип, ${item.title.toLowerCase()}`} />
+              </div>
+              <figcaption>{t(item.title)}</figcaption>
+            </figure>
+          ))}
+        </div>
       </div>
     </div>
   );
