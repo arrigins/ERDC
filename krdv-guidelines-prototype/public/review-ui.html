@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<!--! TT Norms Pro © TypeType (ООО «ТайпТайп»), https://typetype.org. Используется по веб-лицензии АО «КРДВ» (счёт-договор № КРДВ-001 от 20.11.2023). Копирование и распространение файлов шрифта запрещено. -->
+<title>Ревью интерфейса</title>
+<style>
+/*! TT Norms Pro © TypeType (ООО «ТайпТайп»), https://typetype.org. Используется по веб-лицензии АО «КРДВ» (счёт-договор № КРДВ-001 от 20.11.2023). Копирование и распространение файлов шрифта запрещено. */
+@font-face { font-family: "TT Norms Pro"; src: url("fonts/TT-Norms-Pro-Light.woff2") format("woff2"); font-weight: 300; font-display: swap; }
+@font-face { font-family: "TT Norms Pro"; src: url("fonts/TT-Norms-Pro-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "TT Norms Pro"; src: url("fonts/TT-Norms-Pro-Normal.woff2") format("woff2"); font-weight: 450; font-display: swap; }
+@font-face { font-family: "TT Norms Pro"; src: url("fonts/TT-Norms-Pro-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "TT Norms Pro"; src: url("fonts/TT-Norms-Pro-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "TT Norms Pro"; src: url("fonts/TT-Norms-Pro-ExtraBold.woff2") format("woff2"); font-weight: 800; font-display: swap; }
+
+:root {
+  color-scheme: light;
+  --bg: #f6f5f8;
+  --card: #ffffff;
+  --ink: #0d1420;
+  --muted: #6e7380;
+  --faint: #a3a7b1;
+  --line: #e3e2e8;
+  --ui: #1b3e92;
+  --brand: #0056a2;
+  --red: #de2327;
+  --navy: #001d37;
+  --ok: #1d8a4e;
+  --no: #c93c3c;
+  --talk: #b97a06;
+  --r: 24px;
+  --ri: 16px;
+  --rc: 12px;
+  --gutter: clamp(16px, 4vw, 48px);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 17px/1.5 "TT Norms Pro", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 120px;
+}
+img { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; }
+a { color: var(--ui); }
+h1, h2, h3, h4 { margin: 0; font-weight: 450; letter-spacing: -0.01em; }
+p { margin: 0; }
+
+/* ── шапка ── */
+.top { max-width: 1240px; margin: 0 auto; padding: 40px var(--gutter) 0; }
+.top-row { display: flex; align-items: center; gap: 20px; justify-content: space-between; flex-wrap: wrap; }
+.top-logo { width: 150px; }
+.top-kicker { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.top h1 { font-size: clamp(34px, 5vw, 60px); line-height: 1.04; margin-top: 36px; max-width: 900px; }
+.top-lead { margin-top: 18px; font-size: clamp(18px, 1.8vw, 21px); color: #3b414d; max-width: 820px; }
+.howto { margin-top: 28px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 980px; }
+.howto div { background: var(--card); border-radius: var(--ri); padding: 16px 18px; font-size: 15px; color: #3b414d; }
+.howto b { display: block; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+
+/* ── вкладки ── */
+.tabs {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(12px);
+  margin-top: 36px;
+  border-bottom: 1px solid var(--line);
+}
+.tabs-in { max-width: 1240px; margin: 0 auto; padding: 0 var(--gutter); display: flex; gap: 4px; overflow-x: auto; }
+.tab {
+  border: 0; background: none; cursor: pointer;
+  padding: 18px 18px 16px; font-size: 18px; font-weight: 450; color: var(--muted);
+  border-bottom: 2px solid transparent; white-space: nowrap;
+}
+.tab .n { font-size: 13px; color: var(--faint); margin-left: 6px; }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ui); }
+
+.page { max-width: 1240px; margin: 0 auto; padding: 32px var(--gutter) 0; }
+.page[hidden] { display: none; }
+.page-intro { font-size: clamp(20px, 2vw, 26px); line-height: 1.3; max-width: 900px; margin: 12px 0 28px; }
+.group-title { margin: 56px 0 16px; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.group-title:first-of-type { margin-top: 8px; }
+
+/* ── пункт ── */
+.item { background: var(--card); border-radius: var(--r); padding: clamp(20px, 3vw, 36px); margin-bottom: 16px; scroll-margin-top: 80px; }
+.item-head { display: grid; grid-template-columns: auto 1fr; gap: 14px 18px; align-items: start; }
+.item-id { font-size: 14px; font-weight: 500; background: #eef0f4; border-radius: 10px; padding: 6px 10px; min-width: 46px; text-align: center; margin-top: 4px; }
+.item h2 { font-size: clamp(24px, 2.6vw, 32px); line-height: 1.15; }
+.item-what { margin-top: 8px; color: #3b414d; font-size: 18px; max-width: 860px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.tag { font-size: 13px; padding: 3px 10px; border-radius: 99px; background: #f1f2f5; color: #4b5160; }
+.tag.big { background: #fde9e9; color: #8f2626; }
+.tag.mid { background: #fff3da; color: #7a5300; }
+.tag.small { background: #e3f4ea; color: #1d6b40; }
+
+.ba { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+.ba.stack { grid-template-columns: 1fr; }
+.ba > div { min-width: 0; }
+.ba-label { display: flex; align-items: center; gap: 8px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.ba-label::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--faint); }
+.ba-after .ba-label { color: var(--ui); }
+.ba-after .ba-label::before { background: var(--ui); }
+.ba-label.ba-no { color: var(--no); }
+.ba-label.ba-no::before { background: var(--no); }
+.pane { background: var(--bg); border-radius: var(--ri); padding: 18px; height: calc(100% - 30px); }
+.pane.white { background: #fff; outline: 1px solid var(--line); outline-offset: -1px; }
+.pane-note { font-size: 14px; color: var(--muted); margin-top: 12px; }
+.why { margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 28px; }
+.why p { font-size: 15.5px; color: #3b414d; border-left: 2px solid var(--line); padding-left: 14px; }
+.why b { font-weight: 500; color: var(--ink); }
+
+/* ── решение ── */
+.decide { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.decide-q { font-size: 15px; color: var(--muted); margin-right: 6px; }
+.dbtn {
+  border: 1px solid var(--line); background: #fff; cursor: pointer;
+  padding: 10px 18px; border-radius: var(--rc); font-size: 15.5px; font-weight: 450;
+  display: inline-flex; align-items: center; gap: 8px; transition: background .15s, border-color .15s, color .15s;
+}
+.dbtn:hover { border-color: #c7c9d2; }
+.dbtn i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.dbtn[data-v="yes"] i { background: var(--ok); }
+.dbtn[data-v="no"] i { background: var(--no); }
+.dbtn[data-v="talk"] i { background: var(--talk); }
+.dbtn[aria-pressed="true"][data-v="yes"] { background: var(--ok); border-color: var(--ok); color: #fff; }
+.dbtn[aria-pressed="true"][data-v="no"] { background: var(--no); border-color: var(--no); color: #fff; }
+.dbtn[aria-pressed="true"][data-v="talk"] { background: var(--talk); border-color: var(--talk); color: #fff; }
+.dbtn[aria-pressed="true"] i { background: #fff; }
+.comment { flex: 1 1 260px; min-width: 0; border: 1px solid var(--line); border-radius: var(--rc); padding: 10px 14px; font: inherit; font-size: 15px; resize: vertical; min-height: 44px; background: #fff; }
+.comment:focus, .dbtn:focus-visible, .tab:focus-visible { outline: 2px solid var(--ui); outline-offset: 2px; }
+.item[data-state="yes"] { box-shadow: inset 4px 0 0 var(--ok); }
+.item[data-state="no"] { box-shadow: inset 4px 0 0 var(--no); }
+.item[data-state="talk"] { box-shadow: inset 4px 0 0 var(--talk); }
+
+/* ── нижняя панель ── */
+.bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+  background: #0b1630; color: #fff;
+  padding: 12px var(--gutter);
+  display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap; justify-content: center;
+}
+.bar-stats { display: flex; gap: 16px; font-size: 15px; flex-wrap: wrap; }
+.bar-stats span { display: inline-flex; align-items: center; gap: 6px; }
+.bar-stats i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.bar button { border: 0; cursor: pointer; border-radius: var(--rc); padding: 11px 18px; font-size: 15.5px; font-weight: 450; }
+.bar .copy { background: #fff; color: #0b1630; }
+.bar .copy:hover { background: #dfe7ff; }
+.bar .reset { background: transparent; color: #aab4cc; padding: 11px 8px; }
+.bar .reset:hover { color: #fff; }
+.toast { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%) translateY(20px); opacity: 0; transition: .25s; background: var(--ink); color: #fff; padding: 12px 18px; border-radius: 12px; font-size: 15px; z-index: 40; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateX(-50%); }
+.modal { position: fixed; inset: 0; background: rgba(5, 10, 25, .5); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
+.modal.open { display: flex; }
+.modal-box { background: #fff; border-radius: var(--r); padding: 24px; width: min(720px, 100%); max-height: 90vh; display: flex; flex-direction: column; gap: 14px; }
+.modal-box textarea { width: 100%; min-height: 320px; flex: 1; font: 14px/1.5 ui-monospace, Menlo, monospace; border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+.modal-box .row { display: flex; gap: 10px; justify-content: flex-end; }
+.modal-box button { border: 0; border-radius: var(--rc); padding: 11px 18px; cursor: pointer; background: #eef0f4; }
+.modal-box button.primary { background: var(--ui); color: #fff; }
+
+/* ── общие элементы макетов ── */
+.shots { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: start; }
+.shots img { border-radius: 12px; width: 100%; background: #fff; }
+.shots .full { grid-column: 1 / -1; }
+.shots-4 { grid-template-columns: 1.1fr .75fr .75fr; }
+.shots-4 .wl { grid-column: 1 / 2; }
+.shots-4 .full { grid-column: 2 / 4; }
+.fc-row { max-width: 900px; }
+.cap { font-size: 13px; color: var(--muted); margin-top: 6px; }
+.btn-ghost { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: var(--rc); background: #eef0f4; font-size: 14px; border: 0; }
+.mono { font-family: ui-monospace, "Geist Mono", Menlo, monospace; letter-spacing: 0.04em; }
+
+/* И1: единая карточка файла */
+.fc-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.fc { background: #fff; border-radius: var(--ri); padding: 8px; display: flex; flex-direction: column; }
+.fc-prev { position: relative; border-radius: 12px; aspect-ratio: 4 / 3; display: grid; place-items: center; transition: background .25s; background: #f3f3f6; }
+.fc-prev[data-bg="dark"] { background: #10141c; }
+.fc-prev[data-bg="blue"] { background: #1b3e92; }
+.fc-prev img { max-width: 62%; max-height: 62%; }
+.fc-prev img.white { filter: brightness(0) invert(1); }
+.fc-bg { position: absolute; left: 8px; bottom: 8px; display: flex; gap: 4px; }
+.fc-bg button { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #fff; cursor: pointer; box-shadow: 0 0 0 1px rgba(0,0,0,.12); padding: 0; }
+.fc-bg button[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ui); }
+.fc-body { padding: 12px 8px 6px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.fc-title { font-size: 16px; font-weight: 500; line-height: 1.25; }
+.fc-text { font-size: 13.5px; color: var(--muted); line-height: 1.35; }
+.fc-foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-top: auto; padding-top: 4px; }
+.seg { display: inline-flex; background: #eef0f4; border-radius: 10px; padding: 3px; }
+.seg button { border: 0; background: none; border-radius: 8px; padding: 5px 9px; font-size: 13px; cursor: pointer; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+.dl { position: relative; }
+.dl > button { white-space: nowrap; border: 0; background: #eef0f4; border-radius: 10px; padding: 7px 12px; font-size: 13.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.dl > button:hover, .dl.open > button { background: var(--ui); color: #fff; }
+.dl-menu { position: absolute; right: 0; bottom: calc(100% + 6px); width: 250px; background: #fff; border-radius: 14px; box-shadow: 0 12px 40px rgba(10,20,40,.18); padding: 6px; display: none; z-index: 5; }
+.dl.open .dl-menu { display: block; }
+.dl-menu a { display: grid; grid-template-columns: 44px 1fr; gap: 2px 8px; padding: 9px 10px; border-radius: 10px; text-decoration: none; color: var(--ink); font-size: 14px; }
+.dl-menu a:hover { background: #f1f3f8; }
+.dl-menu a b { font-weight: 500; grid-row: span 2; align-self: center; }
+.dl-menu a span { font-size: 12.5px; color: var(--muted); }
+
+/* И2 */
+.btnrow { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.btnrow .lbl { width: 92px; font-size: 14px; color: var(--muted); }
+.fakebtn { background: #f4f4f7; border-radius: 10px; padding: 8px 12px; font-size: 13px; font-family: ui-monospace, Menlo, monospace; }
+.counter { font-size: 44px; font-weight: 300; line-height: 1; }
+
+/* И3: все файлы */
+.rc { background: #fff; border-radius: 12px; padding: 14px; }
+.rc-filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 0; background: #eef0f4; border-radius: 99px; padding: 7px 12px; font-size: 13.5px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ui); color: #fff; }
+.rc-list { margin-top: 12px; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+.rc-file { background: #f6f6f9; border-radius: 10px; padding: 8px; font-size: 12.5px; line-height: 1.25; display: flex; flex-direction: column; gap: 6px; position: relative; cursor: pointer; }
+.rc-file input { position: absolute; top: 8px; right: 8px; accent-color: var(--ui); }
+.rc-file .th { aspect-ratio: 3/2; display: grid; place-items: center; background: #fff; border-radius: 8px; }
+.rc-file .th img { max-width: 70%; max-height: 70%; }
+.rc-file[hidden] { display: none; }
+.rc-go { margin-top: 12px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+.rc-go button { border: 0; background: var(--ui); color: #fff; border-radius: 10px; padding: 9px 14px; font-size: 14px; }
+.archive { display: grid; gap: 8px; }
+.archive div { background: #1b3e92; color: #fff; border-radius: 12px; padding: 14px 16px; font-size: 15px; display: flex; justify-content: space-between; }
+.archive small { color: #b9c6ea; }
+
+/* И4: движение */
+.motion-demo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.md-card { background: #fff; border-radius: 12px; padding: 16px; font-size: 14px; transition: transform .25s, box-shadow .25s, background .2s; min-height: 92px; }
+.md-card b { display: block; font-weight: 500; margin-bottom: 4px; }
+.lifty:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+.md-link { cursor: pointer; }
+.md-link:hover { background: var(--ui); color: #fff; }
+.mtable { width: 100%; border-collapse: collapse; font-size: 14.5px; margin-top: 4px; }
+.mtable th { text-align: left; font-weight: 500; padding: 8px 10px 8px 0; vertical-align: top; width: 34%; }
+.mtable td { padding: 8px 0; color: #3b414d; vertical-align: top; }
+.mtable tr + tr { border-top: 1px solid var(--line); }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
+
+/* И5: цвета */
+.sw-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.sw { border-radius: 12px; padding: 12px; min-height: 120px; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px; font-size: 13px; }
+.sw b { font-weight: 450; font-size: 15px; margin-bottom: 4px; }
+.sw button { border: 0; background: rgba(255,255,255,.16); color: inherit; text-align: left; border-radius: 6px; padding: 3px 6px; cursor: copy; font: 12.5px ui-monospace, Menlo, monospace; display: flex; justify-content: space-between; }
+.sw.light button { background: rgba(0,0,0,.06); }
+.sw button:hover { background: rgba(255,255,255,.32); }
+.sw.light button:hover { background: rgba(0,0,0,.12); }
+.cmx { margin-top: 12px; display: grid; grid-template-columns: repeat(9, 1fr); gap: 4px; }
+.cmx div { aspect-ratio: 1; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 15px; font-weight: 500; line-height: 1; gap: 3px; }
+.cmx small { font-size: 10.5px; font-weight: 500; padding: 2px 4px; border-radius: 4px; background: rgba(255,255,255,.85); color: var(--ink); }
+.cmx-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-top: 8px; }
+
+/* И6: коротко */
+.short { background: #fff; border-radius: 12px; padding: 18px; }
+.short h4 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 450; margin-bottom: 10px; }
+.short ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.short li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; font-size: 15px; line-height: 1.35; }
+.mark { width: 20px; height: 20px; border-radius: 50%; border: 1.6px solid; display: grid; place-items: center; font-size: 11px; font-weight: 700; margin-top: 1px; }
+.mark.y { color: var(--ok); }
+.mark.n { color: var(--no); }
+
+/* И7: меню */
+.menus { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.menu-new { background: #fff; border-radius: 12px; padding: 14px 16px; font-size: 14.5px; }
+.menu-new h5 { margin: 12px 0 4px; font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 450; }
+.menu-new h5:first-child { margin-top: 0; }
+.menu-new div { display: grid; grid-template-columns: 26px 1fr; padding: 4px 0; }
+.menu-new div span:first-child { color: var(--faint); font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; padding-top: 2px; }
+.menu-new .new::after { content: "новый"; font-size: 11px; background: #e3f4ea; color: #1d6b40; border-radius: 6px; padding: 1px 6px; margin-left: 6px; }
+.menu-new .moved::after { content: "переезд"; font-size: 11px; background: #e6ecfb; color: var(--ui); border-radius: 6px; padding: 1px 6px; margin-left: 6px; }
+
+/* И8: обложки */
+.covers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.covers figure { margin: 0; position: relative; }
+.covers img { border-radius: 8px; aspect-ratio: 2/1; object-fit: cover; width: 100%; }
+.covers figcaption { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+.cover-rule { display: grid; gap: 8px; }
+.cover-rule div { background: #fff; border-radius: 12px; padding: 12px 14px; font-size: 14.5px; }
+.cover-rule b { font-weight: 500; }
+
+/* И9, И10 */
+.checklist { display: grid; gap: 8px; }
+.checklist div { background: #fff; border-radius: 12px; padding: 12px 14px; font-size: 14.5px; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+.checklist small { color: var(--muted); }
+.phone { width: 180px; height: 360px; border-radius: 28px; border: 8px solid #111; background: #fff; margin: 0 auto; overflow: hidden; position: relative; }
+.phone img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.log { background: #fff; border-radius: 12px; padding: 16px; font-size: 14.5px; }
+.log div { display: grid; grid-template-columns: 70px 1fr; gap: 10px; padding: 8px 0; }
+.log div + div { border-top: 1px solid var(--line); }
+.log time { color: var(--muted); font-family: ui-monospace, Menlo, monospace; font-size: 13px; }
+.log em { font-style: normal; font-size: 12px; background: #eef0f4; border-radius: 6px; padding: 1px 6px; margin-left: 6px; }
+
+/* ── бренд ── */
+.struct { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.struct-list { display: grid; gap: 4px; }
+.sitem { display: grid; grid-template-columns: 30px 1fr auto; align-items: center; gap: 8px; background: #fff; border-radius: 10px; padding: 8px 12px; font-size: 15px; border-left: 4px solid var(--c, #ccc); }
+.sitem span:first-child { color: var(--faint); font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; }
+.sitem small { font-size: 12px; color: var(--muted); }
+.sgroup { margin-top: 10px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+.sgroup:first-child { margin-top: 0; }
+.sgroup i { width: 10px; height: 10px; border-radius: 3px; background: var(--c); }
+.g1 { --c: #1b3e92; } .g2 { --c: #22a8e0; } .g3 { --c: #8a5cd6; } .g4 { --c: #de2327; } .g5 { --c: #8b919e; }
+.badge-new { font-size: 11px; background: #e3f4ea; color: #1d6b40; border-radius: 6px; padding: 2px 7px; }
+.badge-move { font-size: 11px; background: #e6ecfb; color: var(--ui); border-radius: 6px; padding: 2px 7px; }
+
+/* лепесток */
+.petal-clip { clip-path: url(#petal); }
+.gx-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.gx { background: #fff; border-radius: 14px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+.gx-stage { border-radius: 10px; aspect-ratio: 1; position: relative; overflow: hidden; background: #f3f3f6; display: grid; place-items: center; }
+.gx h4 { font-size: 15px; font-weight: 500; }
+.gx p { font-size: 13px; color: var(--muted); line-height: 1.35; }
+.construct svg { width: 86%; }
+.carriers { display: grid; grid-template-columns: 1.15fr 1.6fr 0.62fr; gap: 12px; align-items: end; }
+.carrier { position: relative; overflow: hidden; border-radius: 10px; }
+.carrier-cap { font-size: 13px; color: var(--muted); margin-top: 6px; }
+.c-post { aspect-ratio: 1; background: #0056a2; }
+.c-slide { aspect-ratio: 16/9; background: #001d37; }
+.c-roll { aspect-ratio: 800/1800; }
+.aurora { position: absolute; inset: 0; }
+.au-ocean { background: radial-gradient(60% 55% at 78% 82%, #22a8e0 0%, transparent 70%), radial-gradient(55% 60% at 18% 20%, #1b3e92 0%, transparent 70%), radial-gradient(45% 45% at 60% 35%, #0056a2 0%, transparent 70%), #001d37; }
+.au-north { background: radial-gradient(55% 50% at 75% 75%, #0aaba5 0%, transparent 70%), radial-gradient(50% 55% at 25% 25%, #1b3e92 0%, transparent 72%), radial-gradient(35% 35% at 85% 30%, #1ba7df 0%, transparent 70%), #041b38; }
+.au-dawn { background: radial-gradient(60% 55% at 80% 80%, #ffffff 0%, transparent 70%), radial-gradient(55% 55% at 20% 25%, #9ec6eb 0%, transparent 70%), radial-gradient(45% 45% at 70% 25%, #fce8ea 0%, transparent 70%), #d4e6fa; }
+.au-sunset { background: radial-gradient(55% 50% at 80% 82%, #de2327 0%, transparent 70%), radial-gradient(40% 40% at 60% 55%, #ef8a91 0%, transparent 70%), radial-gradient(60% 60% at 15% 20%, #0c5082 0%, transparent 70%), #0c1b3d; }
+.au-swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.au-sw { aspect-ratio: 4/5; border-radius: 12px; position: relative; overflow: hidden; color: #fff; }
+.au-sw span { position: absolute; left: 12px; bottom: 10px; font-size: 14px; font-weight: 450; }
+.au-sw.light { color: var(--navy); }
+.old-grads { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.old-grads div { aspect-ratio: 4/5; border-radius: 12px; }
+
+.ill-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ill-row img { width: 64px; height: 64px; object-fit: contain; }
+.picto { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+.picto img { width: 58%; }
+.rules { display: grid; gap: 8px; }
+.rules div { background: #fff; border-radius: 12px; padding: 12px 14px; font-size: 14.5px; }
+.rules b { font-weight: 500; display: block; margin-bottom: 2px; }
+
+.sig-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.sig { border-radius: 12px; padding: 16px; min-height: 150px; display: flex; flex-direction: column; justify-content: space-between; font-size: 13px; }
+.sig strong { font-size: clamp(17px, 1.8vw, 22px); font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; }
+.sig strong em { font-style: normal; font-weight: 400; }
+
+.grid-demo { position: relative; aspect-ratio: 1; border-radius: 10px; overflow: hidden; }
+.grid-lines { position: absolute; inset: 0; background-image: linear-gradient(to right, rgba(255,255,255,.35) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,.35) 1px, transparent 1px); background-size: calc(100% / 9) calc(100% / 9); }
+
+/* знаки режимов */
+.styles3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.st { background: #fff; border-radius: 12px; padding: 10px; }
+.st-stage { aspect-ratio: 1; border-radius: 10px; display: grid; place-items: center; background: #f5f3f8; overflow: hidden; }
+.st-stage img, .st-stage svg { width: 62%; }
+.st-stage img.wide { width: 100%; height: 100%; object-fit: cover; }
+.st h4 { font-size: 15px; font-weight: 500; margin-top: 8px; }
+.st p { font-size: 13px; color: var(--muted); }
+.regime-uses { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+.ru { background: #fff; border-radius: 12px; padding: 10px; }
+.ru-stage { border-radius: 10px; overflow: hidden; position: relative; aspect-ratio: 1; }
+.ru h4 { font-size: 15px; font-weight: 500; margin-top: 8px; }
+.ru p { font-size: 13px; color: var(--muted); }
+.r-label { position: absolute; display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px 5px 6px; border-radius: 99px; color: #fff; font-weight: 700; font-size: 13px; letter-spacing: 0.02em; }
+.r-label img { width: 20px; height: 20px; filter: brightness(0) invert(1); }
+.pattern { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; padding: 6%; align-items: center; justify-items: center; }
+.pattern img { width: 56%; filter: brightness(0) invert(1); opacity: .9; }
+.pattern img:nth-child(2n) { transform: rotate(90deg); opacity: .55; }
+.divs { position: absolute; inset: 0; display: grid; grid-template-rows: repeat(3, 1fr); gap: 4px; padding: 6px; }
+.divs div { border-radius: 6px; position: relative; overflow: hidden; color: #fff; font-weight: 700; font-size: 13px; padding: 8px 10px; }
+.divs img { position: absolute; right: -14%; top: -40%; width: 64%; filter: brightness(0) invert(1); opacity: .28; }
+
+/* голос */
+.voice { display: grid; gap: 8px; }
+.vpair { display: grid; grid-template-columns: 140px 1fr 1fr; gap: 8px; align-items: stretch; }
+.vpair > div { background: #fff; border-radius: 12px; padding: 12px 14px; font-size: 14.5px; line-height: 1.4; }
+.vpair .vlabel { background: none; padding: 12px 0; font-weight: 500; }
+.vpair .bad { color: #7a2a2a; background: #fdf1f1; }
+.vpair .good { color: #164d30; background: #edf8f1; }
+.vpair .bad::before { content: "Не так  "; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; display: block; margin-bottom: 4px; opacity: .7; }
+.vpair .good::before { content: "Так  "; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; display: block; margin-bottom: 4px; opacity: .7; }
+.tone { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 8px; }
+.tone div { background: #fff; border-radius: 12px; padding: 12px 14px; font-size: 13.5px; color: var(--muted); }
+.tone b { display: block; color: var(--ink); font-weight: 500; font-size: 15.5px; margin-bottom: 2px; }
+
+/* фото */
+.ptable { width: 100%; border-collapse: separate; border-spacing: 0 6px; font-size: 14.5px; }
+.ptable td { background: #fff; padding: 10px 14px; vertical-align: top; }
+.ptable td:first-child { border-radius: 10px 0 0 10px; color: #7a2a2a; width: 50%; }
+.ptable td:last-child { border-radius: 0 10px 10px 0; color: #164d30; }
+.ptable th { text-align: left; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 450; padding: 0 14px; }
+.ptable s { text-decoration-color: rgba(201,60,60,.5); }
+.oldnew { display: grid; gap: 4px; }
+.oldnew div { background: #fff; border-radius: 10px; padding: 9px 12px; font-size: 14.5px; display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.oldnew small { color: var(--no); font-size: 12.5px; text-align: right; }
+.oldnew.after small { color: var(--ok); }
+.grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.grade figure { margin: 0; }
+.grade img { border-radius: 10px; aspect-ratio: 4/3; object-fit: cover; width: 100%; }
+.grade figcaption { font-size: 13px; margin-top: 6px; display: flex; gap: 6px; align-items: flex-start; line-height: 1.3; }
+.g-heavy { filter: saturate(2.1) contrast(1.35) brightness(1.05); }
+.g-filter { filter: sepia(.55) hue-rotate(-12deg) contrast(1.15) saturate(1.3); }
+.vignette { position: relative; }
+.vignette::after { content: ""; position: absolute; inset: 0; border-radius: 10px; box-shadow: inset 0 0 60px 20px rgba(0,0,0,.6); pointer-events: none; }
+.zone { position: relative; aspect-ratio: 1; border-radius: 10px; overflow: hidden; }
+.zone > img.ph { width: 100%; height: 100%; object-fit: cover; }
+.zone .badge { height: auto; }
+.zone .safe { position: absolute; left: calc(100% / 18); top: calc(100% / 18); width: calc(100% / 9); height: calc(100% / 9); outline: 2px dashed #fff; outline-offset: calc(100% / 18 * .5); }
+.zone .badge { position: absolute; left: calc(100% / 18); top: calc(100% / 18); width: calc(100% / 9); }
+.zone .calm { position: absolute; left: 0; right: 0; bottom: 0; height: 34%; background: repeating-linear-gradient(135deg, rgba(255,255,255,.18) 0 8px, rgba(255,255,255,0) 8px 16px); border-top: 2px dashed rgba(255,255,255,.9); color: #fff; font-size: 12.5px; display: flex; align-items: flex-end; padding: 10px; }
+.credit { position: absolute; right: 8px; bottom: 8px; background: rgba(0,0,0,.55); color: #fff; font-size: 11px; padding: 3px 7px; border-radius: 6px; }
+.ethic { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.ethic div { background: #fff; border-radius: 12px; padding: 12px 14px; font-size: 14px; color: #3b414d; }
+.ethic b { display: block; color: var(--ink); font-weight: 500; font-size: 15px; margin-bottom: 2px; }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; counter-reset: s; }
+.steps div { background: #fff; border-radius: 12px; padding: 14px; font-size: 14px; color: #3b414d; counter-increment: s; }
+.steps div::before { content: counter(s); display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--ui); color: #fff; font-size: 13px; margin-bottom: 8px; }
+.steps b { display: block; color: var(--ink); font-weight: 500; margin-bottom: 2px; }
+.toc { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.toc div { background: #fff; border-radius: 12px; padding: 12px; font-size: 14px; }
+.toc span { display: block; color: var(--faint); font-size: 12px; font-family: ui-monospace, Menlo, monospace; margin-bottom: 4px; }
+.toc a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--line); }
+
+.end { margin-top: 40px; background: #0b1630; color: #fff; border-radius: var(--r); padding: clamp(24px, 4vw, 44px); }
+.end h2 { font-size: clamp(24px, 3vw, 34px); }
+.end p { color: #b9c3da; margin-top: 10px; max-width: 760px; }
+
+
+/* ── v2: карточка файла ── */
+.tag.new2 { background: #e6ecfb; color: var(--ui); }
+.removed { display: flex; flex-wrap: wrap; gap: 8px; }
+.removed span { background: #fff; border-radius: 99px; padding: 6px 12px; font-size: 14px; color: #7a2a2a; text-decoration: line-through; text-decoration-color: rgba(201,60,60,.45); }
+.ac-grid { display: grid; grid-template-columns: 1fr 1.4fr 1fr 1fr; gap: 12px; }
+.ac-grid.is-3 { grid-template-columns: repeat(3, 1fr); }
+.ac { background: #fff; border-radius: 16px; padding: 8px; display: flex; flex-direction: column; min-width: 0; }
+.ac-prev { position: relative; aspect-ratio: 4 / 3; border-radius: 12px; background: #f3f3f6; display: grid; place-items: center; overflow: hidden; }
+.ac.is-wide .ac-prev { aspect-ratio: auto; height: 100%; min-height: 0; }
+.ac-prev.blue { background: #0056a2; }
+.ac-prev.tor-bg { background: #f5f0f5; }
+.ac-prev img { max-width: 58%; max-height: 52%; }
+.ac.is-wide .ac-prev img { max-width: 70%; }
+.ac-meta { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 12px 8px 8px; }
+.ac-title { font-size: 16px; font-weight: 450; line-height: 1.25; }
+.ac-lang { display: inline-flex; gap: 10px; font-size: 14px; flex: none; }
+.ac-lang button { border: 0; background: none; padding: 0; cursor: pointer; color: var(--faint); font: inherit; }
+.ac-lang button[aria-pressed="true"] { color: var(--ink); }
+.ac-lang button:hover { color: var(--ui); }
+/* А: форматы при наведении */
+.ac-pills { position: absolute; left: 8px; right: 8px; bottom: 8px; display: flex; gap: 6px; opacity: 0; transform: translateY(6px); transition: opacity .2s, transform .2s; }
+.ac-prev:hover .ac-pills, .ac-prev:focus-within .ac-pills { opacity: 1; transform: none; }
+.ac-pills a { flex: 1; text-align: center; background: rgba(255,255,255,.9); backdrop-filter: blur(8px); border-radius: 10px; padding: 9px 0; font-size: 13px; font-weight: 500; letter-spacing: .03em; color: var(--ink); text-decoration: none; box-shadow: 0 1px 2px rgba(10,20,40,.08); transition: background .15s, color .15s; }
+.ac-pills a:hover { background: var(--ui); color: #fff; }
+@media (hover: none) { .ac-pills { opacity: 1; transform: none; left: 6px; right: 6px; bottom: 6px; gap: 4px; } .ac-pills a { padding: 7px 0; font-size: 12px; } .ac-prev:has(.ac-pills) { aspect-ratio: auto; height: auto; padding: 14px 0 50px; } .ac-prev:has(.ac-pills) img { max-height: 90px; } }
+/* Б: кнопка в углу */
+.ac-ic { position: absolute; top: 8px; right: 8px; display: flex; align-items: center; background: #fff; border-radius: 99px; box-shadow: 0 2px 10px rgba(10,20,40,.12); }
+.ac-ic button { width: 36px; height: 36px; border: 0; border-radius: 50%; background: none; cursor: pointer; display: grid; place-items: center; color: var(--ink); }
+.ac-ic button:hover { color: var(--ui); }
+.ac-ic svg { width: 16px; height: 16px; }
+.ac-fmts { display: flex; max-width: 0; overflow: hidden; transition: max-width .3s ease; }
+.ac-ic.open .ac-fmts { max-width: 180px; padding-left: 6px; }
+.ac-fmts a { padding: 8px 8px; font-size: 13px; font-weight: 500; letter-spacing: .03em; color: var(--ink); text-decoration: none; border-radius: 99px; white-space: nowrap; }
+.ac-fmts a:hover { background: var(--ui); color: #fff; }
+/* В: текстом */
+.ac-txt { display: flex; gap: 16px; padding: 0 8px 8px; }
+.ac-txt a { color: var(--muted); text-decoration: none; font-size: 13.5px; font-weight: 500; letter-spacing: .03em; padding: 4px 0; border-bottom: 1px solid transparent; }
+.ac-txt a:hover { color: var(--ui); border-bottom-color: currentColor; }
+.variants { display: grid; gap: 16px; margin-top: 24px; }
+.fmt-line { font-size: 14px; color: var(--muted); }
+.menu-new hr { border: 0; border-top: 1px solid var(--line); margin: 12px 0 6px; }
+.menu-new .maybe::after { content: "если Б2"; }
+@media (max-width: 900px) { .ac-grid { grid-template-columns: 1fr 1fr; } .ac-grid.is-3 { grid-template-columns: 1fr 1fr 1fr; } .ac.is-wide .ac-prev { aspect-ratio: 4 / 3; height: auto; } }
+@media (max-width: 560px) { .ac-grid.is-3 { grid-template-columns: 1fr 1fr; } .ac-meta { flex-direction: column; gap: 4px; } }
+
+@media (max-width: 900px) {
+  .ba, .struct { grid-template-columns: 1fr; }
+  .pane { height: auto; }
+  .fc-row, .styles3, .regime-uses, .sig-row { grid-template-columns: 1fr 1fr; }
+  .gx-grid, .toc, .steps, .tone, .au-swatches { grid-template-columns: 1fr 1fr; }
+  .carriers { grid-template-columns: 1fr 1fr; }
+  .carriers > :last-child { grid-column: span 2; max-width: 200px; }
+  .howto { grid-template-columns: 1fr; }
+  .vpair { grid-template-columns: 1fr; }
+  .vpair .vlabel { padding: 6px 0 0; }
+  .covers { grid-template-columns: repeat(3, 1fr); }
+  .shots-4 { grid-template-columns: 1fr 1fr; }
+  .shots-4 .wl, .shots-4 .full { grid-column: 1 / -1; }
+}
+@media (max-width: 560px) {
+  .fc-row, .styles3, .regime-uses, .sig-row, .shots, .motion-demo, .grade, .ethic, .sw-row { grid-template-columns: 1fr; }
+  .cmx { grid-template-columns: repeat(5, 1fr); }
+  .item-head { grid-template-columns: 1fr; }
+  .item-id { justify-self: start; }
+  .old-grads { grid-template-columns: 1fr 1fr 1fr; }
+  .bar { justify-content: space-between; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+
+.now-imgs { display: grid; gap: 10px; }
+.now-imgs img { border-radius: 12px; width: auto; max-width: 100%; background: #fff; }
+.now-imgs.two { grid-template-columns: 1fr 1fr; align-items: start; }
+.now-imgs .narrow { max-width: 360px; }
+.prop { display: grid; gap: 10px; }
+.prop ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; font-size: 16px; color: #3b414d; }
+.mock { background: #fff; border-radius: 12px; padding: 18px; display: grid; gap: 14px; }
+.mock-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.m-btn { display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 12px; padding: 11px 16px; background: #eef0f4; color: #0d1420; font-size: 15px; cursor: pointer; transition: background .2s, color .2s; }
+.m-btn:hover { background: var(--ui); color: #fff; }
+.m-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.m-seg { display: inline-flex; background: #eef0f4; border-radius: 12px; padding: 3px; }
+.m-seg button { border: 0; background: none; border-radius: 9px; padding: 8px 14px; font-size: 14.5px; color: var(--muted); cursor: pointer; }
+.m-seg button[aria-pressed="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+.m-arch { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.m-arch a { display: grid; gap: 4px; border-radius: 16px; padding: 18px 20px; background: #f3f4f8; color: #07143a; text-decoration: none; transition: background .2s, color .2s; }
+.m-arch a:hover { background: var(--ui); color: #fff; }
+.m-arch a span { font-size: 13.5px; color: #6b7080; }
+.m-arch a:hover span { color: rgba(255,255,255,.75); }
+.m-arch a b { font-weight: 400; font-size: 19px; }
+.m-arch a i { font-style: normal; font-size: 14px; color: var(--ui); margin-top: 8px; }
+.m-arch a:hover i { color: #fff; }
+.m-text { max-width: 680px; font-size: 18px; line-height: 1.55; color: #0d1420; }
+.m-text.wide { max-width: none; }
+.m-label { font-size: 12.5px; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; margin-bottom: 6px; }
+.m-foot { background: #0b1630; color: #fff; border-radius: 12px; padding: 22px 24px; display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; font-size: 15px; }
+.m-foot img { width: 180px; filter: brightness(0) invert(1); }
+.m-foot nav { display: flex; gap: 20px; flex-wrap: wrap; color: #c9d2e8; }
+.m-spec { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 28px; }
+.m-spec b { display: block; font-weight: 500; font-size: 16px; margin-bottom: 6px; }
+.m-spec ul { margin: 0; padding-left: 18px; color: #2e3440; font-size: 16.5px; line-height: 1.5; }
+.m-cardpair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.m-card { background: #fff; border-radius: 20px; padding: 10px; }
+.m-card .pv { border-radius: 14px; aspect-ratio: 4/3; background: #f3f3f6; display: grid; place-items: center; overflow: hidden; }
+.m-card .pv img { width: 100%; height: 100%; object-fit: cover; }
+.m-card .pv img.logo { width: 46%; height: auto; object-fit: contain; }
+.m-card h4 { font-size: 18px; font-weight: 400; padding: 12px 6px 2px; }
+.m-card p { font-size: 14px; color: var(--muted); padding: 0 6px 6px; }
+.m-phone { width: 220px; border: 8px solid #111; border-radius: 30px; overflow: hidden; background: #f6f5f8; }
+.m-phone .bar2 { height: 46px; background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; border-bottom: 1px solid var(--line); font-size: 12px; }
+.m-phone .bar2 img { width: 70px; }
+.m-phone .body { height: 260px; padding: 10px; display: grid; gap: 8px; }
+.m-phone .body div { background: #fff; border-radius: 12px; }
+.m-next { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.m-next a { position: relative; display: block; border-radius: 16px; overflow: hidden; aspect-ratio: 16/6; background: #001d37 center/cover; color: #fff; text-decoration: none; padding: 16px 18px; font-size: 19px; }
+.m-next a span { display: block; font-size: 13px; opacity: .7; margin-bottom: 4px; }
+.m-next a.r { text-align: right; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-row">
+    <img class="top-logo" src="assets/logos/krdv-logo-ru-horizontal.svg" alt="КРДВ">
+    <span class="top-kicker">Внутренний документ · 20 октября 2026</span>
+  </div>
+  <h1>Ревью интерфейса веб-гайда</h1>
+  <p class="top-lead">Второй проход по всем 15 разделам — только интерфейс, без контента, обложек и графики. Главная мысль: похожие вещи на сайте всё ещё выглядят по-разному. Ниже — 15 пунктов, каждый можно принять отдельно. Заглушки, файлы для скачивания и неактивные кнопки сюда не вошли — их шлифуем в конце.</p>
+  <div class="howto">
+    <div><b>1. Отметьте каждый пункт</b>«Да» — делаем, «Нет» — не делаем, «Обсудить» — есть вопросы. Можно оставить комментарий.</div>
+    <div><b>2. Отметки сохраняются</b>в этом браузере на этом компьютере: можно закрыть страницу и вернуться позже.</div>
+    <div><b>3. Пришлите мне решения</b>Кнопка «Скопировать решения» внизу соберёт список. Вставьте его в чат.</div>
+  </div>
+  <div class="howto" style="grid-template-columns:1fr;max-width:980px">
+    <div><b>Уже исправлено перед ревью</b>Кнопка скачивания без грязной тени; в «ДО» кнопки стоят ровной строкой над логотипами; знаки режимов скачиваются той же кнопкой в углу; в «Логотипе» при переключении «Рус / Eng» знак больше не прыгает и не меняет размер.</div>
+  </div>
+</header>
+<main class="page" id="page-ui">
+<h3 class="group-title">Элементы: одинаковое должно выглядеть одинаково</h3>
+  <article class="item" data-id="И11" data-title="Ссылки на архивы — светлые карточки вместо синих плашек">
+    <div class="item-head">
+      <span class="item-id">И11</span>
+      <div>
+        <h2>Ссылки на архивы — светлые карточки вместо синих плашек</h2>
+        <p class="item-what">Синяя плашка «Открыть архив» стоит под каждой второй секцией — в «Корп. материалах» их пять, в «Режимах» четыре. Это самый тяжёлый и громкий элемент страницы, а по смыслу — второстепенная ссылка. В «Обзоре» мы уже сделали светлые карточки, синие при наведении.</p>
+        <div class="tags"><span class="tag small">Объём: небольшой</span></div>
+      </div>
+    </div>
+    <div class="ba stack">
+      <div><div class="ba-label">Сейчас</div><div class="pane"><div class="now-imgs"><figure style="margin:0"><img src="review2/archive-blue.webp" alt="" loading="lazy"><figcaption class="cap">Сейчас: «Корпоративные материалы»</figcaption></figure></div></div></div>
+      <div class="ba-after"><div class="ba-label">Предлагаю</div><div class="pane"><div class="prop"><ul><li>Везде как в «Обзоре»: светло-серая карточка, синяя — при наведении.</li><li>Синий цвет остаётся для действий, а не для фона ссылок.</li></ul><div class="m-arch"><a href="#" onclick="return false"><b>Шаблон стандартных визиток</b><span>Исходники для русской и английской версии</span><i>Открыть архив →</i></a><a href="#" onclick="return false"><b>Шаблон визиток с QR</b><span>Контактный блок с отдельной QR-зоной</span><i>Открыть архив →</i></a></div></div></div></div>
+    </div>
+    <div class="why"><p><b>Зачем.</b> Внимание держится на самих материалах; страница становится тише и дороже.</p></div>
+    <div class="decide"></div>
+  </article>
+  <article class="item" data-id="И12" data-title="Один вид кнопок и ссылок-действий">
+    <div class="item-head">
+      <span class="item-id">И12</span>
+      <div>
+        <h2>Один вид кнопок и ссылок-действий</h2>
+        <p class="item-what">Сейчас действия выглядят по-разному: «Скачать логотипы» и «Собрать на портале» — мелкий моноширинный капс 12–13 px, «Поделиться идеей →» — синий капс 11 px без кнопки, «Добавить набор в Telegram» — третий вариант. Капс 11–13 px трудно читать, особенно на телефоне.</p>
+        <div class="tags"><span class="tag mid">Объём: средний</span></div>
+      </div>
+    </div>
+    <div class="ba stack">
+      <div><div class="ba-label">Сейчас</div><div class="pane"><div class="now-imgs two"><figure style="margin:0"><img src="review2/caps-intro.webp" alt="" loading="lazy"><figcaption class="cap">Сейчас: кнопка во вступлении</figcaption></figure><figure style="margin:0"><img src="review2/caps-cta.webp" alt="" loading="lazy"><figcaption class="cap">Сейчас: ссылка в карточке «Есть идея для мерча?»</figcaption></figure></div></div></div>
+      <div class="ba-after"><div class="ba-label">Предлагаю</div><div class="pane"><div class="prop"><ul><li>Одна кнопка: TT Norms 15 px, обычный регистр, серая → синяя при наведении, иконка-стрелка или скачивание.</li><li>Тот же вид — в карточках «Нашли ошибку?», «Есть идея…», «Нужен пост…».</li><li>Моноширинный капс оставляем только для служебных меток (номера, HEX-коды).</li></ul><div class="mock-row"><button class="m-btn"><svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Скачать логотипы</button><button class="m-btn">Собрать на портале<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><button class="m-btn">Написать в MAX<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div></div></div></div>
+    </div>
+    <div class="why"><p><b>Зачем.</b> Кнопки узнаются с первого взгляда и не спорят с подписями; меньше мелкого капса — спокойнее страница.</p></div>
+    <div class="decide"></div>
+  </article>
+  <article class="item" data-id="И13" data-title="Один вид переключателей">
+    <div class="item-head">
+      <span class="item-id">И13</span>
+      <div>
+        <h2>Один вид переключателей</h2>
+        <p class="item-what">На сайте пять разных переключателей: варианты затемнения в соцсетях (синие таблетки), начертания в «Типографике» (серые чипы), «Ближе к…» в «Позиционировании» (белые с обводкой), цвета шоппера (с точкой), «Рус / Eng» (текст). Они делают одно и то же — выбирают вариант.</p>
+        <div class="tags"><span class="tag mid">Объём: средний</span></div>
+      </div>
+    </div>
+    <div class="ba stack">
+      <div><div class="ba-label">Сейчас</div><div class="pane"><div class="now-imgs"><figure style="margin:0"><img src="review2/tabs-social.webp" alt="" loading="lazy"><figcaption class="cap">Соцсети</figcaption></figure><figure style="margin:0"><img src="review2/tabs-merch.webp" alt="" loading="lazy"><figcaption class="cap">Мерч</figcaption></figure><figure style="margin:0"><img src="review2/tabs-type.webp" alt="" loading="lazy"><figcaption class="cap">Типографика</figcaption></figure></div></div></div>
+      <div class="ba-after"><div class="ba-label">Предлагаю</div><div class="pane"><div class="prop"><ul><li>Один сегмент-переключатель: серая подложка, выбранный вариант — белая плашка (как в системных интерфейсах).</li><li>«Рус / Eng» в карточках файлов оставляем текстом — он маленький и не должен спорить с превью.</li></ul><div class="mock-row"><div class="m-seg" data-seg><button aria-pressed="true">Без затемнения</button><button aria-pressed="false">Затемнение</button><button aria-pressed="false">Синее затемнение</button></div><div class="m-seg" data-seg><button aria-pressed="false">Синий</button><button aria-pressed="true">Голубой</button><button aria-pressed="false">Чёрный</button></div></div></div></div></div>
+    </div>
+    <div class="why"><p><b>Зачем.</b> Пользователь один раз понимает, как выбирать, и дальше не задумывается.</p></div>
+    <div class="decide"></div>
+  </article>
+  <article class="item" data-id="И14" data-title="Скачивание в «Дизайне соцсетей» — та же кнопка в углу">
+    <div class="item-head">
+      <span class="item-id">И14</span>
+      <div>
+        <h2>Скачивание в «Дизайне соцсетей» — та же кнопка в углу</h2>
+        <p class="item-what">Логотипы, ДО, знаки и «Сделано в…» уже скачиваются круглой кнопкой в углу превью. В соцсетях остались старые ряды «PNG 1080 · PNG 2160», а у укрупнённого логотипа их шесть подряд.</p>
+        <div class="tags"><span class="tag small">Объём: небольшой</span></div>
+      </div>
+    </div>
+    <div class="ba stack">
+      <div><div class="ba-label">Сейчас</div><div class="pane"><div class="now-imgs"><figure style="margin:0"><img src="review2/png-social.webp" alt="" loading="lazy"><figcaption class="cap">Сейчас: «Укрупнённый логотип»</figcaption></figure></div></div></div>
+      <div class="ba-after"><div class="ba-label">Предлагаю</div><div class="pane"><div class="prop"><ul><li>Круглая кнопка в углу превью раскрывает «1080 · 2160».</li><li>У укрупнённого логотипа — три превью (без затемнения, с затемнением, синее) с кнопкой у каждого вместо шести строк.</li></ul></div></div></div>
+    </div>
+    <div class="why"><p><b>Зачем.</b> Одно правило скачивания на весь сайт.</p></div>
+    <div class="decide"></div>
+  </article>
+  <article class="item" data-id="И15" data-title="Карточки с изображением — один вид и одна система подписей">
+    <div class="item-head">
+      <span class="item-id">И15</span>
+      <div>
+        <h2>Карточки с изображением — один вид и одна система подписей</h2>
+        <p class="item-what">Сейчас два вида карточек: у файлов и носителей изображение лежит в серой рамке с отступом, у фотографий («Применение», «Фотостиль», «Реклама») — вплотную к краям. Подписи — пяти разных размеров: 16, 18, 19, 20 и 22 px.</p>
+        <div class="tags"><span class="tag mid">Объём: средний</span></div>
+      </div>
+    </div>
+    <div class="ba stack">
+      <div><div class="ba-label">Сейчас</div><div class="pane"><div class="now-imgs two"><figure style="margin:0"><img src="review2/card-asset.webp" alt="" loading="lazy"><figcaption class="cap">Карточка файла</figcaption></figure><figure style="margin:0"><img src="review2/card-photo.webp" alt="" loading="lazy"><figcaption class="cap">Карточка фото</figcaption></figure></div></div></div>
+      <div class="ba-after"><div class="ba-label">Предлагаю</div><div class="pane"><div class="prop"><ul><li>Везде одна карточка: белая основа, изображение с отступом 10 px и скруглением 16 px, ниже подпись.</li><li>Два уровня подписи: название 19 px и пояснение 14 px серым.</li></ul><div class="m-cardpair"><div class="m-card"><div class="pv"><img class="logo" src="assets/logos/krdv-logo-ru-square.svg" alt=""></div><h4>Вертикальная</h4><p>Основная версия логотипа</p></div><div class="m-card"><div class="pv"><img src="review2/card-photo.webp" alt="" style="object-position:50% 0"></div><h4>Упаковка резидента</h4><p>Знак подтверждает происхождение продукции</p></div></div></div></div></div>
+    </div>
+    <div class="why"><p><b>Зачем.</b> Карточки разных разделов складываются в одну систему, сетка читается ровнее.</p></div>
+    <div class="decide"></div>
+  </article><h3 class="group-title">Текст и ритм страницы</h3>
+  <article class="item" data-id="И16" data-title="Короче строка — легче читать">
+    <div class="item-head">
+      <span class="item-id">И16</span>
+      <div>
+        <h2>Короче строка — легче читать</h2>
+        <p class="item-what">Колонка текста сейчас 830 px, местами 1070–1130 px: в строке 110–130 знаков. Удобная длина для чтения — 60–80 знаков, глаз теряет начало следующей строки.</p>
+        <div class="tags"><span class="tag small">Объём: небольшой</span></div>
+      </div>
+    </div>
+    <div class="ba stack">
+      <div><div class="ba-label">Сейчас</div><div class="pane"><div class="now-imgs"><figure style="margin:0"><img src="review2/textwide.webp" alt="" loading="lazy"><figcaption class="cap">Сейчас: «Фотостиль»</figcaption></figure></div></div></div>
+      <div class="ba-after"><div class="ba-label">Предлагаю</div><div class="pane"><div class="prop"><ul><li>Ограничить ширину абзацев ~680 px (около 75 знаков). Ширина колонки для картинок и карточек не меняется.</li><li>Лид секции может быть шире — до 820 px.</li></ul><div><div class="m-label">Предлагаю</div><p class="m-text">Показываем результат: работающие предприятия, порты, дороги и проекты резидентов. Для презентаций выбирайте фотографии, которые показывают ключевые достижения, а не процесс подготовки или пустые площадки.</p></div></div></div></div>
+    </div>
+    <div class="why"><p><b>Зачем.</b> Длинные тексты (Фотостиль, Логотип, Корп. материалы) станут заметно легче.</p></div>
+    <div class="decide"></div>
+  </article>
+  <article class="item" data-id="И17" data-title="Единое начало секции: крупный лид, потом текст">
+    <div class="item-head">
+      <span class="item-id">И17</span>
+      <div>
+        <h2>Единое начало секции: крупный лид, потом текст</h2>
+        <p class="item-what">Одни секции начинаются с крупной фразы (26 px) — «Реклама», «ДО», «Мерч», другие сразу с мелкого абзаца — «Знак», «Бренд-обещание», «Фирменные цвета», «Режимник». Из-за этого ритм страниц скачет, а главное в секции не считывается.</p>
+        <div class="tags"><span class="tag mid">Объём: средний</span></div>
+      </div>
+    </div>
+    <div class="ba stack">
+      <div><div class="ba-label">Сейчас</div><div class="pane"><div class="now-imgs two"><figure style="margin:0"><img src="review2/lead-small.webp" alt="" loading="lazy"><figcaption class="cap">Без лида: «Товарный знак»</figcaption></figure><figure style="margin:0"><img src="review2/lead-big.webp" alt="" loading="lazy"><figcaption class="cap">С лидом: «Рекламные»</figcaption></figure></div></div></div>
+      <div class="ba-after"><div class="ba-label">Предлагаю</div><div class="pane"><div class="prop"><ul><li>У каждой секции лид в 1–2 строки крупно, ниже — обычные абзацы.</li><li>Где лида нет, сделаю его из первой фразы текста (формулировки пришлю на согласование).</li></ul></div></div></div>
+    </div>
+    <div class="why"><p><b>Зачем.</b> Каждая секция открывается одинаково: прочитав только лиды, человек понимает суть раздела.</p></div>
+    <div class="decide"></div>
+  </article>
+  <article class="item" data-id="И18" data-title="Списки и пояснения — крупнее и контрастнее">
+    <div class="item-head">
+      <span class="item-id">И18</span>
+      <div>
+        <h2>Списки и пояснения — крупнее и контрастнее</h2>
+        <p class="item-what">Списки с линией слева («Подходящие сюжеты», «Хороший кадр», «Набор шрифта») набраны 14–16 px светло-серым. Это одна из самых полезных частей гайда, а читается хуже всего.</p>
+        <div class="tags"><span class="tag small">Объём: небольшой</span></div>
+      </div>
+    </div>
+    <div class="ba stack">
+      <div><div class="ba-label">Сейчас</div><div class="pane"><div class="now-imgs"><figure style="margin:0"><img src="review2/spec.webp" alt="" loading="lazy"><figcaption class="cap">Сейчас: «Фотостиль»</figcaption></figure></div></div></div>
+      <div class="ba-after"><div class="ba-label">Предлагаю</div><div class="pane"><div class="prop"><ul><li>Текст списков 16–17 px, цвет — тёмно-серый, а не светло-серый.</li><li>Заголовок группы — 16 px, линию слева убрать: группы и так разделены колонками.</li></ul><div class="m-spec"><div><b>Хороший кадр</b><ul><li>Участники заинтересованы и вовлечены</li><li>Живые эмоции</li><li>Естественный, непостановочный кадр</li></ul></div><div><b>Неподходящий кадр</b><ul><li>Участники не вовлечены</li><li>Много людей, лица не в фокусе</li><li>Затылки на переднем плане</li></ul></div></div></div></div></div>
+    </div>
+    <div class="why"><p><b>Зачем.</b> Правила, ради которых открывают гайд, будет легко прочитать.</p></div>
+    <div class="decide"></div>
+  </article>
+  <article class="item" data-id="И19" data-title="Подзаголовки внутри секций — один стиль">
+    <div class="item-head">
+      <span class="item-id">И19</span>
+      <div>
+        <h2>Подзаголовки внутри секций — один стиль</h2>
+        <p class="item-what">Внутренние подзаголовки («Сделано в ТОР СПВ», «Пост из нескольких карточек», «Собственные иллюстрации») сейчас разного размера (16–20 px) и с разными отступами.</p>
+        <div class="tags"><span class="tag small">Объём: небольшой</span></div>
+      </div>
+    </div>
+    <div class="ba stack">
+      <div><div class="ba-label">Сейчас</div><div class="pane"><div class="now-imgs"><figure style="margin:0"><img src="review2/subhead.webp" alt="" loading="lazy"><figcaption class="cap">Сейчас: «Работы дизайн-команды»</figcaption></figure></div></div></div>
+      <div class="ba-after"><div class="ba-label">Предлагаю</div><div class="pane"><div class="prop"><ul><li>Один стиль: 20 px, отступ сверху 40 px, снизу 16 px.</li><li>Порядок уровней везде одинаковый: секция → подзаголовок → карточки.</li></ul></div></div></div>
+    </div>
+    <div class="why"><p><b>Зачем.</b> Иерархия читается без усилий.</p></div>
+    <div class="decide"></div>
+  </article>
+  <article class="item" data-id="И20" data-title="Палитры в одном виде">
+    <div class="item-head">
+      <span class="item-id">И20</span>
+      <div>
+        <h2>Палитры в одном виде</h2>
+        <p class="item-what">В «Цвете» цвета собраны в одну доску с прямыми углами между плитками, в «Режимах» — отдельные скруглённые плитки. Подписи HEX/RGB/CMYK тоже стоят по-разному.</p>
+        <div class="tags"><span class="tag small">Объём: небольшой</span></div>
+      </div>
+    </div>
+    <div class="ba stack">
+      <div><div class="ba-label">Сейчас</div><div class="pane"><div class="now-imgs two"><figure style="margin:0"><img src="review2/palette-a.webp" alt="" loading="lazy"><figcaption class="cap">«Цвет»</figcaption></figure><figure style="margin:0"><img src="review2/palette-b.webp" alt="" loading="lazy"><figcaption class="cap">«Режимы»</figcaption></figure></div></div></div>
+      <div class="ba-after"><div class="ba-label">Предлагаю</div><div class="pane"><div class="prop"><ul><li>Вариант А: везде доска (плитки встык, общее скругление) — палитра читается как система.</li><li>Вариант Б: везде отдельные плитки — удобнее копировать коды.</li><li>Подписи в обоих случаях одинаковые: название, затем коды мелким.</li></ul></div></div></div>
+    </div>
+    <div class="why"><p><b>Зачем.</b> Цвет — основа бренда, палитры должны выглядеть как одно целое. Напишите в комментарии «А» или «Б».</p></div>
+    <div class="decide"></div>
+  </article><h3 class="group-title">Каркас: меню, футер, телефон</h3>
+  <article class="item" data-id="И21" data-title="Телефон: кнопка «Меню» перекрывает содержимое">
+    <div class="item-head">
+      <span class="item-id">И21</span>
+      <div>
+        <h2>Телефон: кнопка «Меню» перекрывает содержимое</h2>
+        <p class="item-what">На телефоне круглая кнопка «Меню» висит поверх страницы и закрывает кнопки скачивания в углах карточек и часть заголовков.</p>
+        <div class="tags"><span class="tag small">Объём: небольшой</span></div>
+      </div>
+    </div>
+    <div class="ba stack">
+      <div><div class="ba-label">Сейчас</div><div class="pane"><div class="now-imgs"><figure style="margin:0"><img src="review2/mobile-menu.webp" alt="" loading="lazy"><figcaption class="cap">Сейчас: «Логотип» на ширине 390 px</figcaption></figure></div></div></div>
+      <div class="ba-after"><div class="ba-label">Предлагаю</div><div class="pane"><div class="prop"><ul><li>Кнопка прячется, когда листаете вниз, и появляется, когда листаете вверх.</li><li>Альтернатива: тонкая белая полоса сверху с логотипом и «Меню» — контент начинается под ней.</li></ul><div class="mock-row" style="justify-content:center"><div class="m-phone"><div class="bar2"><img src="assets/logos/krdv-logo-ru-horizontal.svg" alt=""><span>Меню ☰</span></div><div class="body"><div></div><div></div></div></div></div></div></div></div>
+    </div>
+    <div class="why"><p><b>Зачем.</b> Ничего не перекрыто, меню под рукой.</p></div>
+    <div class="decide"></div>
+  </article>
+  <article class="item" data-id="И22" data-title="Меню: плотнее подпункты">
+    <div class="item-head">
+      <span class="item-id">И22</span>
+      <div>
+        <h2>Меню: плотнее подпункты</h2>
+        <p class="item-what">Под раскрытым разделом подпункты идут с большим шагом, а после списка — пустое поле, из-за чего следующий раздел «отрывается».</p>
+        <div class="tags"><span class="tag small">Объём: небольшой</span></div>
+      </div>
+    </div>
+    <div class="ba stack">
+      <div><div class="ba-label">Сейчас</div><div class="pane"><div class="now-imgs"><figure style="margin:0"><img src="review2/sidebar.webp" alt="" loading="lazy"><figcaption class="cap">Сейчас: раскрыт «Логотип»</figcaption></figure></div></div></div>
+      <div class="ba-after"><div class="ba-label">Предлагаю</div><div class="pane"><div class="prop"><ul><li>Шаг подпунктов 28 px вместо 31, отступ после списка как между обычными пунктами.</li><li>Текущий подпункт — тёмный текст, остальные серые (плашку оставляем только при наведении).</li></ul></div></div></div>
+    </div>
+    <div class="why"><p><b>Зачем.</b> Меню компактнее и видно больше разделов без прокрутки.</p></div>
+    <div class="decide"></div>
+  </article>
+  <article class="item" data-id="И23" data-title="Футер компактнее и аккуратнее">
+    <div class="item-head">
+      <span class="item-id">И23</span>
+      <div>
+        <h2>Футер компактнее и аккуратнее</h2>
+        <p class="item-what">Футер разложен на четыре колонки мелким текстом, между ними много пустоты; «Версия 1.0» ничего не сообщает пользователю.</p>
+        <div class="tags"><span class="tag small">Объём: небольшой</span></div>
+      </div>
+    </div>
+    <div class="ba stack">
+      <div><div class="ba-label">Сейчас</div><div class="pane"><div class="now-imgs"><figure style="margin:0"><img src="review2/footer.webp" alt="" loading="lazy"><figcaption class="cap">Сейчас</figcaption></figure></div></div></div>
+      <div class="ba-after"><div class="ba-label">Предлагаю</div><div class="pane"><div class="prop"><ul><li>Одна строка: белый логотип слева, справа «Написать в MAX», erdc.ru, «Наверх».</li><li>Ниже тонкой линией — © и название руководства.</li></ul><div class="m-foot"><img src="assets/logos/krdv-logo-ru-horizontal.svg" alt=""><nav><span>Написать в MAX</span><span>erdc.ru</span><span>Наверх ↑</span></nav></div></div></div></div>
+    </div>
+    <div class="why"><p><b>Зачем.</b> Футер выглядит законченно и не тянет внимание.</p></div>
+    <div class="decide"></div>
+  </article>
+  <article class="item" data-id="И24" data-title="«Дальше» — с обложкой следующего раздела">
+    <div class="item-head">
+      <span class="item-id">И24</span>
+      <div>
+        <h2>«Дальше» — с обложкой следующего раздела</h2>
+        <p class="item-what">Внизу каждой страницы ссылки «Назад / Вперёд» — только текст. Это место, где человек решает, читать ли дальше.</p>
+        <div class="tags"><span class="tag small">Объём: небольшой</span></div>
+      </div>
+    </div>
+    <div class="ba stack">
+      <div><div class="ba-label">Сейчас</div><div class="pane"><div class="now-imgs"><figure style="margin:0"><img src="review2/endlinks.webp" alt="" loading="lazy"><figcaption class="cap">Сейчас</figcaption></figure></div></div></div>
+      <div class="ba-after"><div class="ba-label">Предлагаю</div><div class="pane"><div class="prop"><ul><li>Две карточки с обложками предыдущего и следующего раздела (те же, что в «Обзоре»), название поверх.</li><li>Затемнение при наведении — как у плиток «Обзора».</li></ul><div class="m-next"><a href="#" onclick="return false" style="background-image:linear-gradient(90deg,rgba(0,15,40,.6),rgba(0,15,40,.1)),url('review/cover-00.webp')"><span>← Назад</span>Обзор</a><a class="r" href="#" onclick="return false" style="background-image:linear-gradient(270deg,rgba(0,15,40,.6),rgba(0,15,40,.1)),url('review/cover-02.webp')"><span>Вперёд →</span>Логотип</a></div></div></div></div>
+    </div>
+    <div class="why"><p><b>Зачем.</b> Переход между разделами становится заметным и связывает страницы с «Обзором».</p></div>
+    <div class="decide"></div>
+  </article>
+  <article class="item" data-id="И25" data-title="Один фон для всех страниц">
+    <div class="item-head">
+      <span class="item-id">И25</span>
+      <div>
+        <h2>Один фон для всех страниц</h2>
+        <p class="item-what">«Обзор» теперь белый, остальные страницы — светло-серые с белыми карточками. При переходе из «Обзора» в раздел фон меняется.</p>
+        <div class="tags"><span class="tag small">Объём: небольшой</span></div>
+      </div>
+    </div>
+    <div class="ba stack">
+      
+      <div class="ba-after"><div class="ba-label">Предлагаю</div><div class="pane"><div class="prop"><ul><li>Вариант А: оставить как есть — «Обзор» как отдельная витрина.</li><li>Вариант Б: все страницы белые, карточки — светло-серые (как плитки в «Обзоре»).</li></ul></div></div></div>
+    </div>
+    <div class="why"><p><b>Зачем.</b> Нужно ваше решение: напишите в комментарии «А» или «Б».</p></div>
+    <div class="decide"></div>
+  </article>
+</main>
+<div class="bar" role="region" aria-label="Итоги">
+  <div class="bar-stats">
+    <span><i style="background:var(--ok)"></i>Да: <b data-stat="yes">0</b></span>
+    <span><i style="background:var(--no)"></i>Нет: <b data-stat="no">0</b></span>
+    <span><i style="background:var(--talk)"></i>Обсудить: <b data-stat="talk">0</b></span>
+    <span style="color:#aab4cc">Без отметки: <b data-stat="none">0</b></span>
+  </div>
+  <button type="button" class="copy">Скопировать решения</button>
+  <button type="button" class="reset">Сбросить</button>
+</div>
+<div class="toast" role="status" aria-live="polite"></div>
+<div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-t">
+  <div class="modal-box">
+    <h3 id="modal-t">Решения скопированы — вставьте их в чат</h3>
+    <textarea readonly></textarea>
+    <div class="row"><button type="button" data-close>Закрыть</button><button type="button" class="primary" data-recopy>Скопировать ещё раз</button></div>
+  </div>
+</div>
+<script>
+(function () {
+  const KEY = "krdv-review-ui2";
+  let state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { state = {}; }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+  const labels = { yes: "ДА", no: "НЕТ", talk: "ОБСУДИТЬ" };
+  const items = [...document.querySelectorAll(".item")];
+  items.forEach((item) => {
+    const id = item.dataset.id;
+    const box = item.querySelector(".decide");
+    box.innerHTML = '<span class="decide-q">Решение:</span>' +
+      ["yes","no","talk"].map((v) => `<button type="button" class="dbtn" data-v="${v}" aria-pressed="false"><i></i>${{yes:"Да, делаем",no:"Нет",talk:"Обсудить"}[v]}</button>`).join("") +
+      '<textarea class="comment" rows="1" placeholder="Комментарий (необязательно)"></textarea>';
+    const ta = box.querySelector("textarea");
+    ta.value = (state[id] || {}).c || "";
+    const paint = () => {
+      const v = (state[id] || {}).v;
+      box.querySelectorAll(".dbtn").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === v)));
+      if (v) item.dataset.state = v; else delete item.dataset.state;
+    };
+    paint();
+    box.querySelectorAll(".dbtn").forEach((b) => b.addEventListener("click", () => {
+      const cur = (state[id] || {}).v;
+      state[id] = { ...(state[id] || {}), v: cur === b.dataset.v ? undefined : b.dataset.v };
+      save(); paint(); stats();
+    }));
+    ta.addEventListener("input", () => { state[id] = { ...(state[id] || {}), c: ta.value }; save(); });
+  });
+  document.querySelectorAll("[data-seg]").forEach((s) => s.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => s.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))))));
+  function stats() {
+    const c = { yes: 0, no: 0, talk: 0, none: 0 };
+    items.forEach((it) => c[(state[it.dataset.id] || {}).v || "none"]++);
+    Object.keys(c).forEach((k) => (document.querySelector(`[data-stat="${k}"]`).textContent = c[k]));
+  }
+  stats();
+  function summary() {
+    const lines = ["Решения по ревью интерфейса (20.10)", ""];
+    const none = [];
+    items.forEach((it) => {
+      const s = state[it.dataset.id] || {};
+      if (!s.v && !s.c) { none.push(it.dataset.id); return; }
+      lines.push(`${it.dataset.id} ${it.dataset.title} — ${s.v ? labels[s.v] : "без отметки"}${s.c ? ": " + s.c.trim() : ""}`);
+    });
+    if (none.length) lines.push("", "Без отметки: " + none.join(", "));
+    return lines.join("\n");
+  }
+  const toast = document.querySelector(".toast");
+  function say(t) { toast.textContent = t; toast.classList.add("show"); clearTimeout(say.t); say.t = setTimeout(() => toast.classList.remove("show"), 1800); }
+  async function copyText(t) { try { await navigator.clipboard.writeText(t); return true; } catch (e) { return false; } }
+  const modal = document.querySelector(".modal");
+  document.querySelector(".bar .copy").addEventListener("click", async () => { const t = summary(); await copyText(t); modal.querySelector("textarea").value = t; modal.classList.add("open"); });
+  modal.addEventListener("click", (e) => { if (e.target === modal || e.target.hasAttribute("data-close")) modal.classList.remove("open"); });
+  modal.querySelector("[data-recopy]").addEventListener("click", async () => say((await copyText(modal.querySelector("textarea").value)) ? "Скопировано" : "Выделите текст и скопируйте вручную"));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") modal.classList.remove("open"); });
+  document.querySelector(".bar .reset").addEventListener("click", () => { if (!window.confirm("Стереть все отметки и комментарии?")) return; state = {}; save(); location.reload(); });
+})();
+</script>
+</body>
+</html>
