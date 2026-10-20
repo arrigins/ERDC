@@ -8996,3 +8996,47 @@ a.slide-viewer-download,
 /* И22. Меню: подпункты плотнее, без пустого поля после списка */
 .nav-children { padding-bottom: 10px; }
 .nav-children button { min-height: 28px; padding-top: 4px; padding-bottom: 4px; }
+
+/* ══ 20.10, мелкие правки интерфейса ══ */
+
+/* Кнопка скачивания в углу: круг и выпадающие форматы — отдельные элементы, без общей белой подложки
+   (раньше белая «таблетка» проступала каймой вокруг синего круга — мигание при наведении и обводка на синем фоне) */
+.corner-download {
+  gap: 6px;
+  background: none;
+  box-shadow: none;
+}
+.corner-download > button {
+  background: #ffffff;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.corner-download-formats {
+  order: -1;
+  border-radius: 999px;
+  background: #ffffff;
+  transition: max-width 0.3s var(--ease-standard), padding 0.3s var(--ease-standard), opacity 0.2s ease;
+  opacity: 0;
+}
+.corner-download.is-open .corner-download-formats {
+  padding: 0 4px;
+  opacity: 1;
+}
+.corner-download-formats a { padding: 8px 9px; margin: 3px 0; }
+
+/* ДО: каждая ячейка — колонка между разделителями, кнопка в её правом верхнем углу */
+.subsidiary-row-cells .subsidiary-cell + .subsidiary-cell::before {
+  top: 0;
+  height: 100%;
+}
+.subsidiary-cell-tools .corner-download { background: none; }
+.subsidiary-cell-tools .corner-download > button,
+.subsidiary-cell-tools .corner-download-formats { background: var(--btn-bg, #eef0f4); }
+.subsidiary-cell-tools .corner-download > button:hover,
+.subsidiary-cell-tools .corner-download.is-open > button { background: var(--ui-blue); color: #ffffff; }
+
+/* Логотип → охранное поле: чистый голубой из палитры вместо серо-синего */
+.cs-zone { fill: rgba(34, 168, 224, 0.07); }
+.cs-guide { stroke: rgba(34, 168, 224, 0.55); }
+.cs-outline { stroke: #22a8e0; }
+.cs-unit rect { fill: rgba(34, 168, 224, 0.12); stroke: rgba(34, 168, 224, 0.6); }
+.cs-unit path { fill: rgba(34, 168, 224, 0.45); }

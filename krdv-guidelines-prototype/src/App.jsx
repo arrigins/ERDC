@@ -389,7 +389,7 @@ const fontFamilies = [
     // Десктоп-лицензия без веб-опции: на сайте только картинка-образец (файлы шрифта не подключаются)
     // Временно — картинка прежнего образца (до замены на набор в настоящем Norms Serif)
     imageOnly: true,
-    sampleImage: { src: "font-sample-serif.webp", alt: "Территория будущего начинается с ясной коммуникации", width: 860, height: 255 },
+    sampleImage: { src: "font-sample-serif.webp", alt: "Территория будущего начинается с ясной коммуникации", width: 774, height: 230 },
     description: "Семейство используется как второй, преимущественно акцидентный элемент шрифтовой пары.",
     files: [],
   },
@@ -399,7 +399,7 @@ const fontFamilies = [
     role: "Наградные документы",
     // Десктоп-лицензия без веб-опции: образец — картинка, файлы шрифта на сайт не подключаются
     imageOnly: true,
-    sampleImage: { src: "font-sample-tsars-v2.webp", alt: "Грамота за развитие территорий", width: 900, height: 152 },
+    sampleImage: { src: "font-sample-tsars-v2.webp", alt: "Грамота за развитие территорий", width: 810, height: 137 },
     description: "Гарнитура для благодарностей, благодарственных писем, почетных грамот и других наградных документов.",
     files: [],
   },
@@ -708,7 +708,7 @@ const logoUsageExamples = [
 
 const logoBackgroundExamples = [
   { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", bg: "#d8e5f6" }, text: "Фирменные цвета и их оттенки с высоким уровнем контраста" },
-  { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square-ondark.svg", bg: "#000000" }, text: "Черный фон — с версией логотипа с белым написанием" },
+  { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square-ondark.svg", bg: "#10141c" }, text: "Черный фон — с версией логотипа с белым написанием" },
   { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", photo: "photostyle-composition-15.webp", width: "30%", position: "top-left" }, text: "Фотография со светлым однородным участком под логотипом" },
   { verdict: "yes", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", photo: "photostyle-composition-1.webp", position: "plate", plate: true }, text: "Если однородного участка нет — используйте белую плашку" },
   { verdict: "no", preview: { kind: "logo", file: "krdv-logo-ru-square.svg", bg: "#2a64d8" }, text: "Фирменные цвета и оттенки с низким уровнем контраста" },
@@ -3675,7 +3675,7 @@ function AssetCard({ title, variants, asset = logoAsset, shape = "square", tone 
           <span className="asset-card-lang" role="group" aria-label={t("Язык версии")}>
             {langs.map((code) => (
               <button key={code} type="button" aria-pressed={code === lang} onClick={() => setLang(code)}>
-                {code === "ru" ? "Рус" : "Eng"}
+                {code === "ru" ? "RU" : "EN"}
               </button>
             ))}
           </span>
