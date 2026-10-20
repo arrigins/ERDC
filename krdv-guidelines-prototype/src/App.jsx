@@ -4339,7 +4339,7 @@ function ResourceLinks({ keys }) {
             <em>{t(item.pending || "Ссылка появится позже")}</em>
           </div>
         ) : (
-        <motion.a key={item.url} href={item.url} target="_blank" rel="noreferrer" whileHover={{ y: -2 }} whileTap={{ scale: 0.995 }}>
+        <a key={item.url} href={item.url} target="_blank" rel="noreferrer">
           <div>
             <strong>{t(item.title)}</strong>
             <p>{t(noDot(item.description))}</p>
@@ -4349,7 +4349,7 @@ function ResourceLinks({ keys }) {
             {t(item.action || "Открыть архив")}
             <UiIcon icon={ICONS.arrowRight} className="resource-link-icon" />
           </em>
-        </motion.a>
+        </a>
         ),
       )}
     </div>

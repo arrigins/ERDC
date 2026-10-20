@@ -8853,21 +8853,6 @@ a.slide-viewer-download:focus-visible,
 
 /* ══ 20.10, ревью интерфейса №2 (И11, И12, И14, И15, И16, И18, И19, И21, И22) ══ */
 
-/* И11. Ссылки на архивы: белые карточки на сером фоне, синие при наведении (в «Обзоре» — светло-серые на белом) */
-.guideline-page.is-soft:not(.is-bento) .resource-links a {
-  background: #ffffff;
-  color: #050505;
-}
-.guideline-page.is-soft:not(.is-bento) .resource-links strong { color: #050505; }
-.guideline-page.is-soft:not(.is-bento) .resource-links p { color: var(--muted); }
-.guideline-page.is-soft:not(.is-bento) .resource-links em { color: var(--ui-blue); }
-.guideline-page.is-soft:not(.is-bento) .resource-links a:hover,
-.guideline-page.is-soft:not(.is-bento) .resource-links a:focus-visible { background: var(--ui-blue); }
-.guideline-page.is-soft:not(.is-bento) .resource-links a:hover :is(strong, em),
-.guideline-page.is-soft:not(.is-bento) .resource-links a:focus-visible :is(strong, em) { color: #ffffff; }
-.guideline-page.is-soft:not(.is-bento) .resource-links a:hover p,
-.guideline-page.is-soft:not(.is-bento) .resource-links a:focus-visible p { color: rgba(255, 255, 255, 0.72); }
-
 /* И12. Кнопки и ссылки-действия — обычный регистр, основной шрифт 15px; моно-капс только для служебных меток */
 .ui-button,
 .intro-action,
@@ -9040,3 +9025,33 @@ a.slide-viewer-download,
 .cs-outline { stroke: #22a8e0; }
 .cs-unit rect { fill: rgba(34, 168, 224, 0.12); stroke: rgba(34, 168, 224, 0.6); }
 .cs-unit path { fill: rgba(34, 168, 224, 0.45); }
+
+/* Ссылки на архивы: синие (в «Обзоре» — светлые). Без подъёма и сдвига текста — при наведении только темнеет фон, стрелка чуть уходит вправо */
+.resource-links a,
+.resource-links a:hover,
+.resource-links a:focus-visible { transform: none; }
+.guideline-page.is-soft:not(.is-bento) .resource-links a { transition: background 0.25s ease; }
+.guideline-page.is-soft:not(.is-bento) .resource-links a:hover,
+.guideline-page.is-soft:not(.is-bento) .resource-links a:focus-visible { background: #15306f; }
+.resource-links a:hover em,
+.resource-links a:focus-visible em { transform: none; }
+.resource-link-icon { transition: transform 0.25s ease; }
+.resource-links a:hover .resource-link-icon,
+.resource-links a:focus-visible .resource-link-icon { transform: translateX(3px); }
+
+/* Охранное поле: светлый серо-голубой */
+.cs-zone { fill: rgba(150, 175, 205, 0.09); }
+.cs-guide { stroke: rgba(140, 166, 198, 0.5); }
+.cs-outline { stroke: #a9bdd6; }
+.cs-unit rect { fill: rgba(150, 175, 205, 0.14); stroke: rgba(140, 166, 198, 0.55); }
+.cs-unit path { fill: rgba(140, 166, 198, 0.42); }
+
+/* Фото-карточки: одна высота превью в ряду (кадр 3:2, фото обрезается по центру) */
+.guideline-page.is-soft .asset-image-card:not(.is-mockup):not(.is-contained):not(.is-wide) .asset-image-frame {
+  aspect-ratio: 3 / 2;
+}
+.guideline-page.is-soft .asset-image-card:not(.is-mockup):not(.is-contained):not(.is-wide) .asset-image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
