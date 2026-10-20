@@ -5878,7 +5878,7 @@ img {
   content: "";
   position: absolute;
   left: 0;
-  top: calc(40 * var(--k) + 12px);
+  top: calc(40 * var(--k) + 12px + 12px);
   height: calc(620 * var(--k));
   width: 1px;
   background: var(--soft-line, #dddce2);
@@ -8739,7 +8739,6 @@ a.slide-viewer-download:focus-visible,
   align-items: center;
   border-radius: 999px;
   background: #ffffff;
-  box-shadow: 0 2px 10px rgba(10, 20, 40, 0.12);
 }
 
 .corner-download > button {
@@ -8759,7 +8758,8 @@ a.slide-viewer-download:focus-visible,
 .corner-download > button:hover,
 .corner-download > button:focus-visible,
 .corner-download.is-open > button {
-  color: var(--ui-blue);
+  background: var(--ui-blue);
+  color: #ffffff;
 }
 
 .corner-download-formats {
@@ -8798,9 +8798,38 @@ a.slide-viewer-download:focus-visible,
   position: relative;
 }
 
-.subsidiary-row-cells .corner-download {
-  top: 4px;
-  right: 8px;
+/* ДО: кнопки — одной строкой над логотипами, у правого края ячейки; на белой карточке кнопка серая */
+.subsidiary-cell-tools {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  min-height: 38px;
+  margin-bottom: -40px;
+}
+
+.subsidiary-cell-tools .corner-download {
+  position: relative;
+  top: auto;
+  right: auto;
+  background: var(--btn-bg, #eef0f4);
+}
+
+/* Логотип: общая рамка по размеру русской версии, картинка привязана к левому верхнему углу */
+.asset-card-frame {
+  position: relative;
+  display: block;
+}
+
+.asset-card.is-square .asset-card-frame { width: 44%; }
+.asset-card.is-wide .asset-card-frame { width: 64%; }
+
+.asset-card .asset-card-preview .asset-card-frame img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: none;
+  max-height: none;
 }
 
 @media (max-width: 900px) {
@@ -8815,4 +8844,9 @@ a.slide-viewer-download:focus-visible,
   }
 
   .asset-card-preview { min-height: 210px; }
+}
+
+/* Знаки режимов: превью — точка привязки для кнопки скачивания в углу */
+.regime-sign-preview {
+  position: relative;
 }

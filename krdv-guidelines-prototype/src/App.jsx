@@ -2995,6 +2995,9 @@ function SubsidiaryRegionCards() {
           >
             {region.cells.map(({ item }) => (
               <div className="subsidiary-cell" key={item.preview}>
+                <div className="subsidiary-cell-tools">
+                  <CornerDownload files={item.files} title={`${item.title}, ${item.versionLabel.toLowerCase()}`} asset={subsidiaryAsset} />
+                </div>
                 <div className={`subsidiary-cell-preview is-${item.orientation}`}>
                   <img
                     src={subsidiaryAsset(item.preview)}
@@ -3002,7 +3005,6 @@ function SubsidiaryRegionCards() {
                     loading="lazy"
                     style={{ "--u": subsidiaryLogoUnits[item.preview.replace(/^subsidiary-|\.svg$/g, "")] }}
                   />
-                  <CornerDownload files={item.files} title={`${item.title}, ${item.versionLabel.toLowerCase()}`} asset={subsidiaryAsset} />
                 </div>
               </div>
             ))}
@@ -3080,18 +3082,12 @@ function RegimeSignLibrary() {
             <div className={`regime-sign-preview ${item.hasIcon ? "is-icon is-cover" : ""}`}>
               <img src={regimeSignAsset(item.preview)} alt={t(item.short)} loading="lazy" />
               {item.iconVideo ? <video src={regimeSignAsset(item.iconVideo)} muted loop playsInline preload="auto" aria-hidden="true" /> : null}
+              <CornerDownload files={item.files} title={`Знак ${item.short}`} asset={regimeSignAsset} />
             </div>
             <div className="regime-sign-copy">
               <span>{t(item.short)}</span>
               <h3>{t(item.title)}</h3>
               <p>{t(noDot(item.description))}</p>
-              <div className="logo-downloads" aria-label={t(`Скачать знак ${item.short}`)}>
-                <div>
-                  {regimeSignFormats.map((format) => (
-                    <LogoDownloadLink key={format} file={item.files[format]} format={format} title={item.title} asset={regimeSignAsset} />
-                  ))}
-                </div>
-              </div>
             </div>
           </motion.article>
         ))}
@@ -3636,14 +3632,25 @@ function CornerDownload({ files, title, asset = logoAsset }) {
 }
 
 // variants: { ru: { preview, files }, en: {...} } — если вариант один, переключатель языка не показывается
-function AssetCard({ title, variants, asset = logoAsset, shape = "square", tone = "light", alt }) {
+// units: { ru: [w, h], en: [w, h] } — размеры SVG в единицах. Если заданы, все языковые версии рисуются в одном масштабе
+// и с общей точкой привязки (знак в левом верхнем углу файла), поэтому при переключении «Рус / Eng» знак не сдвигается.
+function AssetCard({ title, variants, asset = logoAsset, shape = "square", tone = "light", alt, units }) {
   const langs = Object.keys(variants);
   const [lang, setLang] = useState(langs[0]);
   const current = variants[lang] || variants[langs[0]];
+  const imgAlt = t(alt ? `${alt}${langs.length > 1 ? (lang === "ru" ? ", русская" : ", английская") : ""}` : title);
+  const box = units ? units[langs[0]] : null;
+  const own = units ? units[lang] || box : null;
   return (
     <article className={`asset-card is-${shape}`} data-tone={tone}>
       <div className="asset-card-preview">
-        <img src={asset(current.preview)} alt={t(alt ? `${alt}${langs.length > 1 ? (lang === "ru" ? ", русская" : ", английская") : ""}` : title)} loading="lazy" />
+        {box ? (
+          <span className="asset-card-frame" style={{ aspectRatio: `${box[0]} / ${box[1]}` }}>
+            <img src={asset(current.preview)} alt={imgAlt} loading="lazy" style={{ width: `${(own[0] / box[0]) * 100}%`, height: `${(own[1] / box[1]) * 100}%` }} />
+          </span>
+        ) : (
+          <img src={asset(current.preview)} alt={imgAlt} loading="lazy" />
+        )}
         <CornerDownload files={current.files} title={`${title}${langs.length > 1 ? (lang === "ru" ? ", русская" : ", английская") : ""}`} asset={asset} />
       </div>
       <div className="asset-card-meta">
@@ -3661,6 +3668,12 @@ function AssetCard({ title, variants, asset = logoAsset, shape = "square", tone 
     </article>
   );
 }
+
+// Размеры файлов логотипа (viewBox): знак во всех файлах одного размера и стоит в левом верхнем углу
+const logoUnits = {
+  square: { ru: [209.8, 125.31], en: [183.59, 126.06] },
+  horizontal: { ru: [384.61, 69], en: [343.43, 69] },
+};
 
 // Логотип КРДВ: вертикальная и горизонтальная, ниже — белые версии на фирменном синем
 function LogoAssetCards() {
@@ -3681,7 +3694,17 @@ function LogoAssetCards() {
             return [lang, { preview: card.white ? files.svg : variant.preview, files }];
           }),
         );
-        return <AssetCard key={`${card.id}-${card.white}`} title={card.title} alt={`Логотип КРДВ, ${card.title.toLowerCase()}`} variants={variants} shape={card.id === "square" ? "square" : "wide"} tone={card.white ? "blue" : "light"} />;
+        return (
+          <AssetCard
+            key={`${card.id}-${card.white}`}
+            title={card.title}
+            alt={`Логотип КРДВ, ${card.title.toLowerCase()}`}
+            variants={variants}
+            units={logoUnits[card.id]}
+            shape={card.id === "square" ? "square" : "wide"}
+            tone={card.white ? "blue" : "light"}
+          />
+        );
       })}
     </div>
   );
