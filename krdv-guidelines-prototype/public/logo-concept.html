@@ -8,144 +8,149 @@
 <title>Логотип и графика КРДВ</title>
 <style>
 /*! TT Norms Pro © TypeType (ООО «ТайпТайп»), https://typetype.org. Используется по веб-лицензии АО «КРДВ» (счёт-договор № КРДВ-001 от 20.11.2023). Копирование и распространение файлов шрифта запрещено. */
-@font-face { font-family: "TT Norms Pro"; src: url("fonts/TT-Norms-Pro-Light.woff2") format("woff2"); font-weight: 300; font-display: swap; }
 @font-face { font-family: "TT Norms Pro"; src: url("fonts/TT-Norms-Pro-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
 @font-face { font-family: "TT Norms Pro"; src: url("fonts/TT-Norms-Pro-Normal.woff2") format("woff2"); font-weight: 450; font-display: swap; }
 @font-face { font-family: "TT Norms Pro"; src: url("fonts/TT-Norms-Pro-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
 @font-face { font-family: "TT Norms Pro"; src: url("fonts/TT-Norms-Pro-DemiBold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
-@font-face { font-family: "TT Norms Pro"; src: url("fonts/TT-Norms-Pro-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
-@font-face { font-family: "TT Norms Pro"; src: url("fonts/TT-Norms-Pro-ExtraBold.woff2") format("woff2"); font-weight: 800; font-display: swap; }
+/* Шрифты-кандидаты для логотипа: SIL Open Font License 1.1 */
+@font-face { font-family: "Jost"; src: url("concept/fonts/jost-cyrillic-wght-normal.woff2") format("woff2"); font-weight: 100 900; unicode-range: U+0400-045F, U+2116; font-display: swap; }
+@font-face { font-family: "Jost"; src: url("concept/fonts/jost-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122, U+2212; font-display: swap; }
+@font-face { font-family: "Commissioner"; src: url("concept/fonts/commissioner-cyrillic-wght-normal.woff2") format("woff2"); font-weight: 100 900; unicode-range: U+0400-045F, U+2116; font-display: swap; }
+@font-face { font-family: "Commissioner"; src: url("concept/fonts/commissioner-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; unicode-range: U+0000-00FF, U+2000-206F; font-display: swap; }
+@font-face { font-family: "Wix Madefor Display"; src: url("concept/fonts/wix-madefor-display-cyrillic-wght-normal.woff2") format("woff2"); font-weight: 400 800; unicode-range: U+0400-045F, U+2116; font-display: swap; }
+@font-face { font-family: "Wix Madefor Display"; src: url("concept/fonts/wix-madefor-display-latin-wght-normal.woff2") format("woff2"); font-weight: 400 800; unicode-range: U+0000-00FF, U+2000-206F; font-display: swap; }
+@font-face { font-family: "Tenor Sans"; src: url("concept/fonts/tenor-sans-cyrillic-400-normal.woff2") format("woff2"); font-weight: 400; unicode-range: U+0400-045F, U+2116; font-display: swap; }
+@font-face { font-family: "Tenor Sans"; src: url("concept/fonts/tenor-sans-latin-400-normal.woff2") format("woff2"); font-weight: 400; unicode-range: U+0000-00FF, U+2000-206F; font-display: swap; }
 
 :root {
-  --blue: #0056a2; --navy: #001d37; --deep: #0c5082; --sky: #22a8e0;
-  --light: #9ec6eb; --ice: #d4e6fa; --red: #de2327; --ink: #1d1d1b;
-  --bg: #f4f4f6; --card: #fff; --text: #14171c; --muted: #5d6470; --line: #dcdde2;
+  /* палитра «Утро» */
+  --milk: #f6f1e9; --milk2: #ece4d7; --pink: #f6cbc5; --pink2: #fbe7e3;
+  --red: #e31f26; --blue: #2a56e8; --sky: #dfe9ff; --sky2: #b3caff; --sky3: #7d9ef7;
+  --ink: #16181d; --muted: #6b6f78; --line: #e2ddd4; --card: #fff;
+  --logo-font: "Jost", sans-serif;
+  --display: "Jost", sans-serif;
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--bg); color: var(--text); font: 450 17px/1.5 "TT Norms Pro", system-ui, sans-serif; }
+body { margin: 0; background: var(--milk); color: var(--ink); font: 450 17px/1.5 "TT Norms Pro", system-ui, sans-serif; }
 .wrap { width: min(1200px, 100% - 32px); margin: 0 auto; }
-header.top { padding: 72px 0 40px; }
+header.top { padding: 72px 0 48px; }
 .eyebrow { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; }
-h1 { font-weight: 600; font-size: clamp(36px, 5.4vw, 68px); line-height: 1.02; letter-spacing: -.02em; margin: 0 0 24px; max-width: 14em; }
-h2 { font-weight: 600; font-size: clamp(28px, 3.4vw, 44px); line-height: 1.05; letter-spacing: -.015em; margin: 0 0 16px; }
-h3 { font-weight: 600; font-size: 21px; line-height: 1.2; margin: 0 0 8px; }
-.lead { font-size: clamp(19px, 1.7vw, 23px); line-height: 1.4; max-width: 34em; margin: 0; }
+h1 { font: 500 clamp(40px, 6vw, 80px)/.98 var(--display); letter-spacing: -.025em; margin: 0 0 24px; max-width: 12em; }
+h2 { font: 500 clamp(30px, 3.8vw, 50px)/1 var(--display); letter-spacing: -.02em; margin: 0 0 16px; }
+h3 { font-weight: 600; font-size: 20px; line-height: 1.2; margin: 0 0 6px; }
+.lead { font-size: clamp(19px, 1.7vw, 23px); line-height: 1.4; max-width: 32em; margin: 0; }
 p { max-width: 38em; }
 .muted { color: var(--muted); }
-section { padding: 56px 0; border-top: 1px solid var(--line); }
+section { padding: 64px 0; border-top: 1px solid var(--line); }
 .num { font-feature-settings: "tnum"; color: var(--muted); font-size: 15px; margin-bottom: 12px; display: block; }
 .card { background: var(--card); border-radius: 24px; padding: 28px; }
 .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-@media (max-width: 860px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+@media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
 .note { font-size: 14px; color: var(--muted); margin: 12px 0 0; }
-ul.pts { margin: 12px 0 0; padding: 0; list-style: none; }
-ul.pts li { position: relative; padding-left: 18px; margin: 6px 0; max-width: 40em; }
-ul.pts li::before { content: ""; position: absolute; left: 0; top: .62em; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
-ul.pts.minus li::before { background: var(--red); }
+.sub { font-size: 15px; color: var(--muted); margin: 4px 0 0; max-width: 34em; }
+@media (max-width: 600px) { .card { padding: 20px; } }
 
 /* ---------- Логотип ---------- */
 .mark { display: block; flex: none; }
-.lock { display: flex; align-items: center; color: var(--ink); --h: 96px; gap: calc(var(--h) * .2); }
+.lock { display: flex; align-items: center; color: var(--ink); --h: 96px; gap: calc(var(--h) * .2); font-family: var(--f, var(--logo-font)); }
 .lock .mark { height: var(--h); width: calc(var(--h) * 125.1 / 69); }
-.lock .wm { font-size: calc(var(--h) * .235); line-height: 1.12; letter-spacing: -.005em; white-space: nowrap; }
+.lock .wm { font-size: calc(var(--h) * .235); line-height: 1.1; font-weight: var(--w, 450); letter-spacing: var(--ls, .005em); white-space: nowrap; }
 .lock .wm span { display: block; }
 .lock.is-white { color: #fff; }
 .lock.is-white .mark { --m1: #fff; --m2: #fff; }
-.w-a .wm { font-weight: 500; }
-.w-b .wm span:first-child { font-weight: 400; }
-.w-b .wm span:last-child { font-weight: 600; }
-.w-c { gap: calc(var(--h) * .2); }
-.w-c .abbr { font-weight: 700; font-size: calc(var(--h) * .56); letter-spacing: -.01em; line-height: 1; }
-.w-c .full { font-size: calc(var(--h) * .135); line-height: 1.2; font-weight: 450; padding-left: calc(var(--h) * .17); border-left: 1px solid currentColor; white-space: nowrap; }
-.w-c .full span { display: block; }
+.lock.abbr-lock .abbr { font-size: calc(var(--h) * .52); font-weight: 500; letter-spacing: .01em; line-height: 1; }
+.lock.abbr-lock .full { font-size: calc(var(--h) * .15); line-height: 1.2; font-weight: 450; padding-left: calc(var(--h) * .17); border-left: 1px solid currentColor; white-space: nowrap; }
+.lock.abbr-lock .full span { display: block; }
 .lock.vert { flex-direction: column; text-align: center; gap: calc(var(--h) * .14); }
-.lock.vert .wm span { display: block; }
 
-.stage { border-radius: 16px; background: #fff; display: grid; place-items: center; padding: 48px 24px; min-height: 230px; overflow: hidden; container-type: inline-size; }
+.stage { border-radius: 16px; background: var(--milk); display: grid; place-items: center; padding: 44px 20px; min-height: 220px; overflow: hidden; container-type: inline-size; }
+.stage.white { background: #fff; }
 .stage.blue { background: var(--blue); }
-.stage .lock { --h: min(96px, 17cqw); }
-.stage .lock.w-c { --h: min(104px, 16cqw); }
-@media (max-width: 600px) { .stage { padding: 32px 12px; min-height: 160px; } .card { padding: 20px; } }
-.stage .lock.vert { --h: min(120px, 22cqw); }
-.pair { display: grid; grid-template-columns: 1.35fr 1fr; gap: 12px; margin: 20px 0 0; }
-@media (max-width: 860px) { .pair { grid-template-columns: 1fr; } }
+.stage .lock { --h: min(92px, 16cqw); }
+.stage .lock.abbr-lock { --h: min(100px, 15cqw); }
+.stage .lock.vert { --h: min(110px, 22cqw); }
+@media (max-width: 600px) { .stage { padding: 30px 12px; min-height: 150px; } }
 .orig img { width: min(560px, 100%); height: auto; display: block; }
 
-/* сравнение букв */
-.letters { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 20px; }
-.letter { background: #fff; border-radius: 16px; padding: 18px 10px 14px; text-align: center; }
-.letter .g { font-size: clamp(34px, 5vw, 64px); line-height: 1; font-weight: 500; display: flex; justify-content: center; gap: .35em; }
+.letters { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 16px; }
+.letter { background: #fff; border-radius: 16px; padding: 16px 8px 12px; text-align: center; }
+.letter .g { font: 500 clamp(30px, 4.4vw, 56px)/1 "TT Norms Pro"; display: flex; justify-content: center; gap: .3em; }
 .letter .g .bg { color: var(--red); }
-.letter small { display: block; font-size: 13px; color: var(--muted); margin-top: 10px; }
+.letter small { display: block; font-size: 13px; color: var(--muted); margin-top: 8px; }
 @media (max-width: 600px) { .letters { grid-template-columns: repeat(3, 1fr); } }
-.words { margin-top: 12px; background: #fff; border-radius: 16px; padding: 24px; font-size: clamp(24px, 3.4vw, 44px); line-height: 1.25; font-weight: 500; }
-.words .row { display: flex; gap: 20px; align-items: baseline; flex-wrap: wrap; }
-.words .row small { font-size: 14px; font-weight: 450; color: var(--muted); min-width: 160px; }
 
-/* ---------- Макеты ---------- */
-.mock { position: relative; overflow: hidden; container-type: inline-size; border-radius: 6px; isolation: isolate; }
+.font-card { display: grid; grid-template-columns: 1.5fr 1fr; gap: 16px; align-items: stretch; }
+@media (max-width: 860px) { .font-card { grid-template-columns: 1fr; } }
+.glyphs { border-radius: 16px; background: var(--milk); display: flex; align-items: center; justify-content: center; gap: .12em; font-size: clamp(64px, 8vw, 112px); line-height: 1; padding: 24px; color: var(--ink); }
+.glyphs span:nth-child(2) { color: var(--red); }
+.font-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; flex-wrap: wrap; margin-bottom: 14px; }
+.tag { display: inline-block; font-size: 13px; padding: 4px 10px; border-radius: 999px; background: var(--pink2); color: #9b2a22; }
+.tag.best { background: var(--red); color: #fff; }
+
+/* ---------- Графика ---------- */
+.mock { position: relative; overflow: hidden; container-type: inline-size; isolation: isolate; border-radius: 6px; }
 .r-bill { aspect-ratio: 2 / 1; }
 .r-post { aspect-ratio: 4 / 5; }
+.r-story { aspect-ratio: 9 / 16; }
 .r-slide { aspect-ratio: 16 / 9; }
-.mocks { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
-.mocks .row2 { display: grid; grid-template-columns: 1fr 1.6fr; gap: 16px; align-items: start; }
-@media (max-width: 860px) { .mocks .row2 { grid-template-columns: 1fr; } }
-.cap { font-size: 14px; color: var(--muted); margin: 8px 0 0; }
-.mock .lock { position: absolute; z-index: 3; }
-.t { position: absolute; z-index: 3; margin: 0; font-weight: 600; letter-spacing: -.02em; line-height: 1; max-width: none; }
-.s { position: absolute; z-index: 3; margin: 0; font-weight: 450; line-height: 1.3; max-width: none; }
-.tab { font-feature-settings: "tnum"; }
+.r-sq { aspect-ratio: 1; }
+.cap { font-size: 14px; color: var(--muted); margin: 8px 0 0; max-width: none; }
+.row { display: grid; gap: 16px; margin-top: 16px; align-items: start; }
+.row.c2 { grid-template-columns: 1fr 1fr; }
+.row.c3 { grid-template-columns: .82fr 1fr 1fr; }
+@media (max-width: 860px) { .row.c2, .row.c3 { grid-template-columns: 1fr; } }
 
-/* Ход 1: пояса времени */
-.bands { position: absolute; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; }
-.band { position: relative; border-left: 1px solid rgba(255,255,255,.18); }
-.band:nth-child(1) { background: #001d37; }
-.band:nth-child(2) { background: #052c52; }
-.band:nth-child(3) { background: #0c5082; }
-.band:nth-child(4) { background: #0056a2; }
-.band:nth-child(5) { background: #1d7cc8; }
-.band .lab { position: absolute; left: 8%; right: 6%; bottom: 5%; color: #fff; line-height: 1.2; }
-.band .lab b { display: block; font-weight: 600; font-feature-settings: "tnum"; }
-.band .lab i { font-style: normal; opacity: .75; display: block; }
-.band.dawn::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2.2%; background: var(--red); min-height: 4px; }
+.hl { position: absolute; z-index: 4; margin: 0; font: 500 var(--fs, 8cqw)/.98 var(--display); letter-spacing: -.025em; max-width: none; }
+.mock .lock { position: absolute; z-index: 5; }
 
-/* Ход 2: координаты */
-.cross { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-.cross::before, .cross::after { content: ""; position: absolute; background: var(--c, rgba(255,255,255,.55)); }
-.cross::before { left: 0; right: 0; top: var(--y); height: 1px; }
-.cross::after { top: 0; bottom: 0; left: var(--x); width: 1px; }
-.pin { position: absolute; z-index: 2; left: var(--x); top: var(--y); width: 2.2cqw; height: 2.2cqw; min-width: 8px; min-height: 8px; margin: -1.1cqw 0 0 -1.1cqw; background: var(--red); border-radius: 50%; }
-.coord { position: absolute; z-index: 3; font-feature-settings: "tnum"; line-height: 1.25; }
-.coord b { display: block; font-weight: 600; }
-.ticks { position: absolute; z-index: 1; inset: 3.5%; border: 1px solid var(--c, rgba(255,255,255,.35)); }
+.arch { position: absolute; overflow: hidden; z-index: 2; background: var(--bgc, var(--sky2));
+  border-radius: calc(var(--aw) / 2) calc(var(--aw) / 2) calc(var(--aw) * .07) calc(var(--aw) * .07); width: var(--aw); height: var(--ah); }
+.arch img { width: 100%; height: 100%; object-fit: cover; display: block; object-position: var(--op, 50% 50%); }
+.arch.flat { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.sun { position: absolute; z-index: 1; width: var(--s); height: var(--s); border-radius: 50%; background: var(--red); }
+.sun.front { z-index: 3; }
 
-/* Ход 3: шкала */
-.scale { position: absolute; z-index: 3; }
-.scale .bar { display: flex; height: var(--bh, 1.6cqw); border: 1px solid currentColor; }
-.scale .bar i { flex: 1; }
-.scale .bar i:nth-child(odd) { background: currentColor; }
-.scale .bar i.red { background: var(--red); }
-.scale .marks { position: relative; height: 1.3em; margin-top: .6em; font-feature-settings: "tnum"; }
-.scale .marks span { position: absolute; top: 0; left: var(--at); transform: translateX(-50%); white-space: nowrap; }
-.scale .marks span:first-child { transform: none; }
-.scale .marks span:last-child { transform: translateX(-100%); }
-.scale .marks.mid span { transform: translateX(-50%); }
-.chart { position: absolute; display: flex; align-items: flex-end; gap: 4%; }
-.chart .c { flex: 1; background: var(--ice); position: relative; margin: 0 1.5%; }
-.chart .c.hl { background: var(--blue); }
-.chart .c em { position: absolute; top: -1.6em; left: 0; font-style: normal; font-feature-settings: "tnum"; font-weight: 600; }
+.chip { position: absolute; z-index: 6; display: inline-flex; align-items: center; gap: .55em; background: #fff; color: var(--ink); border-radius: 999px; padding: .5em .95em .5em .7em; font: 500 var(--cs, 1.6cqw)/1 "TT Norms Pro"; white-space: nowrap; box-shadow: 0 .3em 1.2em rgba(22, 24, 29, .08); }
+.chip::before { content: ""; width: .62em; height: .62em; border-radius: 50%; background: var(--red); flex: none; }
+.chip b { font-weight: 600; font-feature-settings: "tnum"; }
+.chip.plain::before { display: none; }
 
-/* не делаем */
-.dont { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
-@media (max-width: 860px) { .dont { grid-template-columns: 1fr; } }
-.dont .tile { position: relative; aspect-ratio: 4 / 3; border-radius: 16px; overflow: hidden; background: var(--blue); }
-.dont .tile svg { position: absolute; }
-.dont .tile::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top right, transparent calc(50% - 1.5px), var(--red) calc(50% - 1.5px), var(--red) calc(50% + 1.5px), transparent calc(50% + 1.5px)); }
-.tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
-@media (max-width: 860px) { .tools { grid-template-columns: 1fr; } }
-.tool-ic { height: 72px; position: relative; margin-bottom: 16px; }
+/* часовые арки */
+.zones { position: absolute; display: flex; align-items: flex-end; gap: var(--gap, 2cqw); z-index: 2; }
+.zone { position: relative; width: var(--zw); height: var(--zh); background: var(--zc); border-radius: calc(var(--zw) / 2) calc(var(--zw) / 2) 0 0; color: var(--ink); }
+.zone .zl { position: absolute; left: 0; right: 0; top: calc(var(--zw) * .42); text-align: center; line-height: 1.15; }
+.zone .zl b { display: block; font: 500 var(--zt, 3.6cqw)/1 var(--display); font-feature-settings: "tnum"; letter-spacing: -.01em; }
+.zone .zl i { display: block; font-style: normal; font-size: var(--zc2, 2.1cqw); margin-top: .35em; opacity: .8; }
+.zone.on { color: #fff; }
+
+/* анимация */
+.motion .zone { transform-origin: bottom; animation: rise 7s cubic-bezier(.2, .8, .2, 1) infinite; animation-delay: calc(var(--i) * .25s); }
+.motion .sun { animation: sunrise 7s cubic-bezier(.2, .8, .2, 1) infinite; }
+.motion .hl, .motion .chip { animation: fadein 7s ease infinite; }
+@keyframes rise { 0% { transform: scaleY(0); } 18%, 86% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+@keyframes sunrise { 0%, 22% { transform: translateY(60%); opacity: 0; } 40%, 86% { transform: translateY(0); opacity: 1; } 100% { opacity: 0; } }
+@keyframes fadein { 0%, 30% { opacity: 0; transform: translateY(.4em); } 45%, 86% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .motion * { animation: none !important; } }
+
+/* карточки веером */
+.fan { position: absolute; inset: 0; }
+.fan .fc { position: absolute; width: var(--aw); height: var(--ah); border-radius: calc(var(--aw) / 2) calc(var(--aw) / 2) calc(var(--aw) * .07) calc(var(--aw) * .07); padding: 0 3.4cqw 4.6cqw; display: flex; flex-direction: column; justify-content: flex-end; box-shadow: 0 1.5cqw 5cqw rgba(22, 24, 29, .1); }
+.fan .fc small { font: 500 2.4cqw/1 "TT Norms Pro"; font-feature-settings: "tnum"; opacity: .7; margin-bottom: 2.4cqw; }
+.fan .fc strong { font: 500 4.9cqw/1 var(--display); letter-spacing: -.02em; }
+
+/* шоппер */
+.tote { position: absolute; left: 22%; right: 22%; top: 30%; bottom: 7%; background: var(--milk); border-radius: 1.5cqw; box-shadow: 0 2cqw 6cqw rgba(22, 24, 29, .12); }
+.tote::before { content: ""; position: absolute; left: 22%; right: 22%; top: -20cqw; height: 26cqw; border: 2.6cqw solid var(--milk2); border-bottom: 0; border-radius: 13cqw 13cqw 0 0; z-index: -1; }
+
+/* константы */
+.consts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 24px; }
+@media (max-width: 860px) { .consts { grid-template-columns: 1fr 1fr; } }
+.const { background: #fff; border-radius: 20px; padding: 20px; }
+.const .vis { position: relative; height: 150px; margin-bottom: 14px; container-type: inline-size; }
+.sw { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; height: 100%; }
+.sw i { border-radius: 10px; display: flex; align-items: flex-end; padding: 6px 7px; font: 500 11px/1.1 "TT Norms Pro"; font-style: normal; color: rgba(22, 24, 29, .7); }
+.sw i.d { color: rgba(255, 255, 255, .85); }
 footer { padding: 40px 0 72px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
 </style>
 </head>
@@ -155,19 +160,18 @@ footer { padding: 40px 0 72px; color: var(--muted); font-size: 14px; border-top:
 </svg>
 
 <header class="top wrap">
-  <p class="eyebrow">Концепт · для внутреннего обсуждения · 21.10.2026</p>
-  <h1>Логотип КРДВ: шрифт и своя графика</h1>
-  <p class="lead">Что будет, если надпись в логотипе набрать фирменным шрифтом с русскими формами букв. И как у КРДВ может появиться своя графика, не похожая на графику Восточного экономического форума.</p>
+  <p class="eyebrow">Концепт · для внутреннего обсуждения</p>
+  <h1>КРДВ: ближе, чем кажется</h1>
+  <p class="lead">Новая надпись в логотипе — гротеск, который дружит с лотосом. И одна графическая система вокруг мысли, что Дальний Восток и Арктика ближе, чем кажется.</p>
 </header>
 
 <main>
-<!-- 1. Проблема -->
+<!-- 1. Шрифт логотипа -->
 <section class="wrap">
   <span class="num">01</span>
-  <h2>Что сейчас</h2>
-  <p>Лотос — общий знак дальневосточной «семьи»: он есть у Минвостокразвития, ВЭФ и КРДВ. Языком кадрированного лотоса пользуется ВЭФ, и он заметнее нас. Надпись в логотипе КРДВ набрана болгарскими формами букв, а весь фирменный текст набран TT Norms Pro с русскими формами. Получается, что логотип и фирменные тексты написаны разным почерком.</p>
+  <h2>Шрифт для логотипа</h2>
+  <p>Сейчас надпись набрана болгарскими формами букв. Если просто заменить их на TT Norms, получится, что лотос и надпись поют в разных операх. Лотос нарисован как каллиграфия: дуги-полумесяцы, острые концы, тонкие сужения. Надписи нужен гротеск, который спокойно держит эту пластику: круглые овалы, острые вершины, чистые соединения.</p>
   <div class="card orig" style="margin-top:20px"><img src="assets/logos/krdv-logo-ru-horizontal.svg" alt="Текущий логотип КРДВ"></div>
-
   <div class="letters">
     <div class="letter"><div class="g"><span lang="ru">т</span><span class="bg" lang="bg">т</span></div><small>«m» вместо «т»</small></div>
     <div class="letter"><div class="g"><span lang="ru">и</span><span class="bg" lang="bg">и</span></div><small>«u» вместо «и»</small></div>
@@ -176,277 +180,194 @@ footer { padding: 40px 0 72px; color: var(--muted); font-size: 14px; border-top:
     <div class="letter"><div class="g"><span lang="ru">к</span><span class="bg" lang="bg">к</span></div><small>«k» вместо «к»</small></div>
     <div class="letter"><div class="g"><span lang="ru">л</span><span class="bg" lang="bg">л</span></div><small>«λ» вместо «л»</small></div>
   </div>
-  <div class="words">
-    <div class="row"><small>Русские формы</small><span lang="ru">развития Арктики</span></div>
-    <div class="row"><small>Болгарские формы</small><span lang="bg" style="color:var(--red)">развития Арктики</span></div>
-  </div>
-  <p class="note">Обе строки набраны одним шрифтом, TT Norms Pro: в нём есть болгарский вариант букв. Шрифт тот же, разница только в почерке.</p>
-</section>
-
-<!-- 2. Надпись -->
-<section class="wrap">
-  <span class="num">02</span>
-  <h2>Надпись фирменным шрифтом</h2>
-  <p>Лотос не меняется: его форма, цвет и пропорции остаются как есть. Меняется только надпись: её набираем TT Norms Pro с русскими формами. Логотип начинает говорить тем же голосом, что и все материалы корпорации.</p>
 
   <div class="card" style="margin-top:24px">
-    <h3>А. Прямая замена</h3>
-    <p class="muted" style="margin:0">Те же две строки, TT Norms Pro Medium. Самый мягкий шаг: логотип узнаётся сразу, просто читается легче.</p>
-    <div class="pair">
-      <div class="stage"><div class="lock w-a"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div></div>
-      <div class="stage blue"><div class="lock w-a is-white"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div></div>
+    <div class="font-head"><h3>1. Геометрический: Futura PT</h3><span class="tag best">Рекомендую</span></div>
+    <div class="font-card">
+      <div class="stage white"><div class="lock" style="--f:'Jost';--w:450"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div></div>
+      <div class="glyphs" style="font-family:Jost;font-weight:450"><span>О</span><span>а</span><span>Р</span><span>А</span></div>
     </div>
+    <p class="sub">Овал «О» — почти правильный круг, как дуги лепестков. Острые вершины «А», «Д», «Л» и «К» перекликаются с остриями лотоса. Штрих ровный и лёгкий, поэтому сложный знак остаётся главным. Шрифт строгий, но не холодный. В концепте набрано Jost — свободным аналогом Futura; для логотипа стоит взять Futura PT из каталога ParaType, у неё родная кириллица.</p>
   </div>
 
   <div class="card" style="margin-top:16px">
-    <h3>Б. С акцентом на территории</h3>
-    <p class="muted" style="margin:0">Главное в названии — «Дальний Восток и Арктика», поэтому вторая строка плотнее. Тип организации читается спокойнее, территория — сильнее.</p>
-    <div class="pair">
-      <div class="stage"><div class="lock w-b"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div></div>
-      <div class="stage blue"><div class="lock w-b is-white"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div></div>
+    <div class="font-head"><h3>2. С контрастом: Tenor Sans</h3><span class="tag">Альтернатива</span></div>
+    <div class="font-card">
+      <div class="stage white"><div class="lock" style="--f:'Tenor Sans';--w:400;--ls:.02em"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div></div>
+      <div class="glyphs" style="font-family:'Tenor Sans'"><span>О</span><span>а</span><span>Р</span><span>А</span></div>
     </div>
+    <p class="sub">Гуманистический гротеск с тонкими сужениями в соединениях — как сужения в лепестках. Самый «каллиграфичный» и премиальный, но мягче и хуже держится в мелких размерах. Есть только одно начертание.</p>
   </div>
 
   <div class="card" style="margin-top:16px">
-    <h3>В. «КРДВ» как имя</h3>
-    <p class="muted" style="margin:0">Корпорацию и так все называют «КРДВ». Аббревиатура становится главным словом, полное название — подписью. Такой логотип компактнее и лучше работает в соцсетях, на мерче и на мелких носителях. Это самое заметное изменение, его нужно согласовывать отдельно.</p>
-    <div class="pair">
-      <div class="stage"><div class="lock w-c"><svg class="mark"><use href="#lotus"/></svg><span class="abbr">КРДВ</span><div class="full"><span>Корпорация развития</span><span>Дальнего Востока</span><span>и Арктики</span></div></div></div>
-      <div class="stage blue"><div class="lock w-c is-white"><svg class="mark"><use href="#lotus"/></svg><span class="abbr">КРДВ</span><div class="full"><span>Корпорация развития</span><span>Дальнего Востока</span><span>и Арктики</span></div></div></div>
+    <div class="font-head"><h3>3. Гуманистический: Commissioner</h3><span class="tag">Спокойный</span></div>
+    <div class="font-card">
+      <div class="stage white"><div class="lock" style="--f:'Commissioner';--w:450"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div></div>
+      <div class="glyphs" style="font-family:Commissioner;font-weight:450"><span>О</span><span>а</span><span>Р</span><span>А</span></div>
     </div>
+    <p class="sub">Открытые формы и живой, чуть рукописный ритм. Современный и нейтральный: не спорит с лотосом, но и не добавляет характера.</p>
   </div>
 
-  <div class="grid2" style="margin-top:16px">
-    <div class="card">
-      <h3>Вертикальная версия (А)</h3>
-      <div class="stage" style="margin-top:16px"><div class="lock vert w-a"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div></div>
+  <div class="card" style="margin-top:16px">
+    <div class="font-head"><h3>4. Мягкий геометрический: Wix Madefor Display</h3><span class="tag">Близко к Circe и Mont</span></div>
+    <div class="font-card">
+      <div class="stage white"><div class="lock" style="--f:'Wix Madefor Display';--w:450"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div></div>
+      <div class="glyphs" style="font-family:'Wix Madefor Display';font-weight:450"><span>О</span><span>а</span><span>Р</span><span>А</span></div>
     </div>
-    <div class="card">
-      <h3>Вертикальная версия (В)</h3>
-      <div class="stage" style="margin-top:16px"><div class="lock vert w-c" style="--h:min(120px,22cqw)"><svg class="mark"><use href="#lotus"/></svg><span class="abbr" style="font-size:calc(var(--h)*.42)">КРДВ</span></div></div>
-    </div>
+    <p class="sub">Широкие овалы, дружелюбный характер. Хорошо читается, но звучит скорее как цифровой сервис, чем как корпорация.</p>
   </div>
-  <ul class="pts">
-    <li>Это набор шрифтом, а не готовый логотип. В финале надпись дорабатывает шрифтовой дизайнер: межбуквенные расстояния, оптика, совпадение с лотосом по высоте.</li>
-    <li>Использование TT Norms Pro в логотипе нужно проверить по лицензии TypeType.</li>
-    <li>Английская версия устроена так же: «Far East and Arctic Development Corporation» или «ERDC» в варианте В.</li>
-  </ul>
+
+  <h3 style="margin:40px 0 4px">Логотип с Futura PT</h3>
+  <p class="sub" style="margin-bottom:16px">Лотос не меняется. Основная версия — полное название; короткая — «КРДВ» с подписью «Дальний Восток и Арктика», чтобы Арктика не потерялась в аббревиатуре.</p>
+  <div class="grid2">
+    <div class="stage" style="min-height:240px"><div class="lock"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div></div>
+    <div class="stage blue" style="min-height:240px"><div class="lock is-white"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div></div>
+    <div class="stage white" style="min-height:240px"><div class="lock abbr-lock"><svg class="mark"><use href="#lotus"/></svg><span class="abbr">КРДВ</span><div class="full"><span>Дальний Восток</span><span>и Арктика</span></div></div></div>
+    <div class="stage" style="min-height:240px;background:var(--pink)"><div class="lock vert"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div></div>
+  </div>
+  <p class="note">Это набор шрифтом. Для настоящего логотипа надпись дорабатывает шрифтовой дизайнер: расстояния между буквами, толщина рядом со знаком, высота относительно лотоса.</p>
 </section>
 
-<!-- 3. Принцип графики -->
+<!-- 2. Графика -->
 <section class="wrap">
-  <span class="num">03</span>
-  <h2>Графика: лотос не трогаем</h2>
-  <p>Лотос — знак семьи. Кадрировать его, вырезать из него лепестки и ставить в фон — значит говорить языком ВЭФ. Поэтому лотос живёт только в логотипе. Своя графика КРДВ строится из того, чем корпорация занимается: территории, площадки, условия, сроки. Главная мысль — <b>точность вместо символа</b>: где, когда и сколько.</p>
-  <div class="dont">
-    <div class="tile"><svg viewBox="0 0 40 30" style="inset:0;width:100%;height:100%"><use href="#lotus" x="-38" y="-14" width="110" height="61" style="opacity:.95"/></svg></div>
-    <div class="tile" style="background:#fff"><svg viewBox="0 0 40 30" style="inset:0;width:100%;height:100%"><use href="#lotus" x="-3" y="-28" width="150" height="83"/></svg></div>
-    <div class="tile" style="background:var(--navy)"><svg viewBox="0 0 40 30" style="inset:0;width:100%;height:100%;opacity:.35"><use href="#lotus" x="-6" y="-2" width="60" height="33"/></svg></div>
-  </div>
-  <p class="note">Не делаем: крупный кадр лепестков, лотос как узор или фон, полупрозрачный лотос под текстом.</p>
+  <span class="num">02</span>
+  <h2>Графика: «Ближе, чем кажется»</h2>
+  <p>Само слово «дальний» отталкивает: далеко, дорого, сложно. Графика КРДВ спорит с этим ощущением. Утро в России начинается на Востоке, поэтому главная форма — арка восходящего солнца. Она же окно, в котором видна обычная, понятная жизнь: город, работа, учёба, природа. Цвета — утренние, тёплые и светлые, а не тёмные и холодные.</p>
 
-  <div class="tools">
-    <div class="card">
-      <div class="tool-ic">
-        <div class="bands" style="inset:0;width:60%"><div class="band"></div><div class="band"></div><div class="band"></div><div class="band"></div><div class="band dawn"></div></div>
-      </div>
-      <h3>Время</h3>
-      <p class="muted" style="margin:0">Дальний Восток живёт в пяти часовых поясах, и день в России начинается здесь. Пояса становятся полосами, и восточная полоса — светлее. Красная метка ставится там, где начинается день.</p>
+  <div class="consts">
+    <div class="const">
+      <div class="vis"><div class="sw">
+        <i style="background:var(--milk)">Молочный</i><i style="background:var(--pink)">Рассвет</i><i class="d" style="background:var(--red)">Солнце</i><i class="d" style="background:var(--blue)">Океан</i>
+      </div></div>
+      <h3>Палитра «Утро»</h3><p class="sub">Светлая основа, красный — только солнце, синий — новый, ярче и чище.</p>
     </div>
-    <div class="card">
-      <div class="tool-ic" style="background:var(--blue);width:60%;border-radius:4px;container-type:inline-size">
-        <div class="cross" style="--x:64%;--y:44%"></div><div class="pin" style="--x:64%;--y:44%"></div>
-      </div>
-      <h3>Место</h3>
-      <p class="muted" style="margin:0">Каждое сообщение привязано к реальной точке: тонкий крест координат, красная точка, подпись с широтой и долготой. Это не карта, а адрес.</p>
+    <div class="const">
+      <div class="vis"><div class="arch" style="--aw:34cqw;--ah:46cqw;left:33cqw;bottom:0;--bgc:var(--sky2)"></div><div class="sun" style="--s:16cqw;left:52cqw;top:4cqw"></div></div>
+      <h3>Арка</h3><p class="sub">Солнце над горизонтом, дверь и окно. Главная форма системы.</p>
     </div>
-    <div class="card">
-      <div class="tool-ic" style="color:var(--navy)">
-        <div class="scale" style="left:0;width:60%;top:24px;--bh:12px"><div class="bar"><i></i><i></i><i></i><i class="red"></i></div></div>
-      </div>
-      <h3>Масштаб</h3>
-      <p class="muted" style="margin:0">Масштабная линейка, как на карте. Большие территории и сложные условия переводятся в понятные размеры: гектар, проценты, километры.</p>
+    <div class="const">
+      <div class="vis" style="display:grid;place-items:center"><span class="chip" data-tz="Asia/Vladivostok" style="position:static;--cs:16px">Владивосток <b>17:00</b></span></div>
+      <h3>Местное время</h3><p class="sub">Плашка с живым временем — мостик между «там» и «здесь».</p>
+    </div>
+    <div class="const">
+      <div class="vis" style="display:flex;align-items:center"><span style="font:500 40px/.95 var(--display);letter-spacing:-.025em">Ближе, чем кажется</span></div>
+      <h3>Шрифт и голос</h3><p class="sub">Заголовки — шрифтом логотипа, тексты — TT Norms Pro.</p>
     </div>
   </div>
-  <p class="note">Три хода — части одного языка, а не три разных стиля. На одном носителе обычно работает один ход, иногда два. Красный цвет — только одна метка на носителе.</p>
-</section>
 
-<!-- 4. Время -->
-<section class="wrap">
-  <span class="num">04</span>
-  <h2>Ход 1. Время</h2>
-  <p>Свет приходит с востока, поэтому полосы светлеют от запада к востоку. Это ровные тональные ступени синего, без градиентов и пятен. Ход полезен и в работе: созвоны, сроки и события у КРДВ всегда идут в нескольких поясах сразу.</p>
-  <div class="mocks">
+  <!-- Билборд -->
+  <div style="margin-top:32px">
+    <div class="mock r-bill" style="background:var(--milk)">
+      <div class="lock" style="--h:5cqw;left:4cqw;top:4cqw"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div>
+      <p class="hl" style="--fs:7.4cqw;left:4cqw;bottom:5cqw;width:56cqw">Дальний Восток ближе, чем кажется</p>
+      <div class="sun" style="--s:13cqw;right:9cqw;top:4cqw"></div>
+      <div class="arch flat" style="--aw:31cqw;--ah:41cqw;right:6cqw;bottom:0"><img src="assets/brandbook/raster/photostyle-composition-12.webp" alt="" style="--op:60% 50%"></div>
+      <span class="chip" data-tz="Asia/Vladivostok" style="--cs:1.55cqw;right:26cqw;bottom:7cqw">Владивосток <b>17:00</b></span>
+    </div>
+    <p class="cap">Билборд. Арка поднимается от нижнего края, как солнце над горизонтом. Солнце выглядывает из-за неё.</p>
+  </div>
+
+  <div class="row c2">
     <div>
-      <div class="mock r-bill" style="background:var(--navy)">
-        <div class="lock w-a is-white" style="--h:6.2cqw;left:4%;top:7%"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div>
-        <p class="t" style="left:4%;bottom:11%;color:#fff;font-size:6.1cqw;width:40%">День в&nbsp;России начинается здесь</p>
-        <div class="bands" style="left:48%;right:0;top:0;bottom:0;font-size:1.25cqw">
-          <div class="band"><div class="lab"><b>МСК+5</b><i>Улан-Удэ</i></div></div>
-          <div class="band"><div class="lab"><b>МСК+6</b><i>Якутск</i></div></div>
-          <div class="band"><div class="lab"><b>МСК+7</b><i>Владивосток</i></div></div>
-          <div class="band"><div class="lab"><b>МСК+8</b><i>Магадан</i></div></div>
-          <div class="band dawn"><div class="lab"><b>МСК+9</b><i>Камчатка</i></div></div>
-        </div>
+      <div class="mock r-post" style="background:var(--pink2)">
+        <p class="hl" style="--fs:10.2cqw;left:7cqw;top:7cqw;width:80cqw">Арктика ближе, чем кажется</p>
+        <div class="sun" style="--s:24cqw;left:57cqw;top:42cqw"></div>
+        <div class="arch flat" style="--aw:66cqw;--ah:72cqw;left:17cqw;bottom:0"><img src="assets/brandbook/raster/photostyle-composition-1.webp" alt="" style="--op:45% 50%"></div>
+        <span class="chip plain" style="--cs:3.2cqw;left:7cqw;bottom:8cqw">Северный морской путь</span>
       </div>
-      <p class="cap">Билборд 6×3 м. Имиджевое сообщение. Полосы занимают правую половину, текст стоит на спокойном поле.</p>
+      <p class="cap">Пост. Арктика на рассвете — тёплая, а не «край света».</p>
     </div>
-    <div class="row2">
-      <div>
-        <div class="mock r-post" style="background:var(--navy)">
-          <p class="t" style="left:7%;top:7%;color:#fff;font-size:8.6cqw;width:86%;line-height:1.04">Когда в&nbsp;Москве 9&nbsp;утра, на&nbsp;Камчатке уже 6&nbsp;вечера</p>
-          <div class="bands" style="left:0;right:0;bottom:0;height:48%;font-size:2.9cqw">
-            <div class="band"><div class="lab"><b>14:00</b></div></div>
-            <div class="band"><div class="lab"><b>15:00</b></div></div>
-            <div class="band"><div class="lab"><b>16:00</b></div></div>
-            <div class="band"><div class="lab"><b>17:00</b></div></div>
-            <div class="band dawn"><div class="lab"><b>18:00</b></div></div>
-          </div>
-        </div>
-        <p class="cap">Пост 1080×1350. Факт про территорию, полосы внизу.</p>
-      </div>
-      <div>
-        <div class="mock r-slide" style="background:#fff">
-          <div class="lock w-a" style="--h:3.6cqw;left:4.5%;top:7%"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div>
-          <p class="t" style="left:4.5%;top:22%;font-size:4.2cqw;color:var(--navy)">Встреча с резидентами — 10:00 по Москве</p>
-          <p class="s" style="left:4.5%;top:31%;font-size:1.6cqw;color:var(--muted)">Местное время участников</p>
-          <div class="bands" style="left:4.5%;right:4.5%;top:42%;bottom:9%;font-size:1.5cqw">
-            <div class="band"><div class="lab" style="bottom:auto;top:12%"><b style="font-size:2.8cqw">15:00</b><i>Улан-Удэ</i></div></div>
-            <div class="band"><div class="lab" style="bottom:auto;top:12%"><b style="font-size:2.8cqw">16:00</b><i>Якутск</i></div></div>
-            <div class="band"><div class="lab" style="bottom:auto;top:12%"><b style="font-size:2.8cqw">17:00</b><i>Владивосток</i></div></div>
-            <div class="band"><div class="lab" style="bottom:auto;top:12%"><b style="font-size:2.8cqw">18:00</b><i>Магадан</i></div></div>
-            <div class="band dawn"><div class="lab" style="bottom:auto;top:12%"><b style="font-size:2.8cqw">19:00</b><i>Камчатка</i></div></div>
-          </div>
-        </div>
-        <p class="cap">Рабочий слайд. Тот же ход становится полезной схемой, а не украшением.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 5. Место -->
-<section class="wrap">
-  <span class="num">05</span>
-  <h2>Ход 2. Место</h2>
-  <p>Красная точка — конкретное место, тонкий крест — его координаты. Сам по себе ход скромный, но он закрепляет за КРДВ интонацию «мы говорим о реальных местах». Координаты всегда настоящие и всегда подписаны.</p>
-  <div class="mocks">
     <div>
-      <div class="mock r-bill" style="background:var(--blue)">
-        <div class="cross" style="--x:70%;--y:40%"></div><div class="pin" style="--x:70%;--y:40%"></div>
-        <div class="coord" style="left:calc(70% + 2cqw);top:calc(40% + 1.6cqw);color:#fff;font-size:1.5cqw"><b>Владивосток</b>43°07′ с. ш. · 131°54′ в. д.</div>
-        <div class="lock w-a is-white" style="--h:6.2cqw;left:4%;top:7%"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div>
-        <p class="t" style="left:4%;bottom:11%;color:#fff;font-size:6.1cqw;width:52%">Место для следующего шага</p>
-      </div>
-      <p class="cap">Билборд. Линии креста уходят за край поля, а текст стоит в свободном углу.</p>
-    </div>
-    <div class="row2">
-      <div>
-        <div class="mock r-post" style="background:var(--ice)">
-          <div class="cross" style="--x:58%;--y:62%;--c:rgba(0,29,55,.35)"></div><div class="pin" style="--x:58%;--y:62%"></div>
-          <div class="coord" style="left:calc(58% + 3cqw);top:calc(62% + 2.4cqw);color:var(--navy);font-size:3cqw"><b>Певек</b>69°42′ с. ш.<br>170°17′ в. д.</div>
-          <p class="t" style="left:7%;top:7%;color:var(--navy);font-size:9cqw;width:86%;line-height:1.04">Арктика ближе, чем кажется</p>
+      <div class="mock r-post" style="background:var(--sky)">
+        <p class="hl" style="--fs:10.2cqw;left:7cqw;top:7cqw;width:84cqw">День в&nbsp;России начинается здесь</p>
+        <div class="sun" style="--s:16cqw;left:72cqw;top:48cqw"></div>
+        <div class="zones" style="left:5cqw;right:5cqw;bottom:0;--gap:1.5cqw;--zw:16.8cqw">
+          <div class="zone" style="--zh:28cqw;--zc:#fff"><div class="zl"><b data-tz="Asia/Irkutsk">14:00</b><i>Улан-Удэ</i></div></div>
+          <div class="zone" style="--zh:36cqw;--zc:#cddcff"><div class="zl"><b data-tz="Asia/Yakutsk">15:00</b><i>Якутск</i></div></div>
+          <div class="zone" style="--zh:44cqw;--zc:var(--sky2)"><div class="zl"><b data-tz="Asia/Vladivostok">16:00</b><i>Владивосток</i></div></div>
+          <div class="zone on" style="--zh:52cqw;--zc:var(--sky3)"><div class="zl"><b data-tz="Asia/Magadan">17:00</b><i>Магадан</i></div></div>
+          <div class="zone on" style="--zh:60cqw;--zc:var(--blue)"><div class="zl"><b data-tz="Asia/Kamchatka">18:00</b><i>Камчатка</i></div></div>
         </div>
-        <p class="cap">Пост. Светлое поле, точка смещена вниз, заголовок сверху.</p>
       </div>
-      <div>
-        <div class="mock r-slide" style="background:#fff">
-          <div class="lock w-a" style="--h:3.6cqw;left:4.5%;top:7%"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div>
-          <div style="position:absolute;left:4.5%;top:24%;width:36%;aspect-ratio:1;background:var(--navy);container-type:inline-size">
-            <div class="ticks"></div><div class="cross" style="--x:46%;--y:54%"></div><div class="pin" style="--x:46%;--y:54%;width:5cqw;height:5cqw;margin:-2.5cqw 0 0 -2.5cqw"></div>
-            <div class="coord" style="left:52%;top:59%;color:#fff;font-size:4.4cqw">43°07′ с. ш.<br>132°21′ в. д.</div>
-          </div>
-          <p class="t" style="left:46%;top:24%;font-size:3.6cqw;color:var(--navy)">Паспорт площадки</p>
-          <div class="s tab" style="left:46%;right:4.5%;top:35%;font-size:1.55cqw;color:var(--text)">
-            <div style="display:grid;grid-template-columns:38% 1fr;row-gap:.9em;border-top:1px solid var(--line);padding-top:.9em">
-              <span class="muted">Регион</span><span>Приморский край</span>
-              <span class="muted">Режим</span><span>ТОР «Большой Камень»</span>
-              <span class="muted">Площадь участка</span><span>— га</span>
-              <span class="muted">До порта</span><span>— км</span>
-              <span class="muted">Сети</span><span>электричество, вода, газ</span>
-            </div>
-          </div>
-        </div>
-        <p class="cap">Слайд «паспорт площадки»: точка и координаты — часть данных. Значения условные.</p>
-      </div>
+      <p class="cap">Пост. Пять часовых поясов Дальнего Востока — пять арок. Время на макете живое.</p>
     </div>
   </div>
-</section>
 
-<!-- 6. Масштаб -->
-<section class="wrap">
-  <span class="num">06</span>
-  <h2>Ход 3. Масштаб</h2>
-  <p>Масштабная линейка из карт: чередование тёмных и светлых делений и один красный отрезок. Линейка помогает понять размер: сколько это — гектар, два процента, сто километров. Она же становится осью графиков в презентациях.</p>
-  <div class="mocks">
+  <div class="row c3">
     <div>
-      <div class="mock r-bill" style="background:#fff">
-        <div class="lock w-a" style="--h:6.2cqw;left:4%;top:7%"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div>
-        <p class="t" style="left:4%;top:36%;color:var(--navy);font-size:6.4cqw;width:80%">Гектар — это 100 на&nbsp;100 метров</p>
-        <div class="scale" style="left:4%;right:4%;bottom:21%;color:var(--navy);font-size:1.5cqw;--bh:2cqw">
-          <div class="bar"><i></i><i></i><i></i><i class="red"></i></div>
-          <div class="marks"><span style="--at:0%">0</span><span style="--at:25%">25</span><span style="--at:50%">50</span><span style="--at:75%">75</span><span style="--at:100%">100 м</span></div>
-        </div>
-        <p class="s" style="left:4%;bottom:6%;font-size:1.8cqw;color:var(--muted)">Дальневосточный и арктический гектар — земля для дома, дела или хозяйства</p>
+      <div class="mock r-story" style="background:var(--blue)">
+        <div class="lock is-white" style="--h:9cqw;left:7cqw;top:7cqw"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div>
+        <p class="hl" style="--fs:12.5cqw;left:7cqw;top:25cqw;width:86cqw;color:#fff">Камчатка ближе, чем кажется</p>
+        <div class="sun" style="--s:24cqw;left:62cqw;top:63cqw"></div>
+        <div class="arch" style="--aw:80cqw;--ah:82cqw;left:10cqw;bottom:24cqw"><img src="assets/brandbook/raster/photostyle-composition-9.webp" alt=""></div>
+        <span class="chip plain" style="--cs:4.2cqw;left:50%;transform:translateX(-50%);bottom:8cqw">Как переехать →</span>
       </div>
-      <p class="cap">Билборд. Линейка на всю ширину — главный графический жест.</p>
+      <p class="cap">Сторис.</p>
     </div>
-    <div class="row2">
-      <div>
-        <div class="mock r-post" style="background:var(--blue)">
-          <p class="t" style="left:7%;top:7%;color:#fff;font-size:8cqw;width:86%;line-height:1.04">Дальневосточная ипотека</p>
-          <p class="t tab" style="left:5.5%;top:30%;color:#fff;font-size:44cqw;letter-spacing:-.05em">2%</p>
-          <div class="scale" style="left:7%;right:7%;bottom:8%;color:#fff;font-size:2.8cqw;--bh:3.4cqw">
-            <div class="bar"><i class="red" style="flex:2"></i><i style="flex:8;background:transparent"></i></div>
-            <div class="marks"><span style="--at:0%">0</span><span style="--at:20%;transform:translateX(-50%)">2</span><span style="--at:100%">10%</span></div>
-          </div>
+    <div>
+      <div class="mock r-post" style="background:var(--milk2)">
+        <div class="fan">
+          <div class="fc" style="--aw:27cqw;--ah:58cqw;left:6cqw;top:46cqw;transform:rotate(-6deg);background:var(--pink)"><small>01</small><strong>Ипотека 2%</strong></div>
+          <div class="fc" style="--aw:27cqw;--ah:58cqw;left:36.5cqw;top:38cqw;transform:rotate(2deg);background:var(--sky2)"><small>02</small><strong>Гектар земли</strong></div>
+          <div class="fc" style="--aw:27cqw;--ah:58cqw;left:67cqw;top:43cqw;transform:rotate(7deg);background:#fff"><small>03</small><strong>Работа у&nbsp;океана</strong></div>
         </div>
-        <p class="cap">Пост. Крупная цифра и линейка, на которой видно, сколько это.</p>
+        <p class="hl" style="--fs:7.4cqw;left:7cqw;top:7cqw;width:86cqw">Три причины переехать</p>
       </div>
-      <div>
-        <div class="mock r-slide" style="background:#fff">
-          <div class="lock w-a" style="--h:3.6cqw;left:4.5%;top:7%"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div>
-          <p class="t" style="left:4.5%;top:22%;font-size:4.2cqw;color:var(--navy)">Новые резиденты по годам</p>
-          <p class="s" style="left:4.5%;top:31%;font-size:1.6cqw;color:var(--muted)">Данные условные, пример вёрстки</p>
-          <div class="chart" style="left:4.5%;right:4.5%;top:44%;bottom:20%;gap:0;font-size:1.6cqw;color:var(--navy)">
-            <div class="c" style="height:40%"><em>120</em></div><div class="c" style="height:58%"><em>170</em></div><div class="c" style="height:72%"><em>215</em></div><div class="c hl" style="height:100%"><em>300</em></div>
-          </div>
-          <div class="scale" style="left:4.5%;right:4.5%;bottom:7%;color:var(--navy);font-size:1.3cqw;--bh:1cqw">
-            <div class="bar"><i></i><i></i><i></i><i class="red"></i></div>
-            <div class="marks mid"><span style="--at:12.5%">2022</span><span style="--at:37.5%">2023</span><span style="--at:62.5%">2024</span><span style="--at:87.5%">2025</span></div>
-          </div>
+      <p class="cap">Карусель: каждая карточка — арка.</p>
+    </div>
+    <div>
+      <div class="mock r-post" style="background:var(--pink)">
+        <div class="tote">
+          <div class="arch" style="--aw:26cqw;--ah:30cqw;left:calc(50% - 13cqw);top:9cqw;--bgc:var(--blue)"></div>
+          <div class="sun" style="--s:9cqw;left:calc(50% + 4cqw);top:6cqw;z-index:3"></div>
+          <p class="hl" style="--fs:5.6cqw;left:0;right:0;top:44cqw;text-align:center">Ближе,<br>чем кажется</p>
         </div>
-        <p class="cap">Слайд. Линейка служит осью графика, красный отрезок отмечает текущий год.</p>
       </div>
+      <p class="cap">Мерч: арка, солнце и фраза без логотипа.</p>
     </div>
   </div>
-</section>
 
-<!-- 7. Итог -->
-<section class="wrap">
-  <span class="num">07</span>
-  <h2>Чем это отличается от ВЭФ</h2>
-  <div class="grid2" style="margin-top:20px">
-    <div class="card">
-      <h3>Что даёт</h3>
-      <ul class="pts">
-        <li>Лотос остаётся общим знаком семьи, но графика у КРДВ своя.</li>
-        <li>Графика рассказывает о работе корпорации: время, место и масштаб — это её ежедневные вопросы.</li>
-        <li>Плоско и строго: работает в печати, на экране, в вышивке и в одном цвете.</li>
-        <li>Ходы полезны: на слайдах и в постах они передают информацию, а не только украшают.</li>
-      </ul>
+  <div class="row c2">
+    <div>
+      <div class="mock r-slide" style="background:#fff">
+        <div class="lock" style="--h:4.4cqw;left:5cqw;top:5cqw"><svg class="mark"><use href="#lotus"/></svg><div class="wm"><span>Корпорация развития</span><span>Дальнего Востока и Арктики</span></div></div>
+        <p class="hl" style="--fs:5.6cqw;left:5cqw;top:22cqw;width:52cqw">Инвестиции на&nbsp;Дальнем Востоке и&nbsp;в&nbsp;Арктике</p>
+        <p class="hl" style="--fs:1.9cqw;left:5cqw;bottom:6cqw;font-family:'TT Norms Pro';font-weight:450;letter-spacing:0;color:var(--muted)">Презентация для инвесторов · 2026</p>
+        <div class="sun" style="--s:11cqw;right:8cqw;top:9cqw"></div>
+        <div class="arch flat" style="--aw:27cqw;--ah:41cqw;right:5cqw;bottom:0"><img src="assets/brandbook/raster/photostyle-composition-11.webp" alt=""></div>
+      </div>
+      <p class="cap">Обложка презентации.</p>
     </div>
-    <div class="card">
-      <h3>Риски</h3>
-      <ul class="pts minus">
-        <li>Сдержанность может стать сухостью. Нужны сильная фотография и живые тексты рядом.</li>
-        <li>Координаты и пояса требуют точности: каждый факт проверять.</li>
-        <li>Надпись в логотипе — отдельное решение для руководства. Без него графика всё равно работает со старым логотипом.</li>
-      </ul>
+    <div>
+      <div class="mock r-slide motion" style="background:var(--sky)">
+        <p class="hl" style="--fs:5.2cqw;left:5cqw;top:6cqw;width:60cqw">Утро наступает здесь раньше</p>
+        <div class="sun" style="--s:10cqw;left:78cqw;top:15cqw"></div>
+        <div class="zones" style="left:5cqw;right:5cqw;bottom:0;--gap:1.2cqw;--zw:17cqw;--zt:3.2cqw;--zc2:1.6cqw">
+          <div class="zone" style="--i:0;--zh:15cqw;--zc:#fff"><div class="zl"><b data-tz="Asia/Irkutsk">14:00</b><i>Улан-Удэ</i></div></div>
+          <div class="zone" style="--i:1;--zh:19cqw;--zc:#cddcff"><div class="zl"><b data-tz="Asia/Yakutsk">15:00</b><i>Якутск</i></div></div>
+          <div class="zone" style="--i:2;--zh:23cqw;--zc:var(--sky2)"><div class="zl"><b data-tz="Asia/Vladivostok">16:00</b><i>Владивосток</i></div></div>
+          <div class="zone on" style="--i:3;--zh:27cqw;--zc:var(--sky3)"><div class="zl"><b data-tz="Asia/Magadan">17:00</b><i>Магадан</i></div></div>
+          <div class="zone on" style="--i:4;--zh:31cqw;--zc:var(--blue)"><div class="zl"><b data-tz="Asia/Kamchatka">18:00</b><i>Камчатка</i></div></div>
+        </div>
+      </div>
+      <p class="cap">Моушн: арки поднимаются с запада на восток, за последней встаёт солнце.</p>
     </div>
   </div>
 </section>
 </main>
 
-<footer class="wrap">Концепт для внутреннего обсуждения. Логотип и знак — АО «КРДВ». Надпись набрана TT Norms Pro, это не финальная отрисовка. Цифры на макетах, кроме часовых поясов, координат и условий программ, — условные.</footer>
+<footer class="wrap">Концепт для внутреннего обсуждения. Шрифты-кандидаты — свободные аналоги (лицензия SIL OFL); Futura PT — шрифт ParaType, для логотипа нужна покупка лицензии. Фото — из раздела «Фотостиль».</footer>
+
+<script>
+(function () {
+  try {
+    document.querySelectorAll("[data-tz]").forEach(function (el) {
+      var t = new Intl.DateTimeFormat("ru-RU", { hour: "2-digit", minute: "2-digit", timeZone: el.getAttribute("data-tz") }).format(new Date());
+      var target = el.tagName === "B" ? el : el.querySelector("b");
+      if (target) target.textContent = t;
+    });
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>
