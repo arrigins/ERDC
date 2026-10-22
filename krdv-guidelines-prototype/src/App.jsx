@@ -105,13 +105,13 @@ const noDot = (text) => (typeof text === "string" ? text.replace(/\.\s*$/, "") :
 
 // Плитки палитры: цвета и фотографии. area — [колонка с, колонка по, ряд с, ряд по] в сетке из 12 колонок.
 const primaryPalette = [
-  { name: "Дальневосточный синий", hex: "#0056a2", rgb: "0-86-162", cmyk: "100-75-00-00", area: [1, 4, 1, 2] },
-  { name: "Голубой", hex: "#22a8e0", rgb: "34-168-225", cmyk: "72-15-00-00", area: [4, 7, 1, 2] },
+  { name: "Дальневосточный синий", hex: "#243d8d", rgb: "36-61-141", cmyk: "74-57-0-45", area: [1, 4, 1, 2] },
+  { name: "Голубой", hex: "#00a9eb", rgb: "0-169-235", cmyk: "100-28-0-8", area: [4, 7, 1, 2] },
   { photo: "palette-ocean-kling25.webp", video: "palette-ocean-kling25.mp4", alt: "Подводный мир", area: [7, 9, 1, 3] },
-  { name: "Светло-синий", hex: "#9ec6eb", rgb: "158-198-235", cmyk: "24-13-00-00", area: [9, 13, 1, 2] },
-  { name: "Ледяной голубой", hex: "#d4e6fa", rgb: "212-230-250", cmyk: "15-5-00-00", area: [9, 13, 2, 3] },
-  { name: "Темно-синий", hex: "#001d37", rgb: "0-30-55", cmyk: "100-84-47-58", area: [1, 4, 2, 3] },
-  { name: "Глубокий синий", hex: "#0c5082", rgb: "12-80-130", cmyk: "100-73-24-9", area: [4, 7, 2, 3] },
+  { name: "Светло-синий", hex: "#8cc8ff", rgb: "140-200-255", cmyk: "45-22-0-0", area: [9, 13, 1, 2] },
+  { name: "Ледяной голубой", hex: "#e5f2ff", rgb: "229-242-255", cmyk: "10-5-0-0", area: [9, 13, 2, 3] },
+  { name: "Темно-синий", hex: "#091b38", rgb: "9-27-56", cmyk: "84-52-0-78", area: [1, 4, 2, 3] },
+  { name: "Глубокий синий", hex: "#1553b7", rgb: "21-83-183", cmyk: "89-55-0-28", area: [4, 7, 2, 3] },
   { name: "Красный акцент", hex: "#de2327", rgb: "222-35-39", cmyk: "5-100-100-00", area: [1, 4, 3, 4] },
   { photo: "palette-photo-sunset.webp", video: "palette-sunset-kling25.mp4", alt: "Закат над сопками", area: [10, 13, 3, 4], position: "100% 60%" },
   { name: "Розовый", hex: "#ef8a91", rgb: "239-138-145", cmyk: "0-42-39-6", area: [4, 7, 3, 4], proposal: true },
@@ -119,10 +119,10 @@ const primaryPalette = [
 ];
 
 const colorHeroTiles = [
-  { id: "tile-blue", color: "#0056a2" },
-  { id: "tile-sky", color: "#22a8e0" },
+  { id: "tile-blue", color: "#243d8d" },
+  { id: "tile-sky", color: "#00a9eb" },
   { id: "tile-red", color: "#de2327" },
-  { id: "tile-dark", color: "#001d37" },
+  { id: "tile-dark", color: "#091b38" },
 ];
 const colorHeroGridStates = [
   {
@@ -2154,7 +2154,7 @@ function LibraryHeroBackground({ variant, miniature = false }) {
     case "overview-panels":
       return (
         <div className="library-hero-bg is-overview-panels" aria-hidden="true">
-          <ColorPanels {...shaderProps} colors={["#0056a2", "#22a8e0", "#9ec6eb", "#de2327"]} colorBack="#001d37" density={1.18} length={1.7} angle1={0.34} angle2={-0.18} blur={0.06} edges speed={0.16} gradient={0.18} />
+          <ColorPanels {...shaderProps} colors={["#243d8d", "#00a9eb", "#8cc8ff", "#de2327"]} colorBack="#091b38" density={1.18} length={1.7} angle1={0.34} angle2={-0.18} blur={0.06} edges speed={0.16} gradient={0.18} />
         </div>
       );
     default:

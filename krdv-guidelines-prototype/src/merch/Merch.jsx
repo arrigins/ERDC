@@ -746,9 +746,9 @@ const accessoryCards = [
   { id: "power", span: 7, stage: "#eef0f4", images: ["merch-powerbanks.webp"], title: "Аккумуляторы", text: "«Энергия Дальнего Востока» и «Арктика держит заряд» — фраза подсказывает, зачем вещь." },
   { id: "mug", span: 5, fit: "contain", images: ["merch-mug.webp"], title: "Термокружка", text: "«Арктика закаляет, кофе согревает». В коробке — QR-код на сайт." },
   { id: "weather", span: 7, images: [
-    // дождевик крупнее: низ уходит за кадр; зонт — по нижнему краю, чтобы ручка не обрезалась
-    { file: "merch-raincoat.webp", style: { objectPosition: "50% 0%", transform: "scale(1.26)", transformOrigin: "40% 6%" } },
-    { file: "merch-umbrella.webp", style: { objectPosition: "35% 100%" } },
+    // обе вещи целиком (поля обрезаны в файлах); рука с зонтом уходит за правый край карточки
+    { file: "merch-raincoat-trim.webp", style: { objectFit: "contain", padding: "24px 12px 24px 24px" } },
+    { file: "merch-umbrella-trim.webp", style: { objectFit: "contain", objectPosition: "100% 50%", padding: "24px 0 24px 12px" } },
   ], title: "Зонт и дождевик", text: "Одна фраза на двух вещах: «Работаем в любую погоду»." },
   { id: "notebooks", span: 5, fit: "contain", images: ["merch-notebooks-v2.webp"], title: "Блокноты", text: "«План развития: здесь», «Дальний Восток — территория идей» и «Большие проекты начинаются с небольшого блокнота»." },
   { id: "keychain", span: 6, fit: "contain", images: ["merch-keychain.webp"], title: "Брелоки", text: "Эмалевое сердце КРДВ, лотос и подвеска «Когда работа дарит восторг»." },
