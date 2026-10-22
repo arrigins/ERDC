@@ -1,6 +1,6 @@
 import React from "react";
 import { GrainGradient, MeshGradient, ShaderMount } from "@paper-design/shaders-react";
-import { causticsShader, dawnShader, mistShader, ribbonShader } from "./shaders.js";
+import { causticsShader, mistShader, ribbonShader } from "./shaders.js";
 
 // Варианты обложки «Обзора» (22.10). Отдельная страница для выбора, в гайд не встроена.
 // Палитра — основная палитра КРДВ (обновлена 22.10).
@@ -34,6 +34,16 @@ function Horizon() {
   );
 }
 
+// Зерно в основной палитре: тёмно-синий фон, Дальневосточный и глубокий синий, тёплый красный акцент
+function GrainBrand() {
+  return <GrainGradient {...shader} colorBack={C.dark} colors={[C.far, C.deep, "#3b2f8f", C.red]} softness={0.8} intensity={0.3} noise={0.35} shape="corners" speed={0.5} />;
+}
+
+// То же, но живее и с более мелким зерном (рисуется в повышенном разрешении)
+function GrainBrandLive() {
+  return <GrainGradient {...shader} minPixelRatio={3} maxPixelCount={6000000} colorBack={C.dark} colors={[C.deep, C.far, "#3b2f8f", C.red, C.deep]} softness={0.8} intensity={0.3} noise={0.3} shape="corners" speed={0.85} />;
+}
+
 function Grain() {
   return <GrainGradient {...shader} colorBack={C.dark} colors={[C.deep, C.sky, C.light, C.far]} softness={0.75} intensity={0.35} noise={0.4} shape="corners" speed={0.5} />;
 }
@@ -65,7 +75,8 @@ function Custom({ fragment, speed = 1 }) {
 const variants = [
   { id: "horizon", n: "1", title: "Горизонт (был 2)", text: "Как было: прямая линия воды и неба, розовый рассвет, красная точка.", View: Horizon },
   { id: "grain", n: "2", title: "Зерно (был 3)", text: "Как было: плавный градиент с плёночным зерном.", View: Grain },
-  { id: "dawn", n: "3", title: "Рассвет — 2 + 3", text: "Цвета горизонта, но линия воды живая и мягко дышит, по воде идут медленные блики. Сиреневый свет шире и плавнее, солнце — размытое, коралловое. Сверху мелкое зерно.", View: () => <Custom fragment={dawnShader} /> },
+  { id: "grain-brand", n: "3", title: "Зерно в фирменных цветах", text: "Та же фактура, но в основной палитре: тёмно-синий, Дальневосточный и глубокий синий, тёплый красный акцент — меньше голубого.", View: GrainBrand },
+  { id: "grain-live", n: "3а", title: "Зерно в фирменных цветах — живее", text: "Как 3, но движение чуть активнее, а зерно мельче.", View: GrainBrandLive },
   { id: "fluted", n: "4", title: "Рифлёное стекло 2", text: "Убрала серый в переходах: соседние цвета теперь из одной гаммы — ультрамарин, голубой, сиреневый и тёплый коралловый отблеск. Мелкое зерно.", View: Fluted2 },
   { id: "caustics", n: "5", title: "Свет под водой", text: "Солнечная сетка на глубине и косые лучи сверху, как на фото океана в палитре. Спокойно, глубоко, в наших синих.", View: () => <Custom fragment={causticsShader} /> },
   { id: "ribbon", n: "6", title: "Лента", text: "Одна светящаяся шёлковая лента медленно изгибается на тёмно-синем. Цвет переходит от кораллового через сиреневый к голубому — как рассвет.", View: () => <Custom fragment={ribbonShader} /> },
