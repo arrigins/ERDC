@@ -3,9 +3,10 @@
 
 const head = `#version 300 es
 precision highp float;
-uniform float u_time;
-uniform vec2 u_resolution;
-uniform float u_pixelRatio;
+// точность общих uniform должна совпадать с вершинным шейдером Paper (mediump), иначе на реальных видеокартах программа не собирается
+uniform mediump float u_time;
+uniform mediump vec2 u_resolution;
+uniform mediump float u_pixelRatio;
 out vec4 fragColor;
 
 float hash(vec2 p) { p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
