@@ -15,6 +15,7 @@ export default defineConfig({
         main: "index.html",
         portal: "portal.html",
         covers: "covers.html",
+        overviewCovers: "overview-covers.html",
       },
     },
   },
