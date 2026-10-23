@@ -302,3 +302,59 @@ void main() {
   fragColor = vec4(col, 1.);
 }
 `;
+
+// ── Пятый круг (23.10): «Зерно с намёком на сияние», деликатнее ──
+// Зерно почти неподвижно: два статичных слоя шума медленно перетекают друг в друга (без «ряби старого телевизора»).
+// Звёзды тусклые и мерцают медленно, плавно. Сияние движется в 2 раза медленнее. accentA / accentB — оттенки,
+// которые подмешиваются в разные полосы (изумрудный, сиреневый).
+const auroraSoft = (accentA, accentB, accentAmount) => `${head}
+float ihash2(vec2 p) {
+  uvec2 q = uvec2(ivec2(p) + 100000) * uvec2(1597334673u, 3812015801u);
+  uint n = (q.x ^ q.y) * 1597334673u;
+  n ^= n >> 16u;
+  return float(n) / 4294967295.;
+}
+float calmGrain(float t) {
+  vec2 px = floor(gl_FragCoord.xy);
+  float k = t * .25;
+  float i = floor(k);
+  float f = smoothstep(0., 1., fract(k));
+  return mix(ihash2(px + i * vec2(37., 17.)), ihash2(px + (i + 1.) * vec2(37., 17.)), f) - .5;
+}
+void main() {
+  vec2 uv = gl_FragCoord.xy / u_resolution;
+  float ar = u_resolution.x / u_resolution.y;
+  float t = u_time * .03;
+  vec2 p = vec2(uv.x * ar, uv.y);
+
+  float s = uv.x * .8 - uv.y * .6 + .1 * sin(uv.y * 2.2 + t * 2.) + .08 * (fbm(p * .45 + t) - .5);
+  float b1 = exp(-pow((s - .62 - .04 * sin(t * 2.4)) / .21, 2.));
+  float b2 = exp(-pow((s + .05 + .03 * cos(t * 1.7)) / .17, 2.));
+  float veil = .78 + .22 * smoothstep(.25, .85, noise(vec2(p.x * 3. + t * 1.1, uv.y * .35)));
+  float light = (b1 + b2 * .8) * veil;
+
+  vec3 col = rgb(9., 27., 56.);
+  col = mix(col, rgb(21., 83., 183.), clamp(light * 1.1, 0., 1.));
+  col = mix(col, rgb(0., 169., 235.), clamp(pow(light, 1.8) * .85, 0., 1.));
+  col = mix(col, rgb(140., 200., 255.), clamp(pow(light, 4.) * .5, 0., 1.));
+  // оттенки: в нижнюю полосу — accentA, к верхнему краю верхней — accentB; доля меняется очень медленно
+  float drift = .5 + .5 * sin(t * 1.3 + uv.x * 1.5);
+  col = mix(col, ${accentA}, clamp(b2 * veil * ${accentAmount} * (.6 + .4 * drift), 0., 1.));
+  col = mix(col, ${accentB}, exp(-pow((s - .84) / .1, 2.)) * ${accentAmount} * (.7 + .3 * (1. - drift)));
+
+  // звёзды: редкие, тусклые, мерцают медленно и плавно
+  vec2 cell = floor(gl_FragCoord.xy / 2.);
+  float st = ihash2(cell + 3.);
+  float tw = .5 + .5 * cos(u_time * (.25 + st * .35) + st * 60.);
+  tw = tw * tw;
+  col += vec3(.82, .9, 1.) * step(.9988, st) * tw * (1. - clamp(light * 1.6, 0., 1.)) * .16;
+
+  col += calmGrain(u_time) * .05;
+  fragColor = vec4(col, 1.);
+}
+`;
+
+// 7а — с изумрудным оттенком в нижней полосе и лёгким сиреневым по краю
+export const grainAuroraEmeraldShader = auroraSoft("rgb(31., 190., 165.)", "rgb(150., 140., 240.)", ".32");
+// 7б — с сиреневым оттенком в нижней полосе и едва заметным изумрудным по краю
+export const grainAuroraLilacShader = auroraSoft("rgb(160., 130., 245.)", "rgb(60., 200., 175.)", ".42");

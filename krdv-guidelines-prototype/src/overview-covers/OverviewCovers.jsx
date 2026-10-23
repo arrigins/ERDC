@@ -1,6 +1,6 @@
 import React from "react";
 import { GrainGradient, MeshGradient, ShaderMount } from "@paper-design/shaders-react";
-import { flowShader, grainAuroraShader, horizonSoftShader, ribbonShader } from "./shaders.js";
+import { flowShader, grainAuroraEmeraldShader, grainAuroraLilacShader, grainAuroraShader, horizonSoftShader, ribbonShader } from "./shaders.js";
 
 // Варианты обложки «Обзора» (22.10). Отдельная страница для выбора, в гайд не встроена.
 // Палитра — основная палитра КРДВ (обновлена 22.10).
@@ -74,7 +74,9 @@ const variants = [
   { id: "fluted", n: "4", title: "Рифлёное стекло 2", text: "Для памяти.", View: Fluted2 },
   { id: "ribbon", n: "5", title: "Лента", text: "Для памяти.", View: () => <Custom fragment={ribbonShader} /> },
   { id: "horizon-soft", n: "6", title: "Горизонт 2 — новый", text: "Цвета «Горизонта». На воде больше нет полос: гладкий градиент и мягкая дорожка света, которая медленно переливается. Линия горизонта — мягкое свечение. Солнце — размытое, коралловое. Сиреневый свет растекается плавно. Мелкое зерно.", View: () => <Custom fragment={horizonSoftShader} /> },
-  { id: "grain-aurora", n: "7", title: "Зерно — с намёком на сияние — новый", text: "Как «Зерно»: крупные мягкие полосы голубого на тёмно-синем, но зерно мелкое, без «баллончика». Внутри света — едва заметные вертикальные занавеси, по краю лёгкий сиреневый, в тёмной части редкие искры-звёзды.", View: () => <Custom fragment={grainAuroraShader} /> },
+  { id: "grain-aurora", n: "7", title: "Зерно — с намёком на сияние", text: "Как «Зерно»: крупные мягкие полосы голубого на тёмно-синем, но зерно мелкое, без «баллончика». Внутри света — едва заметные вертикальные занавеси, по краю лёгкий сиреневый, в тёмной части редкие искры-звёзды.", View: () => <Custom fragment={grainAuroraShader} /> },
+  { id: "grain-aurora-emerald", n: "7а", title: "Зерно с намёком на сияние — изумрудный", text: "Как 7, но деликатнее: зерно почти не рябит, сияние движется вдвое медленнее, звёзды тусклые и мерцают плавно. В нижнюю полосу подмешан изумрудный, по краю верхней — лёгкий сиреневый.", View: () => <Custom fragment={grainAuroraEmeraldShader} /> },
+  { id: "grain-aurora-lilac", n: "7б", title: "Зерно с намёком на сияние — сиреневый", text: "То же, что 7а, но наоборот: в нижней полосе — сиреневый оттенок, по краю верхней — едва заметный изумрудный.", View: () => <Custom fragment={grainAuroraLilacShader} /> },
   { id: "flow", n: "8", title: "Разлитый свет — новый", text: "Вместо тонкой ленты — широкий поток света, только фирменные синие: тёмно-синий, Дальневосточный, глубокий, голубой. Движение очень медленное. Мелкое зерно.", View: () => <Custom fragment={flowShader} /> },
 ];
 
