@@ -1,6 +1,6 @@
 import React from "react";
 import { GrainGradient, MeshGradient, ShaderMount } from "@paper-design/shaders-react";
-import { causticsShader, mistShader, ribbonShader } from "./shaders.js";
+import { flowShader, grainAuroraShader, horizonSoftShader, ribbonShader } from "./shaders.js";
 
 // Варианты обложки «Обзора» (22.10). Отдельная страница для выбора, в гайд не встроена.
 // Палитра — основная палитра КРДВ (обновлена 22.10).
@@ -39,11 +39,6 @@ function GrainBrand() {
   return <GrainGradient {...shader} colorBack={C.dark} colors={[C.far, C.deep, "#3b2f8f", C.red]} softness={0.8} intensity={0.3} noise={0.35} shape="corners" speed={0.5} />;
 }
 
-// То же, но живее и с более мелким зерном (рисуется в повышенном разрешении)
-function GrainBrandLive() {
-  return <GrainGradient {...shader} minPixelRatio={3} maxPixelCount={6000000} colorBack={C.dark} colors={[C.deep, C.far, "#3b2f8f", C.red, C.deep]} softness={0.8} intensity={0.3} noise={0.3} shape="corners" speed={0.85} />;
-}
-
 function Grain() {
   return <GrainGradient {...shader} colorBack={C.dark} colors={[C.deep, C.sky, C.light, C.far]} softness={0.75} intensity={0.35} noise={0.4} shape="corners" speed={0.5} />;
 }
@@ -73,14 +68,14 @@ function Custom({ fragment, speed = 1 }) {
 }
 
 const variants = [
-  { id: "horizon", n: "1", title: "Горизонт (был 2)", text: "Как было: прямая линия воды и неба, розовый рассвет, красная точка.", View: Horizon },
-  { id: "grain", n: "2", title: "Зерно (был 3)", text: "Как было: плавный градиент с плёночным зерном.", View: Grain },
-  { id: "grain-brand", n: "3", title: "Зерно в фирменных цветах", text: "Та же фактура, но в основной палитре: тёмно-синий, Дальневосточный и глубокий синий, тёплый красный акцент — меньше голубого.", View: GrainBrand },
-  { id: "grain-live", n: "3а", title: "Зерно в фирменных цветах — живее", text: "Как 3, но движение чуть активнее, а зерно мельче.", View: GrainBrandLive },
-  { id: "fluted", n: "4", title: "Рифлёное стекло 2", text: "Убрала серый в переходах: соседние цвета теперь из одной гаммы — ультрамарин, голубой, сиреневый и тёплый коралловый отблеск. Мелкое зерно.", View: Fluted2 },
-  { id: "caustics", n: "5", title: "Свет под водой", text: "Солнечная сетка на глубине и косые лучи сверху, как на фото океана в палитре. Спокойно, глубоко, в наших синих.", View: () => <Custom fragment={causticsShader} /> },
-  { id: "ribbon", n: "6", title: "Лента", text: "Одна светящаяся шёлковая лента медленно изгибается на тёмно-синем. Цвет переходит от кораллового через сиреневый к голубому — как рассвет.", View: () => <Custom fragment={ribbonShader} /> },
-  { id: "mist", n: "7", title: "Туман", text: "Слои тумана над водой плывут с разной скоростью, справа — тёплый просвет. Почти монохром, очень тихо.", View: () => <Custom fragment={mistShader} /> },
+  { id: "horizon", n: "1", title: "Горизонт", text: "Для памяти: первый вариант.", View: Horizon },
+  { id: "grain", n: "2", title: "Зерно", text: "Для памяти: первый вариант с зерном.", View: Grain },
+  { id: "grain-brand", n: "3", title: "Зерно в фирменных цветах", text: "Для памяти.", View: GrainBrand },
+  { id: "fluted", n: "4", title: "Рифлёное стекло 2", text: "Для памяти.", View: Fluted2 },
+  { id: "ribbon", n: "5", title: "Лента", text: "Для памяти.", View: () => <Custom fragment={ribbonShader} /> },
+  { id: "horizon-soft", n: "6", title: "Горизонт 2 — новый", text: "Цвета «Горизонта». На воде больше нет полос: гладкий градиент и мягкая дорожка света, которая медленно переливается. Линия горизонта — мягкое свечение. Солнце — размытое, коралловое. Сиреневый свет растекается плавно. Мелкое зерно.", View: () => <Custom fragment={horizonSoftShader} /> },
+  { id: "grain-aurora", n: "7", title: "Зерно — с намёком на сияние — новый", text: "Как «Зерно»: крупные мягкие полосы голубого на тёмно-синем, но зерно мелкое, без «баллончика». Внутри света — едва заметные вертикальные занавеси, по краю лёгкий сиреневый, в тёмной части редкие искры-звёзды.", View: () => <Custom fragment={grainAuroraShader} /> },
+  { id: "flow", n: "8", title: "Разлитый свет — новый", text: "Вместо тонкой ленты — широкий поток света, только фирменные синие: тёмно-синий, Дальневосточный, глубокий, голубой. Движение очень медленное. Мелкое зерно.", View: () => <Custom fragment={flowShader} /> },
 ];
 
 export function OverviewCovers() {
@@ -88,7 +83,7 @@ export function OverviewCovers() {
     <main className="oc-page">
       <header className="oc-head">
         <p className="oc-kicker">Обложка «Обзора» · черновик для выбора</p>
-        <h1>Обложка «Обзора»: второй круг</h1>
+        <h1>Обложка «Обзора»: четвёртый круг</h1>
         <p className="oc-intro">Обложки показаны в размере шапки гайда. Все варианты анимированы и собраны из основной палитры КРДВ. Выберите номер — поставлю его в гайд.</p>
       </header>
       {variants.map(({ id, n, title, text, View }) => (

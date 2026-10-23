@@ -176,3 +176,129 @@ void main() {
   fragColor = vec4(col, 1.);
 }
 `;
+
+// ── Четвёртый круг (23.10) ──
+// мелкое зерно, обновляется ~12 раз в секунду (без «телевизионного» мелькания)
+const fineGrain = `
+// целочисленный хеш: без видимой сетки, которую даёт hash() на соседних пикселях
+float ihash(vec2 p) {
+  uvec2 q = uvec2(ivec2(p) + 100000) * uvec2(1597334673u, 3812015801u);
+  uint n = (q.x ^ q.y) * 1597334673u;
+  n ^= n >> 16u;
+  return float(n) / 4294967295.;
+}
+float fineGrain(float t) { return ihash(gl_FragCoord.xy + floor(t * 12.) * vec2(37., 17.)) - .5; }
+`;
+
+// 6. «Горизонт 2» — цвета горизонта (1), море без полос: гладкий градиент и мягкая дорожка света,
+// размытое коралловое солнце, сиреневый свет растекается плавно, поверх мелкое зерно
+export const horizonSoftShader = `${head}${fineGrain}
+void main() {
+  vec2 uv = gl_FragCoord.xy / u_resolution;
+  float ar = u_resolution.x / u_resolution.y;
+  float t = u_time;
+  float h = .42;
+  float d = uv.y - h;
+
+  // небо как у «Горизонта»: от почти чёрно-синего к светлой полосе над водой
+  float s = clamp(d / (1. - h), 0., 1.);
+  vec3 sky = mix(rgb(169., 198., 240.), rgb(59., 111., 207.), smoothstep(0., .06, s));
+  sky = mix(sky, rgb(26., 63., 143.), smoothstep(.04, .3, s));
+  sky = mix(sky, rgb(11., 29., 74.), smoothstep(.25, .7, s));
+  sky = mix(sky, rgb(5., 13., 34.), smoothstep(.65, 1., s));
+
+  // море: гладкий градиент вниз
+  float sd = clamp(-d / h, 0., 1.);
+  vec3 sea = mix(rgb(16., 47., 116.), rgb(10., 29., 72.), smoothstep(0., .45, sd));
+  sea = mix(sea, rgb(5., 13., 34.), smoothstep(.4, 1., sd));
+
+  vec3 col = d > 0. ? sky : sea;
+
+  // рассвет: сиреневый и розовый свет, очень медленно «дышит»
+  vec2 sunPos = vec2(.7, h + .012);
+  vec2 q = (uv - sunPos) * vec2(ar, 1.);
+  float breathe = .9 + .1 * sin(t * .16);
+  float lilac = exp(-dot(q * vec2(.55, 1.5), q * vec2(.55, 1.5)) * 2.) * breathe;
+  float rose = exp(-dot(q * vec2(.9, 2.2), q * vec2(.9, 2.2)) * 4.) * breathe;
+  float above = smoothstep(-.02, .02, d);
+  col = mix(col, rgb(176., 160., 240.), lilac * mix(.18, .6, above));
+  col = mix(col, rgb(248., 160., 178.), rose * mix(.12, .45, above));
+
+  // дорожка света на воде — мягкая, без полос; медленно переливается крупными пятнами
+  float shimmer = .75 + .25 * noise(vec2(uv.x * 3. + 4., sd * 5. - t * .08));
+  float path = exp(-pow((uv.x - sunPos.x) * ar * (2.2 + sd * 3.), 2.)) * (1. - smoothstep(0., .9, sd)) * shimmer;
+  col = mix(col, rgb(222., 170., 205.), path * .35 * (1. - above));
+
+  // линия горизонта — мягкое свечение, без жёсткого штриха
+  col += rgb(190., 210., 255.) * (exp(-abs(d) * 60.) * .2 + exp(-abs(d) * 500.) * .08);
+
+  // коралловое солнце — сильно размытое
+  float r2 = dot(q, q);
+  col = mix(col, rgb(255., 128., 108.), clamp(exp(-r2 * 60.) * .4, 0., 1.));
+  col = mix(col, rgb(255., 178., 160.), clamp(exp(-r2 * 420.) * .75, 0., 1.));
+
+  col += fineGrain(t) * .03;
+  fragColor = vec4(col, 1.);
+}
+`;
+
+// 7. «Зерно — с намёком на сияние» — как «Зерно» (2): крупные мягкие полосы голубого на тёмно-синем,
+// но зерно мелкое; внутри полос — едва заметные вертикальные «занавеси», в тёмных местах редкие искры-звёзды
+export const grainAuroraShader = `${head}${fineGrain}
+void main() {
+  vec2 uv = gl_FragCoord.xy / u_resolution;
+  float ar = u_resolution.x / u_resolution.y;
+  float t = u_time * .06;
+  vec2 p = vec2(uv.x * ar, uv.y);
+
+  // две крупные мягкие диагональные полосы света, как в «Зерне»
+  float s = uv.x * .8 - uv.y * .6 + .12 * sin(uv.y * 2.4 + t * 2.) + .1 * (fbm(p * .5 + t) - .5);
+  float b1 = exp(-pow((s - .62 - .05 * sin(t * 3.)) / .2, 2.));
+  float b2 = exp(-pow((s + .05 + .04 * cos(t * 2.)) / .16, 2.));
+  // занавес: мягкая вертикальная модуляция, только внутри света
+  float veil = .7 + .3 * smoothstep(.25, .85, noise(vec2(p.x * 3.2 + t * 1.5, uv.y * .35)));
+  float light = (b1 + b2 * .8) * veil;
+
+  vec3 col = rgb(9., 27., 56.);
+  col = mix(col, rgb(21., 83., 183.), clamp(light * 1.1, 0., 1.));
+  col = mix(col, rgb(0., 169., 235.), clamp(pow(light, 1.8) * .9, 0., 1.));
+  col = mix(col, rgb(140., 200., 255.), clamp(pow(light, 4.) * .55, 0., 1.));
+  // лёгкий сиреневый край у верхней полосы
+  col = mix(col, rgb(150., 140., 240.), exp(-pow((s - .86) / .08, 2.)) * .18);
+
+  // редкие искры в тёмной части — как звёзды сквозь зерно
+  vec2 cell = floor(gl_FragCoord.xy / 2.);
+  float st = ihash(cell + 3.);
+  float tw = .55 + .45 * sin(u_time * (.7 + st * 2.) + st * 50.);
+  col += vec3(.8, .9, 1.) * step(.9985, st) * tw * (1. - clamp(light * 1.5, 0., 1.)) * .55;
+
+  col += fineGrain(u_time) * .065;
+  fragColor = vec4(col, 1.);
+}
+`;
+
+// 8. «Разлитый свет» — вместо тонкой ленты широкий поток света в фирменных синих, медленный
+export const flowShader = `${head}${fineGrain}
+void main() {
+  vec2 uv = gl_FragCoord.xy / u_resolution;
+  float ar = u_resolution.x / u_resolution.y;
+  float t = u_time * .1;
+  vec2 p = vec2(uv.x * ar, uv.y);
+
+  // ось потока: диагональ, мягко изогнутая
+  float s = uv.x * .65 + uv.y * .55 + .1 * sin(uv.x * 2. + t * 1.2) + .12 * (fbm(p * .6 + vec2(t * .3, -t * .2)) - .5);
+  vec3 col = mix(rgb(9., 27., 56.), rgb(36., 61., 141.), smoothstep(.15, .85, s));
+  // главный поток
+  float c = .78 + .04 * sin(t * .9);
+  float band = exp(-pow((s - c) / .24, 2.));
+  col = mix(col, rgb(21., 83., 183.), band * .9);
+  col = mix(col, rgb(0., 169., 235.), pow(band, 2.2) * .75);
+  col += rgb(140., 200., 255.) * pow(band, 6.) * .3;
+  // второй, тихий поток ниже
+  float band2 = exp(-pow((s - c + .42) / .14, 2.));
+  col = mix(col, rgb(36., 61., 141.), band2 * .6);
+
+  col += fineGrain(u_time) * .035;
+  fragColor = vec4(col, 1.);
+}
+`;
