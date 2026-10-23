@@ -358,3 +358,56 @@ void main() {
 export const grainAuroraEmeraldShader = auroraSoft("rgb(31., 190., 165.)", "rgb(150., 140., 240.)", ".32");
 // 7б — с сиреневым оттенком в нижней полосе и едва заметным изумрудным по краю
 export const grainAuroraLilacShader = auroraSoft("rgb(160., 130., 245.)", "rgb(60., 200., 175.)", ".42");
+
+// ── Финал (23.10): обложка «Обзора» в гайде — 7б без звёзд, композиция медленно меняется ──
+// Полосы света плавно смещаются и чуть поворачиваются (циклы ~1,5–2,5 мин), вдоль полос бродит более яркий участок,
+// поэтому за минуту картинка заметно меняется, но движение остаётся спокойным.
+export const overviewCoverShader = `${head}
+float ihash2(vec2 p) {
+  uvec2 q = uvec2(ivec2(p) + 100000) * uvec2(1597334673u, 3812015801u);
+  uint n = (q.x ^ q.y) * 1597334673u;
+  n ^= n >> 16u;
+  return float(n) / 4294967295.;
+}
+float calmGrain(float t) {
+  vec2 px = floor(gl_FragCoord.xy);
+  float k = t * .25;
+  float i = floor(k);
+  float f = smoothstep(0., 1., fract(k));
+  return mix(ihash2(px + i * vec2(37., 17.)), ihash2(px + (i + 1.) * vec2(37., 17.)), f) - .5;
+}
+void main() {
+  vec2 uv = gl_FragCoord.xy / u_resolution;
+  float ar = u_resolution.x / u_resolution.y;
+  float T = u_time;
+  float t = T * .03;
+  vec2 p = vec2(uv.x * ar, uv.y);
+
+  // ось полос медленно поворачивается
+  float ang = .64 + .1 * sin(T * .045);
+  float s = uv.x * cos(ang) * 1.25 - uv.y * sin(ang) * 1.0
+          + .1 * sin(uv.y * 2.2 + t * 2.) + .08 * (fbm(p * .45 + t) - .5);
+  // вдоль полос: координата для «бродящего» яркого участка
+  float along = uv.x * sin(ang) + uv.y * cos(ang);
+
+  float c1 = .6 + .14 * sin(T * .06);
+  float c2 = -.04 + .12 * sin(T * .042 + 1.7);
+  float b1 = exp(-pow((s - c1) / (.2 + .03 * sin(T * .05)), 2.));
+  float b2 = exp(-pow((s - c2) / (.17 + .03 * cos(T * .037)), 2.));
+  b1 *= .7 + .3 * sin(along * 3. - T * .07);
+  b2 *= .7 + .3 * sin(along * 2.6 + T * .055 + 2.);
+  float veil = .78 + .22 * smoothstep(.25, .85, noise(vec2(p.x * 3. + t * 1.1, uv.y * .35)));
+  float light = (b1 + b2 * .8) * veil;
+
+  vec3 col = rgb(9., 27., 56.);
+  col = mix(col, rgb(21., 83., 183.), clamp(light * 1.1, 0., 1.));
+  col = mix(col, rgb(0., 169., 235.), clamp(pow(light, 1.8) * .85, 0., 1.));
+  col = mix(col, rgb(140., 200., 255.), clamp(pow(light, 4.) * .5, 0., 1.));
+  float drift = .5 + .5 * sin(t * 1.3 + uv.x * 1.5);
+  col = mix(col, rgb(160., 130., 245.), clamp(b2 * veil * .42 * (.6 + .4 * drift), 0., 1.));
+  col = mix(col, rgb(60., 200., 175.), exp(-pow((s - c1 - .22) / .1, 2.)) * .42 * (.7 + .3 * (1. - drift)));
+
+  col += calmGrain(T) * .05;
+  fragColor = vec4(col, 1.);
+}
+`;

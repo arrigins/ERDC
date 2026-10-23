@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState, Fragment } from "react";
 import { AnimatePresence, LayoutGroup, MotionConfig, motion, useReducedMotion } from "motion/react";
 import { MorphIcon } from "morphicons/react";
-import { ColorPanels, MeshGradient } from "@paper-design/shaders-react";
+import { MeshGradient, ShaderMount } from "@paper-design/shaders-react";
+import { overviewCoverShader } from "./overview-covers/shaders.js";
 import { MerchAccessories, MerchApparel, MerchBags, MerchSlogans, MerchSystem, MerchThermo } from "./merch/Merch.jsx";
 
 const assetPath = (pathname) => `${import.meta.env.BASE_URL}${pathname.replace(/^\/+/, "")}`;
@@ -2168,7 +2169,8 @@ function LibraryHeroBackground({ variant, miniature = false }) {
     case "overview-panels":
       return (
         <div className="library-hero-bg is-overview-panels" aria-hidden="true">
-          <ColorPanels {...shaderProps} colors={["#243d8d", "#00a9eb", "#8cc8ff", "#de2327"]} colorBack="#091b38" density={1.18} length={1.7} angle1={0.34} angle2={-0.18} blur={0.06} edges speed={0.16} gradient={0.18} />
+          {/* 23.10: «Зерно с намёком на сияние» (вариант 7б со страницы overview-covers.html, без звёзд, с медленно меняющейся композицией) */}
+          <ShaderMount {...shaderProps} fragmentShader={overviewCoverShader} uniforms={{}} speed={1} />
         </div>
       );
     default:
