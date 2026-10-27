@@ -16,7 +16,7 @@ FRAMES = {
     "coral": "rgb(92.549133%, 29.411316%, 31.37207%)",
     "blue": "rgb(1.176453%, 4.31366%, 57.255554%)",
 }
-HEX = {"ink": "#262425", "sky": "#00BBFA", "coral": "#EC4B50", "blue": "#030B92", "navy": "#003577"}
+HEX = {"ink": "#262425", "sky": "#00BBFA", "coral": "#EC4B50", "blue": "#0B2A8C", "navy": "#0B2A8C"}
 PAGES = {1: "sky", 2: "coral", 3: "blue"}
 
 
@@ -57,8 +57,10 @@ def main(src):
                     open(f"{OUT}/mp-white{suffix}.svg", "w").write(
                         finish(svg, {INK: "#FFFFFF", WHITE: HEX["navy"], frame: "#FFFFFF"}))
                     if not suffix:
-                        open(f"{OUT}/mp-compact-blue.svg", "w").write(
-                            finish(svg, {INK: HEX["ink"], WHITE: "#FFFFFF", frame: HEX["blue"]}, drop_emblem=True))
+                        # Герб отдельно — для «аватарки» Минвостокразвития в баблах
+                        emb = finish(svg, {INK: HEX["ink"], WHITE: "#FFFFFF", frame: HEX["blue"]})
+                        emb = emb.replace(f'viewBox="{VIEWBOX}"', 'viewBox="142.25 193.25 44.5 49.25"', 1)
+                        open(f"{OUT}/mp-emblem.svg", "w").write(emb)
     print("ok:", sorted(os.listdir(OUT)))
 
 
