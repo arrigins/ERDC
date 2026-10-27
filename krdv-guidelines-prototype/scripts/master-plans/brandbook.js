@@ -6,7 +6,7 @@ fit();
 window.addEventListener("resize", fit);
 
 // Правило графики: кольцо прерывается перед текстом, логотипом и баблом (зазор t).
-// Дуги режутся по радиусу, обрубки короче 2,5t убираются. Всё остаётся векторным в PDF.
+// Дуги режутся по радиусу, обрубки короче 3,5t убираются. Всё остаётся векторным в PDF.
 const NS = "http://www.w3.org/2000/svg";
 
 function arcPath(cx, cy, r, a0, a1) {
@@ -16,14 +16,16 @@ function arcPath(cx, cy, r, a0, a1) {
 }
 
 function cutArcs(svg, rects, t) {
-  if (!rects.length) return;
   const pad = t / 2;
-  const inside = (x, y) => rects.some((r) => x > r.x - pad && x < r.x + r.w + pad && y > r.y - pad && y < r.y + r.h + pad);
+  const vb = svg.viewBox.baseVal;
+  // за краем макета дуги не видно — там тоже «разрез», чтобы у края не оставались обрубки
+  const out = (x, y) => x < vb.x - pad || x > vb.x + vb.width + pad || y < vb.y - pad || y > vb.y + vb.height + pad;
+  const inside = (x, y) => out(x, y) || rects.some((r) => x > r.x - pad && x < r.x + r.w + pad && y > r.y - pad && y < r.y + r.h + pad);
   svg.querySelectorAll(".arc[data-arc]").forEach((el) => {
     const [cx, cy, r, a0, a1] = el.dataset.arc.split(" ").map(Number);
     const full = a1 - a0 >= 360;
     const step = Math.min(0.5, ((t / 4) / r) * (180 / Math.PI));
-    const minA = ((2.5 * t) / r) * (180 / Math.PI);
+    const minA = ((3.5 * t) / r) * (180 / Math.PI);
     const runs = [];
     let start = null;
     for (let a = a0; a <= a1 + 1e-6; a += step) {
