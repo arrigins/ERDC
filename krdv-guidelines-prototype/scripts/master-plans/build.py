@@ -22,7 +22,7 @@ C = {
     "mist": "#F3F4F8", "line": "#DCDFE8",
 }
 
-LOGO_W, LOGO_H = 773.5, 263.75     # габарит логотипа, пт исходника
+LOGO_W, LOGO_H = 764.75, 263.75     # габарит логотипа, пт исходника
 LOGO_R = LOGO_W / LOGO_H
 BAR = 48 / LOGO_H                  # плашка «настоящее будущее» = охранное поле a (доля высоты)
 CITY_SIZE = 28.4                   # кегль города в пт исходника
@@ -86,7 +86,7 @@ def logo_img(x, y, w, color="coral", city=None, cls="", city_cls="city"):
         fill = "#FFFFFF" if color == "white" else C["ink"]
         cities = city if isinstance(city, list) else [city]
         for i, c in enumerate(cities):
-            out += (f'<text class="{city_cls} c{i}" style="--i:{i}" x="{x + (882.4 - 111) * s:.2f}" y="{y + (286.75 - 165.75) * s:.2f}" '
+            out += (f'<text class="{city_cls} c{i}" style="--i:{i}" x="{x + (874.2 - 111) * s:.2f}" y="{y + (286.75 - 165.75) * s:.2f}" '
                     f'text-anchor="end" font-size="{CITY_SIZE * s:.2f}" font-weight="400" fill="{fill}">{c}</text>')
     return f'<g class="{cls}">{out}</g>'
 
@@ -253,6 +253,12 @@ page(ttl("Цветные версии")
      + stage('<div class="versions">' + "".join(
          f'<figure><div class="v-pre"><img src="{LOGO}mp-{c}.svg" alt=""></div>{cap(n)}</figure>'
          for c, n in [("coral", "Основная версия"), ("blue", "Дополнительная версия"), ("sky", "Дополнительная версия")]) + "</div>"), "light", "Логотип")
+
+page(ttl("Версия для малых размеров", "В мелком масштабе используется версия с упрощённым гербом: детали не сливаются и герб остаётся узнаваемым.")
+     + stage('<div class="small-ver">' + "".join(
+         f'<figure><div class="sv-big"><img src="{LOGO}mp-coral{sfx}.svg" alt=""></div>'
+         f'<div class="sv-row"><img src="{LOGO}mp-coral{sfx}.svg" alt="" style="width:240px"><img src="{LOGO}mp-coral{sfx}.svg" alt="" style="width:150px"></div>{cap(n)}</figure>'
+         for sfx, n in [("", "Основная версия"), ("-small", "Для малых размеров")]) + "</div>"), "light", "Логотип")
 
 
 def plate_scene(photo=False):
@@ -634,8 +640,10 @@ page(ttl("Презентация")
      + stage(f'<div class="pair wide"><figure class="fit">{slide_title()}</figure><figure class="fit bordered">{slide_content()}</figure></div>'),
      "light", "Носители")
 
-page(ttl("Баннер у стройки")
-     + stage(f'<figure class="photo-full"><img src="master-plans/mockups/concept-fence.webp" alt=""></figure>'), "light", "Носители")
+page(f'<div class="bg"><img class="bleed-img" src="master-plans/mockups/city-street.webp" alt=""></div>', "blue bleed", "Носители")
+page(ttl("Ограждение стройки")
+     + stage('<div class="two photos"><figure><img src="master-plans/mockups/city-fence.webp" alt=""></figure>'
+             '<figure><img src="master-plans/mockups/city-fence-gate.webp" alt=""></figure></div>'), "light", "Носители")
 page(ttl("Автобус")
      + stage(f'<figure class="photo-full"><img src="master-plans/mockups/concept-bus.webp" alt=""></figure>'), "light", "Носители")
 

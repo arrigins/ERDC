@@ -2,22 +2,21 @@
 
 Запуск: python3 extract-logos.py <путь к .ai>
 Нужен pdftocairo (poppler). Исходный AI в репозиторий не кладём (внутри подмножества шрифтов).
-Страницы AI: 1 голубой, 2 коралловый, 3 синий; 4–6 — то же с городом (Петропавловск-Камчатский).
+Страницы AI (версия 28.10): 1 — основной, 2 — для малых размеров (упрощённый герб),
+3–4 — то же с регионом. Цветные, чёрная и белая версии получаются перекраской основного.
 """
 import os, re, subprocess, sys, tempfile
 
 OUT = os.path.join(os.path.dirname(__file__), "../../public/master-plans/logo")
-VIEWBOX = "111 165.75 773.5 263.75"  # габарит логотипа в пунктах исходника
+VIEWBOX = "111 165.75 764.75 263.75"  # габарит логотипа в пунктах исходника
 
-INK = "rgb(14.901733%, 14.117432%, 14.509583%)"
+INK = "rgb(13.725281%, 12.156677%, 12.548828%)"
 WHITE = "rgb(100%, 100%, 100%)"
-FRAMES = {
-    "sky": "rgb(0%, 73.33374%, 98.039246%)",
-    "coral": "rgb(92.549133%, 29.411316%, 31.37207%)",
-    "blue": "rgb(1.176453%, 4.31366%, 57.255554%)",
-}
-HEX = {"ink": "#262425", "sky": "#00BBFA", "coral": "#EC4B50", "blue": "#0B2A8C", "navy": "#0B2A8C"}
-PAGES = {1: "sky", 2: "coral", 3: "blue"}
+BLACK = "rgb(0%, 0%, 0%)"
+FRAME = "rgb(86.66687%, 35.293579%, 34.117126%)"
+# цвет рамки приводим к палитре брендбука
+VERSIONS = {"coral": "#EC4B50", "blue": "#0B2A8C", "sky": "#00BBFA"}
+INK_HEX, NAVY = "#262425", "#0B2A8C"
 
 
 def page_svg(src, page, tmp):
@@ -26,41 +25,23 @@ def page_svg(src, page, tmp):
     return open(out, encoding="utf-8").read()
 
 
-def finish(svg, colors, drop_emblem=False):
-    """colors: {исходный цвет: новый}. drop_emblem — без герба и строки поддержки (компактная версия)."""
-    svg = re.sub(r'width="[^"]+" height="[^"]+" viewBox="[^"]+"', f'viewBox="{VIEWBOX}"', svg, count=1)
-    if drop_emblem:
-        head, body = svg.split("</defs>", 1)
-        frame_fill = next(c for c in FRAMES.values() if c in body)
-        cut = body.index(f'fill="{frame_fill}"')
-        cut = body.rfind("<path", 0, cut)
-        svg = head + "</defs>\n" + body[cut:]
-    for src, dst in colors.items():
-        svg = svg.replace(f'"{src}"', f'"{dst}"')
-    svg = re.sub(r"<\?xml[^>]*>\s*", "", svg)
-    return svg
+def finish(svg, colors, viewbox=VIEWBOX):
+    svg = re.sub(r'width="[^"]+" height="[^"]+" viewBox="[^"]+"', f'viewBox="{viewbox}"', svg, count=1)
+    for a, b in colors.items():
+        svg = svg.replace(f'"{a}"', f'"{b}"')
+    return re.sub(r"<\?xml[^>]*>\s*", "", svg)
 
 
 def main(src):
     os.makedirs(OUT, exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:
-        for page, name in PAGES.items():
-            for suffix, p in (("", page), ("-city", page + 3)):
-                svg = page_svg(src, p, tmp)
-                frame = FRAMES[name]
-                colored = finish(svg, {INK: HEX["ink"], WHITE: "#FFFFFF", frame: HEX[name]})
-                open(f"{OUT}/mp-{name}{suffix}.svg", "w").write(colored)
-                if name == "blue":
-                    open(f"{OUT}/mp-black{suffix}.svg", "w").write(
-                        finish(svg, {INK: "#000000", WHITE: "#FFFFFF", frame: "#000000"}))
-                    # Негатив: всё белое, вырезы (надпись в плашке, просветы герба) — цветом фона
-                    open(f"{OUT}/mp-white{suffix}.svg", "w").write(
-                        finish(svg, {INK: "#FFFFFF", WHITE: HEX["navy"], frame: "#FFFFFF"}))
-                    if not suffix:
-                        # Герб отдельно — для «аватарки» Минвостокразвития в баблах
-                        emb = finish(svg, {INK: HEX["ink"], WHITE: "#FFFFFF", frame: HEX["blue"]})
-                        emb = emb.replace(f'viewBox="{VIEWBOX}"', 'viewBox="142.25 193.25 44.5 49.25"', 1)
-                        open(f"{OUT}/mp-emblem.svg", "w").write(emb)
+        for page, suffix in ((1, ""), (2, "-small")):
+            svg = page_svg(src, page, tmp)
+            for name, hx in VERSIONS.items():
+                open(f"{OUT}/mp-{name}{suffix}.svg", "w").write(finish(svg, {INK: INK_HEX, WHITE: "#FFFFFF", BLACK: "#000000", FRAME: hx}))
+            open(f"{OUT}/mp-black{suffix}.svg", "w").write(finish(svg, {INK: "#000000", WHITE: "#FFFFFF", BLACK: "#000000", FRAME: "#000000"}))
+            # негатив: всё белое, вырезы (надпись в плашке, просветы герба) — цветом фона
+            open(f"{OUT}/mp-white{suffix}.svg", "w").write(finish(svg, {INK: "#FFFFFF", WHITE: NAVY, BLACK: "#FFFFFF", FRAME: "#FFFFFF"}))
     print("ok:", sorted(os.listdir(OUT)))
 
 

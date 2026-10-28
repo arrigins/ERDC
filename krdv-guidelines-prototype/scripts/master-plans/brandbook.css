@@ -193,3 +193,15 @@ figure.fit { height: 100%; }
 .ttl .lead, .spec dd, .notes li, figcaption, .w em, .cv-sub { text-wrap: balance; }
 .cv-sub { margin-top: 48px; }
 .ttl .lead { max-width: 1500px; }
+
+/* 28.10: версия для малых размеров, фото в городе */
+.small-ver { display: grid; grid-template-columns: 1fr 1fr; height: 100%; }
+.small-ver figure { display: flex; flex-direction: column; padding: 0 56px; border-left: 1px solid var(--line); }
+.small-ver figure:first-child { padding-left: 0; border-left: 0; }
+.sv-big img { width: 100%; display: block; }
+.sv-row { margin-top: auto; display: flex; align-items: flex-end; gap: 48px; padding-top: 48px; }
+.sv-row img { display: block; }
+.two.photos figure { justify-content: center; }
+.two.photos img { width: 100%; height: auto; display: block; border-radius: 20px; }
+.bleed-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.bleed .ph { color: rgba(255,255,255,.9); text-shadow: 0 1px 6px rgba(0,0,0,.35); }
