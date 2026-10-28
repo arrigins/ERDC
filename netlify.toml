@@ -1,0 +1,9 @@
+# Netlify публикует только брендбук «Мастер-планы» (гайд КРДВ остаётся на GitHub Pages)
+[build]
+  command = "bash krdv-guidelines-prototype/scripts/master-plans/netlify-build.sh"
+  publish = "netlify-mp"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
