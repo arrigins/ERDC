@@ -178,7 +178,11 @@ def page(body, cls="light", section=""):
 
 
 def ttl(title, lead=None):
-    return f'<div class="ttl"><h2>{T(title)}</h2>' + (f'<p class="lead">{T(lead)}</p>' if lead else "") + "</div>"
+    """Подзаголовок: каждое предложение — с новой строки (в PDF строки не рвутся на полуслове)."""
+    if lead:
+        parts = re.split(r"(?<=[.!?»])\s+(?=[А-ЯЁA-Z«])", lead)
+        lead = "<br>".join(T(x) for x in parts)
+    return f'<div class="ttl"><h2>{T(title)}</h2>' + (f'<p class="lead">{lead}</p>' if lead else "") + "</div>"
 
 
 def stage(inner, cls=""):
@@ -224,7 +228,7 @@ page("", "light", "Содержание")  # заполняется в конц�
 SEC["01"] = divider("01", "Логотип", full_rings(2000, -40, [330, 522, 714], [[(96, 176)], [(100, 142), (160, 186)], [(106, 170)]]))
 
 page(ttl("Логотип")
-     + stage(f'<div class="logo-solo"><img src="{LOGO}mp-coral.svg" alt="Логотип «Мастер-планы»"></div>'), "light", "Логотип")
+     + stage(f'<div class="logo-solo"><img src="{LOGO}mp-coral.svg" alt="Логотип «Мастер-планы»"></div>', "page-center"), "light", "Логотип")
 
 
 def clear_space():
@@ -323,12 +327,12 @@ SEC["03"] = divider("03", "Идея", full_rings(2050, 900, [330, 522, 714], [[(
 
 def hero():
     t = 54
-    b = rings(1250, 560, [430, 646, 862], t, [[(150, 215), (300, 350)], [(160, 196), (214, 262), (318, 352)], [(190, 236), (300, 330)]], C["coral"])
+    b = rings(1300, 560, [420, 620], t, [[(150, 205), (305, 352)], [(165, 196), (318, 350)]], C["coral"])
     b += plate(96, 96, 520, city="Петропавловск-Камчатский")
-    b += head(1250, 380, ["Строим", "будущее"], 150, anchor="middle", lh=0.98)
-    b += head(1250, 636, [[("Здесь ", "#fff"), ("будет", C["coral"])]], 86, anchor="middle")
-    b += head(1250, 900, [("Школа", C["coral"])], 250, anchor="middle")
-    b += bubble(120, 640, 560, ["Скоро здесь будет новая школа", "на 1100 мест — с бассейном", "и стадионом!"], 32)
+    b += head(1300, 380, ["Строим", "будущее"], 150, anchor="middle", lh=0.98)
+    b += head(1300, 636, [[("Здесь ", "#fff"), ("будет", C["coral"])]], 86, anchor="middle")
+    b += head(1300, 900, [("Школа", C["coral"])], 250, anchor="middle")
+    b += bubble(96, 640, 560, ["Скоро здесь будет новая школа", "на 1100 мест — с бассейном", "и стадионом!"], 32)
     return art(1920, 1080, b, bg=C["blue"], t=t, cls="art fill")
 
 
@@ -336,40 +340,33 @@ page(f'<div class="bg">{hero()}</div>', "blue bleed", "Идея")
 
 
 def plan_map():
-    """Карта мастер-плана: улицы растворяются слева направо, радиусы остаются — так появляется графика."""
+    """Схема мастер-плана: кварталы и река растворяются слева направо, радиусы остаются — так появляется графика."""
     w, h = STAGE_W, STAGE_H
-    cx, cy = 560, 330
-    rnd = random.Random(7)
+    cx, cy = 520, 300
+    rnd = random.Random(11)
 
     def op(x):
-        return 0.4 if x < 300 else max(0.0, 0.4 * (1 - (x - 300) / 800))
+        return 0.09 if x < 260 else max(0.0, 0.09 * (1 - (x - 260) / 820))
 
-    xs, ys = [0], [0]
-    while xs[-1] < w:
-        xs.append(xs[-1] + rnd.randint(70, 130))
-    while ys[-1] < h:
-        ys.append(ys[-1] + rnd.randint(60, 110))
-    lines = []
-    for x in xs:
-        for i in range(len(ys) - 1):
-            if op(x) > 0.02:
-                lines.append(f'<line x1="{x}" y1="{ys[i]}" x2="{x + rnd.randint(-6, 6)}" y2="{ys[i + 1]}" stroke-opacity="{op(x):.2f}"/>')
-    for y in ys:
-        for i in range(len(xs) - 1):
-            o = op((xs[i] + xs[i + 1]) / 2)
-            if o > 0.02:
-                lines.append(f'<line x1="{xs[i]}" y1="{y}" x2="{xs[i + 1]}" y2="{y + rnd.randint(-5, 5)}" stroke-opacity="{o:.2f}"/>')
-    for i in range(30):
-        x0 = i * 40
-        if op(x0) > 0.02:
-            lines.append(f'<line x1="{x0}" y1="{620 - i * 22}" x2="{x0 + 40}" y2="{620 - (i + 1) * 22}" stroke-width="5" stroke-opacity="{op(x0):.2f}"/>')
-    river = []
-    for i in range(24):
-        x0 = i * 50
-        if op(x0) > 0.02:
-            river.append(f'<line x1="{x0}" y1="{560 + 40 * math.sin(i / 3):.1f}" x2="{x0 + 50}" y2="{560 + 40 * math.sin((i + 1) / 3):.1f}" '
-                         f'stroke="{C["sky"]}" stroke-width="14" stroke-opacity="{op(x0) * 0.8:.2f}"/>')
-    b = f'<g class="map" stroke="#fff" stroke-width="1.6">{"".join(lines)}</g>{"".join(river)}'
+    blocks = []
+    bw, bh, gap = 104, 74, 20
+    for row in range(-1, h // (bh + gap) + 2):
+        for col in range(-1, 12):
+            if rnd.random() < 0.12:
+                continue
+            x = col * (bw + gap) + (row % 2) * 30
+            y = row * (bh + gap)
+            if 440 < y + bh / 2 < 560:      # здесь течёт река
+                continue
+            o = op(x + bw / 2)
+            if o < 0.01:
+                continue
+            ww = bw * 2 + gap if rnd.random() < 0.15 else bw
+            blocks.append(f'<rect x="{x}" y="{y}" width="{ww}" height="{bh}" rx="6" fill="#fff" fill-opacity="{o:.3f}"/>')
+    river = (f'<defs><linearGradient id="rv" x1="0" x2="1"><stop offset="0" stop-color="{C["sky"]}" stop-opacity=".45"/>'
+             f'<stop offset=".62" stop-color="{C["sky"]}" stop-opacity="0"/></linearGradient></defs>'
+             f'<path d="M-20 520 C 220 470, 420 560, 660 505 S 1100 470, 1400 520" fill="none" stroke="url(#rv)" stroke-width="34" stroke-linecap="round"/>')
+    b = f'<g class="map">{"".join(blocks)}{river}</g>'
     t = 30
     b += rings(cx, cy, [130, 250, 370, 490], t, [[(0, 360)], [(200, 330), (350, 520)], [(160, 290), (310, 470)], [(190, 330), (345, 440)]], C["coral"])
     b += f'<g class="ko"><circle cx="{cx}" cy="{cy}" r="16" fill="#fff"/></g>'
@@ -469,29 +466,15 @@ page(ttl("Принципы вёрстки")
      "light", "Коммуникация")
 
 
-def voice():
-    w, h = STAGE_W, STAGE_H
-    t = 33
-    b = rings(1500, 760, [260, 392, 524], t, [[(190, 300)], [(196, 240), (262, 340)], [(204, 262), (282, 318)]], C["coral"])
-    b += bubble(150, 60, 640, ["Ваше здоровье бесценно!", "", "Сохранить его помогут врачи", "в новой больнице. Уже строим", "её для вас."], 34)
-    b += bubble(900, 250, 600, ["Скоро здесь будет новый", "плавательный бассейн!"], 34)
-    return art(w, h, b, bg=C["blue"], t=t, r=20)
-
-
-page(ttl("Министерство на связи",
-         "Сообщения на носителях звучат как личное сообщение от Минвостокразвития: тепло, просто и о пользе для человека.")
-     + stage(f'<figure class="fit">{voice()}</figure>'), "light", "Коммуникация")
-
-
 def bubble_anatomy():
     w, h = 1120, 654
     t = 32
     b = rings(1080, 720, [230, 360], t, [[(190, 300)], [(200, 250), (270, 330)]], C["coral"])
-    b += bubble(90, 80, 760, ["Скоро здесь будет новый", "плавательный бассейн!", "", "С аквааэробикой, кроссфитом", "и боксом!"], 44)
+    b += bubble(90, 80, 760, ["Ваше здоровье бесценно!", "", "Сохранить его помогут врачи", "в новой больнице. Уже строим", "её для вас."], 44)
     return art(w, h, b, bg=C["blue"], t=t, r=20)
 
 
-page(ttl("Сообщение от министерства")
+page(ttl("Сообщение от министерства", "Министерство говорит с жителями как в личной переписке: тепло, просто и о пользе для человека.")
      + stage(f'<div class="split"><figure class="fit">{bubble_anatomy()}</figure>' + spec([
          ("Как в мессенджере", "Белое сообщение и аватарка — цветной герб Минвостокразвития в белом круге."),
          ("О пользе для человека", "Что изменится для жителя: врачи в новой больнице, бассейн рядом с домом."),
@@ -579,12 +562,6 @@ def story():
     return art(w, h, b, t=t)
 
 
-page(ttl("Соцсети")
-     + stage(f'<div class="carrier"><div class="pair"><figure class="fit">{post_sq()}</figure><figure class="fit">{story()}</figure></div>'
-             + notes("Пост — слоган в центре радиусов.", "История — фото и сообщение от министерства.", "Логотип с городом — для местных аккаунтов.") + "</div>"),
-     "light", "Носители")
-
-
 def passport():
     w, h = 800, 600
     t = 20
@@ -657,17 +634,14 @@ page(ttl("Презентация")
      + stage(f'<div class="pair wide"><figure class="fit">{slide_title()}</figure><figure class="fit bordered">{slide_content()}</figure></div>'),
      "light", "Носители")
 
-# ── 07 В городе
-SEC["07"] = divider("07", "В городе", full_rings(2060, 900, [330, 522, 714], [[(150, 270)], [(160, 205), (224, 262)], [(172, 238)]]))
-
 page(ttl("Баннер у стройки")
-     + stage(f'<figure class="photo-full"><img src="master-plans/mockups/concept-fence.webp" alt=""></figure>'), "light", "В городе")
+     + stage(f'<figure class="photo-full"><img src="master-plans/mockups/concept-fence.webp" alt=""></figure>'), "light", "Носители")
 page(ttl("Автобус")
-     + stage(f'<figure class="photo-full"><img src="master-plans/mockups/concept-bus.webp" alt=""></figure>'), "light", "В городе")
+     + stage(f'<figure class="photo-full"><img src="master-plans/mockups/concept-bus.webp" alt=""></figure>'), "light", "Носители")
 
 page(cover("Строим будущее здесь"), "blue cover")
 
-toc = [("01", "Логотип"), ("02", "Цвет и шрифт"), ("03", "Идея"), ("04", "Фирменная графика"), ("05", "Коммуникация"), ("06", "Носители"), ("07", "В городе")]
+toc = [("01", "Логотип"), ("02", "Цвет и шрифт"), ("03", "Идея"), ("04", "Фирменная графика"), ("05", "Коммуникация"), ("06", "Носители")]
 toc_html = ttl("Содержание") + stage('<ol class="toc">' + "".join(
     f'<li><a href="#p{SEC[n]}"><span class="toc-n">{n}</span><span class="toc-t">{t}</span><span class="toc-p">{SEC[n]:02d}</span></a></li>'
     for n, t in toc) + "</ol>")

@@ -187,3 +187,9 @@ figure.fit { height: 100%; }
 .photo-full img { max-width: 100%; max-height: 100%; display: block; }
 .bleed-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .bleed .ph { color: rgba(255,255,255,.85); }
+
+/* 28.10: логотип по центру листа, ровные переносы, версия ниже */
+.stage.page-center { top: 0; bottom: 0; }
+.ttl .lead, .spec dd, .notes li, figcaption, .w em, .cv-sub { text-wrap: balance; }
+.cv-sub { margin-top: 48px; }
+.ttl .lead { max-width: 1500px; }
