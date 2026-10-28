@@ -193,6 +193,18 @@ def notes(*items):
     return '<ul class="notes">' + "".join(f"<li>{T(x)}</li>" for x in items) + "</ul>"
 
 
+DL = "https://arrigins.github.io/ERDC/master-plans/logo/"  # абсолютные ссылки — работают и в скачанном PDF
+
+
+def dl(name, label=None, zip_all=False):
+    """Кнопки скачивания логотипа: SVG · PNG · PDF (+ архив всех версий)."""
+    btn = "".join(f'<a class="dl-btn" href="{DL}files/{name}.{ext}" download>{ext.upper()}</a>' for ext in ("svg", "png", "pdf"))
+    if zip_all:
+        btn += f'<a class="dl-btn dl-zip" href="{DL}master-plans-logo.zip" download>Все версии · ZIP</a>'
+    lab = f'<span class="dl-label">{label}</span>' if label else ""
+    return f'<div class="dl">{lab}{btn}</div>'
+
+
 def cap(title):
     return f"<figcaption>{T(title)}</figcaption>"
 
@@ -228,7 +240,8 @@ page("", "light", "Содержание")  # заполняется в конц�
 SEC["01"] = divider("01", "Логотип", full_rings(2000, -40, [330, 522, 714], [[(96, 176)], [(100, 142), (160, 186)], [(106, 170)]]))
 
 page(ttl("Логотип")
-     + stage(f'<div class="logo-solo"><img src="{LOGO}mp-coral.svg" alt="Логотип «Мастер-планы»"></div>', "page-center"), "light", "Логотип")
+     + stage(f'<div class="logo-solo"><img src="{LOGO}mp-coral.svg" alt="Логотип «Мастер-планы»"></div>', "page-center")
+     + '<div class="dl-dock">' + dl("mp-coral", "Скачать", zip_all=True) + "</div>", "light", "Логотип")
 
 
 def clear_space():
@@ -251,11 +264,12 @@ page(ttl("Охранное поле", "Свободное поле вокруг 
 
 page(ttl("Цветные версии")
      + stage('<div class="versions">' + "".join(
-         f'<figure><div class="v-pre"><img src="{LOGO}mp-{c}.svg" alt=""></div>{cap(n)}</figure>'
+         f'<figure><div class="v-pre"><img src="{LOGO}mp-{c}.svg" alt=""></div>{cap(n)}{dl("mp-" + c)}</figure>'
          for c, n in [("coral", "Основная версия"), ("blue", "Дополнительная версия"), ("sky", "Дополнительная версия")]) + "</div>"), "light", "Логотип")
 
 page(ttl("Версия для малых размеров", "В мелком масштабе используется версия с упрощённым гербом: детали не сливаются и герб остаётся узнаваемым.")
-     + stage(f'<div class="logo-solo"><img src="{LOGO}mp-coral-small.svg" alt="Логотип для малых размеров"></div>'), "light", "Логотип")
+     + stage(f'<div class="logo-solo"><img src="{LOGO}mp-coral-small.svg" alt="Логотип для малых размеров"></div>')
+     + '<div class="dl-dock">' + dl("mp-coral-small", "Скачать") + "</div>", "light", "Логотип")
 
 
 def plate_scene(photo=False):
