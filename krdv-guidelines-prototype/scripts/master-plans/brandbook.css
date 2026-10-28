@@ -193,3 +193,6 @@ figure.fit { height: 100%; }
 .ttl .lead, .spec dd, .notes li, figcaption, .w em, .cv-sub { text-wrap: balance; }
 .cv-sub { margin-top: 48px; }
 .ttl .lead { max-width: 1500px; }
+.tb-actions { display: flex; gap: 10px; }
+.toolbar a.tb-alt { background: var(--mist); color: var(--blue); }
+.toolbar a.tb-alt:hover { background: var(--blue); color: #fff; }

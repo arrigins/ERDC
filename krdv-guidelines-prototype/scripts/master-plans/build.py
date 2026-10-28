@@ -663,7 +663,7 @@ html = f"""<!doctype html>
 </style>
 </head>
 <body>
-<div class="toolbar"><span>Мастер-планы · Брендбук</span><a href="master-plans/master-plans-brandbook.pdf" download>Скачать PDF</a></div>
+<div class="toolbar"><span>Мастер-планы · Брендбук</span><span class="tb-actions"><a class="tb-alt" href="master-plans/master-plans-brandbook-svg.zip" download>SVG для Illustrator</a><a href="master-plans/master-plans-brandbook.pdf" download>Скачать PDF</a></span></div>
 <main class="deck">
 {chr(10).join(pages)}
 </main>
