@@ -255,10 +255,7 @@ page(ttl("Цветные версии")
          for c, n in [("coral", "Основная версия"), ("blue", "Дополнительная версия"), ("sky", "Дополнительная версия")]) + "</div>"), "light", "Логотип")
 
 page(ttl("Версия для малых размеров", "В мелком масштабе используется версия с упрощённым гербом: детали не сливаются и герб остаётся узнаваемым.")
-     + stage('<div class="small-ver">' + "".join(
-         f'<figure><div class="sv-big"><img src="{LOGO}mp-coral{sfx}.svg" alt=""></div>'
-         f'<div class="sv-row"><img src="{LOGO}mp-coral{sfx}.svg" alt="" style="width:240px"><img src="{LOGO}mp-coral{sfx}.svg" alt="" style="width:150px"></div>{cap(n)}</figure>'
-         for sfx, n in [("", "Основная версия"), ("-small", "Для малых размеров")]) + "</div>"), "light", "Логотип")
+     + stage(f'<div class="logo-solo"><img src="{LOGO}mp-coral-small.svg" alt="Логотип для малых размеров"></div>'), "light", "Логотип")
 
 
 def plate_scene(photo=False):
@@ -640,7 +637,8 @@ page(ttl("Презентация")
      + stage(f'<div class="pair wide"><figure class="fit">{slide_title()}</figure><figure class="fit bordered">{slide_content()}</figure></div>'),
      "light", "Носители")
 
-page(f'<div class="bg"><img class="bleed-img" src="master-plans/mockups/city-street.webp" alt=""></div>', "blue bleed", "Носители")
+page(ttl("Носители в городе")
+     + stage(f'<figure class="photo-full"><img src="master-plans/mockups/city-street.webp" alt=""></figure>'), "light", "Носители")
 page(ttl("Ограждение стройки")
      + stage('<div class="two photos"><figure><img src="master-plans/mockups/city-fence.webp" alt=""></figure>'
              '<figure><img src="master-plans/mockups/city-fence-gate.webp" alt=""></figure></div>'), "light", "Носители")
