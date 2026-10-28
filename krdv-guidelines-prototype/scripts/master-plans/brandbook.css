@@ -110,7 +110,8 @@ figure.fit { height: 100%; }
 .versions figure:first-child { padding-left: 0; border-left: 0; }
 .versions figure:last-child { padding-right: 0; }
 .v-pre { flex: 1; display: grid; place-items: center; }
-.v-pre img { width: 100%; }
+.v-pre { justify-items: start; }
+.v-pre img { width: 496px; max-width: 100%; } /* одинаковый размер во всех колонках */
 .loc { display: flex; flex-direction: column; height: 100%; }
 .loc-main { flex: 1; display: grid; place-items: center; }
 .loc-main svg { width: 1240px; height: auto; }

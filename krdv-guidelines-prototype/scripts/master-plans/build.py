@@ -268,8 +268,9 @@ page(ttl("Цветные версии")
          for c, n in [("coral", "Основная версия"), ("blue", "Дополнительная версия"), ("sky", "Дополнительная версия")]) + "</div>"), "light", "Логотип")
 
 page(ttl("Версия для малых размеров", "В мелком масштабе используется версия с упрощённым гербом: детали не сливаются и герб остаётся узнаваемым.")
-     + stage(f'<div class="logo-solo"><img src="{LOGO}mp-coral-small.svg" alt="Логотип для малых размеров"></div>')
-     + '<div class="dl-dock">' + dl("mp-coral-small", "Скачать") + "</div>", "light", "Логотип")
+     + stage('<div class="versions">' + "".join(
+         f'<figure><div class="v-pre"><img src="{LOGO}mp-{c}-small.svg" alt=""></div>{cap(n)}{dl("mp-" + c + "-small")}</figure>'
+         for c, n in [("coral", "Основная версия"), ("blue", "Дополнительная версия"), ("sky", "Дополнительная версия")]) + "</div>"), "light", "Логотип")
 
 
 def plate_scene(photo=False):
