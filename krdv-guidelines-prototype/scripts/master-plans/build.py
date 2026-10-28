@@ -210,36 +210,25 @@ def divider(num, name, rings_svg):
                 f'<h1 class="dv-title">{T(name)}</h1></div>', "blue divider", name)
 
 
-def cover(title, desc="", sub=""):
+def cover(title, sub=""):
     w = 560
     plate_svg = art(w + 2 * BAR * w / LOGO_R, w / LOGO_R * (1 + 2 * BAR), plate(0, 0, w), cls="art")
     rg = full_rings(1500, 760, [300, 492, 684], [[(150, 290)], [(170, 236), (258, 330), (350, 400)], [(196, 250), (268, 318)]])
     return (f'<div class="bg">{rg}</div><div class="cv-plate">{plate_svg}</div>'
-            f'<div class="cv-foot"><h1 class="cv-title">{title}</h1>' + (f'<p class="cv-desc">{T(desc)}</p>' if desc else "")
-            + (f'<p class="cv-sub">{sub}</p>' if sub else "") + "</div>")
+            f'<div class="cv-foot"><h1 class="cv-title">{title}</h1>' + (f'<p class="cv-sub">{sub}</p>' if sub else "") + "</div>")
 
 
 SEC = {}
 
+page(cover("Брендбук", '<span>Версия 1.0</span><span>2026</span>'), "blue cover")
+TOC_AT = len(pages)
+page("", "light", "Содержание")  # заполняется в конце
 
-def statement():
-    return ('<div class="statement"><span class="st-label">Задача</span>'
-            f'<p>{T("Мастер-планы меняют города.")}<br><em>{T("Мы делаем эти изменения видимыми и понятными жителям.")}</em></p></div>')
+# ── 02 Логотип
+SEC["01"] = divider("01", "Логотип", full_rings(2000, -40, [330, 522, 714], [[(96, 176)], [(100, 142), (160, 186)], [(106, 170)]]))
 
-
-def series(word):
-    w, h = 554, 590
-    t = 24
-    size = min(96, 470 / (len(word) * 0.74))
-    b = rings(277, 330, [200, 296], t, [[(150, 230), (300, 390)], [(165, 215), (235, 300), (320, 375)]], C["coral"])
-    b += plate(30, 30, 170)
-    b += head(277, 312, ["Здесь будет"], 40, anchor="middle")
-    b += head(277, 312 + size * 0.95 + 14, [(word, C["coral"])], size, anchor="middle")
-    return art(w, h, b, bg=C["blue"], t=t, r=20)
-
-
-def spec2(items):
-    return '<div class="spec2">' + "".join(f"<div><dt>{a}</dt><dd>{T(b)}</dd></div>" for a, b in items) + "</div>"
+page(ttl("Логотип")
+     + stage(f'<div class="logo-solo"><img src="{LOGO}mp-coral.svg" alt="Логотип «Мастер-планы»"></div>', "page-center"), "light", "Логотип")
 
 
 def clear_space():
@@ -257,6 +246,14 @@ def clear_space():
     return art(W + 2 * pad, H + 2 * pad, b, cls="art cs")
 
 
+page(ttl("Охранное поле", "Свободное поле вокруг логотипа равно высоте плашки «настоящее будущее».")
+     + stage(f'<figure class="fit anim">{clear_space()}</figure>'), "light", "Логотип")
+
+page(ttl("Цветные версии")
+     + stage('<div class="versions">' + "".join(
+         f'<figure><div class="v-pre"><img src="{LOGO}mp-{c}.svg" alt=""></div>{cap(n)}</figure>'
+         for c, n in [("coral", "Основная версия"), ("blue", "Дополнительная версия"), ("sky", "Дополнительная версия")]) + "</div>"), "light", "Логотип")
+
 
 def plate_scene(photo=False):
     w, h = 848, 600
@@ -267,6 +264,17 @@ def plate_scene(photo=False):
     return art(w, h, b, bg=None if photo else C["blue"], r=20)
 
 
+page(ttl("Логотип на цвете и фото", "На синем фоне и фотографиях логотип ставится на белую подложку. Её поля равны охранному полю.")
+     + stage(f'<div class="two"><figure class="fit">{plate_scene()}</figure><figure class="fit">{plate_scene(True)}</figure></div>'), "light", "Логотип")
+
+CITIES = ["Петропавловск-Камчатский", "Владивосток", "Южно-Сахалинск", "Магадан", "Хабаровск", "Анадырь", "Николаевск-на-Амуре"]
+loc_big = art(1300, 1300 / LOGO_R + 20, logo_img(0, 10, 1300, "coral", CITIES, city_cls="city cyc"), cls="art loc", extra=f'style="--n:{len(CITIES)}"')
+loc_small = "".join(f'<figure>{art(520, 520 / LOGO_R + 8, logo_img(0, 4, 520, "coral", c))}</figure>' for c in ["Владивосток", "Южно-Сахалинск", "Николаевск-на-Амуре"])
+page(ttl("Региональная локализация", "Название города стоит над названием проекта и выровнено по его правому краю. Шаблон один для любого города.")
+     + stage(f'<div class="loc"><figure class="loc-main anim">{loc_big}</figure><div class="loc-row">{loc_small}</div></div>'), "light", "Логотип")
+
+# ── 03 Цвет и шрифт
+SEC["02"] = divider("02", "Цвет и шрифт", full_rings(2060, 640, [330, 522, 714], [[(118, 236)], [(126, 176), (194, 246)], [(132, 206)]]))
 
 palette = [
     ("Синий", C["blue"], "11 · 42 · 140", "100 · 85 · 0 · 10", "main"),
@@ -283,6 +291,17 @@ def swatch(n, hx, rgb, cmyk, kind):
             f'<b>{n}</b><dl><dt>HEX</dt><dd>{hx}</dd><dt>RGB</dt><dd>{rgb}</dd><dt>CMYK</dt><dd>{cmyk}</dd></dl></div>')
 
 
+page(ttl("Палитра", "Синий — основной цвет стиля, фон всех носителей. Коралловый — графика и акцентные слова.")
+     + stage('<div class="palette">' + swatch(*palette[0]) + swatch(*palette[1])
+             + '<div class="sw-col">' + "".join(swatch(*p) for p in palette[2:]) + "</div></div>"), "light", "Цвет и шрифт")
+
+weights = [(800, "ExtraBold", "Слоганы на носителях"), (700, "Bold", "Сообщения от министерства"),
+           (500, "Medium", "Подзаголовки и текст"), (400, "Regular", "Сноски, город в логотипе")]
+page(ttl("TT Norms Pro", "Фирменный шрифт — геометрический гротеск: чётко читается с расстояния и звучит современно.")
+     + stage('<div class="type"><div class="type-aa">Аа</div><div class="type-w">'
+             + "".join(f'<div class="w"><span style="font-weight:{w}">Строим будущее</span><em><b>{n}</b>{T(d)}</em></div>' for w, n, d in weights)
+             + "</div></div>"), "light", "Цвет и шрифт")
+
 
 def hierarchy():
     w, h = 1120, 654
@@ -291,9 +310,19 @@ def hierarchy():
     b += plate(40, 40, 240)
     b += head(640, 250, ["Строим", "будущее"], 104, anchor="middle", lh=0.98)
     b += head(640, 436, [[("Здесь ", "#fff"), ("будет", C["coral"])]], 60, anchor="middle")
-    b += head(640, 612, [("Парк", C["coral"])], 200, anchor="middle")
+    b += head(640, 612, [("Школа", C["coral"])], 176, anchor="middle")
     return art(w, h, b, bg=C["blue"], t=t, r=20)
 
+
+page(ttl("Иерархия на носителе")
+     + stage(f'<div class="split"><figure class="fit">{hierarchy()}</figure>' + spec([
+         ("Слоган", "ExtraBold, капс, белый. Центральная выключка."),
+         ("Связка", "Тот же шрифт мельче. Одно слово можно выделить коралловым."),
+         ("Объект", "Самое крупное слово — что здесь будет. Коралловый."),
+         ("Сообщение", "Bold, строчными — от имени министерства.")]) + "</div>"), "light", "Цвет и шрифт")
+
+# ── 01 Идея
+SEC["03"] = divider("03", "Идея", full_rings(2050, 900, [330, 522, 714], [[(150, 270)], [(160, 205), (224, 262)], [(172, 238)]]))
 
 
 def hero():
@@ -306,6 +335,8 @@ def hero():
     b += bubble(96, 640, 560, ["Скоро здесь будет новая школа", "на 1100 мест — с бассейном", "и стадионом!"], 32)
     return art(1920, 1080, b, bg=C["blue"], t=t, cls="art fill")
 
+
+page(f'<div class="bg">{hero()}</div>', "blue bleed", "Идея")
 
 
 def plan_map():
@@ -337,15 +368,19 @@ def plan_map():
              f'<path d="M-20 520 C 220 470, 420 560, 660 505 S 1100 470, 1400 520" fill="none" stroke="url(#rv)" stroke-width="34" stroke-linecap="round"/>')
     b = f'<g class="map">{"".join(blocks)}{river}</g>'
     t = 30
-    b += rings(cx, cy, [130, 250, 370], t, [[(0, 360)], [(200, 330), (350, 520)], [(160, 290), (310, 470)]], C["coral"])
+    b += rings(cx, cy, [130, 250, 370, 490], t, [[(0, 360)], [(200, 330), (350, 520)], [(160, 290), (310, 470)], [(190, 330), (345, 440)]], C["coral"])
     b += f'<g class="ko"><circle cx="{cx}" cy="{cy}" r="16" fill="#fff"/></g>'
     b += para(cx + 34, cy + 9, ["Новая школа"], 26, weight=700)
-    # справа — те же радиусы вокруг сообщения: точка на карте становится носителем
-    b += rings(1330, 327, [250, 366], t, [[(150, 225), (300, 395)], [(165, 210), (232, 285), (318, 380)]], C["coral"])
-    b += head(1330, 300, ["Здесь будет"], 50, anchor="middle")
-    b += head(1330, 400, [("школа", C["coral"])], 104, anchor="middle")
     return art(w, h, b, bg=C["blue"], t=t, r=20)
 
+
+page(ttl("Графика выросла из мастер-плана",
+         "На карте радиусы показывают, кому станет ближе новая школа, поликлиника или парк. Мы сделали их фирменной графикой.")
+     + stage(f'<figure class="fit anim">{plan_map()}</figure>'), "light", "Идея")
+
+
+# ── 04 Графика
+SEC["04"] = divider("04", "Фирменная графика", full_rings(1980, 1180, [330, 522, 714], [[(184, 262)], [(190, 226), (242, 272)], [(196, 250)]]))
 
 
 def step(n):
@@ -365,6 +400,11 @@ def step(n):
     return art(w, h, b, bg=C["blue"], t=t, r=20)
 
 
+page(ttl("Как устроена графика", "Радиусы расходятся от места, где строится объект. Кольца разорваны — город строится. В центре — сообщение.")
+     + stage('<div class="three anim">' + "".join(f'<figure>{step(i)}{cap(c)}</figure>' for i, c in
+                                                 [(1, "Радиусы от точки «здесь»"), (2, "Кольца одной толщины"), (3, "Разрывы и сообщение в центре")]) + "</div>"),
+     "light", "Фирменная графика")
+
 
 def text_case(cut):
     w, h = 848, 590
@@ -374,6 +414,10 @@ def text_case(cut):
     b += head(424, 452, [("здесь", C["coral"])], 110, anchor="middle", ko=cut)
     return art(w, h, b, bg=C["blue"], t=t, r=20)
 
+
+page(ttl("Графика и текст", "Кольцо прерывается перед буквами. Сообщение читается целиком, графика его обнимает.")
+     + stage(f'<div class="two"><figure class="ok">{text_case(True)}{cap("Так")}</figure><figure class="no">{text_case(False)}{cap("Не так")}</figure></div>'),
+     "light", "Фирменная графика")
 
 
 def bad(kind):
@@ -390,6 +434,14 @@ def bad(kind):
     return art(w, h, b, t=t, r=20)
 
 
+page(ttl("Так нельзя", "Кольца не замыкаются, не меняют толщину и не ложатся на фотографию.")
+     + stage('<div class="three">' + "".join(f'<figure class="no">{bad(k)}{cap(n)}</figure>' for k, n in
+                                            [("target", "Сплошные кольца — мишень"), ("thick", "Разная толщина"), ("photo", "Кольца поверх фотографии")]) + "</div>"),
+     "light", "Фирменная графика")
+
+# ── 05 Коммуникация
+SEC["05"] = divider("05", "Коммуникация", full_rings(2160, 300, [330, 522, 714], [[(112, 222)], [(118, 160), (178, 226)], [(128, 206)]]))
+
 
 def cityformat_stack():
     w, h = 400, 600
@@ -405,6 +457,14 @@ def cityformat_stack():
     return art(w, h, b, bg=C["blue"], t=t)
 
 
+page(ttl("Принципы вёрстки")
+     + stage(f'<div class="split narrow"><figure class="fit">{cityformat_stack()}</figure>' + spec([
+         ("Крупный капс по центру", "Слоган набирается ExtraBold и выключается по центру — как вывеска."),
+         ("Ритм слогана", "Слоган повторяется в вариантах: активная строка белая, остальные — приглушённым синим."),
+         ("Трапеции", "Плашки со скошенными краями: коралловая — для акцента, белая — для логотипа."),
+         ("Одно акцентное слово", "Коралловым выделяем то, что здесь будет: школа, парк, больница.")]) + "</div>"),
+     "light", "Коммуникация")
+
 
 def bubble_anatomy():
     w, h = 1120, 654
@@ -414,6 +474,16 @@ def bubble_anatomy():
     return art(w, h, b, bg=C["blue"], t=t, r=20)
 
 
+page(ttl("Сообщение от министерства", "Министерство говорит с жителями как в личной переписке: тепло, просто и о пользе для человека.")
+     + stage(f'<div class="split"><figure class="fit">{bubble_anatomy()}</figure>' + spec([
+         ("Как в мессенджере", "Белое сообщение и аватарка — цветной герб Минвостокразвития в белом круге."),
+         ("О пользе для человека", "Что изменится для жителя: врачи в новой больнице, бассейн рядом с домом."),
+         ("Коротко и на «вы»", "До пяти строк простыми словами. Bold, синий цвет.")]) + "</div>"),
+     "light", "Коммуникация")
+
+# ── 06 Носители
+SEC["06"] = divider("06", "Носители", full_rings(2000, -80, [330, 522, 714], [[(94, 176)], [(98, 136), (152, 180)], [(102, 164)]]))
+
 
 def billboard():
     w, h = 600, 300
@@ -422,15 +492,20 @@ def billboard():
     b += plate(18, 18, 150, city="Петропавловск-Камчатский")
     b += head(400, 92, ["Строим", "будущее"], 48, anchor="middle", lh=0.98)
     b += head(400, 182, [[("Здесь ", "#fff"), ("будет", C["coral"])]], 30, anchor="middle")
-    b += head(392, 262, [("Больница", C["coral"])], 54, anchor="middle")
+    b += head(400, 270, [("Школа", C["coral"])], 84, anchor="middle")
     return art(w, h, b, bg=C["blue"], t=t)
 
+
+page(ttl("Информационный щит 6 × 3 м")
+     + stage(f'<div class="carrier"><figure class="fit">{billboard()}</figure>'
+             + notes("Сообщение — в центре радиусов.", "Объект — самое крупное слово.", "Логотип с городом — на плашке слева сверху.") + "</div>"),
+     "light", "Носители")
 
 
 def city_photo():
     w, h = 400, 600
     t = 20
-    b = f'<image href="{PHOTO}photostyle-composition-7.webp" width="{w}" height="360" preserveAspectRatio="xMidYMid slice"/>'
+    b = f'<image href="{PHOTO}photostyle-composition-6.webp" width="{w}" height="360" preserveAspectRatio="xMidYMid slice"/>'
     b += f'<rect y="360" width="{w}" height="240" fill="{C["blue"]}"/>'
     b += f'<clipPath id="cpb"><rect y="360" width="{w}" height="240"/></clipPath>'
     b += f'<g clip-path="url(#cpb)">{rings(230, 660, [130, 210, 290], t, [[(190, 300)], [(196, 250), (268, 340)], [(200, 262), (290, 345)]], C["coral"])}</g>'
@@ -439,11 +514,16 @@ def city_photo():
     return art(w, h, b, t=t)
 
 
+page(ttl("Ситиформаты 1,2 × 1,8 м")
+     + stage(f'<div class="carrier"><div class="pair"><figure class="fit">{cityformat_stack()}</figure><figure class="fit">{city_photo()}</figure></div>'
+             + notes("Слоган в ритме повторов — для серии на одной улице.", "Фото объекта и сообщение от министерства.", "Кольца — только на синем, фото без графики.") + "</div>"),
+     "light", "Носители")
+
 
 def fence():
     w, h = 1500, 260
     t = 13
-    b = rings(860, 130, [215, 300], t, [[(140, 220), (320, 400)], [(150, 205), (335, 385)]], C["coral"])
+    b = rings(860, 140, [190, 260], t, [[(150, 215), (325, 390)], [(160, 200), (338, 372)]], C["coral"])
     b += rings(330, 420, [230, 300, 370], t, [[(250, 320)], [(232, 270), (290, 330)], [(240, 300)]], C["coral"])
     b += rings(1380, -60, [160, 230], t, [[(95, 170)], [(100, 135), (150, 182)]], C["coral"])
     b += bubble(60, 34, 430, ["Ваше здоровье бесценно!", "", "Сохранить его помогут врачи", "в новой больнице. Уже строим её для вас."], 17)
@@ -454,6 +534,33 @@ def fence():
     return art(w, h, b, bg=C["blue"], t=t)
 
 
+page(ttl("Баннер на ограждение", "Длинный формат собирается асимметрично: сообщение, слоган в центре колец, логотип. Группы колец — разного размера.")
+     + stage(f'<div class="carrier col"><figure class="fit">{fence()}</figure>'
+             + notes("Высота 2–4 м, модуль считается от высоты.", "На длинных ограждениях макет повторяется со сменой сообщений.") + "</div>"),
+     "light", "Носители")
+
+
+def post_sq():
+    w = h = 1080
+    t = 54
+    b = rings(560, 600, [300, 452, 604], t, [[(160, 220), (300, 350)], [(170, 210), (228, 268), (318, 352)], [(186, 240), (290, 330)]], C["coral"])
+    b += plate(60, 60, 400, city="Хабаровск")
+    b += head(560, 560, [[("Здесь ", "#fff"), ("будет", C["coral"])]], 76, anchor="middle")
+    b += head(560, 700, [("набережная", C["coral"])], 128, anchor="middle")
+    return art(w, h, b, bg=C["blue"], t=t)
+
+
+def story():
+    w, h = 1080, 1920
+    t = 54
+    b = f'<image href="{PHOTO}photostyle-composition-6.webp" width="1080" height="1080" preserveAspectRatio="xMidYMid slice"/>'
+    b += f'<rect y="1080" width="1080" height="840" fill="{C["blue"]}"/><clipPath id="cps"><rect y="1080" width="1080" height="840"/></clipPath>'
+    b += f'<g clip-path="url(#cps)">{rings(540, 1500, [330, 482, 634], t, [[(150, 230), (300, 380)], [(170, 215), (235, 300), (320, 365)], [(190, 250), (290, 340)]], C["coral"])}</g>'
+    b += bubble(54, 890, 780, ["Скоро здесь будет новый", "колледж — с мастерскими", "и общежитием!"], 46)
+    b += head(540, 1450, ["Строим", ("будущее", C["coral"]), "здесь"], 96, anchor="middle")
+    b += plate(540, 1700, 330, city="Хабаровск", anchor="middle")
+    return art(w, h, b, t=t)
+
 
 def passport():
     w, h = 800, 600
@@ -463,7 +570,7 @@ def passport():
     b += plate(30, 30, 230)
     b += para(330, 72, ["ПАСПОРТ ОБЪЕКТА"], 26, weight=800)
     b += para(330, 110, ["Школа на 1100 мест"], 22, weight=500)
-    b += f'<image href="{PHOTO}photostyle-composition-6.webp" x="30" y="180" width="350" height="300" preserveAspectRatio="xMidYMid slice"/>'
+    b += f'<image href="{PHOTO}photostyle-composition-12.webp" x="30" y="180" width="350" height="300" preserveAspectRatio="xMidYMid slice"/>'
     rows = [("Адрес", "ул. Ленинградская, 74"), ("Заказчик", "Администрация города"), ("Подрядчик", "ООО «Строитель»"),
             ("Начало работ", "март 2026"), ("Окончание", "август 2027"), ("Ответственный", "+7 (4152) 00-00-00")]
     y = 196
@@ -476,6 +583,11 @@ def passport():
     return art(w, h, b, t=t)
 
 
+page(ttl("Паспорт объекта")
+     + stage(f'<div class="carrier"><figure class="fit bordered">{passport()}</figure>'
+             + notes("Обязательный щит на стройке: шапка в фирменном стиле, данные — графитом на белом.", "Состав полей — по требованиям региона. Данные на макете условные.") + "</div>"),
+     "light", "Носители")
+
 
 def slide_title():
     w, h = 1920, 1080
@@ -485,7 +597,6 @@ def slide_title():
     b += head(96, 560, ["Что изменится", "в городе", ("к 2028 году", C["coral"])], 118)
     b += para(96, 984, ["Встреча с жителями  |  Октябрь 2026"], 30, color="#fff")
     return art(w, h, b, bg=C["blue"], t=t)
-
 
 
 def slide_content():
@@ -499,7 +610,7 @@ def slide_content():
     top, bot = 300, 900
     pw = 840
     b += (f'<clipPath id="scp"><rect x="{m}" y="{top}" width="{pw}" height="{bot - top}" rx="16"/></clipPath>'
-          f'<image href="{PHOTO}photostyle-composition-7.webp" x="{m}" y="{top}" width="{pw}" height="{bot - top}" preserveAspectRatio="xMidYMid slice" clip-path="url(#scp)"/>')
+          f'<image href="{PHOTO}photostyle-composition-6.webp" x="{m}" y="{top}" width="{pw}" height="{bot - top}" preserveAspectRatio="xMidYMid slice" clip-path="url(#scp)"/>')
     x2 = m + pw + g * 2
     rw = w - m - x2
     rows = [("1100", "мест для учеников"), ("2027", "год открытия"), ("3", "спортзала и бассейн")]
@@ -519,115 +630,20 @@ def slide_content():
     return art(w, h, b, t=t)
 
 
+page(ttl("Презентация")
+     + stage(f'<div class="pair wide"><figure class="fit">{slide_title()}</figure><figure class="fit bordered">{slide_content()}</figure></div>'),
+     "light", "Носители")
 
-
-CITIES = ["Петропавловск-Камчатский", "Владивосток", "Южно-Сахалинск", "Магадан", "Хабаровск", "Анадырь", "Николаевск-на-Амуре"]
-weights = [(800, "ExtraBold", "Слоганы на носителях"), (700, "Bold", "Сообщения от министерства"),
-           (500, "Medium", "Подзаголовки и текст"), (400, "Regular", "Сноски, город в логотипе")]
-
-# ── Вступление
-page(cover("Фирменный стиль", "Концепция оформления строящихся объектов и коммуникации с жителями", '<span>Версия 1.0</span><span>2026</span>'), "blue cover")
-TOC_AT = len(pages)
-page("", "light", "Содержание")  # заполняется в конце
-page(statement(), "light", "Задача")
-page(f'<div class="bg">{hero()}</div>', "blue bleed", "Идея")
-
-# ── 01 Фирменный стиль
-SEC["01"] = divider("01", "Фирменный стиль", full_rings(2000, -40, [330, 522, 714], [[(96, 176)], [(100, 142), (160, 186)], [(106, 170)]]))
-S1 = "Фирменный стиль"
-page(ttl("Логотип")
-     + stage(f'<div class="logo-solo"><img src="{LOGO}mp-coral.svg" alt="Логотип «Мастер-планы»"></div>', "page-center"), "light", S1)
-loc_big = art(1300, 1300 / LOGO_R + 20, logo_img(0, 10, 1300, "coral", CITIES, city_cls="city cyc"), cls="art loc", extra=f'style="--n:{len(CITIES)}"')
-loc_small = "".join(f'<figure>{art(520, 520 / LOGO_R + 8, logo_img(0, 4, 520, "coral", c))}</figure>' for c in ["Владивосток", "Южно-Сахалинск", "Николаевск-на-Амуре"])
-page(ttl("Один стиль для разных городов", "Название города стоит над названием проекта и выровнено по его правому краю. Шаблон один для любого города.")
-     + stage(f'<div class="loc"><figure class="loc-main anim">{loc_big}</figure><div class="loc-row">{loc_small}</div></div>'), "light", S1)
-page(ttl("Логотип на цвете и фото", "На синем фоне и фотографиях логотип ставится на белую подложку. Её поля равны охранному полю.")
-     + stage(f'<div class="two"><figure class="fit">{plate_scene()}</figure><figure class="fit">{plate_scene(True)}</figure></div>'), "light", S1)
-page(ttl("Палитра", "Синий — основной фон носителей. Коралловый — графика и акцентные слова.")
-     + stage('<div class="palette">' + swatch(*palette[0]) + swatch(*palette[1])
-             + '<div class="sw-col">' + "".join(swatch(*p) for p in palette[2:]) + "</div></div>"), "light", S1)
-page(ttl("TT Norms Pro", "Фирменный шрифт — геометрический гротеск: чётко читается с расстояния и звучит современно.")
-     + stage('<div class="type"><div class="type-aa">Аа</div><div class="type-w">'
-             + "".join(f'<div class="w"><span style="font-weight:{w}">Строим будущее</span><em><b>{n}</b>{T(d)}</em></div>' for w, n, d in weights)
-             + "</div></div>"), "light", S1)
-page(ttl("Иерархия на носителе")
-     + stage(f'<div class="split"><figure class="fit">{hierarchy()}</figure>' + spec([
-         ("Слоган", "ExtraBold, капс, белый. Центральная выключка."),
-         ("Связка", "Тот же шрифт мельче. Одно слово можно выделить коралловым."),
-         ("Объект", "Самое крупное слово — что здесь будет. Коралловый."),
-         ("Сообщение", "Bold, строчными — от имени министерства.")]) + "</div>"), "light", S1)
-
-# ── 02 Графика и сообщения
-SEC["02"] = divider("02", "Графика и сообщения", full_rings(1980, 1180, [330, 522, 714], [[(184, 262)], [(190, 226), (242, 272)], [(196, 250)]]))
-S2 = "Графика и сообщения"
-page(ttl("Графика выросла из мастер-плана",
-         "На карте радиусы показывают, кому станет ближе новая школа, поликлиника или парк. На носителе в центре радиусов — то, что появится рядом.")
-     + stage(f'<figure class="fit anim">{plan_map()}</figure>'), "light", S2)
-page(ttl("Как устроена графика", "Радиусы расходятся от места, где строится объект. Кольца разорваны — город строится. В центре — сообщение.")
-     + stage('<div class="three anim">' + "".join(f'<figure>{step(i)}{cap(c)}</figure>' for i, c in
-                                                 [(1, "Радиусы от точки «здесь»"), (2, "Кольца одной толщины"), (3, "Разрывы и сообщение в центре")]) + "</div>"), "light", S2)
-page(ttl("Принципы вёрстки")
-     + stage(f'<div class="split narrow"><figure class="fit">{cityformat_stack()}</figure>' + spec2([
-         ("Крупный капс по центру", "Слоган набирается ExtraBold и выключается по центру — как вывеска."),
-         ("Ритм слогана", "Слоган повторяется в вариантах: активная строка белая, остальные — приглушённым синим."),
-         ("Трапеции", "Плашки со скошенными краями: коралловая — для акцента, белая — для логотипа."),
-         ("Одно акцентное слово", "Коралловым выделяем то, что здесь будет: школа, парк, больница.")]) + "</div>"), "light", S2)
-page(ttl("Говорим о том, что важно жителям", "Министерство говорит с жителями как в личной переписке: тепло, просто и о пользе для человека.")
-     + stage(f'<div class="split"><figure class="fit">{bubble_anatomy()}</figure>' + spec([
-         ("Как в мессенджере", "Белое сообщение и аватарка — цветной герб Минвостокразвития в белом круге."),
-         ("О пользе для человека", "Что изменится для жителя: врачи в новой больнице, бассейн рядом с домом."),
-         ("Коротко и на «вы»", "До пяти строк простыми словами. Bold, синий цвет.")]) + "</div>"), "light", S2)
-page(ttl("Одна система — разные объекты", "Меняется только то, что появится рядом. Цвет, радиусы и логотип остаются прежними.")
-     + stage('<div class="three">' + "".join(f'<figure>{series(w)}</figure>' for w in ["Школа", "Больница", "Набережная"]) + "</div>"), "light", S2)
-
-# ── 03 Носители
-SEC["03"] = divider("03", "Носители", full_rings(2000, -80, [330, 522, 714], [[(94, 176)], [(98, 136), (152, 180)], [(102, 164)]]))
-S3 = "Носители"
-page(ttl("Информационный щит 6 × 3 м")
-     + stage(f'<div class="carrier"><figure class="fit">{billboard()}</figure>'
-             + notes("Сообщение — в центре радиусов.", "Объект — самое крупное слово.", "Логотип с городом — на плашке слева сверху.") + "</div>"), "light", S3)
-page(ttl("Ситиформаты 1,2 × 1,8 м")
-     + stage(f'<div class="carrier"><div class="pair"><figure class="fit">{cityformat_stack()}</figure><figure class="fit">{city_photo()}</figure></div>'
-             + notes("Слоган в ритме повторов — для серии на одной улице.", "Фото объекта и сообщение от министерства.", "Кольца — только на синем, фото без графики.") + "</div>"), "light", S3)
-page(ttl("Баннер на ограждение", "Длинный формат собирается асимметрично: сообщение, слоган в центре колец, логотип.")
-     + stage(f'<div class="carrier col"><figure class="fit">{fence()}</figure>'
-             + '<div class="fence-row"><figure class="fence-photo"><img src="master-plans/mockups/concept-fence.webp" alt=""></figure>'
-             + notes("Высота 2–4 м, модуль считается от высоты.", "На длинных ограждениях макет повторяется со сменой сообщений.", "Визуализация в городе — предварительная.") + "</div></div>"), "light", S3)
-page(ttl("Паспорт объекта")
-     + stage(f'<div class="carrier"><figure class="fit bordered">{passport()}</figure>'
-             + notes("Обязательный щит на стройке: шапка в фирменном стиле, данные — графитом на белом.", "Состав полей — по требованиям региона. Данные на макете условные.") + "</div>"), "light", S3)
-page(ttl("Презентация для встреч с жителями")
-     + stage(f'<div class="pres"><figure class="fit bordered">{slide_content()}</figure><figure class="fit">{slide_title()}</figure></div>'), "light", S3)
-page(ttl("Автобус", "Возможное развитие системы: брендирование городского транспорта.")
-     + stage(f'<figure class="photo-full"><img src="master-plans/mockups/concept-bus.webp" alt=""></figure>'), "light", S3)
-page(ttl("Одна система")
-     + stage('<div class="system">' + spec([
-         ("Узнаваемость", "Один синий, коралловые радиусы и логотип на белой подложке — на любой стройке."),
-         ("Адаптация к городу", "Название города в логотипе, свои объекты и свои сообщения."),
-         ("Понятные сообщения", "Что появится, где и что это даст жителю.")])
-             + f'<div class="sys-grid"><div class="sys-row r1"><figure>{billboard()}</figure><figure>{cityformat_stack()}</figure><figure>{city_photo()}</figure></div>'
-             + f'<div class="sys-row r2"><figure class="bordered">{passport()}</figure><figure>{slide_title()}</figure></div></div></div>'),
-     "light", S3)
-
-# ── Справка
-SEC["С"] = len(pages) + 1
-page(ttl("Охранное поле", "Свободное поле вокруг логотипа равно высоте плашки «настоящее будущее».")
-     + stage(f'<figure class="fit anim">{clear_space()}</figure>'), "light", "Справка")
-page(ttl("Цветные версии логотипа")
-     + stage('<div class="versions">' + "".join(
-         f'<figure><div class="v-pre"><img src="{LOGO}mp-{c}.svg" alt=""></div>{cap(n)}</figure>'
-         for c, n in [("coral", "Основная версия"), ("blue", "Дополнительная версия"), ("sky", "Дополнительная версия")]) + "</div>"), "light", "Справка")
-page(ttl("Графика и текст", "Кольцо прерывается перед буквами. Сообщение читается целиком, графика его обнимает.")
-     + stage(f'<div class="two"><figure class="ok">{text_case(True)}{cap("Так")}</figure><figure class="no">{text_case(False)}{cap("Не так")}</figure></div>'), "light", "Справка")
-page(ttl("Так нельзя", "Кольца не замыкаются, не меняют толщину и не ложатся на фотографию.")
-     + stage('<div class="three">' + "".join(f'<figure class="no">{bad(k)}{cap(n)}</figure>' for k, n in
-                                            [("target", "Сплошные кольца — мишень"), ("thick", "Разная толщина"), ("photo", "Кольца поверх фотографии")]) + "</div>"), "light", "Справка")
+page(ttl("Баннер у стройки")
+     + stage(f'<figure class="photo-full"><img src="master-plans/mockups/concept-fence.webp" alt=""></figure>'), "light", "Носители")
+page(ttl("Автобус")
+     + stage(f'<figure class="photo-full"><img src="master-plans/mockups/concept-bus.webp" alt=""></figure>'), "light", "Носители")
 
 page(cover("Строим будущее здесь"), "blue cover")
 
-toc = [("01", "Фирменный стиль"), ("02", "Графика и сообщения"), ("03", "Носители"), ("С", "Справка")]
+toc = [("01", "Логотип"), ("02", "Цвет и шрифт"), ("03", "Идея"), ("04", "Фирменная графика"), ("05", "Коммуникация"), ("06", "Носители")]
 toc_html = ttl("Содержание") + stage('<ol class="toc">' + "".join(
-    f'<li><a href="#p{SEC[n]}"><span class="toc-n">{n if n != "С" else ""}</span><span class="toc-t">{t}</span><span class="toc-p">{SEC[n]:02d}</span></a></li>'
+    f'<li><a href="#p{SEC[n]}"><span class="toc-n">{n}</span><span class="toc-t">{t}</span><span class="toc-p">{SEC[n]:02d}</span></a></li>'
     for n, t in toc) + "</ol>")
 pages[TOC_AT] = pages[TOC_AT].replace("</header></section>", "</header>" + toc_html + "</section>")
 
