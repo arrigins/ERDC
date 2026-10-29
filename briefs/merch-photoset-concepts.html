@@ -1,0 +1,362 @@
+<title>Нейрофотосет мерча КРДВ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column 760px; concepts are full-width bands, each opens with its light palette strip */
+:root {
+  --paper: #f4f6f9;
+  --card: #ffffff;
+  --ink: #0b1630;
+  --muted: #5b6475;
+  --line: #dde2ea;
+  --blue: #0056a2;
+  --red: #de2327;
+  --band: #0b1630;
+  --band-fg: #eef2f8;
+  --sans: "Golos Text", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0c1220; --card: #141c2e; --ink: #e8edf5; --muted: #9aa5b8; --line: #263149;
+    --blue: #5aa2ec; --red: #ff5a5d; --band: #060a14; --band-fg: #eef2f8; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0c1220; --card: #141c2e; --ink: #e8edf5; --muted: #9aa5b8; --line: #263149;
+  --blue: #5aa2ec; --red: #ff5a5d; --band: #060a14; --band-fg: #eef2f8; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font: 400 17px/1.55 var(--sans); }
+.wrap { max-width: 820px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(34px, 6vw, 56px); line-height: 1.04; font-weight: 600; }
+h2 { font-size: clamp(26px, 3.6vw, 36px); line-height: 1.12; font-weight: 600; }
+h3 { font-size: 19px; line-height: 1.3; font-weight: 600; }
+p { margin: 0; }
+a { color: var(--blue); text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.label { font: 500 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.lead { font-size: clamp(19px, 2.3vw, 22px); line-height: 1.45; }
+.stack { display: grid; gap: 16px; }
+
+header.top { background: var(--band); color: var(--band-fg); padding-block: 56px 48px; }
+header.top .label { color: #8fa0bd; }
+header.top .stack { gap: 20px; }
+header.top .lead { color: #c9d3e3; max-width: 36em; }
+.sun { display: inline-block; width: 0.62em; height: 0.62em; border-radius: 50%; background: #de2327; vertical-align: 0.06em; margin-left: 0.12em; }
+nav.jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+nav.jump a { color: var(--band-fg); text-decoration: none; border: 1px solid #2b3a5c; border-radius: 999px; padding: 6px 14px; font-size: 14px; }
+nav.jump a:hover { border-color: #8fa0bd; }
+
+section { padding-block: 56px; border-bottom: 1px solid var(--line); }
+section > .wrap { display: grid; gap: 28px; }
+
+.refs { display: grid; gap: 12px; }
+.ref { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; display: grid; gap: 6px; }
+.ref p { color: var(--muted); font-size: 15.5px; }
+.ref p b { color: var(--ink); font-weight: 500; }
+
+.insight { border-left: 3px solid var(--red); padding-left: 18px; font-size: 20px; line-height: 1.45; }
+
+.cast { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.person { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: grid; gap: 4px; min-width: 0; }
+.person .who { font-weight: 600; }
+.person p { color: var(--muted); font-size: 15px; }
+
+ul.dots { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+ul.dots li { position: relative; padding-left: 18px; }
+ul.dots li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+ul.dots.neg li::before { background: var(--red); }
+
+.concept-head { display: grid; gap: 14px; }
+.light { display: flex; height: 64px; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
+.light span { flex: 1; display: flex; align-items: flex-end; padding: 6px 8px; font: 500 10.5px/1.2 var(--mono); letter-spacing: 0.04em; }
+.meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px 24px; }
+.meta div { display: grid; gap: 4px; min-width: 0; }
+.meta p { font-size: 15.5px; }
+
+.shots { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 15px; }
+th, td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+th { font: 500 11.5px/1.3 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 500; }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 500; width: 26%; }
+td .q { color: var(--muted); font-weight: 400; display: block; font-size: 13.5px; }
+
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.box { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; display: grid; gap: 10px; min-width: 0; }
+
+.prompt { font: 400 13.5px/1.55 var(--mono); background: var(--card); border: 1px dashed var(--line); border-radius: 12px; padding: 14px 16px; color: var(--muted); overflow-wrap: anywhere; }
+
+.verdict { background: var(--band); color: var(--band-fg); border-radius: 18px; padding: 28px; display: grid; gap: 14px; }
+.verdict .label { color: #8fa0bd; }
+.verdict p { color: #d3dbe8; }
+.verdict b { color: #fff; font-weight: 600; }
+
+ol.steps { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
+footer { padding-block: 40px 64px; color: var(--muted); font-size: 14px; }
+@media (max-width: 520px) { body { font-size: 16px; } section { padding-block: 40px; } }
+</style>
+
+<header class="top">
+  <div class="wrap stack">
+    <span class="label">Мерч КРДВ · нейрофотосет · концепции · 29.10.2026</span>
+    <h1>Три концепции нейрофотосета для мерча<span class="sun" aria-hidden="true"></span></h1>
+    <p class="lead">Что я посмотрела, кто наш герой и три способа снять вещи так, чтобы это было стильно, честно и по-нашему. В конце рекомендация и следующий шаг.</p>
+    <nav class="jump" aria-label="Разделы">
+      <a href="#refs">Референсы</a>
+      <a href="#hero">Герой</a>
+      <a href="#a">А. Встречаем день первыми</a>
+      <a href="#b">Б. В любую погоду</a>
+      <a href="#c">В. Своё хозяйство</a>
+      <a href="#next">Рекомендация</a>
+    </nav>
+  </div>
+</header>
+
+<section id="refs">
+  <div class="wrap">
+    <div class="stack">
+      <span class="label">Что я посмотрела</span>
+      <h2>Сильные кампании держатся на одной честной ситуации, а не на красивом фоне</h2>
+      <p>У всех удачных примеров одно общее: вещь встроена в настоящую жизнь конкретного места, а логотип вторичен. Ниже то, что берём, и то, что не берём.</p>
+    </div>
+    <div class="refs">
+      <div class="ref">
+        <h3><a href="https://www.theimpression.com/saint-laurent-an-ordinary-day-2025-ad-campaign-review/" target="_blank" rel="noopener">Saint Laurent × Мартин Парр, «An Ordinary Day», 2025</a></h3>
+        <p>Модная вещь в пригородном саду: чашки в цветочек, торт, собака в очках. Прямая вспышка, лёгкая ирония. <b>Берём:</b> смелость показывать обыденное. <b>Не берём:</b> британский китч.</p>
+      </div>
+      <div class="ref">
+        <h3><a href="https://www.thefashionisto.com/?p=799550" target="_blank" rel="noopener">Jil Sander: дорога по Шотландии (Найджел Шафран), Японии, Сицилии</a></h3>
+        <p>Тихие кадры в пути, место говорит само за себя, никаких открыток. Линия Jil Sander+ снята как разговор одежды с природой. <b>Берём:</b> спокойствие, воздух, свет. Съёмку «в огороде» я не нашла. Пришли ссылку, если она у тебя есть. Ближе всего к ней Парр и Jacquemus.</p>
+      </div>
+      <div class="ref">
+        <h3><a href="https://www.pap-magazine.com/en/article/jacquemus-le-paysan-campaign-rural-france-roots" target="_blank" rel="noopener">Jacquemus, «Le Paysan», 2026</a> и <a href="https://lofficielusa.com/fashion/jacquemus-shoots-grandmother-in-latest-campaign-spring-summer-2020" target="_blank" rel="noopener">бабушка как лицо бренда, 2020</a></h3>
+        <p>Крестьянские корни основателя стали главной эстетикой бренда. <b>Берём:</b> не стесняться своего: огород, дачу и рыбалку подавать как стиль, а не как бедность.</p>
+      </div>
+      <div class="ref">
+        <h3><a href="https://www.alpinetrek.co.uk/blog/66north-functional-apparel/" target="_blank" rel="noopener">66°North, Исландия</a></h3>
+        <p>Бренд вырос из одежды для рыбаков. В кампаниях снимает обычных людей, например пожилого мужчину в старой куртке поверх рубашки с галстуком. <b>Берём:</b> вещь, проверенную работой и погодой.</p>
+      </div>
+      <div class="ref">
+        <h3><a href="https://nssmag.com/en/fashion/27273/snow-peak-fw21" target="_blank" rel="noopener">Snow Peak FW21</a> и <a href="https://br.adforum.com/talent/81814228-toby-dye/work/34595305" target="_blank" rel="noopener">Шпицберген, Тоби Дай</a></h3>
+        <p>У Snow Peak художник с семьёй в родном снежном городе. На Шпицбергене снимали жителей Лонгйира без раскадровки. <b>Берём:</b> героя-жителя, а не туриста.</p>
+      </div>
+      <div class="ref">
+        <h3><a href="https://t.me/truemerch" target="_blank" rel="noopener">Канал true merch</a></h3>
+        <p>Мерч подают через жизненную ситуацию. Шарфы студии Lennarts &amp; De Bruijn — «холодное утро понедельника», брелок «превращает обувь в мерч». В подборке Befree в моде локальное и ручное: сибирское серебро, стёганые сумки с вышивкой, одежда из советских покрывал. <b>Берём:</b> у каждой вещи своя маленькая история.</p>
+      </div>
+      <div class="ref">
+        <h3><a href="https://ruward.ru/cases/9223/" target="_blank" rel="noopener">Mish × «Торги 223»</a> и <a href="https://www.candidstudios.net/?p=52969" target="_blank" rel="noopener">тренд на живую съёмку, 2025</a></h3>
+        <p>Корпоративный мерч делают как уличную моду, иначе его не носят. На фоне ИИ-контента главным стал «настоящий» кадр. <b>Для нас:</b> нейрофото должно выглядеть как плёнка и живая съёмка, а не как нейроглянец.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="hero">
+  <div class="wrap">
+    <div class="stack">
+      <span class="label">Кто наш герой</span>
+      <h2>Житель, а не покоритель</h2>
+      <p class="insight">Первая ассоциация — мужчина со стоковым лицом на фоне вулкана. Это взгляд туриста: Дальний Восток как экстрим и открытка. Наша аудитория здесь живёт, работает и строит. Наш герой — человек, для которого всё это обычный вторник.</p>
+    </div>
+    <div class="two">
+      <div class="box">
+        <h3>Какие они</h3>
+        <ul class="dots">
+          <li>Ядро 24–40 лет: специалисты, предприниматели, молодые семьи. Рядом старшее поколение как опора: наставник, мама, сосед.</li>
+          <li>Лица как на настоящем Дальнем Востоке: русские, корейцы Сахалина, саха, буряты, нанайцы, чукчи, татары. Без экзотизации: все в одной современной одежде.</li>
+          <li>Живая кожа: обветренные щёки, веснушки, руки с работы, пар изо рта. Обычные стрижки, без грима и глянца.</li>
+          <li>Мерч надет на своё: под рабочую куртку, поверх свитера, в слоях. Не «костюм бренда».</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>Что транслируем</h3>
+        <ul class="dots">
+          <li>Здесь живут по-настоящему, и это современная жизнь.</li>
+          <li>Будущее здесь не обещают, его делают каждый день. Это позиционирование «ближе к будущему», показанное через быт.</li>
+          <li>Спокойная уверенность, тепло и немного юмора. Как в тоне бренда: партнёр, а не ведомство.</li>
+        </ul>
+        <h3>Чего не будет</h3>
+        <ul class="dots neg">
+          <li>Улыбок в камеру, поз с поднятыми руками, HDR-пейзажей и съёмки с дрона «эпично».</li>
+          <li>Медведей, триколора, костюмов в снегу, ряженых «народных» образов.</li>
+          <li>Идеальной нейрокожи и пластиковой ткани.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="stack">
+      <span class="label">Сквозные персонажи (на все концепции)</span>
+      <p>Шесть постоянных героев. Каждый появляется в 2–3 кадрах, поэтому сет читается как история о людях, а не как набор картинок. Лица держим одинаковыми с помощью референса персонажа.</p>
+    </div>
+    <div class="cast">
+      <div class="person"><span class="who">Аня, 27</span><p>Технолог рыбного завода в Находке, резидент ТОР. Короткая стрижка, веснушки, практичная.</p></div>
+      <div class="person"><span class="who">Тимур, 31</span><p>Инженер порта во Владивостоке. Татарин, борода, спокойный юмор.</p></div>
+      <div class="person"><span class="who">Саина, 24</span><p>Разработчица из Якутска, саха. Пуховик оверсайз, наушники, ходит на рынок в −40.</p></div>
+      <div class="person"><span class="who">Семья Ким, 35 и 6</span><p>Корейцы Сахалина. Дом и теплица на дальневосточном гектаре.</p></div>
+      <div class="person"><span class="who">Марина, 38</span><p>Врач на Камчатке, переехала по программе, купила квартиру в ипотеку под 2%. Собранная, тёплая.</p></div>
+      <div class="person"><span class="who">Пётр Иванович, 64</span><p>Пасечник в Приморье, наставник. Морщины, кепка, руки рабочего человека.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="a">
+  <div class="wrap">
+    <div class="concept-head">
+      <span class="label">Концепция А · основной бренд</span>
+      <h2>Встречаем день первыми</h2>
+      <div class="light" aria-label="Свет и цвет концепции">
+        <span style="background:#1b2a4a;color:#cfd8ea">синий час</span>
+        <span style="background:#6f86b4;color:#fff">утренний туман</span>
+        <span style="background:#d9e6f5;color:#33405a">ледяной голубой</span>
+        <span style="background:#f3c4c2;color:#5a2a2a">первое солнце</span>
+        <span style="background:#de2327;color:#fff">красный</span>
+      </div>
+      <p class="lead">Дальний Восток первым в стране встречает утро. Весь сет — один час рассвета в разных точках региона: люди, которые начинают день раньше всех.</p>
+    </div>
+    <div class="meta">
+      <div><span class="label">Почему это наше</span><p>Это легенда цвета бренда (красный — солнце, встающее на востоке) и фраза с голубой футболки «Встречаем день первыми на Дальнем Востоке». Красный появляется сам: низкое солнце, сигнальный огонь, отблеск.</p></div>
+      <div><span class="label">Свет и камера</span><p>Плёнка 35 мм, мягкое зерно. Синий час переходит в первое солнце, контровой свет, много воздуха. Люди не позируют и смотрят мимо камеры.</p></div>
+      <div><span class="label">Референсы</span><p>Дороги Jil Sander (Шафран, Япония), свет Ринко Каваути, спокойный быт журнала Uniqlo LifeWear.</p></div>
+    </div>
+    <div class="shots">
+      <table>
+        <thead><tr><th>Вещь</th><th>Кадр</th><th>Где</th></tr></thead>
+        <tbody>
+          <tr><td>Футболка голубая<span class="q">«Встречаем день первыми»</span></td><td>Саина на пустой остановке, 5:40, пар изо рта, подходит первый автобус. Футболка под расстёгнутым пуховиком.</td><td>Якутск, конец сентября</td></tr>
+          <tr><td>Термокружка<span class="q">«Арктика закаляет, кофе согревает»</span></td><td>Смена в порту на рассвете. Кружка на перилах, за ней краны в розовом свете, рука в рабочей перчатке.</td><td>Мурманск, Кольский залив</td></tr>
+          <tr><td>Шоппер чёрный<span class="q">«Несу добро и развиваю Дальний Восток»</span></td><td>Тимур выходит из пекарни в 6 утра, в шоппере горячий хлеб, мост в тумане.</td><td>Владивосток, Золотой мост</td></tr>
+          <tr><td>Ветровка молочная</td><td>Аня на причале в утреннем тумане, проверяет улов на приёмке, планшет в руке.</td><td>Находка</td></tr>
+          <tr><td>Блокноты<span class="q">«План развития: здесь»</span></td><td>Стол у окна, первые лучи на страницах, чертёж дома, кружка, детский рисунок.</td><td>Сахалин, дом семьи Ким</td></tr>
+          <tr><td>Зонт<span class="q">«Работаем в любую погоду»</span></td><td>Марина идёт на утреннюю смену под мелким дождём, за спиной вулкан едва виден в облаках.</td><td>Петропавловск-Камчатский</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="two">
+      <div class="box"><h3>Сильное</h3><ul class="dots"><li>Прямо опирается на легенду бренда, годится для основного бренда и гайда.</li><li>Даёт единый узнаваемый свет на всю серию.</li><li>Подходит и вещам, и людям.</li></ul></div>
+      <div class="box"><h3>Риск</h3><ul class="dots neg"><li>Может скатиться в «красивое утро из стока». Держим настоящие детали: пятиэтажки, провода, сопки, рабочие перчатки, остановки.</li><li>Все кадры в одном свете — нужно разнообразие ракурсов и крупностей.</li></ul></div>
+    </div>
+    <div class="prompt">Пример запроса: 35mm film photo, Portra 400, blue hour turning into first sunrise, Yakutsk empty bus stop, 24-year-old Sakha woman in oversized down jacket open over a pale-blue t-shirt, breath visible, looking at the approaching bus, not at camera, soft grain, natural skin texture, Soviet apartment blocks in pink light, documentary, no gloss</div>
+  </div>
+</section>
+
+<section id="b">
+  <div class="wrap">
+    <div class="concept-head">
+      <span class="label">Концепция Б · мерч и соцсети</span>
+      <h2>Работаем в любую погоду</h2>
+      <div class="light" aria-label="Свет и цвет концепции">
+        <span style="background:#f2f5f8;color:#33405a">снег</span>
+        <span style="background:#1230f2;color:#fff">насыщенный синий</span>
+        <span style="background:#f08a24;color:#fff">фонарь</span>
+        <span style="background:#2a2f38;color:#dfe3ea">полярная ночь</span>
+        <span style="background:#de2327;color:#fff">красный</span>
+      </div>
+      <p class="lead">Климат здесь не драма, а соавтор. Каждая вещь в кадре решает настоящую погодную задачу, а герой снят с невозмутимым лицом. Смешная ситуация, а не смешные люди.</p>
+    </div>
+    <div class="meta">
+      <div><span class="label">Почему это наше</span><p>Фразы на мерче уже написаны с этой интонацией: «Работаем в любую погоду», «Арктика держит заряд». Концепция честно показывает, зачем нужна вещь.</p></div>
+      <div><span class="label">Свет и камера</span><p>Прямая вспышка днём и ночью, насыщенный цвет, крупные планы деталей: иней на ресницах, пар, капли.</p></div>
+      <div><span class="label">Референсы</span><p>Saint Laurent × Мартин Парр, люди 66°North, Юрген Теллер.</p></div>
+    </div>
+    <div class="shots">
+      <table>
+        <thead><tr><th>Вещь</th><th>Кадр</th><th>Где</th></tr></thead>
+        <tbody>
+          <tr><td>Аккумулятор<span class="q">«Арктика держит заряд»</span></td><td>Саина на рыбном рынке в −45 заряжает телефон, за ней стоят вертикально замороженные чиры и муксуны. Иней на ресницах, лицо абсолютно спокойное.</td><td>Якутск, рынок</td></tr>
+          <tr><td>Ремувки<span class="q">«Арктика» / «Дальний Восток»</span></td><td>Макро: ладонь греет ленточку на морозе, надпись проявляется цветом. Термопечать как главный фокус.</td><td>Норильск, улица ночью</td></tr>
+          <tr><td>Зонт и дождевик</td><td>Тайфун, ветер вывернул зонт, дождевик держит. Марина ждёт светофор так, будто ничего не происходит.</td><td>Владивосток, набережная</td></tr>
+          <tr><td>Термокружка</td><td>Пар столбом над кружкой под оранжевым фонарём, полярная ночь, рядом вахтовый автобус.</td><td>Анадырь</td></tr>
+          <tr><td>Шоппер синий<span class="q">«Приносим радость»</span></td><td>Рыбный рынок: в шоппере банка икры, пучок черемши и букет ромашек. Вспышка, крупный план.</td><td>Петропавловск-Камчатский</td></tr>
+          <tr><td>Ветровка чёрная</td><td>Тимур у горячего источника под снегопадом, ветровка на ветке, от воды поднимается пар.</td><td>Камчатка, Паратунка</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="two">
+      <div class="box"><h3>Сильное</h3><ul class="dots"><li>Самая запоминающаяся концепция, хорошо расходится в соцсетях.</li><li>Наглядно показывает функции вещей: термопечать, защиту от дождя, заряд.</li><li>Дальний Восток здесь не открытка, а характер.</li></ul></div>
+      <div class="box"><h3>Риск</h3><ul class="dots neg"><li>Ирония может прочитаться как насмешка над регионом. Правило: шутит погода, человек всегда в выигрыше.</li><li>Для инвесторов и официальных материалов слишком легко. Это язык мерча, а не основного бренда.</li></ul></div>
+    </div>
+    <div class="prompt">Пример запроса: direct on-camera flash, daytime, Yakutsk frozen fish market at -45°C, frozen whole fish standing upright in rows, 24-year-old Sakha woman calmly charging her phone from a navy power bank, frost on eyelashes, deadpan expression, saturated colour, Martin Parr style documentary, real skin, no gloss</div>
+  </div>
+</section>
+
+<section id="c">
+  <div class="wrap">
+    <div class="concept-head">
+      <span class="label">Концепция В · «огород» по-дальневосточному</span>
+      <h2>Своё хозяйство</h2>
+      <div class="light" aria-label="Свет и цвет концепции">
+        <span style="background:#4f6b3a;color:#fff">зелень</span>
+        <span style="background:#8a6a48;color:#fff">земля и дерево</span>
+        <span style="background:#f3efe6;color:#4a4235">молочный</span>
+        <span style="background:#9fb6c9;color:#21303f">пасмурное небо</span>
+        <span style="background:#0056a2;color:#fff">синий бренда</span>
+      </div>
+      <p class="lead">Ответ на «огород Jil Sander»: Дальний Восток как место, где можно вырастить своё — дом, урожай, дело. Модная съёмка в рабочей среде: теплица, морская ферма, пасека, поле, новый дом на гектаре. Вещи работают как инструменты.</p>
+    </div>
+    <div class="meta">
+      <div><span class="label">Почему это наше</span><p>Это напрямую продукты КРДВ: гектар, ТОР, марикультура, сельское хозяйство. Неочевидно: вместо вулканов — грядки, гребешок и мёд.</p></div>
+      <div><span class="label">Свет и камера</span><p>Мягкий рассеянный дневной свет, естественные цвета. Пополам люди и натюрморты: вещь на верстаке, на столе, на гвозде.</p></div>
+      <div><span class="label">Референсы</span><p>Jacquemus «Le Paysan», природа Jil Sander+, семья в родном городе у Snow Peak.</p></div>
+    </div>
+    <div class="shots">
+      <table>
+        <thead><tr><th>Вещь</th><th>Кадр</th><th>Где</th></tr></thead>
+        <tbody>
+          <tr><td>Вязаный шоппер</td><td>Зимняя теплица: снаружи −40, внутри огурцы. Саина срезает их прямо в шоппер, окна в инее.</td><td>Якутия, тепличный комплекс</td></tr>
+          <tr><td>Ветровка молочная</td><td>Морская ферма: лодка, сетки с гребешком, отец и сын поднимают садок. Брызги, пасмурно.</td><td>Приморье, бухта Посьета</td></tr>
+          <tr><td>Футболка белая<span class="q">сердце «Дальний Восток — близко к сердцу»</span></td><td>Пётр Иванович и молодой пасечник в тайге, рамка с сотами, липовый цвет.</td><td>Приморье, Уссурийская тайга</td></tr>
+          <tr><td>Стёганая сумка и чехол</td><td>Натюрморт на веранде нового дома: ноутбук в чехле, банка мёда, чертёж, свежая стружка.</td><td>Гектар под Хабаровском</td></tr>
+          <tr><td>Брелок с сердцем</td><td>Связка ключей от нового дома на гвозде, рядом ещё неокрашенные доски.</td><td>Сахалин, дом семьи Ким</td></tr>
+          <tr><td>Блокноты<span class="q">«Большие проекты начинаются с небольшого блокнота»</span></td><td>Агроном записывает в блокнот у края соевого поля, рядом современный трактор.</td><td>Амурская область</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="two">
+      <div class="box"><h3>Сильное</h3><ul class="dots"><li>Самая неожиданная и модная из трёх, ближе всего к твоему референсу.</li><li>Рассказывает о программах КРДВ без слов.</li><li>Тёплая, человечная, хороша для сумок, блокнотов и брелоков.</li></ul></div>
+      <div class="box"><h3>Риск</h3><ul class="dots neg"><li>Может уйти в деревенскую идиллию и дауншифтинг, а это спорит с «будущим». Держим современность: высокотехнологичные теплицы, ноутбук, молодые предприниматели.</li><li>Мало Арктики. Ей нужен отдельный северный блок.</li></ul></div>
+    </div>
+    <div class="prompt">Пример запроса: soft overcast daylight, medium format film look, scallop farm in Posyet bay Primorye, father and son lifting a mesh cage onto a small boat, son wears a cream anorak, spray, muted greens and greys, quiet editorial like Jacquemus Le Paysan, natural skin, documentary, no gloss</div>
+  </div>
+</section>
+
+<section id="next">
+  <div class="wrap">
+    <div class="verdict">
+      <span class="label">Моя рекомендация</span>
+      <p><b>Основа — концепция А «Встречаем день первыми».</b> Она опирается на легенду бренда, её можно ставить в гайд и в официальные материалы.</p>
+      <p><b>Из Б берём «погодные» вещи</b> (термокружку, ремувки, аккумулятор, зонт) как отдельную подсерию для соцсетей и раздела «Мерч». <b>Из В — 2–3 кадра «своего хозяйства»</b> для сумок, блокнотов и брелоков.</p>
+      <p>Если хочется одной чистой идеи без смешивания, выбирай А.</p>
+    </div>
+    <div class="two">
+      <div class="box">
+        <h3>Как будем делать нейрофото</h3>
+        <ul class="dots">
+          <li>Сцену и героя генерируем, вещь — по её настоящему фото.</li>
+          <li>Надписи и логотип нейросети не доверяем: кладём настоящий макет при доработке и сверяем буква в букву.</li>
+          <li>Шесть постоянных героев с одинаковыми лицами из кадра в кадр.</li>
+          <li>Отбраковываем по списку: идеальная кожа, лишние пальцы, пластиковая ткань, кривые буквы, «нейроглянец».</li>
+          <li>Для публикации стоит договориться о пометке «изображение создано ИИ» (связано с открытым вопросом про этику).</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>Что нужно от тебя</h3>
+        <ol class="steps">
+          <li>Выбрать концепцию или сочетание.</li>
+          <li>Переслать презентации мерча отдельным сообщением: в прошлом сообщении они не дошли.</li>
+          <li>Ссылку на съёмку Jil Sander в огороде, если она есть.</li>
+          <li>Где будут жить кадры: только гайд или ещё соцсети и сайт.</li>
+        </ol>
+        <p>Дальше я сделаю по одному пробному кадру на выбранную концепцию, и мы оценим, годится ли такое качество.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Подготовлено для внутреннего обсуждения. Изображения референсов — только по ссылкам, для публикации их не используем.</div>
+</footer>
