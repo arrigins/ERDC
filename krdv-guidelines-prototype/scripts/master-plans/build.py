@@ -201,7 +201,7 @@ def notes(*items):
     return '<ul class="notes">' + "".join(f"<li>{T(x)}</li>" for x in items) + "</ul>"
 
 
-DL = "https://masterplans-brandbook.netlify.app/master-plans/logo/"  # абсолютные ссылки — работают и в скачанном PDF
+DL = "https://erdc-master-plans.pages.dev/master-plans/logo/"  # абсолютные ссылки — работают и в скачанном PDF
 
 
 def dl(name, label=None, zip_all=False):
