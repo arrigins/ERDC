@@ -286,6 +286,7 @@ def plate_scene(photo=False):
     b = ""
     if photo:
         b += f'<image href="{PHOTO}photostyle-composition-12.webp" width="{w}" height="{h}" preserveAspectRatio="xMidYMid slice"/>'
+        b += f'<rect width="{w}" height="{h}" fill="{C["blue"]}" fill-opacity=".3"/>'  # лёгкое затемнение — белая плашка не сливается с небом
     b += plate(w / 2, 190, 520, anchor="middle")
     return art(w, h, b, bg=None if photo else C["blue"], r=20)
 
@@ -421,7 +422,8 @@ def step(n):
     elif n == 2:
         b += rings(cx, cy, radii, t, [[(0, 360)]] * 3, C["coral"])
     else:
-        b += rings(cx, cy, radii, t, [[(110, 250), (290, 395)], [(150, 228), (250, 300), (330, 420)], [(185, 300), (320, 365)]], C["coral"])
+        # центр колец смещён от центра надписи, дуги разной длины — композиция асимметрична
+        b += rings(cx + 46, cy + 40, radii, t, [[(-38, 46), (168, 262)], [(104, 196), (282, 372)], [(176, 238), (300, 352), (22, 60)]], C["coral"])
         b += head(cx, cy - 4, ["Здесь", ("будет", C["coral"])], 52, anchor="middle", lh=1.0)
     return art(w, h, b, bg=C["blue"], t=t, r=20)
 
@@ -435,7 +437,7 @@ page(ttl("Как устроена графика", "Радиусы расход�
 def text_case(cut):
     w, h = 848, 590
     t = 28
-    b = rings(424, 300, [200, 312, 424], t, [[(150, 260), (290, 400)], [(170, 250), (270, 330), (350, 400)], [(190, 300), (320, 370)]], C["coral"])
+    b = rings(488, 336, [200, 312, 424], t, [[(-30, 38), (150, 270)], [(98, 176), (232, 296), (330, 392)], [(160, 252), (286, 346)]], C["coral"])
     b += head(424, 262, ["Строим", "будущее"], 80, anchor="middle", ko=cut)
     b += head(424, 452, [("здесь", C["coral"])], 110, anchor="middle", ko=cut)
     return art(w, h, b, bg=C["blue"], t=t, r=20)
@@ -536,6 +538,8 @@ def city_photo():
     w, h = 400, 600
     t = 20
     b = f'<image href="{PHOTO}photostyle-composition-6.webp" width="{w}" height="360" preserveAspectRatio="xMidYMid slice"/>'
+    b += (f'<defs><linearGradient id="shd-cp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{C["blue"]}" stop-opacity=".8"/>'
+          f'<stop offset=".62" stop-color="{C["blue"]}" stop-opacity=".16"/></linearGradient></defs><rect width="{w}" height="360" fill="url(#shd-cp)"/>')
     b += f'<rect y="360" width="{w}" height="240" fill="{C["blue"]}"/>'
     b += f'<clipPath id="cpb"><rect y="360" width="{w}" height="240"/></clipPath>'
     b += f'<g clip-path="url(#cpb)">{rings(230, 660, [130, 210, 290], t, [[(190, 300)], [(196, 250), (268, 340)], [(200, 262), (290, 345)]], C["coral"])}</g>'
@@ -649,7 +653,7 @@ def passport():
     t = 20
     b = f'<rect width="{w}" height="{h}" fill="#fff"/><rect width="{w}" height="150" fill="{C["blue"]}"/>'
     b += f'<clipPath id="cpp"><rect width="{w}" height="150"/></clipPath><g clip-path="url(#cpp)">{rings(780, 230, [120, 190], t, [[(190, 280)], [(200, 240), (256, 300)]], C["coral"])}</g>'
-    b += plate(30, 30, 230)
+    b += plate(30, 21, 230)
     b += para(330, 72, ["ПАСПОРТ ОБЪЕКТА"], 26, weight=800)
     b += para(330, 110, ["Школа на 1100 мест"], 22, weight=500)
     b += f'<image href="{PHOTO}photostyle-composition-12.webp" x="30" y="180" width="350" height="300" preserveAspectRatio="xMidYMid slice"/>'

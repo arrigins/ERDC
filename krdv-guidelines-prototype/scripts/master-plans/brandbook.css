@@ -222,3 +222,8 @@ figure.fit { height: 100%; }
 
 /* Фото-мокап по высоте сцены рядом с плоским макетом */
 .carrier > figure.photo-h img { height: 100%; width: auto; display: block; border-radius: 20px; }
+
+/* Выравнивание: все макеты начинаются от верха сцены; пояснения — сразу под макетом */
+.pair.wide { align-items: flex-start; }
+.two.photos figure { justify-content: flex-start; }
+.carrier.col .notes { margin-top: 40px; }
