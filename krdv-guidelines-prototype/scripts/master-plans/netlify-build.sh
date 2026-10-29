@@ -6,6 +6,7 @@ OUT=netlify-mp
 rm -rf "$OUT" && mkdir -p "$OUT/fonts" "$OUT/assets/brandbook/raster"
 cp "$SRC/master-plans.html" "$OUT/index.html"
 cp -r "$SRC/master-plans" "$OUT/"
+rm -rf "$OUT/master-plans/mockups/src"  # исходники фото без адреса сайта
 for w in Regular Medium Bold ExtraBold; do cp "$SRC/fonts/TT-Norms-Pro-$w.woff2" "$OUT/fonts/"; done
 grep -oE 'assets/brandbook/raster/[^"]+' "$SRC/master-plans.html" | sort -u | while read -r f; do cp "$SRC/$f" "$OUT/$f"; done
 # старый адрес страницы тоже открывается
