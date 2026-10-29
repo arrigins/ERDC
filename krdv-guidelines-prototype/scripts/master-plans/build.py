@@ -78,10 +78,10 @@ def art(w, h, body, bg=None, t=None, cls="art", extra="", r=0):
             f'{clip}<g clip-path="url(#{cid})">{bgr}{body}</g></svg>')
 
 
-def logo_img(x, y, w, color="coral", city=None, cls="", city_cls="city"):
+def logo_img(x, y, w, color="coral", city=None, cls="", city_cls="city", small=False):
     h = w / LOGO_R
     s = w / LOGO_W
-    out = f'<image href="{LOGO}mp-{color}.svg" x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h:.2f}"/>'
+    out = f'<image href="{LOGO}mp-{color}{'-small' if small else ''}.svg" x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h:.2f}"/>'
     if city:
         fill = "#FFFFFF" if color == "white" else C["ink"]
         cities = city if isinstance(city, list) else [city]
@@ -91,7 +91,7 @@ def logo_img(x, y, w, color="coral", city=None, cls="", city_cls="city"):
     return f'<g class="{cls}">{out}</g>'
 
 
-def plate(x, y, w, color="coral", city=None, anchor="start"):
+def plate(x, y, w, color="coral", city=None, anchor="start", small=False):
     """Логотип на белой плашке: поля = охранное поле a, скругление = a."""
     h = w / LOGO_R
     a = BAR * h
@@ -99,7 +99,7 @@ def plate(x, y, w, color="coral", city=None, anchor="start"):
     if anchor == "middle":
         x -= pw / 2
     return (f'<g class="ko"><rect x="{x:.2f}" y="{y:.2f}" width="{pw:.2f}" height="{h + 2 * a:.2f}" rx="{a:.2f}" fill="#fff"/>'
-            + logo_img(x + a, y + a, w, color, city) + "</g>")
+            + logo_img(x + a, y + a, w, color, city, small=small) + "</g>")
 
 
 def avatar(cx, cy, r):
@@ -470,17 +470,19 @@ SEC["05"] = divider("05", "Коммуникация", full_rings(2160, 300, [330
 
 
 def cityformat_stack():
+    """Постер 1,2 × 1,8 м. Поля 40, ритм: слоган-эхо, слоган, коралловая плашка, белая плашка с логотипом, сайт."""
     w, h = 400, 600
     t = 20
-    b = rings(-40, 250, [150, 230], t, [[(-70, 60)], [(-80, -20), (10, 75)]], C["coral"])
-    b += rings(450, 540, [130, 210], t, [[(150, 250)], [(160, 200), (220, 265)]], C["coral"])
-    b += head(200, 70, [("Строим", C["mute"]), ("будущее", C["mute"]), ("вместе!", C["mute"])], 44, anchor="middle")
-    b += head(200, 220, ["Строим", "будущее", "сегодня!"], 44, anchor="middle")
-    b += trapezoid(28, 340, 344, 112, C["coral"], 12)
-    b += head(200, 386, [("На Дальнем", C["pink"]), ("Востоке", C["pink"])], 40, anchor="middle")
-    b += trapezoid(16, 452, 368, 112, "#fff", 12)
-    b += logo_img(200 - 150, 470, 300, "coral", "Магадан")
-    b += site(200, 588, 15, anchor="middle")
+    b = rings(-50, 215, [150, 230], t, [[(-60, 40)], [(-70, -25), (5, 50)]], C["coral"])
+    b += rings(455, 560, [130, 210], t, [[(168, 250)], [(172, 205), (225, 262)]], C["coral"])
+    b += head(200, 76, [("Строим", C["mute"]), ("будущее", C["mute"]), ("вместе!", C["mute"])], 36, anchor="middle")
+    b += head(200, 212, ["Строим", "будущее", "сегодня!"], 36, anchor="middle")
+    b += trapezoid(28, 316, 344, 92, C["coral"], 12)
+    b += head(200, 352, [("На Дальнем", C["pink"]), ("Востоке", C["pink"])], 30, anchor="middle")
+    b += trapezoid(16, 408, 368, 120, "#fff", 12)
+    lw = 236
+    b += logo_img(200 - lw / 2, 408 + (120 - lw / LOGO_R) / 2, lw, "coral", "Магадан")
+    b += site(200, 568, 15, anchor="middle")
     return art(w, h, b, bg=C["blue"], t=t)
 
 
@@ -572,7 +574,7 @@ def sign_plate():
     t = 26
     b = rings(600, 590, [170, 250], t, [[(182, 246)], [(196, 232), (250, 286)]], C["coral"])
     b += head(48, 124, ["Эта", "поликлиника", "появилась", "благодаря", ("мастер-плану", C["coral"])], 56, lh=1.04)
-    b += plate(48, 410, 300)
+    b += plate(48, 410, 300, small=True)
     mw = 420  # логотип Минвостокразвития (белый, от пользователя), 628.9 × 142.5
     b += f'<g class="ko"><image href="{LOGO}mvr-logo-white.svg" x="48" y="628" width="{mw}" height="{mw * 142.5 / 628.9:.1f}"/></g>'
     b += site(48, 762, 18)
@@ -720,7 +722,7 @@ page(ttl("Ограждение стройки")
      + stage('<div class="two photos"><figure><img src="master-plans/mockups/city-fence.webp" alt=""></figure>'
              '<figure><img src="master-plans/mockups/city-fence-gate.webp" alt=""></figure></div>'), "light", "Носители")
 page(ttl("Автобус")
-     + stage(f'<figure class="photo-full"><img src="master-plans/mockups/concept-bus.webp" alt=""></figure>'), "light", "Носители")
+     + stage(f'<figure class="photo-full"><img src="master-plans/mockups/concept-bus-v2.webp" alt=""></figure>'), "light", "Носители")
 
 page(cover("Строим будущее здесь"), "blue cover")
 
