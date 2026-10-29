@@ -38,3 +38,16 @@ Krea, модель `google/nano-banana-pro`, 2K (2528×1696, 3:2), 111 един�
 Промпт 12: Two-panel diptych in one image, side by side with a thin white gap between the panels, each panel 1:1. Still-life product photography on medium format film look, natural morning light only. A black nylon key-strap lanyard from the reference images on a wide light wooden windowsill in a modern office in Vladivostok, beside a dark grey backpack and the edge of a laptop. LEFT PANEL (07:40): cool blue pre-sunrise shadow; printed words barely visible, a faint matte grey ghost of lettering exactly as in the first reference. RIGHT PANEL (07:58): the first warm sunbeam has reached the strap and the thermochromic print has fully appeared: ДАЛЬНИЙ ВОСТОК in bright coral-orange capitals exactly as in the second reference, warm light pooling on the wood while the rest stays in blue shade. Same camera position, slightly top-down 45-degree angle, 80mm, shallow depth of field. Out of focus behind the window: the Golden Horn bay in morning haze. Fine film grain, muted colours, no HDR, no CGI gloss, no added text.
 
 Следующее: футболка на балконе — снять лишние складки (правка кадра), Аня (повтор при необходимости), затем кадры 05/15/18.
+
+## Третий круг (29.10) — новые вещи, не Владивосток. Лимит 1000, все шесть с первой попытки
+
+Запуск шести кадров сразу в фоновом режиме (async + get_job) — так не теряются результаты по таймауту.
+
+- **15 — Якутск, аккумулятор.** Саина на остановке в морозном тумане, фонари, розовый диск солнца, иней на ресницах, тёмно-синий аккумулятор с кабелем. Рабочая.
+- **01 — Анадырь, молочная ветровка.** Настя идёт вдоль лимана, цветные пятиэтажки, сердце-нашивка на груди. Рабочая.
+- **18 — Мурманск, чёрная ветровка со спины.** Первое солнце после полярной ночи, горожане с телефонами, большое сердце КРДВ на спине воспроизведено верно (образец — брелок). Рабочая, финал серии.
+- **06 — Южно-Сахалинск, брелок.** Детская рука с ключами от новой квартиры, эмалевое сердце в луче, лотос и бирка. Ключи «советские» (в новой квартире были бы современные) — мелочь, при финале заменить. Рабочая.
+- **17 — Якутск, вязаный шоппер.** IT-парк, розовый туман за стеклом, буквы КРДВ на сумке. На ноутбуке виден логотип Apple — убрать в постобработке. Рабочая.
+- **03 — Камчатка, дождевик и зонт.** Свет, дождь, вулкан, сияющий дождевик — хорошо; подъезд ржавый и облезлый (антипример). v2 с опрятным подъездом запущена.
+
+Один образец на все кадры с мехом: шапка Саины одинаковая в 15 и 17 — героиня узнаётся без отдельной «карточки персонажа».
