@@ -219,3 +219,6 @@ figure.fit { height: 100%; }
 .dl-dock .dl { margin-top: 0; }
 /* фото носителей — по левому краю, как заголовок */
 .photo-full { place-items: start; }
+
+/* Фото-мокап по высоте сцены рядом с плоским макетом */
+.carrier > figure.photo-h img { height: 100%; width: auto; display: block; border-radius: 20px; }

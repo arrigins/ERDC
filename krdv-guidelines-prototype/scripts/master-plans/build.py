@@ -159,6 +159,14 @@ def para(x, y, lines, size, color="#fff", weight=500, lh=1.3, anchor="start", ko
     return f'<text class="{"ko" if ko else ""}" font-size="{size}" font-weight="{weight}" fill="{color}" text-anchor="{anchor}">{sp}</text>'
 
 
+SITE = "25городов.рф"
+
+
+def site(x, y, size, anchor="start", color="#fff"):
+    """Адрес сайта проекта на носителях."""
+    return para(x, y, [SITE], size, color=color, weight=500, anchor=anchor)
+
+
 def trapezoid(x, y, w, h, fill, inset):
     return f'<polygon class="ko" points="{x},{y} {x + w},{y} {x + w - inset},{y + h} {x + inset},{y + h}" fill="{fill}"/>'
 
@@ -472,6 +480,7 @@ def cityformat_stack():
     b += head(200, 386, [("На Дальнем", C["pink"]), ("Востоке", C["pink"])], 40, anchor="middle")
     b += trapezoid(16, 452, 368, 112, "#fff", 12)
     b += logo_img(200 - 150, 470, 300, "coral", "Магадан")
+    b += site(200, 588, 15, anchor="middle")
     return art(w, h, b, bg=C["blue"], t=t)
 
 
@@ -511,6 +520,7 @@ def billboard():
     b += head(400, 92, ["Строим", "будущее"], 48, anchor="middle", lh=0.98)
     b += head(400, 182, [[("Здесь ", "#fff"), ("будет", C["coral"])]], 30, anchor="middle")
     b += head(400, 270, [("Школа", C["coral"])], 84, anchor="middle")
+    b += site(18, 282, 13)
     return art(w, h, b, bg=C["blue"], t=t)
 
 
@@ -529,12 +539,61 @@ def city_photo():
     b += f'<g clip-path="url(#cpb)">{rings(230, 660, [130, 210, 290], t, [[(190, 300)], [(196, 250), (268, 340)], [(200, 262), (290, 345)]], C["coral"])}</g>'
     b += plate(200, 24, 240, city="Магадан", anchor="middle")
     b += bubble(46, 290, 320, ["Скоро здесь будет новый", "образовательный центр!", "", "С лабораториями", "и коворкингом."], 17)
+    b += site(372, 582, 15, anchor="end")
     return art(w, h, b, t=t)
 
 
 page(ttl("Ситиформаты 1,2 × 1,8 м")
      + stage(f'<div class="carrier"><div class="pair"><figure class="fit">{cityformat_stack()}</figure><figure class="fit">{city_photo()}</figure></div>'
              + notes("Слоган в ритме повторов — для серии на одной улице.", "Фото объекта и сообщение от министерства.", "Кольца — только на синем, фото без графики.") + "</div>"),
+     "light", "Носители")
+
+
+def stele():
+    """Стела в парке: пропорции как у стелы на фото-примере."""
+    w, h = 400, 712
+    t = 20
+    b = rings(200, 470, [200, 280], t, [[(195, 238), (296, 352), (18, 62)], [(244, 300)]], C["coral"])
+    b += plate(36, 48, 252)
+    b += head(48, 452, ["Строим", "будущее", ("сегодня", C["coral"])], 54, lh=1.0)
+    b += site(48, 676, 17)
+    return art(w, h, b, bg=C["blue"], t=t)
+
+
+page(ttl("Парки и скверы", "Стела у входа в парк или сквер показывает: это место появилось благодаря мастер-плану.")
+     + stage(f'<div class="carrier"><figure class="photo-h"><img src="master-plans/mockups/park-stele.webp" alt=""></figure>'
+             f'<figure class="fit" id="stele-flat">{stele()}</figure></div>'),
+     "light", "Носители")
+
+
+def sign_plate():
+    """Режимник 30 × 40 см у входа в построенный объект."""
+    w, h = 600, 800
+    t = 26
+    b = rings(600, 590, [170, 250], t, [[(182, 246)], [(196, 232), (250, 286)]], C["coral"])
+    b += head(48, 124, ["Эта", "поликлиника", "появилась", "благодаря", ("мастер-плану", C["coral"])], 56, lh=1.04)
+    b += plate(48, 410, 300)
+    ew = 74
+    eh = ew * 142.5 / 137.1
+    b += f'<g class="ko"><image href="{LOGO}mp-emblem-color.svg" x="48" y="662" width="{ew}" height="{eh:.1f}"/></g>'
+    b += para(140, 682, ["Министерство Российской Федерации", "по развитию Дальнего Востока", "и Арктики"], 16, weight=500, lh=1.3)
+    b += site(552, 746, 18, anchor="end")
+    return art(w, h, b, bg=C["blue"], t=t)
+
+
+def sign_photo():
+    w, h = 1600, 1213
+    b = f'<image href="master-plans/mockups/polyclinic.webp" width="{w}" height="{h}"/>'
+    x, y, mw, mh = 574, 868, 44, 59
+    b += (f'<rect x="{x}" y="{y}" width="{mw}" height="{mh}" fill="{C["coral"]}" fill-opacity=".35" stroke="{C["coral"]}" stroke-width="6"/>'
+          f'<line x1="{x + mw}" y1="{y + mh / 2}" x2="{x + mw + 110}" y2="{y + mh / 2}" stroke="{C["coral"]}" stroke-width="4"/>'
+          f'<rect x="{x + mw + 110}" y="{y + mh / 2 - 38}" width="300" height="76" rx="38" fill="{C["coral"]}"/>'
+          + para(x + mw + 260, y + mh / 2 + 11, ["Режимник 30 × 40"], 30, weight=700, anchor="middle", ko=False))
+    return art(w, h, b, r=20)
+
+
+page(ttl("Режимник 30 × 40 см", "Табличка у входа в построенный объект: что появилось благодаря мастер-плану.")
+     + stage(f'<div class="carrier"><figure class="fit">{sign_photo()}</figure><figure class="fit">{sign_plate()}</figure></div>'),
      "light", "Носители")
 
 
@@ -549,6 +608,7 @@ def fence():
     b += head(860, 162, [("будущее", C["coral"])], 64, anchor="middle")
     b += head(860, 214, ["здесь"], 44, anchor="middle")
     b += plate(1330, 150, 210, city="Петропавловск-Камчатский", anchor="middle")
+    b += site(1330, 46, 18, anchor="middle")
     return art(w, h, b, bg=C["blue"], t=t)
 
 
@@ -565,6 +625,7 @@ def post_sq():
     b += plate(60, 60, 400, city="Хабаровск")
     b += head(560, 560, [[("Здесь ", "#fff"), ("будет", C["coral"])]], 76, anchor="middle")
     b += head(560, 700, [("набережная", C["coral"])], 128, anchor="middle")
+    b += site(540, 1036, 30, anchor="middle")
     return art(w, h, b, bg=C["blue"], t=t)
 
 
@@ -576,7 +637,8 @@ def story():
     b += f'<g clip-path="url(#cps)">{rings(540, 1500, [330, 482, 634], t, [[(150, 230), (300, 380)], [(170, 215), (235, 300), (320, 365)], [(190, 250), (290, 340)]], C["coral"])}</g>'
     b += bubble(54, 890, 780, ["Скоро здесь будет новый", "колледж — с мастерскими", "и общежитием!"], 46)
     b += head(540, 1450, ["Строим", ("будущее", C["coral"]), "здесь"], 96, anchor="middle")
-    b += plate(540, 1700, 330, city="Хабаровск", anchor="middle")
+    b += plate(540, 1660, 330, city="Хабаровск", anchor="middle")
+    b += site(540, 1876, 34, anchor="middle")
     return art(w, h, b, t=t)
 
 
@@ -598,6 +660,7 @@ def passport():
         y += 50
     b += f'<rect y="510" width="{w}" height="90" fill="{C["blue"]}"/>'
     b += head(30, 568, [[("Строим будущее ", "#fff"), ("здесь", C["coral"])]], 30)
+    b += site(770, 566, 22, anchor="end")
     return art(w, h, b, t=t)
 
 
@@ -614,6 +677,7 @@ def slide_title():
     b += plate(96, 96, 440, city="Петропавловск-Камчатский")
     b += head(96, 560, ["Что изменится", "в городе", ("к 2028 году", C["coral"])], 118)
     b += para(96, 984, ["Встреча с жителями  |  Октябрь 2026"], 30, color="#fff")
+    b += site(1824, 984, 30, anchor="end")
     return art(w, h, b, bg=C["blue"], t=t)
 
 
