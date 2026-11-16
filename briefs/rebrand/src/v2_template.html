@@ -1,0 +1,88 @@
+<title>КРДВ: три направления</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Layout: three long direction sheets; each opens with mark + thesis, then meaning, mark variants, system, applications */
+:root{
+  color-scheme: light;
+  --paper:#F4F5F6; --sheet:#FFFFFF; --ink:#111418; --muted:#5A616C; --line:#E0E3E7;
+  --f:"Onest","Helvetica Neue",Arial,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+body{background:var(--paper);color:var(--ink);font:400 16px/1.55 var(--f);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 72px}
+svg{font-family:var(--f)}
+.wrap{max-width:1180px;margin:0 auto;display:grid;gap:28px}
+header{display:grid;gap:14px}
+.tag,.eyebrow{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0}
+h1{font:700 clamp(30px,4.4vw,52px)/1.05 var(--f);letter-spacing:-.02em;margin:0;text-wrap:balance}
+header p{margin:0;max-width:46em;color:var(--muted);font-size:17px}
+nav{display:flex;gap:10px;flex-wrap:wrap}
+nav a{color:var(--ink);text-decoration:none;background:var(--sheet);border-radius:999px;padding:8px 16px;font-weight:500}
+nav a:hover,nav a:focus-visible{background:var(--ink);color:#fff;outline:none}
+.dir{background:var(--sheet);border-radius:22px;padding:40px;display:grid;gap:22px}
+.dirhead{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:40px;align-items:center;padding-bottom:28px;border-bottom:1px solid var(--line)}
+.heromk{width:100%;height:auto;display:block}
+.dh-text{display:grid;gap:10px;min-width:0}
+.dh-text h2{font:700 clamp(34px,4vw,48px)/1.05 var(--f);margin:0;letter-spacing:-.015em}
+.thesis{font-size:22px;font-weight:500;margin:0;text-wrap:balance}
+.lock{padding-top:14px}
+.lock .wm{height:52px;width:auto;max-width:100%}
+h3{font:700 19px/1.25 var(--f);margin:6px 0 8px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+.grid2 p{margin:0;max-width:36em}
+.bl{margin:0;padding-left:1.1em;display:grid;gap:6px}
+.slg{list-style:none;margin:0 0 6px;padding:0;display:grid;gap:4px}
+.slg li{font-size:19px;font-weight:500}
+.slg li::before{content:"«"}.slg li::after{content:"»"}
+.pal{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.pal li{display:grid;gap:4px;font-size:13px}
+.pal span{height:56px;border-radius:10px;border:1px solid var(--line)}
+.pal code{font:12px var(--mono);color:var(--muted)}
+.mvs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.mv{margin:0;display:grid;gap:8px}
+.mvb{border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;place-items:center}
+.mvb svg{width:min(180px,100%);height:auto}
+figcaption{font-size:14px;color:var(--muted)}
+.apps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start}
+.apps figure{margin:0;display:grid;gap:8px;min-width:0}
+.apps .wide{grid-column:1/-1}
+.app{width:100%;height:auto;display:block;border-radius:12px;box-shadow:0 0 0 1px var(--line)}
+.etbox{border:1px solid var(--line);border-radius:12px;padding:20px;display:grid;place-items:center}
+.arch{width:100%;height:auto;max-height:260px}
+.avf{align-content:start}
+.ava{width:140px;height:140px;border-radius:50%;overflow:hidden;display:grid;place-items:center}
+.ava svg{width:100%;height:100%}
+.risk{margin:0;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);max-width:52em}
+.risk b{color:var(--ink);font-weight:500}
+.notes{background:var(--sheet);border-radius:22px;padding:32px 40px;display:grid;gap:12px}
+.notes h2{margin:0;font:700 26px/1.2 var(--f)}
+.notes ul{margin:0;padding-left:1.1em;display:grid;gap:6px;max-width:52em}
+.notes p{margin:0;color:var(--muted);max-width:52em}
+@media (max-width:860px){
+  .dir{padding:24px 20px}
+  .dirhead{grid-template-columns:1fr;gap:20px}.dh-mark{max-width:220px}
+  .grid2,.apps{grid-template-columns:1fr}
+  .mvs{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.mvb{padding:8px}
+  .notes{padding:24px 20px}
+  .pal{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+<div class="wrap">
+<header>
+  <p class="tag">Ребрендинг КРДВ · второй круг · 16 ноября 2026</p>
+  <h1>Три направления</h1>
+  <p>По итогам первого круга оставили «Северо-восток», «Основание» и «Ледокол». «Основание» переосмыслено как «Первый камень». У каждого направления: смысл, варианты знака, как оно растёт в систему, голос, цвет и носители. Формы ещё черновые, надпись набрана свободным шрифтом Onest. Параллельно Codex ищет референсы, проверяет сходство знаков и делает фотомакеты.</p>
+  <nav aria-label="Направления"><a href="#ne">1. Северо-восток</a><a href="#stone">2. Первый камень</a><a href="#ice">3. Ледокол</a></nav>
+</header>
+{{SECTIONS}}
+<section class="notes">
+  <h2>Как сравнивать</h2>
+  <ul>
+    <li><b>Северо-восток</b> — самый узнаваемый знак и самая короткая история. Лучше всего работает на маленьком размере.</li>
+    <li><b>Первый камень</b> — самая сильная связь с ролью КРДВ и стройкой. Требует безупречной отрисовки букв.</li>
+    <li><b>Ледокол</b> — самая яркая история для Арктики и ЕТОР. Форма пока слабее остальных.</li>
+  </ul>
+  <p>Дальше: выбираем одно-два направления → своя отрисовка надписи, точная геометрия, палитра с CMYK, графика, полный набор носителей, проверка на сходство.</p>
+</section>
+</div>
