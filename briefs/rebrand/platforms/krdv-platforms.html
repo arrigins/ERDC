@@ -1,0 +1,471 @@
+<title>КРДВ: три платформы бренда</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: three platform sheets; each = idea + rules, then the same five artboards (billboard, region series, ETOR, resident badge, deck cover) so they compare side by side */
+:root{
+  color-scheme: light;
+  --paper:#EEF0F3; --sheet:#FFFFFF; --ink:#0E1116; --muted:#5A616C; --line:#DFE2E7;
+  --navy:#091B38; --blue:#243D8D; --red:#E3262B; --ice:#E5F2FF;
+  --f:"Onest","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:400 16px/1.55 var(--f);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 72px}
+.wrap{max-width:1200px;margin:0 auto;display:grid;gap:28px}
+p{margin:0}
+.tag{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+h1{font:700 clamp(30px,4.4vw,52px)/1.05 var(--f);letter-spacing:-.02em;margin:0;text-wrap:balance}
+header{display:grid;gap:14px}
+header p.lead{max-width:46em;color:var(--muted);font-size:17px}
+nav{display:flex;gap:10px;flex-wrap:wrap}
+nav a{color:var(--ink);text-decoration:none;background:var(--sheet);border-radius:999px;padding:8px 16px;font-weight:500}
+nav a:hover,nav a:focus-visible{background:var(--ink);color:#fff;outline:none}
+
+.pf{background:var(--sheet);border-radius:24px;padding:40px;display:grid;gap:28px}
+.pf-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:start}
+.pf-head h2{font:700 clamp(34px,4vw,50px)/1.02 var(--f);margin:6px 0 10px;letter-spacing:-.015em}
+.pf-head .thesis{font-size:21px;font-weight:500;text-wrap:balance}
+.pf-head .idea{margin-top:14px;color:var(--ink);max-width:34em}
+.rules{list-style:none;margin:0;padding:0;display:grid;gap:0;border-top:1px solid var(--line)}
+.rules li{display:grid;grid-template-columns:112px minmax(0,1fr);gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.rules b{font-weight:600}
+.board{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
+.cell{display:grid;gap:8px;min-width:0;align-content:start}
+.cell figcaption{font-size:13px;color:var(--muted)}
+.c6{grid-column:span 6}.c4{grid-column:span 4}.c3{grid-column:span 3}.c2{grid-column:span 2}
+.verdict{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;padding-top:20px;border-top:1px solid var(--line);font-size:15px}
+.verdict b{font-weight:600}
+
+/* ---------- artboards ---------- */
+.art{position:relative;container-type:inline-size;overflow:hidden;border-radius:10px;background:var(--navy);color:#fff;isolation:isolate}
+.r21{aspect-ratio:2/1}.r11{aspect-ratio:1/1}.r169{aspect-ratio:16/9}
+.art .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.art .shade{position:absolute;inset:0;z-index:-1}
+.logo{display:inline-flex;align-items:center;gap:.32em;font-weight:700;letter-spacing:-.01em;line-height:1}
+.logo svg{width:1.3em;height:1.3em;flex:none}
+.abs{position:absolute}
+.hd{font-weight:700;letter-spacing:-.025em;line-height:.98;margin:0;text-wrap:balance}
+.sub{font-weight:400;opacity:.85;line-height:1.25}
+.cap{font-weight:500;letter-spacing:.02em}
+svg text{font-family:var(--f)}
+
+/* platform 1 — first light */
+.p1-shade{background:linear-gradient(180deg,rgba(9,27,56,.15) 0%,rgba(9,27,56,0) 35%,rgba(9,27,56,.55) 72%,rgba(9,27,56,.92) 100%)}
+.tl{position:absolute;left:5cqw;right:5cqw;bottom:5cqw}
+.tl svg{width:100%;height:auto;display:block;overflow:visible}
+.big-time{font-weight:600;letter-spacing:-.05em;line-height:.85;font-variant-numeric:tabular-nums}
+
+/* platform 2 — icebreaker wake */
+.p2-shade{background:linear-gradient(90deg,rgba(6,22,40,.72) 0%,rgba(6,22,40,.25) 55%,rgba(6,22,40,0) 100%)}
+.wake{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
+/* platform 3 — platform / support */
+.plinth{position:absolute;left:0;right:0;bottom:0;background:var(--blue);color:#fff}
+.plinth.red{background:var(--red)}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.facts div{border-left:1px solid rgba(255,255,255,.35);padding-left:1.2cqw}
+.facts b{display:block;font-weight:700;letter-spacing:-.02em;line-height:1}
+.facts span{display:block;opacity:.8;line-height:1.2;margin-top:.4em}
+
+/* badges */
+.badge-wrap{background:#F4F5F7;border-radius:10px;display:grid;place-items:center;aspect-ratio:1/1;container-type:inline-size}
+@media (max-width:900px){
+  .pf{padding:24px 18px}
+  .pf-head,.verdict{grid-template-columns:1fr}
+  .board{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .c6,.c4{grid-column:span 2}.c3,.c2{grid-column:span 2}
+  .c2.sq{grid-column:span 1}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- временный знак: упрощённый лотос (лепесток над чашей), как в драфте команды -->
+    <symbol id="lotus" viewBox="0 0 100 100">
+      <path d="M50 12.5Q52.6 12.5 54.4 14.3L69.7 29.6Q72 32 69.7 34.4L54.4 49.7Q50 54 45.6 49.7L30.3 34.4Q28 32 30.3 29.6L45.6 14.3Q47.4 12.5 50 12.5Z" style="fill:var(--petal,currentColor)"/>
+      <path d="M10 36L45 70Q50 75 55 70L90 36A42 42 0 1 1 10 36Z" style="fill:var(--cup,currentColor)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+<header>
+  <p class="tag">Ребрендинг КРДВ · бренд-системы · 16 ноября 2026</p>
+  <h1>Три платформы бренда</h1>
+  <p class="lead">Три разных способа построить всю систему: регионы, ЕТОР, резиденты, презентации. У всех одинаковый набор носителей, чтобы сравнивать. Знак везде временный: упрощённый лотос из драфта команды, его можно заменить. Фото взяты из гайда, шрифт Onest заменяет TT Norms.</p>
+  <nav aria-label="Платформы"><a href="#light">1. Первый свет</a><a href="#wake">2. Ледокол</a><a href="#base">3. Опора</a></nav>
+</header>
+
+<!-- ================= 1. ПЕРВЫЙ СВЕТ ================= -->
+<section class="pf" id="light">
+  <div class="pf-head">
+    <div>
+      <p class="tag">Платформа 1</p>
+      <h2>Первый свет</h2>
+      <p class="thesis">День в России начинается здесь.</p>
+      <p class="idea">Дальний Восток и Арктика живут в восьми из одиннадцати часовых поясов страны. Когда во Владивостоке семь утра, в Москве полночь. Главный элемент системы — линия часовых поясов с красной точкой солнца. Положение точки для каждого региона своё и взято из реальности: это его часовой пояс.</p>
+    </div>
+    <ul class="rules">
+      <li><b>Элемент</b><span>Линия часовых поясов UTC+3…+12 и красная точка региона.</span></li>
+      <li><b>Регионы</b><span>Меняются фото, местное время и положение точки. Конструкция одна.</span></li>
+      <li><b>ЕТОР</b><span>Вся линия становится красной: один режим от Мурманска до Анадыря.</span></li>
+      <li><b>Резиденты</b><span>Круглая метка с линией поясов.</span></li>
+      <li><b>Фото</b><span>Утренний свет, реальные места, без постановки.</span></li>
+      <li><b>Цвет</b><span>Ночной синий, белый, один красный. Цвет утра даёт фото.</span></li>
+    </ul>
+  </div>
+
+  <div class="board">
+    <!-- billboard -->
+    <figure class="cell c6" style="margin:0">
+      <div class="art r21">
+        <img class="bg" src="ph/c12.webp" alt="">
+        <div class="shade p1-shade"></div>
+        <div class="abs logo" style="left:5cqw;top:5cqw;font-size:2.6cqw"><svg><use href="#lotus"/></svg>КРДВ</div>
+        <h3 class="abs hd" style="left:5cqw;top:28cqw;font-size:6.6cqw;width:60cqw">День в России начинается здесь</h3>
+        <div class="tl">
+          <svg viewBox="0 0 1000 90" role="img" aria-label="Линия часовых поясов, точка на UTC+10">
+            <line x1="0" y1="56" x2="1000" y2="56" stroke="#fff" stroke-opacity=".55" stroke-width="2"/>
+            <g fill="#fff" fill-opacity=".7" font-size="15">
+              <circle cx="0" cy="56" r="4"/><text x="0" y="86">Москва 00:00</text>
+              <circle cx="111" cy="56" r="3"/><circle cx="222" cy="56" r="3"/><circle cx="333" cy="56" r="3"/><circle cx="444" cy="56" r="3"/><circle cx="555" cy="56" r="3"/><circle cx="666" cy="56" r="3"/><circle cx="888" cy="56" r="3"/><circle cx="1000" cy="56" r="3"/>
+            </g>
+            <circle cx="777" cy="56" r="14" fill="#E3262B"/>
+            <text x="777" y="24" fill="#fff" font-size="22" font-weight="600" text-anchor="middle">Владивосток 07:00</text>
+          </svg>
+        </div>
+      </div>
+      <figcaption>Щит 6 × 3 м. Регион узнаётся по фото и по точке на линии</figcaption>
+    </figure>
+
+    <!-- series -->
+    <figure class="cell c2 sq" style="margin:0">
+      <div class="art r11">
+        <img class="bg" src="ph/c12.webp" alt="">
+        <div class="shade p1-shade"></div>
+        <p class="abs cap" style="left:7cqw;top:7cqw;font-size:4.4cqw">Приморский край</p>
+        <p class="abs big-time" style="left:6cqw;top:42cqw;font-size:26cqw">07:00</p>
+        <p class="abs sub" style="left:7cqw;top:70cqw;font-size:4.2cqw">Москва 00:00</p>
+        <div class="tl"><svg viewBox="0 0 1000 40" aria-hidden="true"><line x1="0" y1="20" x2="1000" y2="20" stroke="#fff" stroke-opacity=".55" stroke-width="5"/><circle cx="777" cy="20" r="18" fill="#E3262B"/></svg></div>
+      </div>
+      <figcaption>Серия регионов: UTC+10</figcaption>
+    </figure>
+    <figure class="cell c2 sq" style="margin:0">
+      <div class="art r11">
+        <img class="bg" src="ph/c9.webp" alt="">
+        <div class="shade p1-shade"></div>
+        <p class="abs cap" style="left:7cqw;top:7cqw;font-size:4.4cqw">Курильские острова</p>
+        <p class="abs big-time" style="left:6cqw;top:42cqw;font-size:26cqw">08:00</p>
+        <p class="abs sub" style="left:7cqw;top:70cqw;font-size:4.2cqw">Москва 00:00</p>
+        <div class="tl"><svg viewBox="0 0 1000 40" aria-hidden="true"><line x1="0" y1="20" x2="1000" y2="20" stroke="#fff" stroke-opacity=".55" stroke-width="5"/><circle cx="888" cy="20" r="18" fill="#E3262B"/></svg></div>
+      </div>
+      <figcaption>UTC+11</figcaption>
+    </figure>
+    <figure class="cell c2 sq" style="margin:0">
+      <div class="art r11">
+        <img class="bg" src="ph/c17.webp" alt="">
+        <div class="shade p1-shade"></div>
+        <p class="abs cap" style="left:7cqw;top:7cqw;font-size:4.4cqw">Камчатский край</p>
+        <p class="abs big-time" style="left:6cqw;top:42cqw;font-size:26cqw">09:00</p>
+        <p class="abs sub" style="left:7cqw;top:70cqw;font-size:4.2cqw">Москва 00:00</p>
+        <div class="tl"><svg viewBox="0 0 1000 40" aria-hidden="true"><line x1="0" y1="20" x2="1000" y2="20" stroke="#fff" stroke-opacity=".55" stroke-width="5"/><circle cx="982" cy="20" r="18" fill="#E3262B"/></svg></div>
+      </div>
+      <figcaption>UTC+12</figcaption>
+    </figure>
+
+    <!-- ETOR -->
+    <figure class="cell c4" style="margin:0">
+      <div class="art r169" style="background:var(--navy)">
+        <div class="abs logo" style="left:5cqw;top:5cqw;font-size:2.4cqw"><svg><use href="#lotus"/></svg>КРДВ</div>
+        <h3 class="abs hd" style="left:5cqw;top:22cqw;font-size:12cqw">ЕТОР</h3>
+        <p class="abs sub" style="left:5.4cqw;top:36cqw;font-size:2.8cqw;width:52cqw">Единый режим поддержки. Одни условия от Мурманска до Анадыря.</p>
+        <div class="tl">
+          <svg viewBox="0 0 1000 90" aria-hidden="true">
+            <line x1="0" y1="50" x2="1000" y2="50" stroke="#E3262B" stroke-width="16" stroke-linecap="round"/>
+            <g fill="#fff" font-size="17" fill-opacity=".8"><text x="0" y="88">Мурманск, UTC+3</text><text x="1000" y="88" text-anchor="end">Анадырь, UTC+12</text></g>
+          </svg>
+        </div>
+      </div>
+      <figcaption>ЕТОР: вся линия красная — один режим на всех поясах</figcaption>
+    </figure>
+    <figure class="cell c2 sq" style="margin:0">
+      <div class="badge-wrap">
+        <svg viewBox="0 0 200 200" style="width:70cqw" role="img" aria-label="Метка «Резидент ЕТОР»">
+          <circle cx="100" cy="100" r="96" fill="#091B38"/>
+          <text x="100" y="86" fill="#fff" font-size="15" font-weight="500" text-anchor="middle" letter-spacing="1.5">РЕЗИДЕНТ</text>
+          <text x="100" y="122" fill="#fff" font-size="40" font-weight="700" text-anchor="middle" letter-spacing="-1">ЕТОР</text>
+          <line x1="40" y1="146" x2="160" y2="146" stroke="#E3262B" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <figcaption>Метка резидента для продукции и сайтов</figcaption>
+    </figure>
+
+    <!-- deck -->
+    <figure class="cell c6" style="margin:0">
+      <div class="art r21" style="background:#fff;color:var(--navy);aspect-ratio:16/7">
+        <div class="abs logo" style="left:4cqw;top:4cqw;font-size:2cqw;color:var(--navy)"><svg><use href="#lotus"/></svg>КРДВ</div>
+        <h3 class="abs hd" style="left:4cqw;top:15cqw;font-size:4.8cqw;width:60cqw">Инвестиционные возможности Дальнего Востока и Арктики</h3>
+        <p class="abs sub" style="left:4cqw;top:31cqw;font-size:1.6cqw;color:var(--muted);opacity:1">Презентация для инвесторов · 2027</p>
+        <div class="tl" style="left:4cqw;right:4cqw;bottom:3.6cqw">
+          <svg viewBox="0 0 1000 60" aria-hidden="true">
+            <line x1="0" y1="30" x2="1000" y2="30" stroke="#091B38" stroke-opacity=".3" stroke-width="2"/>
+            <circle cx="982" cy="30" r="10" fill="#E3262B"/>
+            <text x="960" y="18" fill="#091B38" font-size="13" text-anchor="end">Анадырь 09:00 · Москва 00:00</text>
+          </svg>
+        </div>
+      </div>
+      <figcaption>Обложка презентации. Линия живёт и на белом</figcaption>
+    </figure>
+  </div>
+
+  <div class="verdict">
+    <p><b>Сильное.</b> Метафора из правды, а не из головы: её нельзя скопировать другой территории. Сразу работает и для регионов, и для ЕТОР. Связана с фотосетом мерча «Встречаем день первыми» и с красным цветом солнца.</p>
+    <p><b>Риск.</b> Мурманск живёт по московскому времени, его точка совпадает с Москвой: для Арктики нужен второй параметр (например, полярная ночь и первый рассвет). Система держится на хороших утренних фото.</p>
+  </div>
+</section>
+
+<!-- ================= 2. ЛЕДОКОЛ ================= -->
+<section class="pf" id="wake">
+  <div class="pf-head">
+    <div>
+      <p class="tag">Платформа 2</p>
+      <h2>Ледокол</h2>
+      <p class="thesis">Мы первыми проходим сложную часть пути.</p>
+      <p class="idea">В Арктике первым идёт ледокол, за ним — караван. КРДВ делает то же для бизнеса: земля, разрешения, сети и льготы. Главный элемент — след: красная метка и две тонкие линии, которые расходятся за ней под углом 19°28′. Под этим углом расходится след за любым судном, при любой скорости. Метка всегда стоит там, где проект.</p>
+    </div>
+    <ul class="rules">
+      <li><b>Элемент</b><span>Красная метка и след под углом 19°28′ поверх фото или цвета.</span></li>
+      <li><b>Регионы</b><span>Метка ставится на точку проекта в кадре, след ведёт к ней.</span></li>
+      <li><b>ЕТОР</b><span>«Один путь вместо разных режимов»: шаги располагаются вдоль следа.</span></li>
+      <li><b>Резиденты</b><span>Квадратная метка с красным носом и следом.</span></li>
+      <li><b>Фото</b><span>Широкие планы, простор, движение. Много воздуха для следа.</span></li>
+      <li><b>Цвет</b><span>Полярная вода, лёд, белый, красный корпуса ледокола.</span></li>
+    </ul>
+  </div>
+
+  <div class="board">
+    <figure class="cell c6" style="margin:0">
+      <div class="art r21">
+        <img class="bg" src="ph/c9.webp" alt="">
+        <div class="shade p2-shade"></div>
+        <svg class="wake" viewBox="0 0 2000 1000" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M1490 470L-200 -128M1490 470L-200 1068" stroke="#fff" stroke-width="2.5" stroke-opacity=".85" fill="none"/>
+          <path d="M1500 470Q1490 455 1440 455V485Q1490 485 1500 470Z" fill="#E3262B"/>
+        </svg>
+        <div class="abs logo" style="left:5cqw;top:5cqw;font-size:2.6cqw"><svg><use href="#lotus"/></svg>КРДВ</div>
+        <h3 class="abs hd" style="left:5cqw;bottom:10cqw;font-size:5.6cqw;width:58cqw">Проложим путь для вашего проекта</h3>
+        <p class="abs sub" style="left:5.2cqw;bottom:5cqw;font-size:1.9cqw">Курильские острова · Сахалинская область</p>
+      </div>
+      <figcaption>Щит 6 × 3 м. Метка — точка проекта, след — путь к нему</figcaption>
+    </figure>
+
+    <figure class="cell c2 sq" style="margin:0">
+      <div class="art r11">
+        <img class="bg" src="ph/c12.webp" alt="">
+        <div class="shade" style="background:linear-gradient(0deg,rgba(6,22,40,.8),rgba(6,22,40,0) 55%)"></div>
+        <svg class="wake" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"><path d="M560 640L-100 407M560 640L-100 873" stroke="#fff" stroke-width="3" stroke-opacity=".85" fill="none"/><path d="M572 640Q562 628 520 628V652Q562 652 572 640Z" fill="#E3262B"/></svg>
+        <p class="abs hd" style="left:7cqw;bottom:16cqw;font-size:8cqw">Приморье</p>
+        <p class="abs sub" style="left:7cqw;bottom:8cqw;font-size:4cqw">Порты и логистика</p>
+      </div>
+      <figcaption>Серия регионов</figcaption>
+    </figure>
+    <figure class="cell c2 sq" style="margin:0">
+      <div class="art r11">
+        <img class="bg" src="ph/c3.webp" alt="">
+        <div class="shade" style="background:linear-gradient(0deg,rgba(6,22,40,.85),rgba(6,22,40,0) 55%)"></div>
+        <svg class="wake" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"><path d="M720 300L-100 10M720 300L-100 590" stroke="#fff" stroke-width="3" stroke-opacity=".85" fill="none"/><path d="M732 300Q722 288 680 288V312Q722 312 732 300Z" fill="#E3262B"/></svg>
+        <p class="abs hd" style="left:7cqw;bottom:16cqw;font-size:8cqw">Амурская область</p>
+        <p class="abs sub" style="left:7cqw;bottom:8cqw;font-size:4cqw">Газохимия</p>
+      </div>
+      <figcaption>Метка стоит на объекте</figcaption>
+    </figure>
+    <figure class="cell c2 sq" style="margin:0">
+      <div class="art r11">
+        <img class="bg" src="ph/c17.webp" alt="">
+        <div class="shade" style="background:linear-gradient(0deg,rgba(6,22,40,.8),rgba(6,22,40,0) 55%)"></div>
+        <svg class="wake" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"><path d="M640 480L-100 218M640 480L-100 742" stroke="#fff" stroke-width="3" stroke-opacity=".85" fill="none"/><path d="M652 480Q642 468 600 468V492Q642 492 652 480Z" fill="#E3262B"/></svg>
+        <p class="abs hd" style="left:7cqw;bottom:16cqw;font-size:8cqw">Камчатка</p>
+        <p class="abs sub" style="left:7cqw;bottom:8cqw;font-size:4cqw">Туризм и рыбная отрасль</p>
+      </div>
+      <figcaption>Подписи — отрасли региона</figcaption>
+    </figure>
+
+    <figure class="cell c4" style="margin:0">
+      <div class="art r169" style="background:#0C2B3E">
+        <svg class="wake" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M1380 300L0 -188M1380 300L0 788" stroke="#fff" stroke-width="2" stroke-opacity=".5" fill="none"/>
+          <path d="M1396 300Q1382 284 1320 284V316Q1382 316 1396 300Z" fill="#E3262B"/>
+          <g fill="#fff" font-size="26" font-weight="500">
+            <circle cx="1060" cy="413" r="7" fill="#fff"/><text x="1080" y="455">Льготы</text>
+            <circle cx="760" cy="519" r="7" fill="#fff"/><text x="780" y="561">Земля</text>
+            <circle cx="460" cy="626" r="7" fill="#fff"/><text x="480" y="668">Сопровождение</text>
+          </g>
+        </svg>
+        <div class="abs logo" style="left:5cqw;top:5cqw;font-size:2.4cqw"><svg><use href="#lotus"/></svg>КРДВ</div>
+        <h3 class="abs hd" style="left:5cqw;top:16cqw;font-size:12cqw">ЕТОР</h3>
+        <p class="abs sub" style="left:5.4cqw;top:30cqw;font-size:2.6cqw;width:34cqw">Один путь вместо разных режимов</p>
+      </div>
+      <figcaption>ЕТОР: шаги поддержки стоят вдоль следа</figcaption>
+    </figure>
+    <figure class="cell c2 sq" style="margin:0">
+      <div class="badge-wrap">
+        <svg viewBox="0 0 200 200" style="width:70cqw" role="img" aria-label="Метка «Резидент ЕТОР»">
+          <rect x="4" y="4" width="192" height="192" rx="14" fill="#0C2B3E"/>
+          <path d="M150 64L20 18M150 64L20 110" stroke="#fff" stroke-opacity=".6" stroke-width="2" fill="none"/>
+          <path d="M158 64Q152 56 128 56V72Q152 72 158 64Z" fill="#E3262B"/>
+          <text x="22" y="150" fill="#fff" font-size="14" font-weight="500" letter-spacing="1.5">РЕЗИДЕНТ</text>
+          <text x="20" y="182" fill="#fff" font-size="36" font-weight="700" letter-spacing="-1">ЕТОР</text>
+        </svg>
+      </div>
+      <figcaption>Метка резидента</figcaption>
+    </figure>
+
+    <figure class="cell c6" style="margin:0">
+      <div class="art" style="background:#fff;color:#0C2B3E;aspect-ratio:16/7">
+        <svg class="wake" viewBox="0 0 1600 700" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M1420 180L300 -216M1420 180L300 576" stroke="#0C2B3E" stroke-width="1.6" stroke-opacity=".45" fill="none"/>
+          <path d="M1434 180Q1422 166 1368 166V194Q1422 194 1434 180Z" fill="#E3262B"/>
+        </svg>
+        <div class="abs logo" style="left:4cqw;top:4cqw;font-size:2cqw"><svg><use href="#lotus"/></svg>КРДВ</div>
+        <h3 class="abs hd" style="left:4cqw;bottom:9cqw;font-size:4.8cqw;width:56cqw">Инвестиционные возможности Дальнего Востока и Арктики</h3>
+        <p class="abs sub" style="left:4cqw;bottom:4cqw;font-size:1.6cqw;color:var(--muted);opacity:1">Презентация для инвесторов · 2027</p>
+      </div>
+      <figcaption>Обложка презентации</figcaption>
+    </figure>
+  </div>
+
+  <div class="verdict">
+    <p><b>Сильное.</b> Самая точная история про роль КРДВ: мы не «поддерживаем», а прокладываем путь. Метка на точке проекта превращает любое фото в карту. Угол следа — настоящая физика, это даёт строгую геометрию.</p>
+    <p><b>Риск.</b> Образ сильнее про Арктику и море, чем про Приморье и сельское хозяйство. Тонкие линии теряются на пёстрых фото и в мелких форматах. Нужно проверить, не похоже ли на графику Росатома и Атомфлота.</p>
+  </div>
+</section>
+
+<!-- ================= 3. ОПОРА ================= -->
+<section class="pf" id="base">
+  <div class="pf-head">
+    <div>
+      <p class="tag">Платформа 3</p>
+      <h2>Опора</h2>
+      <p class="thesis">Ваш проект стоит на прочном основании.</p>
+      <p class="idea">Каждый носитель делится на две части: сверху — проект, регион, люди, снизу — плотная синяя плита с фактами. Плита — это КРДВ: условия, земля, льготы, цифры. Бренд говорит фактами, а не лозунгами. Идея «Основания» без подчёркиваний и без камня: опора становится сеткой всех макетов.</p>
+    </div>
+    <ul class="rules">
+      <li><b>Элемент</b><span>Плита снизу: треть высоты, всегда с фактами.</span></li>
+      <li><b>Регионы</b><span>Фото региона сверху, его цифры в плите. Одинаковые три колонки.</span></li>
+      <li><b>ЕТОР</b><span>Плита красная — так сразу видно продукт.</span></li>
+      <li><b>Резиденты</b><span>Метка в виде короткой плиты.</span></li>
+      <li><b>Фото</b><span>Проекты, производство, люди за работой.</span></li>
+      <li><b>Цвет</b><span>Дальневосточный синий для КРДВ, красный для ЕТОР, белый.</span></li>
+    </ul>
+  </div>
+
+  <div class="board">
+    <figure class="cell c6" style="margin:0">
+      <div class="art r21" style="background:#fff">
+        <img class="bg" src="ph/c3.webp" alt="" style="height:64%">
+        <div class="abs logo" style="left:5cqw;top:5cqw;font-size:2.6cqw;color:#fff"><svg><use href="#lotus"/></svg>КРДВ</div>
+        <div class="plinth" style="height:36%;padding:3.6cqw 5cqw;display:grid;grid-template-columns:1.25fr 1fr;gap:4cqw;align-items:center">
+          <h3 class="hd" style="font-size:4.8cqw">Опора для вашего проекта</h3>
+          <div class="facts" style="font-size:1.5cqw">
+            <div><b style="font-size:3cqw">Земля</b><span>площадки с сетями</span></div>
+            <div><b style="font-size:3cqw">Льготы</b><span>единый режим ЕТОР</span></div>
+            <div><b style="font-size:3cqw">Путь</b><span>сопровождение до запуска</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption>Щит 6 × 3 м. Сверху проект, снизу факты</figcaption>
+    </figure>
+
+    <figure class="cell c2 sq" style="margin:0">
+      <div class="art r11" style="background:#fff">
+        <img class="bg" src="ph/c12.webp" alt="" style="height:60%">
+        <div class="plinth" style="height:40%;padding:6cqw 7cqw;display:grid;gap:4cqw;align-content:start">
+          <p class="hd" style="font-size:8cqw">Приморский край</p>
+          <div class="facts" style="font-size:3.4cqw;grid-template-columns:repeat(2,minmax(0,1fr))">
+            <div><b style="font-size:6.4cqw">164,7</b><span>тыс. км²</span></div>
+            <div><b style="font-size:6.4cqw">UTC+10</b><span>часовой пояс</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption>Серия регионов: факты вместо лозунгов</figcaption>
+    </figure>
+    <figure class="cell c2 sq" style="margin:0">
+      <div class="art r11" style="background:#fff">
+        <img class="bg" src="ph/c9.webp" alt="" style="height:60%">
+        <div class="plinth" style="height:40%;padding:6cqw 7cqw;display:grid;gap:4cqw;align-content:start">
+          <p class="hd" style="font-size:8cqw">Сахалинская область</p>
+          <div class="facts" style="font-size:3.4cqw;grid-template-columns:repeat(2,minmax(0,1fr))">
+            <div><b style="font-size:6.4cqw">87,1</b><span>тыс. км²</span></div>
+            <div><b style="font-size:6.4cqw">UTC+11</b><span>часовой пояс</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption>Одна сетка для всех регионов</figcaption>
+    </figure>
+    <figure class="cell c2 sq" style="margin:0">
+      <div class="art r11" style="background:#fff">
+        <img class="bg" src="ph/c17.webp" alt="" style="height:60%">
+        <div class="plinth" style="height:40%;padding:6cqw 7cqw;display:grid;gap:4cqw;align-content:start">
+          <p class="hd" style="font-size:8cqw">Камчатский край</p>
+          <div class="facts" style="font-size:3.4cqw;grid-template-columns:repeat(2,minmax(0,1fr))">
+            <div><b style="font-size:6.4cqw">464,3</b><span>тыс. км²</span></div>
+            <div><b style="font-size:6.4cqw">UTC+12</b><span>часовой пояс</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption>Цифры — площадь и пояс, реальные</figcaption>
+    </figure>
+
+    <figure class="cell c4" style="margin:0">
+      <div class="art r169" style="background:#fff">
+        <img class="bg" src="ph/c6.webp" alt="" style="height:58%">
+        <div class="abs logo" style="left:5cqw;top:5cqw;font-size:2.4cqw;color:#fff"><svg><use href="#lotus"/></svg>КРДВ</div>
+        <div class="plinth red" style="height:42%;padding:4cqw 5cqw;display:grid;grid-template-columns:1fr 1.2fr;gap:4cqw;align-items:center">
+          <div><h3 class="hd" style="font-size:9cqw">ЕТОР</h3><p class="sub" style="font-size:2cqw;margin-top:.6em">Единый режим поддержки</p></div>
+          <div class="facts" style="font-size:1.6cqw">
+            <div><b style="font-size:3cqw">Один</b><span>режим вместо разных</span></div>
+            <div><b style="font-size:3cqw">Все</b><span>регионы ДФО и Арктики</span></div>
+            <div><b style="font-size:3cqw">КРДВ</b><span>оператор</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption>ЕТОР: та же сетка, красная плита</figcaption>
+    </figure>
+    <figure class="cell c2 sq" style="margin:0">
+      <div class="badge-wrap">
+        <svg viewBox="0 0 200 200" style="width:74cqw" role="img" aria-label="Метка «Резидент ЕТОР»">
+          <rect x="10" y="62" width="180" height="76" fill="#E3262B"/>
+          <text x="26" y="94" fill="#fff" font-size="14" font-weight="500" letter-spacing="1.5">РЕЗИДЕНТ</text>
+          <text x="24" y="126" fill="#fff" font-size="32" font-weight="700" letter-spacing="-1">ЕТОР</text>
+          <rect x="10" y="138" width="180" height="10" fill="#243D8D"/>
+        </svg>
+      </div>
+      <figcaption>Метка резидента — короткая плита</figcaption>
+    </figure>
+
+    <figure class="cell c6" style="margin:0">
+      <div class="art" style="background:#fff;color:var(--navy);aspect-ratio:16/7">
+        <div class="abs logo" style="left:4cqw;top:4cqw;font-size:2cqw"><svg><use href="#lotus"/></svg>КРДВ</div>
+        <h3 class="abs hd" style="left:4cqw;top:13cqw;font-size:4.8cqw;width:60cqw">Инвестиционные возможности Дальнего Востока и Арктики</h3>
+        <div class="plinth" style="height:24%;padding:2.4cqw 4cqw;display:flex;align-items:center;justify-content:space-between">
+          <p class="sub" style="font-size:1.7cqw;opacity:1">Презентация для инвесторов · 2027</p>
+          <p class="sub" style="font-size:1.7cqw;opacity:.8">erdc.ru</p>
+        </div>
+      </div>
+      <figcaption>Обложка презентации. Плита держит служебную информацию</figcaption>
+    </figure>
+  </div>
+
+  <div class="verdict">
+    <p><b>Сильное.</b> Самая практичная система: любой дизайнер или пресс-служба соберёт макет без ошибок. Говорит фактами, это подходит институту развития и инвесторам. ЕТОР сразу узнаётся по красной плите.</p>
+    <p><b>Риск.</b> Без сильной метафоры может стать просто аккуратной вёрсткой, как у многих госструктур. Плите нужен собственный характер: пропорция, срез, шрифт.</p>
+  </div>
+</section>
+
+<section class="pf" style="gap:12px">
+  <h2 style="font:700 26px/1.2 var(--f);margin:0">Как выбрать</h2>
+  <p style="max-width:52em">Платформы можно смешивать. Например, сетка «Опоры» с линией часовых поясов из «Первого света» или «Опора» для деловых материалов и «Ледокол» для рекламы. Отметьте, что откликается, и я разверну выбранное в полную систему: шрифт, сетка, фото, иконки, все носители, раздел про регионы и ЕТОР.</p>
+</section>
+</div>
