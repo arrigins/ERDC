@@ -1,0 +1,163 @@
+<title>КРДВ: три концепции</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: tabs switch between three decks; each deck is a column of 16:9 slides laid out like the team's PDF */
+:root{
+  color-scheme: light;
+  --paper:#E9ECF1; --ink:#0B1324; --muted:#5A616C; --line:#DADFE6; --pick:#245BED;
+  --f:"Onest","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.5 var(--f);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+.wrap{max-width:1180px;margin:0 auto;display:grid;gap:22px}
+.top{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap}
+.top h1{margin:0;font:700 clamp(26px,3.4vw,40px)/1.05 var(--f);letter-spacing:-.02em}
+.top p{margin:4px 0 0;color:var(--muted);font-size:15px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tabs a{text-decoration:none;color:var(--ink);background:#fff;border-radius:999px;padding:9px 16px;font-weight:500;font-size:15px}
+.tabs a[aria-current="true"]{background:var(--ink);color:#fff}
+.tabs a:focus-visible{outline:2px solid var(--pick);outline-offset:2px}
+.deck{display:grid;gap:18px}
+.deck[hidden],.refs[hidden]{display:none}
+
+/* ---------- slide ---------- */
+.slide{position:relative;aspect-ratio:16/9;container-type:inline-size;background:#fff;border-radius:12px;overflow:hidden;color:var(--ink)}
+.slide p{margin:0}
+.head{position:absolute;left:5cqw;top:4.6cqw;right:5cqw;display:grid;gap:1.2cqw}
+.ttl{margin:0;font:700 3.6cqw/1.05 var(--f);letter-spacing:-.02em}
+.sub{font-size:1.5cqw;line-height:1.35;max-width:62cqw;color:#2A3242}
+.light{color:#fff}
+.sub.light{color:rgba(255,255,255,.82)}
+svg{display:block}
+
+.cover-txt{position:absolute;left:5cqw;bottom:13cqw;display:grid;gap:1.6cqw}
+.kicker{font-size:1.4cqw;letter-spacing:.06em;text-transform:uppercase;opacity:.75}
+.cover-h{margin:0;color:#fff;font:700 6.6cqw/1 var(--f);letter-spacing:-.025em}
+.rule{width:21cqw;height:.22cqw;background:#3B6BEA}
+.cover-sub{color:rgba(255,255,255,.85);font-size:1.6cqw}
+.cover-mark{position:absolute;right:8cqw;top:50%;transform:translateY(-50%);width:23cqw}
+.vers-slide .head{right:46%}
+.cover-mark svg{width:100%;height:auto}
+
+.idea-mark{position:absolute;left:5cqw;top:15cqw;width:33cqw}
+.idea-mark svg{width:100%;height:auto}
+.idea-txt{position:absolute;left:58cqw;top:13cqw;right:6cqw;display:grid;gap:3cqw}
+.blk{display:grid;gap:1cqw;font-size:1.7cqw;line-height:1.35}
+.blk-h{font-weight:600;font-size:2.2cqw;padding-bottom:.8cqw;border-bottom:.15cqw solid var(--ink);justify-self:start}
+
+.two{position:absolute;left:5cqw;right:5cqw;top:15cqw;display:grid;grid-template-columns:1fr 1fr;gap:8cqw}
+.col-h{font-weight:600;font-size:2.2cqw}
+.col-art{height:12cqw;display:flex;align-items:center;margin-top:3cqw}
+.old-logo{height:7cqw;width:auto}
+.hr{height:.15cqw;background:var(--ink);margin:2cqw 0}
+.col-t{font-size:1.7cqw;line-height:1.35;max-width:36cqw}
+
+.vars{position:absolute;left:5cqw;right:5cqw;top:16cqw;bottom:3.6cqw;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1.2cqw}
+.vars3{grid-template-columns:repeat(3,minmax(0,1fr));gap:3cqw;top:14cqw}
+.var{border:.1cqw solid var(--line);border-radius:1cqw;padding:1.2cqw;display:grid;grid-template-rows:auto auto 1fr;gap:.6cqw;align-content:start}
+.var svg{width:72%;height:auto;margin:0 auto;aspect-ratio:1/1}
+.vars3 .var svg{width:56%;margin:1cqw auto}
+.var p{font-size:1.25cqw;display:flex;gap:.6cqw;align-items:center;flex-wrap:wrap}
+.vars3 .var p{font-size:1.7cqw}
+.var p b{font-weight:600}
+.var i{font-style:normal;font-size:.95cqw;background:var(--pick);color:#fff;border-radius:99px;padding:.15cqw .7cqw}
+.var i.alt{background:#E3262B}
+.var span{font-size:1.02cqw;line-height:1.3;color:var(--muted)}
+.vars3 .var span{font-size:1.45cqw}
+.var.is-pick{border-color:var(--pick);box-shadow:inset 0 0 0 .12cqw var(--pick)}
+
+.geo{position:absolute;left:5cqw;right:5cqw;top:19cqw;display:grid;grid-template-columns:repeat(3,1fr);gap:4cqw}
+.geo-c{display:grid;justify-items:center;gap:1.6cqw}
+.geo-c svg{width:20cqw;height:auto}
+.geo-c p{font-weight:600;font-size:1.9cqw}
+
+.vers{position:absolute;left:5cqw;top:17cqw;width:46cqw;display:grid;gap:3.4cqw}
+.vers > div{display:grid;gap:1cqw;justify-items:start}
+.v-sign svg{width:8cqw;height:auto}
+.v-cap{font-size:1.15cqw;color:var(--muted)}
+.v-dark{position:absolute;right:0;top:0;bottom:0;width:42%;display:grid;place-items:center}
+
+.full{position:absolute;left:5cqw;right:5cqw;top:19cqw;display:grid;grid-template-columns:1.25fr 1fr;grid-template-rows:auto auto;gap:4cqw 5cqw;align-items:start}
+.full > div{display:grid;gap:1.2cqw;justify-items:start}
+.full-v{grid-column:2;grid-row:1 / span 2;justify-self:center}
+.full-v{justify-items:center}
+
+.pal{position:absolute;left:5cqw;right:5cqw;top:20cqw;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1.2cqw}
+.sw{display:grid;gap:.9cqw;font-size:1.4cqw}
+.sw span{height:12cqw;border:.08cqw solid var(--line)}
+.sw b{font-weight:600;font-size:1.6cqw;margin-top:1.4cqw}
+.sw code{font:400 1.6cqw var(--f)}
+.sw em{font-style:normal;color:var(--muted);font-size:1.1cqw;margin-top:2cqw}
+
+.type-big{position:absolute;left:5cqw;top:13cqw;font:700 8.4cqw/1 var(--f);letter-spacing:-.02em}
+.type-row{position:absolute;left:5cqw;right:5cqw;top:31cqw;display:grid;grid-template-columns:1fr 1fr;gap:5cqw}
+.type-k{font:800 6cqw/1 var(--f);letter-spacing:-.02em}
+.type-r{font:500 2.7cqw/1.2 var(--f)}
+.type-n{font-size:1.4cqw;margin-top:3.6cqw!important}
+.type-n b{font-weight:700}
+.type-note{position:absolute;left:5cqw;bottom:3.6cqw;font-size:1.1cqw;color:var(--muted)}
+
+.pat-txt .head{right:auto;width:30cqw}
+.pat-txt .ttl{font-size:4.2cqw}
+.pat-txt .sub{font-size:1.75cqw;margin-top:3cqw}
+.pat-art{position:absolute;right:0;top:0;bottom:0;width:59%}
+.pat-art svg,.mat-a-art svg,.mat-b-art svg{width:100%;height:100%}
+
+.mat{position:absolute;left:5cqw;right:5cqw;top:14cqw;bottom:5cqw;display:grid;grid-template-columns:2.9fr 1fr;gap:1.6cqw}
+.mat-a{position:relative;overflow:hidden;display:grid;grid-template-columns:1.5fr 1fr}
+.mat-a-txt{padding:3cqw;display:grid;align-content:space-between}
+.mat-h{font:500 5cqw/1.04 var(--f);letter-spacing:-.02em;margin-top:2cqw!important}
+.mat-s{font-size:2cqw}
+.mat-a-art{position:relative}
+.mat-b{position:relative;overflow:hidden;padding:2.2cqw;color:#fff;display:grid;align-content:start;gap:3cqw}
+.mat-h2{font:600 2.6cqw/1.1 var(--f);position:relative;z-index:1}
+.mat-b-art{position:absolute;left:0;right:0;bottom:0;height:42%}
+
+/* ---------- refs ---------- */
+.refs{background:#fff;border-radius:12px;padding:32px;display:grid;gap:12px}
+.refs h2{margin:0;font:700 26px/1.2 var(--f)}
+.refs-lead{margin:0;color:var(--muted)}
+.ref-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:8px}
+.ref{border-top:1px solid var(--ink);padding-top:10px;display:grid;gap:4px;align-content:start}
+.ref b{font-weight:600}
+.ref span{font-size:13px;color:var(--muted)}
+.ref p{margin:0;font-size:14px;line-height:1.4}
+
+@media (max-width:760px){
+  .ref-grid{grid-template-columns:1fr 1fr}
+  .slide{border-radius:8px}
+}
+@media (prefers-reduced-motion:no-preference){.tabs a{transition:background .15s}}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div><h1>Три концепции</h1><p>Ребрендинг КРДВ · черновик для обсуждения · шрифт временно Onest</p></div>
+    <nav class="tabs" aria-label="Концепции">
+      <a href="#c1" data-t="c1">1. Точка опоры</a>
+      <a href="#c2" data-t="c2">2. Северо-восток</a>
+      <a href="#c3" data-t="c3">3. Ледокол</a>
+      <a href="#refs" data-t="refs">Референсы</a>
+    </nav>
+  </div>
+  {{DECKS}}
+  {{REFS}}
+</div>
+<script>
+(function(){
+  var ids=['c1','c2','c3','refs'];
+  function show(){
+    var h=(location.hash||'#c1').slice(1); if(ids.indexOf(h)<0) h='c1';
+    ids.forEach(function(id){
+      var el=document.getElementById(id)||document.querySelector('.'+id);
+      if(el) el.hidden=(id!==h);
+    });
+    document.querySelectorAll('.tabs a').forEach(function(a){a.setAttribute('aria-current',a.dataset.t===h?'true':'false')});
+    window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange',show); show();
+})();
+</script>
